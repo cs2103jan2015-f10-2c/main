@@ -53,6 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\영빈\Desktop\CS\main\iPlannerTStorage\iPlannerTStorage;C:\Users\영빈\Desktop\CS\main\iPlannerPStorage\iPlannerPStorage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,6 +79,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\iPlannerPStorage\iPlannerPStorage\PStorage.h" />
+    <ClInclude Include="..\..\iPlannerTStorage\iPlannerTStorage\TStorage.h" />
+    <ClInclude Include="Logic.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\iPlannerPStorage\iPlannerPStorage\PStorage.cpp" />
+    <ClCompile Include="..\..\iPlannerTStorage\iPlannerTStorage\TStorage.cpp" />
+    <ClCompile Include="Logic.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
