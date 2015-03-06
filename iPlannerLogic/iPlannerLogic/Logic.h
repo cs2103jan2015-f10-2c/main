@@ -28,11 +28,11 @@ class Logic
 	public:
 		Logic();
 		~Logic();
-		void addItem();
-		void editItem();
-		void deleteItem();
-		void searchItem();
-		void sortItem();
+		int addTask();
+		int editTask();
+		int deleteTask();
+		int searchTask();
+		int sortTask();
 		void assignTiming();
 		void assignPriority();
 		void assignLabel();
