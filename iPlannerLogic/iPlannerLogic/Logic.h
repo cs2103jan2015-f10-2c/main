@@ -33,17 +33,17 @@ class Logic
 		int deleteTask();
 		int searchTask();
 		int sortTask();
-		void assignTiming();
-		void assignPriority();
-		void assignLabel();
-		void markDone();
-		void markUndone();
-		void undoPreviousAction();
-		void redoPreviousAction();
-		void changeView();
-		void setNotification();
-		void setRecurringTask();
-		void showHelpMenu();
+    int assignTiming();
+    int assignPriority();
+		int assignLabel();
+		int markDone();
+		int markUndone();
+		int undoPreviousAction();
+		int redoPreviousAction();
+		int changeView();
+		int setNotification();
+		int setRecurringTask();
+		int showHelpMenu();
 
 		void addToTStorage();
 		void addToPStorage();
