@@ -15,12 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="UndoableCommand.h">
+    <ClCompile Include="CommandEdit.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="UndoableCommand.cpp">
+    </ClCompile>
+    <ClCompile Include="CommandEdit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

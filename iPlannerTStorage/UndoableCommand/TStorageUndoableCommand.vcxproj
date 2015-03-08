@@ -11,8 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1E19CBA1-EFB7-4908-9996-6EFAF09D61EE}</ProjectGuid>
-    <RootNamespace>CommandAdd</RootNamespace>
+    <ProjectGuid>{D757DDF8-53FC-4DE2-96BE-6C0D72170755}</ProjectGuid>
+    <RootNamespace>TStorageUndoableCommand</RootNamespace>
+    <ProjectName>UndoableCommand</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -65,10 +66,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CommandAdd.h" />
+    <ClCompile Include="UndoableCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CommandAdd.cpp" />
+    <ClInclude Include="UndoableCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
