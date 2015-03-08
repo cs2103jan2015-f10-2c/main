@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlannerLogic", "iPlannerLogic\iPlannerLogic.vcxproj", "{780C360B-4023-472F-999A-600DB436A549}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LogicTest", "LogicTest\LogicTest.vcxproj", "{FAF50C9B-57E1-4529-8938-3D8CC1A5CD48}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{780C360B-4023-472F-999A-600DB436A549}.Debug|Win32.ActiveCfg = Debug|Win32
+		{780C360B-4023-472F-999A-600DB436A549}.Debug|Win32.Build.0 = Debug|Win32
+		{780C360B-4023-472F-999A-600DB436A549}.Release|Win32.ActiveCfg = Release|Win32
+		{780C360B-4023-472F-999A-600DB436A549}.Release|Win32.Build.0 = Release|Win32
+		{FAF50C9B-57E1-4529-8938-3D8CC1A5CD48}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FAF50C9B-57E1-4529-8938-3D8CC1A5CD48}.Debug|Win32.Build.0 = Debug|Win32
+		{FAF50C9B-57E1-4529-8938-3D8CC1A5CD48}.Release|Win32.ActiveCfg = Release|Win32
+		{FAF50C9B-57E1-4529-8938-3D8CC1A5CD48}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
