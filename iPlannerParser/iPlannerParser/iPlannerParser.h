@@ -2,7 +2,9 @@
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng (A0111238U)
 
-#include <string>
+#include "userCommand.h"
+#include <list>
+#include <iostream>
 using namespace std;
 
 #ifndef IPLANNERPARSER_H_
@@ -10,25 +12,19 @@ using namespace std;
 
 class iPlannerParser {
 private:
-	enum CommandType {
-		ADD, DELETE, EDIT, UNDO, CLEAR, SEARCH, SORT, RECUR, EXIT
-	};
-	
-	// add class Item
-	
-	static string STRING_BLANK;
+	list<userCommand> userCommandList;
+	void splitUserInput(string userInput);
 
-	static string readCommand(string userInput);
-	static bool isBlank(string userInput);
+	static const string TOKEN_COMMAND;
+	static const int INDEX_INVALID = -1;
+	static const int INDEX_ZERO = 0;
+	static const int INDEX_NEXT = 1;
 
-	static string setItemName();
-	static string setItemDate();
-	static string setItemTime();
-	static string setItemDescription();
-
+	int findIndex(string userInput, string stringToFind, int startingIndex);
+	string findSubstring(string userInput, int startIndex, int endIndex);
 
 public:
-	static void main(string userInput);
+	list<userCommand> main(string userInput);
 
 };
 

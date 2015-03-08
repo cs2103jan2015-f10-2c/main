@@ -18,9 +18,15 @@
     <ClCompile Include="iPlannerParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="userCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iPlannerParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="userCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
