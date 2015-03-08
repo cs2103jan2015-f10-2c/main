@@ -71,7 +71,7 @@ int Logic::writeDataOntoFile(char * fileName) {
 	return retCode;
 }
 
-DateTime setDateTime(int year, int month, int day, int hour, int minute){
+DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
 	DateTime datetime;
 	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day,month,year)
 		&& datetime.isValidHourRange(hour) && datetime.isValidMinuteRange(minute)){
@@ -84,10 +84,11 @@ DateTime setDateTime(int year, int month, int day, int hour, int minute){
 	return datetime;
 }
 
-Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted){
+Item Logic::setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted){
 	Item item;
 
 	item.setItemName(itemName);
+  item.setStartTime(startTime);
   item.setEndTime(endTime);
 	item.setDescription(description);
 	item.setPriority(priority);
