@@ -71,6 +71,7 @@ private:
 	DateTime _startTime;
 	DateTime _endTime;
 	string _description;
+	unsigned int _itemID;
 	char _priority;
 	char _label;
 	bool _isCompleted;
@@ -90,6 +91,7 @@ public:
 	//	Pre:	ItemName is a string
 	//			Start Time and End Time are DateTime objects
 	//			Description is a string
+	//			Item ID is an unsigned integer
 	//			Priority is a character - L, M, or H
 	//			Label is a character - P, O, or M
 	//			Completion is a boolean value - true if item is completed
@@ -98,6 +100,7 @@ public:
 	DateTime setStartTime(DateTime);
 	DateTime setEndTime(DateTime);
 	string setDescription(string);
+	unsigned int setItemID(unsigned int);
 	char setPriority(char);
 	char setLabel(char);
 	bool setCompletion(bool);
@@ -109,6 +112,7 @@ public:
 	DateTime getStartTime(DateTime);
 	DateTime getEndTime(DateTime);
 	string getDescription(string);
+	unsigned int getItemID(unsigned int);
 	char getPriority(char);
 	char getLabel(char);
 	bool getCompletion(bool);

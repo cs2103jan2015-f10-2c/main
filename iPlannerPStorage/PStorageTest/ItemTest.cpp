@@ -3,7 +3,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace PStorageTest
+namespace ItemTest
 {		
 	TEST_CLASS(TEST_SETDATETIME)
 	{
@@ -57,16 +57,6 @@ namespace PStorageTest
 			int outputMinute = dateTime.setMinute(minute);
 
 			Assert::AreEqual(minute, outputMinute);
-		}
-
-		TEST_METHOD(TestSetDayOfTheWeek)
-		{
-			DateTime dateTime;
-			int dayOfTheWeek = 15;
-
-			int outputDayOfTheWeek = dateTime.setDayOfTheWeek(dayOfTheWeek);
-
-			Assert::AreEqual(dayOfTheWeek, outputDayOfTheWeek);
 		}
 	};
 
@@ -128,17 +118,6 @@ namespace PStorageTest
 			int outputMinute = dateTime.getMinute();
 
 			Assert::AreEqual(minute, outputMinute);
-		}
-
-		TEST_METHOD(TestGetDayOfTheWeek)
-		{
-			DateTime dateTime;
-			int dayOfTheWeek = 15;
-
-			dateTime.setDayOfTheWeek(dayOfTheWeek);
-			int outputDayOfTheWeek = dateTime.getDayOfTheWeek();
-
-			Assert::AreEqual(dayOfTheWeek, outputDayOfTheWeek);
 		}
 	};
 }
