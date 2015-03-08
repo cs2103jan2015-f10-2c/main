@@ -1,6 +1,6 @@
 //	Logic
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
-//	Coder:	Yu Young Bin A0116229J
+//	Coder:	Yu Young Bin A0116229J & Shri Kishen Rajendran A0105180W
 
 #pragma once
 #include "..\..\iPlannerPStorage\iPlannerPStorage\Pstorage.h"
@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 
 class Logic
