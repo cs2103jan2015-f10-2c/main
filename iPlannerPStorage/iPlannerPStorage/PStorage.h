@@ -4,53 +4,11 @@
 
 #include <string>
 #include <vector>
+#include "..\Item\Item.h"
 using namespace std;
 
-class DateTime
-{
-private:
-	enum _dayOfTheWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday };
-	int _year;
-	int _month;
-	int _day;
-	int _hour;
-	int _minute;
 
-public:
-	//	Constructor
-	//	Pre:	
-	//	Post:	
-	DateTime();
-
-	//	Destructor
-	//	Pre:	
-	//	Post:	
-	~DateTime();
-};
 /*
-class TimedItem
-{
-private:
-	string _itemName;
-	DateTime _startTime;
-	DateTime _endTime;
-	string _description;
-	char _priority;
-	char _label;
-	bool _isCompleted;
-
-public:
-	//	Constructor
-	//	Pre:	
-	//	Post:	
-	TimedItem();
-
-	//	Destructor
-	//	Pre:	
-	//	Post:	
-	~TimedItem();
-};
-
 class fullSchedule
 {
 private:

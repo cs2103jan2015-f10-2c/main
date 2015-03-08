@@ -1,0 +1,26 @@
+diff a/iPlannerParser/iPlannerParser/iPlannerParser.cpp b/iPlannerParser/iPlannerParser/iPlannerParser.cpp	(rejected hunks)
+@@ -4,10 +4,20 @@
+ 
+ #include "iPlannerParser.h"
+ 
+-void iPlannerParser::main() {
++string iPlannerParser::STRING_BLANK = "";
++
++void iPlannerParser::main(string userInput) {
++	if(isBlank(userInput)) {
++		return;
++	}
++
+ 	return;
+ }
+ 
+-int main () {
+-	iPlannerParser::main();
++bool iPlannerParser::isBlank(string userInput) {
++	return userInput == STRING_BLANK;
++}
++
++void main() {
++
+ }
+\ No newline at end of file

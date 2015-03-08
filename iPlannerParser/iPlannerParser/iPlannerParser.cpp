@@ -4,20 +4,10 @@
 
 #include "iPlannerParser.h"
 
-string iPlannerParser::STRING_BLANK = "";
-
-void iPlannerParser::main(string userInput) {
-	if(isBlank(userInput)) {
-		return;
-	}
-
+void iPlannerParser::main() {
 	return;
 }
 
-bool iPlannerParser::isBlank(string userInput) {
-	return userInput == STRING_BLANK;
-}
-
-void main() {
-
+int main () {
+	iPlannerParser::main();
 }
