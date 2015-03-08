@@ -80,11 +80,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\iPlannerPStorage\iPlannerPStorage\PStorage.h" />
+    <ClInclude Include="..\..\iPlannerPStorage\Item\Item.h" />
     <ClInclude Include="..\..\iPlannerTStorage\iPlannerTStorage\TStorage.h" />
     <ClInclude Include="Logic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\iPlannerPStorage\iPlannerPStorage\PStorage.cpp" />
+    <ClCompile Include="..\..\iPlannerPStorage\Item\Item.cpp" />
     <ClCompile Include="..\..\iPlannerTStorage\iPlannerTStorage\TStorage.cpp" />
     <ClCompile Include="Logic.cpp" />
   </ItemGroup>

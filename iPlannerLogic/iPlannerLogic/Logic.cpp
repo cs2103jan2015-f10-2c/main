@@ -7,6 +7,7 @@ Logic::Logic()
 
 Logic::~Logic()
 {
+
 }
 
 int Logic::addTask(){
@@ -69,4 +70,29 @@ int Logic::writeDataOntoFile(char * fileName) {
 	}
 
 	return retCode;
+}
+
+DateTime setDateTime(int year, int month, int day, int hour, int minute){
+	DateTime datetime;
+	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day)
+		&& datetime.isValidHourRange(hour) && datetime.isValidMinuteRange(minute)){
+		datetime.setYear(year);
+		datetime.setMonth(month);
+		datetime.setDay(day);
+		datetime.setHour(hour);
+		datetime.setMinute(minute);
+	}
+	return datetime;
+}
+
+Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted){
+	Item item;
+
+	item.setItemName(itemName);
+	item.setEndTime(endTime);
+	item.setDescription(description);
+	item.setPriority(priority);
+	item.setLabel(label);
+	item.setCompletion(isCompleted);
+	return item;
 }

@@ -24,6 +24,9 @@
     <ClInclude Include="..\..\iPlannerTStorage\iPlannerTStorage\TStorage.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\iPlannerPStorage\Item\Item.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logic.cpp">
@@ -33,6 +36,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\iPlannerTStorage\iPlannerTStorage\TStorage.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\iPlannerPStorage\Item\Item.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
