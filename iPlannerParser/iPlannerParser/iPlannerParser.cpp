@@ -42,9 +42,3 @@ string iPlannerParser::findSubstring(string userInput, int startIndex, int endIn
 	return substring;
 }
 
-void main () {
-	iPlannerParser myParser;
-	string userInput;
-	getline(cin, userInput);
-	myParser.main(userInput);
-}
