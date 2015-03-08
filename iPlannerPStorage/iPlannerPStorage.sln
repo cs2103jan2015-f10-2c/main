@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlannerPStorage", "iPlannerPStorage\iPlannerPStorage.vcxproj", "{305B58D8-F52A-443C-BFDF-1AFED0A6A3D6}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PStorageTest", "PStorageTest\PStorageTest.vcxproj", "{D12B79CF-41A2-49DC-B87C-2D70316DDD9A}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlannerStorageExe", "iPlannerStorageExe\iPlannerStorageExe.vcxproj", "{ECC440E0-9A02-4FDE-9BF6-CF4F38032EF4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlannerStorage", "iPlannerPStorage\iPlannerPStorage.vcxproj", "{305B58D8-F52A-443C-BFDF-1AFED0A6A3D6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Item", "Item\Item.vcxproj", "{BA9F787E-E945-4D50-B78A-29212EACDB99}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DateTime", "DateTime\DateTime.vcxproj", "{36FBB098-E366-45D3-8E44-9DADBF6D79DF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DateTimeTest", "DateTimeTest\DateTimeTest.vcxproj", "{2A18986D-4C6F-4C24-8ECD-F43ACA11A4EF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlannerStorageExe", "iPlannerStorageExe\iPlannerStorageExe.vcxproj", "{C68ECF24-074D-4CB3-AF46-C4041DF91666}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +23,22 @@ Global
 		{305B58D8-F52A-443C-BFDF-1AFED0A6A3D6}.Debug|Win32.Build.0 = Debug|Win32
 		{305B58D8-F52A-443C-BFDF-1AFED0A6A3D6}.Release|Win32.ActiveCfg = Release|Win32
 		{305B58D8-F52A-443C-BFDF-1AFED0A6A3D6}.Release|Win32.Build.0 = Release|Win32
-		{D12B79CF-41A2-49DC-B87C-2D70316DDD9A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D12B79CF-41A2-49DC-B87C-2D70316DDD9A}.Debug|Win32.Build.0 = Debug|Win32
-		{D12B79CF-41A2-49DC-B87C-2D70316DDD9A}.Release|Win32.ActiveCfg = Release|Win32
-		{D12B79CF-41A2-49DC-B87C-2D70316DDD9A}.Release|Win32.Build.0 = Release|Win32
-		{ECC440E0-9A02-4FDE-9BF6-CF4F38032EF4}.Debug|Win32.ActiveCfg = Debug|Win32
-		{ECC440E0-9A02-4FDE-9BF6-CF4F38032EF4}.Debug|Win32.Build.0 = Debug|Win32
-		{ECC440E0-9A02-4FDE-9BF6-CF4F38032EF4}.Release|Win32.ActiveCfg = Release|Win32
-		{ECC440E0-9A02-4FDE-9BF6-CF4F38032EF4}.Release|Win32.Build.0 = Release|Win32
 		{BA9F787E-E945-4D50-B78A-29212EACDB99}.Debug|Win32.ActiveCfg = Debug|Win32
 		{BA9F787E-E945-4D50-B78A-29212EACDB99}.Debug|Win32.Build.0 = Debug|Win32
 		{BA9F787E-E945-4D50-B78A-29212EACDB99}.Release|Win32.ActiveCfg = Release|Win32
 		{BA9F787E-E945-4D50-B78A-29212EACDB99}.Release|Win32.Build.0 = Release|Win32
+		{36FBB098-E366-45D3-8E44-9DADBF6D79DF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{36FBB098-E366-45D3-8E44-9DADBF6D79DF}.Debug|Win32.Build.0 = Debug|Win32
+		{36FBB098-E366-45D3-8E44-9DADBF6D79DF}.Release|Win32.ActiveCfg = Release|Win32
+		{36FBB098-E366-45D3-8E44-9DADBF6D79DF}.Release|Win32.Build.0 = Release|Win32
+		{2A18986D-4C6F-4C24-8ECD-F43ACA11A4EF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A18986D-4C6F-4C24-8ECD-F43ACA11A4EF}.Debug|Win32.Build.0 = Debug|Win32
+		{2A18986D-4C6F-4C24-8ECD-F43ACA11A4EF}.Release|Win32.ActiveCfg = Release|Win32
+		{2A18986D-4C6F-4C24-8ECD-F43ACA11A4EF}.Release|Win32.Build.0 = Release|Win32
+		{C68ECF24-074D-4CB3-AF46-C4041DF91666}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C68ECF24-074D-4CB3-AF46-C4041DF91666}.Debug|Win32.Build.0 = Debug|Win32
+		{C68ECF24-074D-4CB3-AF46-C4041DF91666}.Release|Win32.ActiveCfg = Release|Win32
+		{C68ECF24-074D-4CB3-AF46-C4041DF91666}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

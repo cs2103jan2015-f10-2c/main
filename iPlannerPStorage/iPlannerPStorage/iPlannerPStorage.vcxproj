@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{305B58D8-F52A-443C-BFDF-1AFED0A6A3D6}</ProjectGuid>
     <RootNamespace>iPlannerPStorage</RootNamespace>
+    <ProjectName>iPlannerStorage</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,10 +65,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="PStorage.h" />
+    <ClInclude Include="Storage.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PStorage.cpp" />
+    <ClCompile Include="Storage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
