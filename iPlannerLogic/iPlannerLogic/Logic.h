@@ -3,8 +3,8 @@
 //	Coder:	Yu Young Bin A0116229J
 
 #pragma once
-#include "PStorage.h"
-#include "TStorage.h"
+#include "..\..\iPlannerPStorage\iPlannerPStorage\Pstorage.h"
+#include "..\..\iPlannerTStorage\iPlannerTStorage\Tstorage.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -12,7 +12,11 @@ using namespace std;
 
 class Logic
 {
-	private:
+		private:
+
+		
+	
+
 		enum _dayOfTheWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday };
 		int _year;
 		int _month;
