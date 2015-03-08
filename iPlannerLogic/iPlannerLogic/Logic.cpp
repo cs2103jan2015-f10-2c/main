@@ -63,8 +63,7 @@ int Logic::writeDataOntoFile(char * fileName) {
 	ofstream outfile(fileName);
 
 	if (!outfile.bad()) {
-
-		outfile << _taskName << endl;
+    outfile << setItem << endl << setDateTime << endl;
 		outfile.close();
 		retCode = 0;
 	}
@@ -74,7 +73,7 @@ int Logic::writeDataOntoFile(char * fileName) {
 
 DateTime setDateTime(int year, int month, int day, int hour, int minute){
 	DateTime datetime;
-	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day)
+	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day,month,year)
 		&& datetime.isValidHourRange(hour) && datetime.isValidMinuteRange(minute)){
 		datetime.setYear(year);
 		datetime.setMonth(month);
@@ -89,10 +88,11 @@ Item setItem(string itemName, DateTime startTime, DateTime endTime, string descr
 	Item item;
 
 	item.setItemName(itemName);
-	item.setEndTime(endTime);
+  item.setEndTime(endTime);
 	item.setDescription(description);
 	item.setPriority(priority);
 	item.setLabel(label);
 	item.setCompletion(isCompleted);
-	return item;
+	
+  return item;
 }
