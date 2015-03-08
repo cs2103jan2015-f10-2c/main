@@ -47,6 +47,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>NotSet</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -65,9 +66,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="iPlannerParser.cpp" />
+    <ClCompile Include="userCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iPlannerParser.h" />
+    <ClInclude Include="userCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

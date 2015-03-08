@@ -11,4 +11,5 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
-#include "iPlannerParser.h"
+#include "..\..\iPlannerParser\iPlannerParser\iPlannerParser.h"
+#include "..\..\iPlannerParser\iPlannerParser\userCommand.h"
