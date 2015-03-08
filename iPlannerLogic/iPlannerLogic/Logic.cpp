@@ -9,7 +9,6 @@ Logic::~Logic()
 {
 }
 
-<<<<<<< HEAD
 int Logic::addTask(){
 }
 int Logic::editTask(){
@@ -57,21 +56,17 @@ void Logic::assignSaveFolder(){
 void Logic::readDataFromFile(){
 
 }
-void Logic::writeDataOntoFile(){
-
-=======
 int Logic::writeDataOntoFile(char * fileName) {
-  // Variable to denote successful processing of function
-  int retCode = -1;
-  ofstream outfile(fileName);
+	// Variable to denote successful processing of function
+	int retCode = -1;
+	ofstream outfile(fileName);
 
-  if (!outfile.bad()) {
-    
-    outfile << _taskName << endl;
-    outfile.close();
-    retCode = 0;
-  }
-  
-  return retCode;
->>>>>>> 0b529b581b7eae06699b27794196bf0aa19d9254
+	if (!outfile.bad()) {
+
+		outfile << _taskName << endl;
+		outfile.close();
+		retCode = 0;
+	}
+
+	return retCode;
 }
