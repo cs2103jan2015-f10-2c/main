@@ -12,51 +12,30 @@ using namespace std;
 
 class Logic
 {
-		private:
-
-		
+private:
 	
 
-		enum _dayOfTheWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday };
-		int _year;
-		int _month;
-		int _day;
-		int _hour;
-		int _minute;
-		int _taskIndex;
-		string _taskName;
-		string _taskDescription;
-		string _taskPriority;
-		string _taskLabel;
+public:
+	Logic();
+	~Logic();
+	int addTask();
+	int editTask();
+	int deleteTask();
+	int searchTask();
+	int sortTask();
+	int assignTiming();
+	int assignPriority();
+	int assignLabel();
+	int changeView();
+	int showHelpMenu();
 
-	public:
-		Logic();
-		~Logic();
-		int addTask();
-		int editTask();
-		int deleteTask();
-		int searchTask();
-		int sortTask();
-    int assignTiming();
-    int assignPriority();
-		int assignLabel();
-		int markDone();
-		int markUndone();
-		int undoPreviousAction();
-		int redoPreviousAction();
-		int changeView();
-		int setNotification();
-		int setRecurringTask();
-		int showHelpMenu();
+	void addToTStorage();
+	void addToPStorage();
+	void deleteFromPStorage();
+	void editPStorage();
 
-		void addToTStorage();
-		void addToPStorage();
-		void deleteFromPStorage();
-		void editPStorage();
-		
-		void assignSaveFolder();
-		void readDataFromFile();
-		void writeDataOntoFile();
-	};
+	void assignSaveFolder();
+	void readDataFromFile();
+	void writeDataOntoFile();
+};
 
-	
