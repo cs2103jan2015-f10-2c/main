@@ -51,12 +51,12 @@ public:
 	//	Sets the attribute
 	//	Pre:	Attribute has been previously set.
 	//	Post:	_(attribute) is returned
-	string getItemName(string);
-	DateTime getStartTime(DateTime);
-	DateTime getEndTime(DateTime);
-	string getDescription(string);
-	unsigned int getItemID(unsigned int);
-	char getPriority(char);
-	char getLabel(char);
-	bool getCompletion(bool);
+	string getItemName();
+	string getDescription();
+	DateTime getStartTime();
+	DateTime getEndTime();
+	unsigned int getItemID();
+	char getPriority();
+	char getLabel();
+	bool getCompletion();
 };
