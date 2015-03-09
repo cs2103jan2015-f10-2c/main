@@ -10,7 +10,7 @@ Logic::~Logic(){
 }
 
 int Logic::addTask(Item itemToBeAdded){
-	_schedule.addItem(itemToBeAdded);
+	_logicSchedule.addItem(itemToBeAdded);
 }
 int Logic::editTask(){
 
@@ -24,7 +24,7 @@ int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedI
 int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	if (getScheduleSize() > lineIndexToBeDeleted){
 		unsigned int itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
-		_schedule.deleteItem(itemIdToBeDeleted);
+		_logicSchedule.deleteItem(itemIdToBeDeleted);
 		return 1;//Delete successful
 	}
 	else{
@@ -35,13 +35,13 @@ int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
 	for (int lineIndex = 0; lineIndex < getScheduleSize(); lineIndex++){
 		if (isFound(lineIndex, phraseToSearch)){
-			searchedItems.push_back(_schedule.getSchedule()[lineIndex]);
+			searchedItems.push_back(_logicSchedule.getSchedule()[lineIndex]);
 		}
 	}
 }
 bool Logic::isFound(int lineIndex, string& phraseToSearch){
-	unsigned int phraseFoundFromItemName = _schedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch);
-	unsigned int phraseFoundFromItemDescription = _schedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch);
+	unsigned int phraseFoundFromItemName = _logicSchedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch);
+	unsigned int phraseFoundFromItemDescription = _logicSchedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch);
 	if (phraseFoundFromItemName>-1 || phraseFoundFromItemDescription> -1){
 		return true;
 	}
@@ -66,13 +66,13 @@ Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 
 int Logic::assignTimingToNewTask(string timingType, DateTime datetime){
 	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
-	Item itemToBeAssignedTiming = assignTiming(_schedule.getSchedule()[lastLineIndexOfSchedule], timingType, datetime); 
+	Item itemToBeAssignedTiming = assignTiming(_logicSchedule.getSchedule()[lastLineIndexOfSchedule], timingType, datetime); 
 	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedTiming);
 	return 1;
 }
 
 int Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex){
-	Item itemToBeAssignedTiming = assignTiming(_schedule.getSchedule()[lineIndex], timingType, datetime);
+	Item itemToBeAssignedTiming = assignTiming(_logicSchedule.getSchedule()[lineIndex], timingType, datetime);
 	deleteAndAddEditedItem(lineIndex, itemToBeAssignedTiming);
 	return 1;
 }
@@ -96,14 +96,25 @@ void Logic::assignSaveFolder(){
 void Logic::readDataFromFile(){
 
 }
-int Logic::writeDataOntoFile(char * fileName) {
+int Logic::writeDataOntoFile(char * fileName,vector<Item> itemVector) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 	ofstream outfile(fileName);
 
 	if (!outfile.bad()) {
-		outfile << setItem << endl << setDateTime << endl;
-		outfile.close();
+    vector<Item>::iterator iterItem;
+    
+    for( iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
+      outfile << *iterItem->getItemName << endl;
+      outfile << *iterItem->getStartTime << endl;
+      outfile << *iterItem->getEndTime << endl;
+      outfile << *iterItem->getItemID << endl;
+      outfile << *iterItem->getDescription << endl;
+      outfile << *iterItem->getPriority << endl;
+      outfile << *iterItem->getLabel << endl;
+      outfile << *iterItem->getCompletion << endl;
+    }
+    outfile.close();
 		retCode = 0;
 	}
 
@@ -132,12 +143,12 @@ void Logic::printItem(Item item){
 }
 
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = _schedule.getSchedule()[lineIndex].getItemID;
+	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
 	return Id;
 }
 
 unsigned int Logic::getScheduleSize(){
-	return _schedule.getSchedule().size();
+	return _logicSchedule.getSchedule().size();
 }
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){

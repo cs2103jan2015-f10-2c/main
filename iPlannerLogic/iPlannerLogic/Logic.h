@@ -16,7 +16,7 @@ using namespace std;
 class Logic
 {
 private:
-	Schedule _schedule;
+	Schedule _logicSchedule;
 
 public:
 	Logic();
@@ -38,7 +38,7 @@ public:
 
 	void assignSaveFolder();
 	void readDataFromFile();
-	int writeDataOntoFile(char * fileName);
+	int writeDataOntoFile(char * fileName,vector<Item> itemVector);
 	
 	void printItem(Item item);
 	void printItemVector(vector<Item> itemVector);
