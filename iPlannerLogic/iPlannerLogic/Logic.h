@@ -39,7 +39,7 @@ public:
 	void editPStorage();
 
 	void assignSaveFolder();
-	void readDataFromFile();
+  int readDataFromFile(char * fileName,vector<Item> itemVector);
 	int writeDataOntoFile(char * fileName,vector<Item> itemVector);
 	
 	void printItem(Item item);

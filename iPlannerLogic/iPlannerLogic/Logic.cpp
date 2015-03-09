@@ -76,9 +76,10 @@ void Logic::editPStorage(){
 void Logic::assignSaveFolder(){
 
 }
-void Logic::readDataFromFile(){
-
+int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
+  
 }
+
 int Logic::writeDataOntoFile(char * fileName,vector<Item> itemVector) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
@@ -103,7 +104,6 @@ int Logic::writeDataOntoFile(char * fileName,vector<Item> itemVector) {
 
 	return retCode;
 }
-
 
 void Logic::printItemVector(vector<Item> itemVector){
 	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
