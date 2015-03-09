@@ -25,9 +25,23 @@ int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 		return 0;//Delete failed
 	}
 }
-int Logic::searchTask(){
-
+int Logic::searchTask(string phraseToSearch){
+	vector<Item> searchedItems;
+	for (int lineIndex = 0; lineIndex < getScheduleSize(); lineIndex++){
+		if (isFound(lineIndex, phraseToSearch)){
+			searchedItems.push_back(_schedule.getSchedule()[lineIndex]);
+		}
+	}
 }
+bool Logic::isFound(int lineIndex, string& phraseToSearch){
+	if (_schedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch)>-1 || _schedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch) > -1){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 int Logic::sortTask(){
 
 }
@@ -77,6 +91,27 @@ int Logic::writeDataOntoFile(char * fileName) {
 	}
 
 	return retCode;
+}
+
+
+void Logic::printItemVector(vector<Item> itemVector){
+	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
+		printItem(itemVector[lineIndex]);
+		if (lineIndex < itemVector.size() - 1){
+			cout << endl;
+		}
+	}
+	return;
+}
+
+void Logic::printItem(Item item){
+	cout << item.getItemName() << '\t';
+	cout << item.getDescription() << '\t';
+	//cout << item.getStartTime() << '\t';   Need print function for DateTime
+	//cout << item.getEndTime() << '\t';
+	cout << item.getLabel() << '\t';
+	cout << item.getPriority();
+	return;
 }
 
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
