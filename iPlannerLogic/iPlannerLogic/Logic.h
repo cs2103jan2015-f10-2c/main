@@ -16,7 +16,7 @@ using namespace std;
 class Logic
 {
 private:
-	Schedule _schedule;
+	Schedule logicSchedule;
 
 public:
 	Logic();

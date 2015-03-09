@@ -10,7 +10,7 @@ Logic::~Logic(){
 }
 
 int Logic::addTask(Item itemToBeAdded){
-	_schedule.addItem(itemToBeAdded);
+	logicSchedule.addItem(itemToBeAdded);
 }
 int Logic::editTask(){
 
@@ -18,7 +18,7 @@ int Logic::editTask(){
 int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	if (getScheduleSize() > lineIndexToBeDeleted){
 		unsigned int itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
-		_schedule.deleteItem(itemIdToBeDeleted);
+		logicSchedule.deleteItem(itemIdToBeDeleted);
 		return 1;//Delete successful
 	}
 	else{
@@ -29,12 +29,12 @@ int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
 	for (int lineIndex = 0; lineIndex < getScheduleSize(); lineIndex++){
 		if (isFound(lineIndex, phraseToSearch)){
-			searchedItems.push_back(_schedule.getSchedule()[lineIndex]);
+			searchedItems.push_back(logicSchedule.getSchedule()[lineIndex]);
 		}
 	}
 }
 bool Logic::isFound(int lineIndex, string& phraseToSearch){
-	if (_schedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch)>-1 || _schedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch) > -1){
+	if (logicSchedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch)>-1 || logicSchedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch) > -1){
 		return true;
 	}
 	else{
@@ -115,12 +115,12 @@ void Logic::printItem(Item item){
 }
 
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = _schedule.getSchedule()[lineIndex].getItemID;
+	unsigned int Id = logicSchedule.getSchedule()[lineIndex].getItemID;
 	return Id;
 }
 
 unsigned int Logic::getScheduleSize(){
-	return _schedule.getSchedule().size();
+	return logicSchedule.getSchedule().size();
 }
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
