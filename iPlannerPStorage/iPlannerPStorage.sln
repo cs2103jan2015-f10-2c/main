@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DateTimeTest", "DateTimeTes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlannerStorageExe", "iPlannerStorageExe\iPlannerStorageExe.vcxproj", "{C68ECF24-074D-4CB3-AF46-C4041DF91666}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ItemTest", "ItemTest\ItemTest.vcxproj", "{FC5EAEF5-1229-4933-A7FC-561905C44680}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -39,6 +41,10 @@ Global
 		{C68ECF24-074D-4CB3-AF46-C4041DF91666}.Debug|Win32.Build.0 = Debug|Win32
 		{C68ECF24-074D-4CB3-AF46-C4041DF91666}.Release|Win32.ActiveCfg = Release|Win32
 		{C68ECF24-074D-4CB3-AF46-C4041DF91666}.Release|Win32.Build.0 = Release|Win32
+		{FC5EAEF5-1229-4933-A7FC-561905C44680}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FC5EAEF5-1229-4933-A7FC-561905C44680}.Debug|Win32.Build.0 = Debug|Win32
+		{FC5EAEF5-1229-4933-A7FC-561905C44680}.Release|Win32.ActiveCfg = Release|Win32
+		{FC5EAEF5-1229-4933-A7FC-561905C44680}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
