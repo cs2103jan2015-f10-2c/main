@@ -4,3 +4,6 @@
 
 #include "Storage.h"
 
+Schedule::Schedule() {}
+
+Schedule::~Schedule() {}

@@ -7,22 +7,32 @@
 #include "..\Item\Item.h"
 using namespace std;
 
-
-/*
-class fullSchedule
+class Schedule
 {
 private:
-	vector <TimedItem> _schedule;
+	vector <Item> _schedule;
 
 public:
 	//	Constructor
-	//	Pre:	
-	//	Post:	
-	fullSchedule();
+	//	Pre:	Nil
+	//	Post:	Empty schedule is created without any Item objects
+	Schedule();
 
 	//	Destructor
-	//	Pre:	
-	//	Post:	
-	~fullSchedule();
+	//	Pre:	Nil
+	//	Post:	Schedule is destroyed, along with the items stored in it
+	~Schedule();
+
+	//	Adds an item to the schedule
+
+	//	Deletes an item from the schedule
+
+	//	Sorts the schedule according to date
+
+	//	Sorts the schedule according to last updated date
+
+	//	Sorts the schedule according to priority
+	//	Post:	Sequence as follows - high, medium, low, none
+
+	//
 };
-*/
