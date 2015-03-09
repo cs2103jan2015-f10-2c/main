@@ -3,9 +3,10 @@
 //	Coder:	Yu Young Bin A0116229J & Shri Kishen Rajendran A0105180W
 
 #pragma once
-#include "..\..\iPlannerPStorage\iPlannerPStorage\Pstorage.h"
-#include "..\..\iPlannerTStorage\iPlannerTStorage\Tstorage.h"
+#include "..\..\iPlannerPStorage\iPlannerPStorage\Storage.h"
 #include "..\..\iPlannerPStorage\Item\Item.h"
+#include "..\..\iPlannerParser\iPlannerParser\iPlannerParser.h"
+#include "..\..\iPlannerParser\userCommand\userCommand.h"
 #include <iostream>
 #include <vector>
 #include <string>
