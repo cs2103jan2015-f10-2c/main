@@ -1,21 +1,24 @@
 #include "Logic.h"
 
-Logic::Logic()
-{
-}
-
-
-Logic::~Logic()
-{
+Logic::Logic(){
 
 }
 
-int Logic::addTask(){
+
+Logic::~Logic(){
+
+}
+
+int Logic::addTask(Item itemToBeAdded){
+	_schedule.addItem(itemToBeAdded);
 }
 int Logic::editTask(){
-}
-int Logic::deleteTask(){
 
+}
+int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
+	//if(schedule size > lineIndextoBeDeleted)
+	_schedule.deleteItem(lineIndexToBeDeleted);
+	return 1;
 }
 int Logic::searchTask(){
 
@@ -63,7 +66,7 @@ int Logic::writeDataOntoFile(char * fileName) {
 	ofstream outfile(fileName);
 
 	if (!outfile.bad()) {
-    outfile << setItem << endl << setDateTime << endl;
+		outfile << setItem << endl << setDateTime << endl;
 		outfile.close();
 		retCode = 0;
 	}
@@ -71,6 +74,9 @@ int Logic::writeDataOntoFile(char * fileName) {
 	return retCode;
 }
 
+unsigned int Logic::getIdFromIndex(int lineIndex){
+	unsigned int Id = _schedule._
+}
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
 	DateTime datetime;
 	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day,month,year)

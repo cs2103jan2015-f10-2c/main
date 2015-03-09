@@ -16,15 +16,14 @@ using namespace std;
 class Logic
 {
 private:
-  vector<Item> taskList;
-  vector<DateTime> taskDateTime;
+	Schedule _schedule;
 
 public:
 	Logic();
 	~Logic();
-	int addTask();
+	int addTask(Item itemToBeAdded);
 	int editTask();
-	int deleteTask();
+	int deleteTask(unsigned int lineIndexToBeDeleted);
 	int searchTask();
 	int sortTask();
 	int assignTiming();
@@ -42,7 +41,8 @@ public:
 	void readDataFromFile();
 	int writeDataOntoFile(char * fileName);
 
+	unsigned int getIdFromIndex(int lineIndex);
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
-	Item setItem(string itemName, DateTime startTime,	DateTime endTime, string description,	char priority, char label, bool isCompleted);
+	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description,	char priority, char label, bool isCompleted);
 };
 
