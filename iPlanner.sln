@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlanner", "iPlanner\iPlanner.vcxproj", "{5B4A7470-0D1D-452F-BFA7-722F5D15B0D2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iStorage", "iStorage\iStorage.vcxproj", "{46C693BB-9CEF-4D7C-B8AB-6489AF895D25}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iParser", "iParser\iParser.vcxproj", "{0BD891D4-882D-4B27-A8C8-B3C06DC73829}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iLogic", "iLogic\iLogic.vcxproj", "{709815AA-4941-4364-A3A1-40D61151D7BE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iStorageTest", "iStorageTest\iStorageTest.vcxproj", "{7B08DF25-0EC6-4580-82D8-BF69EA9C9CB2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iParserTest", "iParserTest\iParserTest.vcxproj", "{AF856C7B-6C4E-4900-80D3-58F88DD5ABB2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iLogicTest", "iLogicTest\iLogicTest.vcxproj", "{5B6A7A2D-035B-455B-85DF-B7C272C64729}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B4A7470-0D1D-452F-BFA7-722F5D15B0D2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5B4A7470-0D1D-452F-BFA7-722F5D15B0D2}.Debug|Win32.Build.0 = Debug|Win32
+		{5B4A7470-0D1D-452F-BFA7-722F5D15B0D2}.Release|Win32.ActiveCfg = Release|Win32
+		{5B4A7470-0D1D-452F-BFA7-722F5D15B0D2}.Release|Win32.Build.0 = Release|Win32
+		{46C693BB-9CEF-4D7C-B8AB-6489AF895D25}.Debug|Win32.ActiveCfg = Debug|Win32
+		{46C693BB-9CEF-4D7C-B8AB-6489AF895D25}.Debug|Win32.Build.0 = Debug|Win32
+		{46C693BB-9CEF-4D7C-B8AB-6489AF895D25}.Release|Win32.ActiveCfg = Release|Win32
+		{46C693BB-9CEF-4D7C-B8AB-6489AF895D25}.Release|Win32.Build.0 = Release|Win32
+		{0BD891D4-882D-4B27-A8C8-B3C06DC73829}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0BD891D4-882D-4B27-A8C8-B3C06DC73829}.Debug|Win32.Build.0 = Debug|Win32
+		{0BD891D4-882D-4B27-A8C8-B3C06DC73829}.Release|Win32.ActiveCfg = Release|Win32
+		{0BD891D4-882D-4B27-A8C8-B3C06DC73829}.Release|Win32.Build.0 = Release|Win32
+		{709815AA-4941-4364-A3A1-40D61151D7BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{709815AA-4941-4364-A3A1-40D61151D7BE}.Debug|Win32.Build.0 = Debug|Win32
+		{709815AA-4941-4364-A3A1-40D61151D7BE}.Release|Win32.ActiveCfg = Release|Win32
+		{709815AA-4941-4364-A3A1-40D61151D7BE}.Release|Win32.Build.0 = Release|Win32
+		{7B08DF25-0EC6-4580-82D8-BF69EA9C9CB2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7B08DF25-0EC6-4580-82D8-BF69EA9C9CB2}.Debug|Win32.Build.0 = Debug|Win32
+		{7B08DF25-0EC6-4580-82D8-BF69EA9C9CB2}.Release|Win32.ActiveCfg = Release|Win32
+		{7B08DF25-0EC6-4580-82D8-BF69EA9C9CB2}.Release|Win32.Build.0 = Release|Win32
+		{AF856C7B-6C4E-4900-80D3-58F88DD5ABB2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AF856C7B-6C4E-4900-80D3-58F88DD5ABB2}.Debug|Win32.Build.0 = Debug|Win32
+		{AF856C7B-6C4E-4900-80D3-58F88DD5ABB2}.Release|Win32.ActiveCfg = Release|Win32
+		{AF856C7B-6C4E-4900-80D3-58F88DD5ABB2}.Release|Win32.Build.0 = Release|Win32
+		{5B6A7A2D-035B-455B-85DF-B7C272C64729}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5B6A7A2D-035B-455B-85DF-B7C272C64729}.Debug|Win32.Build.0 = Debug|Win32
+		{5B6A7A2D-035B-455B-85DF-B7C272C64729}.Release|Win32.ActiveCfg = Release|Win32
+		{5B6A7A2D-035B-455B-85DF-B7C272C64729}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
