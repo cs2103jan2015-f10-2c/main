@@ -10,15 +10,21 @@ Logic::~Logic(){
 }
 
 int Logic::addTask(Item itemToBeAdded){
-	logicSchedule.addItem(itemToBeAdded);
+	_logicSchedule.addItem(itemToBeAdded);
 }
 int Logic::editTask(){
 
 }
+
+int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
+	deleteTask(lineIndexToBeEdited);
+	addTask(editedItemToBeAdded);
+}
+
 int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	if (getScheduleSize() > lineIndexToBeDeleted){
 		unsigned int itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
-		logicSchedule.deleteItem(itemIdToBeDeleted);
+		_logicSchedule.deleteItem(itemIdToBeDeleted);
 		return 1;//Delete successful
 	}
 	else{
@@ -29,12 +35,14 @@ int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
 	for (int lineIndex = 0; lineIndex < getScheduleSize(); lineIndex++){
 		if (isFound(lineIndex, phraseToSearch)){
-			searchedItems.push_back(logicSchedule.getSchedule()[lineIndex]);
+			searchedItems.push_back(_logicSchedule.getSchedule()[lineIndex]);
 		}
 	}
 }
 bool Logic::isFound(int lineIndex, string& phraseToSearch){
-	if (logicSchedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch)>-1 || logicSchedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch) > -1){
+	unsigned int phraseFoundFromItemName = _logicSchedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch);
+	unsigned int phraseFoundFromItemDescription = _logicSchedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch);
+	if (phraseFoundFromItemName>-1 || phraseFoundFromItemDescription> -1){
 		return true;
 	}
 	else{
@@ -45,8 +53,30 @@ bool Logic::isFound(int lineIndex, string& phraseToSearch){
 int Logic::sortTask(){
 
 }
-int Logic::assignTiming(){
+
+Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
+	if (timingType == "start"){
+		item.setStartTime(datetime);
+	}
+	else if (timingType == "due" || timingType == "end"){
+		item.setEndTime(datetime);
+	}
+	return item;
 }
+
+int Logic::assignTimingToNewTask(string timingType, DateTime datetime){
+	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
+	Item itemToBeAssignedTiming = assignTiming(_logicSchedule.getSchedule()[lastLineIndexOfSchedule], timingType, datetime); 
+	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedTiming);
+	return 1;
+}
+
+int Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex){
+	Item itemToBeAssignedTiming = assignTiming(_logicSchedule.getSchedule()[lineIndex], timingType, datetime);
+	deleteAndAddEditedItem(lineIndex, itemToBeAssignedTiming);
+	return 1;
+}
+
 int Logic::assignPriority(){
 
 }
@@ -57,19 +87,6 @@ int Logic::changeView(){
 
 }
 int Logic::showHelpMenu(){
-
-}
-
-void Logic::addToTStorage(){
-
-}
-void Logic::addToPStorage(){
-
-}
-void Logic::deleteFromPStorage(){
-
-}
-void Logic::editPStorage(){
 
 }
 
@@ -126,17 +143,17 @@ void Logic::printItem(Item item){
 }
 
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = logicSchedule.getSchedule()[lineIndex].getItemID;
+	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
 	return Id;
 }
 
 unsigned int Logic::getScheduleSize(){
-	return logicSchedule.getSchedule().size();
+	return _logicSchedule.getSchedule().size();
 }
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
 	DateTime datetime;
-	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day,month,year)
+	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day, month, year)
 		&& datetime.isValidHourRange(hour) && datetime.isValidMinuteRange(minute)){
 		datetime.setYear(year);
 		datetime.setMonth(month);
@@ -147,16 +164,25 @@ DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
 	return datetime;
 }
 
+DateTime Logic::setDateTime(int year, int month, int day){
+	DateTime datetime;
+	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day, month, year)){
+		datetime.setYear(year);
+		datetime.setMonth(month);
+		datetime.setDay(day);
+	}
+	return datetime;
+}
 Item Logic::setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted){
 	Item item;
 
 	item.setItemName(itemName);
-  item.setStartTime(startTime);
-  item.setEndTime(endTime);
+	item.setStartTime(startTime);
+	item.setEndTime(endTime);
 	item.setDescription(description);
 	item.setPriority(priority);
 	item.setLabel(label);
 	item.setCompletion(isCompleted);
-	
-  return item;
+
+	return item;
 }
