@@ -6,7 +6,15 @@
 
 void main() {
 	iPlannerParser myParser;
+	list<userCommand> myUserCommand;
 	string userInput;
+
 	getline(cin, userInput);
-	myParser.main(userInput);
+	myUserCommand = myParser.main(userInput);
+
+	list<userCommand>::iterator iter;
+	for(iter = myUserCommand.begin(); iter != myUserCommand.end(); iter++) {
+		cout << "Command: " << iter->getCommand() << endl
+			<< "Text: " << iter->getText() << endl;
+	}
 }
