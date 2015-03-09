@@ -1,21 +1,29 @@
 #include "Logic.h"
 
-Logic::Logic()
-{
-}
-
-
-Logic::~Logic()
-{
+Logic::Logic(){
 
 }
 
-int Logic::addTask(){
+
+Logic::~Logic(){
+
+}
+
+int Logic::addTask(Item itemToBeAdded){
+	_schedule.addItem(itemToBeAdded);
 }
 int Logic::editTask(){
-}
-int Logic::deleteTask(){
 
+}
+int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
+	if (getScheduleSize() > lineIndexToBeDeleted){
+		unsigned int itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
+		_schedule.deleteItem(itemIdToBeDeleted);
+		return 1;//Delete successful
+	}
+	else{
+		return 0;//Delete failed
+	}
 }
 int Logic::searchTask(){
 
@@ -63,23 +71,21 @@ int Logic::writeDataOntoFile(char * fileName) {
 	ofstream outfile(fileName);
 
 	if (!outfile.bad()) {
-    vector<Item>::iterator iterItem;
-    
-    for( iterItem = taskList.begin(); iterItem != taskList.end(); ++iterItem) {
-      outfile << (*iterItem)->_itemName << endl;
-      outfile << (*iterItem)->_startTime << endl;
-      outfile << (*iterItem)->_endtime << endl;
-      outfile << (*iterItem)->_itemID << endl;
-      outfile << (*iterItem)->_description << endl;
-      outfile << (*iterItem)->_priority << endl;
-      outfile << (*iterItem)->_label << endl;
-      outfile << (*iterItem)->isCompleted << endl;
-    }
-    outfile.close();
+		outfile << setItem << endl << setDateTime << endl;
+		outfile.close();
 		retCode = 0;
 	}
 
 	return retCode;
+}
+
+unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
+	unsigned int Id = _schedule.getSchedule()[lineIndex].getItemID;
+	return Id;
+}
+
+unsigned int Logic::getScheduleSize(){
+	return _schedule.getSchedule().size();
 }
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){

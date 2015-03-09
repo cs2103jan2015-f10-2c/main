@@ -50,7 +50,35 @@ bool Item::setCompletion(bool isCompleted) {
 	return _isCompleted;
 }
 
+string Item::getItemName() {
+	return _itemName;
+}
 
+string Item::getDescription()  {
+	return _description;
+}
 
+DateTime Item::getStartTime(){
+	return _startTime;
+}
 
+DateTime Item::getEndTime() {
+	return _endTime;
+}
+
+unsigned int Item::getItemID() {
+	return _itemID;
+}
+
+char Item::getPriority() {
+	return _priority;
+}
+
+char Item::getLabel() {
+	return _label;
+}
+
+bool Item::getCompletion() {
+	return _isCompleted;
+}
 
