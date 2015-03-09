@@ -15,7 +15,8 @@ using namespace std;
 class Logic
 {
 private:
-	
+  vector<Item> taskList;
+  vector<DateTime> taskDateTime;
 
 public:
 	Logic();
