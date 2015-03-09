@@ -16,34 +16,43 @@ using namespace std;
 class Logic
 {
 private:
-	Schedule _schedule;
+	Schedule _logicSchedule;
 
 public:
 	Logic();
 	~Logic();
 	int addTask(Item itemToBeAdded);
-	int editTask();
+	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
+	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
 	int deleteTask(unsigned int lineIndexToBeDeleted);
-	int searchTask();
+	int searchTask(string phraseToSearch);
+	bool isFound(int lineIndex, string& phraseToSearch);
 	int sortTask();
-	int assignTiming();
-	int assignPriority();
-	int assignLabel();
+	Item assignTiming(Item item, string timingType, DateTime datetime);
+	int assignTimingToNewTask(string timingType, DateTime datetime);
+	int assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex);
+	Item assignPriority(Item item, char priorityType);
+	int assignPriorityToNewTask(char priorityType);
+	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
+	Item assignLabel(Item item, char labelType);
+	int assignLabelToNewTask(char labelType);
+	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
 	int changeView();
 	int showHelpMenu();
 
-	void addToTStorage();
-	void addToPStorage();
-	void deleteFromPStorage();
-	void editPStorage();
-
 	void assignSaveFolder();
-	void readDataFromFile();
-	int writeDataOntoFile(char * fileName);
+  int readDataFromFile(char * fileName,vector<Item> itemVector);
+	int writeDataOntoFile(char * fileName,vector<Item> itemVector);
 
+	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
+	void printItem(Item item);
+	void printItemVector(vector<Item> itemVector);
+	Item getItem();
+	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
 	unsigned int getItemIdFromLineIndex(int lineIndex);
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
+	DateTime setDateTime(int year, int month, int day);
 	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description,	char priority, char label, bool isCompleted);
 };
 
