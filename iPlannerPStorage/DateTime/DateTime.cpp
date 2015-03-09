@@ -7,6 +7,22 @@
 //	Constructor
 DateTime::DateTime() { }
 
+//	Overloaded Constructor with YYYY MM DD HH MM
+DateTime::DateTime(int year, int month, int day, int hour, int minute) {
+	_year = year;
+	_month = month;
+	_day = day;
+	_hour = hour;
+	_minute = minute;
+}
+
+//	Overloaded Constructor with YYYY MM DD
+DateTime::DateTime(int year, int month, int day) {
+	_year = year;
+	_month = month;
+	_day = day;
+}
+
 //	Destructor
 DateTime::~DateTime() { }
 

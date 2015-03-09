@@ -28,13 +28,23 @@ private:
 
 public:
 	//	Constructor
-	//	Pre:	
-	//	Post:	
+	//	Pre:	Nil
+	//	Post:	DateTime object is created; attributes have no default assigned values
 	DateTime();
 
+	//	Overloaded Constructor with YYYY MM DD HH MM
+	//	Pre:	Year, Month, Day, Hour, and Minute are valid integers within range
+	//	Post:	DateTime object is created; all attributes are assigned accordingly
+	DateTime(int, int, int, int, int);
+
+	//	Overloaded Constructor with YYYY MM DD
+	//	Pre:	Year, Month, Day are valid integers within range
+	//	Post:	DateTime object is created; only YYYY MM DD attributes are assigned
+	DateTime(int, int, int);
+
 	//	Destructor
-	//	Pre:	
-	//	Post:	
+	//	Pre:	Nil
+	//	Post:	DateTime object is destroyed
 	~DateTime();
 
 	//	Sets the attribute

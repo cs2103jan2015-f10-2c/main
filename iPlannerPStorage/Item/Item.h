@@ -21,28 +21,28 @@ private:
 
 public:
 	//	Constructor
-	//	Pre:
-	//	Post:
+	//	Pre:	Nil
+	//	Post:	Item object is created; attributes have no assigned values
 	Item();
 
 	//	Destructor
-	//	Pre:
-	//	Post:
+	//	Pre:	Nil
+	//	Post:	Item object is destroyed
 	~Item();
 
 	//	Sets the attribute
 	//	Pre:	ItemName is a string
-	//			Start Time and End Time are DateTime objects
 	//			Description is a string
+	//			Start Time and End Time are DateTime objects
 	//			Item ID is an unsigned integer
 	//			Priority is a character - L, M, or H
 	//			Label is a character - P, O, or M
 	//			Completion is a boolean value - true if item is completed
 	//	Post:	_(attribute) is set, and value is returned
 	string setItemName(string);
+	string setDescription(string);
 	DateTime setStartTime(DateTime);
 	DateTime setEndTime(DateTime);
-	string setDescription(string);
 	unsigned int setItemID(unsigned int);
 	char setPriority(char);
 	char setLabel(char);
