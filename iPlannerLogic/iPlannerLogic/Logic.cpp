@@ -79,14 +79,25 @@ void Logic::assignSaveFolder(){
 void Logic::readDataFromFile(){
 
 }
-int Logic::writeDataOntoFile(char * fileName) {
+int Logic::writeDataOntoFile(char * fileName,vector<Item> itemVector) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 	ofstream outfile(fileName);
 
 	if (!outfile.bad()) {
-		outfile << setItem << endl << setDateTime << endl;
-		outfile.close();
+    vector<Item>::iterator iterItem;
+    
+    for( iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
+      outfile << *iterItem->getItemName << endl;
+      outfile << *iterItem->getStartTime << endl;
+      outfile << *iterItem->getEndTime << endl;
+      outfile << *iterItem->getItemID << endl;
+      outfile << *iterItem->getDescription << endl;
+      outfile << *iterItem->getPriority << endl;
+      outfile << *iterItem->getLabel << endl;
+      outfile << *iterItem->getCompletion << endl;
+    }
+    outfile.close();
 		retCode = 0;
 	}
 
