@@ -124,9 +124,32 @@ int Logic::showHelpMenu(){
 void Logic::assignSaveFolder(){
 
 }
-void Logic::readDataFromFile(){
+int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
+  // Variable to denote successful processing of function
+  int retCode = -1;
 
+  ifstream infile(fileName,std::ios::_Nocreate);
+
+  if (infile.is_open()) {
+    vector<Item>::iterator iterItem;
+    while(!infile.eof()) {
+      for( iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
+        infile.get(*iterItem->setItemName);
+        infile.get(*iterItem->setStartTime);
+        infile.get(*iterItem->setEndTime);
+        infile.get(*iterItem->setItemID);
+        infile.get(*iterItem->setDescription);
+        infile.get(*iterItem->setPriority);
+        infile.get(*iterItem->setLabel);
+        infile.get(*iterItem->setCompletion);
+      }
+    }
+    infile.close();
+    retCode = 0;
+  }
+  return retCode;  
 }
+
 int Logic::writeDataOntoFile(char * fileName,vector<Item> itemVector) {
 	// Variable to denote successful processing of function
 	int retCode = -1;

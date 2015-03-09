@@ -41,7 +41,7 @@ public:
 	int showHelpMenu();
 
 	void assignSaveFolder();
-	void readDataFromFile();
+  int readDataFromFile(char * fileName,vector<Item> itemVector);
 	int writeDataOntoFile(char * fileName,vector<Item> itemVector);
 
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
