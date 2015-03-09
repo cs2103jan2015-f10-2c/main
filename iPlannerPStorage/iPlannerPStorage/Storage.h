@@ -30,6 +30,9 @@ public:
 	//	Deletes an item from the schedule
 	Item deleteItem(unsigned int);
 
+	//  getter for schedule
+	vector<Item> getSchedule();
+
 	//	Sorts the schedule according to date
 	vector<Item>& sortScheduleByDate();
 

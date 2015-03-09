@@ -16,9 +16,14 @@ int Logic::editTask(){
 
 }
 int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
-	//if(schedule size > lineIndextoBeDeleted)
-	_schedule.deleteItem(lineIndexToBeDeleted);
-	return 1;
+	if (getScheduleSize() > lineIndexToBeDeleted){
+		unsigned int itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
+		_schedule.deleteItem(itemIdToBeDeleted);
+		return 1;//Delete successful
+	}
+	else{
+		return 0;//Delete failed
+	}
 }
 int Logic::searchTask(){
 
@@ -74,9 +79,15 @@ int Logic::writeDataOntoFile(char * fileName) {
 	return retCode;
 }
 
-unsigned int Logic::getIdFromIndex(int lineIndex){
-	unsigned int Id = _schedule._
+unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
+	unsigned int Id = _schedule.getSchedule()[lineIndex].getItemID;
+	return Id;
 }
+
+unsigned int Logic::getScheduleSize(){
+	return _schedule.getSchedule().size();
+}
+
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
 	DateTime datetime;
 	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day,month,year)
