@@ -12,7 +12,7 @@ Logic::~Logic(){
 int Logic::addTask(Item itemToBeAdded){
 	_logicSchedule.addItem(itemToBeAdded);
 }
-int Logic::editTask(){
+int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
 
@@ -22,7 +22,7 @@ int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedI
 }
 
 int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
-	if (getScheduleSize() > lineIndexToBeDeleted){
+	if (isValidLineIndex(lineIndexToBeDeleted)){
 		unsigned int itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
 		_logicSchedule.deleteItem(itemIdToBeDeleted);
 		return 1;//Delete successful
@@ -39,6 +39,7 @@ int Logic::searchTask(string phraseToSearch){
 		}
 	}
 }
+
 bool Logic::isFound(int lineIndex, string& phraseToSearch){
 	unsigned int phraseFoundFromItemName = _logicSchedule.getSchedule()[lineIndex].getItemName.find(phraseToSearch);
 	unsigned int phraseFoundFromItemDescription = _logicSchedule.getSchedule()[lineIndex].getDescription.find(phraseToSearch);
@@ -77,12 +78,42 @@ int Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsi
 	return 1;
 }
 
-int Logic::assignPriority(){
-
+Item Logic::assignPriority(Item item, char priorityType){
+	item.setPriority(priorityType);
+	return item;
 }
-int Logic::assignLabel(){
 
+int Logic::assignPriorityToNewTask(char priorityType){
+	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
+	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.getSchedule()[lastLineIndexOfSchedule], priorityType);
+	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedPriority);
+	return 1;
 }
+
+int Logic::assignPriorityToExistingTask(char priorityType, unsigned int lineIndex){
+	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.getSchedule()[lineIndex], priorityType);
+	deleteAndAddEditedItem(lineIndex, itemToBeAssignedPriority);
+	return 1;
+}
+
+Item Logic::assignLabel(Item item, char labelType){
+	item.setLabel(labelType);
+	return item;
+}
+
+int Logic::assignLabelToNewTask(char labelType){
+	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
+	Item itemToBeAssignedLabel = assignLabel(_logicSchedule.getSchedule()[lastLineIndexOfSchedule], labelType);
+	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedLabel);
+	return 1;
+}
+
+int Logic::assignPriorityToExistingTask(char labelType, unsigned int lineIndex){
+	Item itemToBeAssignedLabel = assignPriority(_logicSchedule.getSchedule()[lineIndex], labelType);
+	deleteAndAddEditedItem(lineIndex, itemToBeAssignedLabel);
+	return 1;
+}
+
 int Logic::changeView(){
 
 }
@@ -121,6 +152,14 @@ int Logic::writeDataOntoFile(char * fileName,vector<Item> itemVector) {
 	return retCode;
 }
 
+bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
+	if (getScheduleSize() > lineIndexToBeChecked){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 
 void Logic::printItemVector(vector<Item> itemVector){
 	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){

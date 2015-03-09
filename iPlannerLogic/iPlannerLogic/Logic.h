@@ -22,7 +22,7 @@ public:
 	Logic();
 	~Logic();
 	int addTask(Item itemToBeAdded);
-	int editTask();
+	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
 	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
 	int deleteTask(unsigned int lineIndexToBeDeleted);
 	int searchTask(string phraseToSearch);
@@ -31,15 +31,20 @@ public:
 	Item assignTiming(Item item, string timingType, DateTime datetime);
 	int assignTimingToNewTask(string timingType, DateTime datetime);
 	int assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex);
-	int assignPriority();
-	int assignLabel();
+	Item assignPriority(Item item, char priorityType);
+	int assignPriorityToNewTask(char priorityType);
+	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
+	Item assignLabel(Item item, char labelType);
+	int assignLabelToNewTask(char labelType);
+	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
 	int changeView();
 	int showHelpMenu();
 
 	void assignSaveFolder();
 	void readDataFromFile();
 	int writeDataOntoFile(char * fileName,vector<Item> itemVector);
-	
+
+	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	void printItem(Item item);
 	void printItemVector(vector<Item> itemVector);
 	Item getItem();
