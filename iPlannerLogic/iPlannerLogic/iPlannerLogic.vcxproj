@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{780C360B-4023-472F-999A-600DB436A549}</ProjectGuid>
+    <ProjectGuid>{F60D34A2-693A-4580-AF96-66431D02BD65}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>iPlannerLogic</RootNamespace>
   </PropertyGroup>
