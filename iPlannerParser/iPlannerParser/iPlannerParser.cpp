@@ -11,7 +11,6 @@ list<userCommand> iPlannerParser::main(string userInput) {
 	return userCommandList;
 }
 
-
 void iPlannerParser::splitUserInput(string userInput) {
 	int startIndex = INDEX_ZERO;
 	int endIndex = INDEX_ZERO;
@@ -20,9 +19,9 @@ void iPlannerParser::splitUserInput(string userInput) {
 		string splittedUserCommand;
 		startIndex = findIndex(userInput,TOKEN_COMMAND, endIndex);
 		endIndex = findIndex(userInput,TOKEN_COMMAND, startIndex+INDEX_NEXT);
-		splittedUserCommand = findSubstring(userInput, startIndex, endIndex);
+		splittedUserCommand = getSubstring(userInput, startIndex, endIndex);
 		userCommand tempUserCommand(splittedUserCommand);
-		userCommandList.push_back(tempUserCommand);
+		addToUserCommandList(tempUserCommand);
 	}
 }
 
@@ -34,7 +33,7 @@ int iPlannerParser::findIndex(string userInput, string stringToFind, int startin
 	return returnIndex;
 }
 
-string iPlannerParser::findSubstring(string userInput, int startIndex, int endIndex) {
+string iPlannerParser::getSubstring(string userInput, int startIndex, int endIndex) {
 	string substring;
 
 	substring = userInput.substr(startIndex, endIndex - startIndex);
@@ -42,3 +41,14 @@ string iPlannerParser::findSubstring(string userInput, int startIndex, int endIn
 	return substring;
 }
 
+void iPlannerParser::addToUserCommandList(userCommand tempUserCommand) {
+	userCommandList.push_back(tempUserCommand);
+}
+
+const int iPlannerParser::getFindIndex(string userInput, string stringToFind, int startingIndex) {
+	return findIndex(userInput, stringToFind, startingIndex);
+}
+
+const string iPlannerParser::getGetSubstring(string userInput, int startIndex, int endIndex) {
+	return getSubstring(userInput, startIndex, endIndex);
+}
