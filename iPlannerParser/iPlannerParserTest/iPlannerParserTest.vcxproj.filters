@@ -26,13 +26,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\iPlannerParser\iPlannerParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="iPlannerParserTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\iPlannerParser\userCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
