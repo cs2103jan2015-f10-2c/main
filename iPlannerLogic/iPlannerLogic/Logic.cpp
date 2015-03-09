@@ -63,8 +63,19 @@ int Logic::writeDataOntoFile(char * fileName) {
 	ofstream outfile(fileName);
 
 	if (!outfile.bad()) {
-    outfile << setItem << endl << setDateTime << endl;
-		outfile.close();
+    vector<Item>::iterator iterItem;
+    
+    for( iterItem = taskList.begin(); iterItem != taskList.end(); ++iterItem) {
+      outfile << (*iterItem)->_itemName << endl;
+      outfile << (*iterItem)->_startTime << endl;
+      outfile << (*iterItem)->_endtime << endl;
+      outfile << (*iterItem)->_itemID << endl;
+      outfile << (*iterItem)->_description << endl;
+      outfile << (*iterItem)->_priority << endl;
+      outfile << (*iterItem)->_label << endl;
+      outfile << (*iterItem)->isCompleted << endl;
+    }
+    outfile.close();
 		retCode = 0;
 	}
 
