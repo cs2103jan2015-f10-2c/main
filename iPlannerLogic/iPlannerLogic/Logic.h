@@ -24,7 +24,8 @@ public:
 	int addTask(Item itemToBeAdded);
 	int editTask();
 	int deleteTask(unsigned int lineIndexToBeDeleted);
-	int searchTask();
+	int searchTask(string phraseToSearch);
+	bool isFound(int lineIndex, string& phraseToSearch);
 	int sortTask();
 	int assignTiming();
 	int assignPriority();
@@ -40,7 +41,9 @@ public:
 	void assignSaveFolder();
 	void readDataFromFile();
 	int writeDataOntoFile(char * fileName);
-
+	
+	void printItem(Item item);
+	void printItemVector(vector<Item> itemVector);
 	unsigned int getScheduleSize();
 	unsigned int getItemIdFromLineIndex(int lineIndex);
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
