@@ -20,7 +20,7 @@ static const int MAX_MINUTE = 59;
 
 class DateTimeVerification {
 private:
-	DateTime dateTimeObjectToVerify;
+	DateTime _dateTimeObjectToVerify;
 
 	bool isValidYearRange();
 	bool isValidMonthRange();
