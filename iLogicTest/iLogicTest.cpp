@@ -77,23 +77,41 @@ namespace iLogicTest {
 			Assert::AreEqual(addedItemId2, deletedItem.getItemID());
 
 		}
-		/*
+		
 		TEST_METHOD(DeleteTaskTest2)
 		{
-		Logic testLogic;
-		Schedule testSchedule;
-		Item testItem;
-		Item testItem2;
-		testItem.setItemID(13);
-		unsigned int addedItemId = testLogic.addTask(testItem);
-		testItem2.setItemID(25);
-		unsigned int addedItemId2 = testLogic.addTask(testItem2);
-		Item deletedItem = testLogic.deleteTask(1);
-		Assert::AreEqual(addedItemId2, deletedItem.getItemID());
-		deletedItem = testLogic.deleteTask(1);
-		Assert::AreEqual(addedItemId, deletedItem.getItemID());
+			Logic testLogic;
+			Schedule testSchedule;
+			Item testItem;
+			testItem.setItemID(13);
+			unsigned int addedItemId = testLogic.addTask(testItem);
+			testItem.setItemID(25);
+			unsigned int addedItemId2 = testLogic.addTask(testItem);
+			testItem.setItemID(35);
+			unsigned int addedItemId3 = testLogic.addTask(testItem);
+			testItem.setItemID(45);
+			unsigned int addedItemId4 = testLogic.addTask(testItem);
+			testItem.setItemID(356);
+			unsigned int addedItemId5 = testLogic.addTask(testItem);
+
+			unsigned int IdFromSchedule = testLogic.getSchedule()[0].getItemID();
+			unsigned int IdFromSchedule2 = testLogic.getSchedule()[1].getItemID();
+			unsigned int IdFromSchedule3 = testLogic.getSchedule()[2].getItemID();
+			unsigned int IdFromSchedule4 = testLogic.getSchedule()[3].getItemID();
+			unsigned int IdFromSchedule5 = testLogic.getSchedule()[4].getItemID();
+			Assert::AreEqual(IdFromSchedule, addedItemId);
+			Assert::AreEqual(IdFromSchedule2, addedItemId2);
+			Assert::AreEqual(IdFromSchedule3, addedItemId3);
+			Assert::AreEqual(IdFromSchedule4, addedItemId4);
+			Assert::AreEqual(IdFromSchedule5, addedItemId5);
+
+			Item deletedItem = testLogic.deleteTask(2);
+			Assert::AreEqual(addedItemId2, deletedItem.getItemID());
+			deletedItem = testLogic.deleteTask(3);
+			Assert::AreEqual(addedItemId4, deletedItem.getItemID());
+
 		}
-		*/
+		
 	};
 
 	TEST_CLASS(GetItemIDFromLineIndexTest)
@@ -143,13 +161,11 @@ namespace iLogicTest {
 			Schedule testSchedule;
 			Item testItem;
 			char priorityType = 'h';
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterPriorityAdded = testLogic.assignPriorityToNewTask(priorityType);
 			Assert::AreEqual(itemAfterPriorityAdded.getPriority(), priorityType);
-			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(25));
+			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(2));
 
 		}
 
@@ -160,13 +176,11 @@ namespace iLogicTest {
 			Schedule testSchedule;
 			Item testItem;
 			char priorityType = 'h';
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterPriorityAdded = testLogic.assignPriorityToExistingTask(priorityType, 1);
 			Assert::AreEqual(itemAfterPriorityAdded.getPriority(), priorityType);
-			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(13));
+			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(1));
 
 		}
 	};
@@ -182,19 +196,14 @@ namespace iLogicTest {
 			Schedule testSchedule;
 			Item testItem;
 			char labelType = 'p';
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterLabelAdded = testLogic.assignLabelToNewTask(labelType);
 			Assert::AreEqual(itemAfterLabelAdded.getLabel(), labelType);
-			Assert::AreEqual(itemAfterLabelAdded.getItemID(), unsigned int(267));
+			Assert::AreEqual(itemAfterLabelAdded.getItemID(), unsigned int(5));
 
 		}
 
@@ -204,19 +213,14 @@ namespace iLogicTest {
 			Schedule testSchedule;
 			Item testItem;
 			char labelType = 'p';
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterLabelAdded = testLogic.assignLabelToExistingTask(labelType, unsigned int(3));
 			Assert::AreEqual(itemAfterLabelAdded.getLabel(), labelType);
-			Assert::AreEqual(itemAfterLabelAdded.getItemID(), unsigned int(36));
+			Assert::AreEqual(itemAfterLabelAdded.getItemID(), unsigned int(3));
 
 		}
 	};
@@ -233,15 +237,10 @@ namespace iLogicTest {
 			Item testItem;
 			DateTime testDateTime(1990, 12, 26);
 			string timingType = "start";
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterTimingAdded = testLogic.assignTimingToNewTask(timingType, testDateTime);
 			int expectedYear = itemAfterTimingAdded.getStartTime().getYear();
@@ -251,7 +250,7 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedYear, 1990);
 			Assert::AreEqual(expectedMonth, 12);
 			Assert::AreEqual(expectedDay, 26);
-			Assert::AreEqual(expectedItemID, unsigned int(267));
+			Assert::AreEqual(expectedItemID, unsigned int(5));
 
 		}
 		TEST_METHOD(AssignTimingTest_AssignToNewItem1_Endtime)
@@ -262,15 +261,10 @@ namespace iLogicTest {
 			Item testItem;
 			DateTime testDateTime(1990, 12, 26);
 			string timingType = "end";
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterTimingAdded = testLogic.assignTimingToNewTask(timingType, testDateTime);
 			int expectedYear = itemAfterTimingAdded.getEndTime().getYear();
@@ -280,7 +274,7 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedYear, 1990);
 			Assert::AreEqual(expectedMonth, 12);
 			Assert::AreEqual(expectedDay, 26);
-			Assert::AreEqual(expectedItemID, unsigned int(267));
+			Assert::AreEqual(expectedItemID, unsigned int(5));
 
 		}
 
@@ -293,15 +287,10 @@ namespace iLogicTest {
 			DateTime testDateTime2(2015, 12, 25);
 			string timingType = "start";
 			string timingType2 = "end";
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterTimingAdded = testLogic.assignTimingToNewTask(timingType, testDateTime);
 			int expectedYear = itemAfterTimingAdded.getStartTime().getYear();
@@ -318,7 +307,7 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedYear2, 2015);
 			Assert::AreEqual(expectedMonth2, 12);
 			Assert::AreEqual(expectedDay2, 25);
-			Assert::AreEqual(expectedItemID, unsigned int(267));
+			Assert::AreEqual(expectedItemID, unsigned int(5));
 
 		}
 
@@ -331,15 +320,10 @@ namespace iLogicTest {
 			DateTime testDateTime(1990, 12, 26);
 			string timingType = "start";
 			unsigned int lineNumberToBeAddedTiming = 3;
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterTimingAdded = testLogic.assignTimingToExistingTask(timingType, testDateTime, lineNumberToBeAddedTiming);
 			int expectedYear = itemAfterTimingAdded.getStartTime().getYear();
@@ -349,27 +333,21 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedYear, 1990);
 			Assert::AreEqual(expectedMonth, 12);
 			Assert::AreEqual(expectedDay, 26);
-			Assert::AreEqual(expectedItemID, unsigned int(36));
+			Assert::AreEqual(expectedItemID, unsigned int(3));
 
 		}
 		TEST_METHOD(AssignTimingTest_AssignToExistingItem1_Endtime)
 		{
-
 			Logic testLogic;
 			Schedule testSchedule;
 			Item testItem;
 			DateTime testDateTime(1990, 12, 26);
 			string timingType = "end";
 			unsigned int lineNumberToBeAddedTiming = 4;
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterTimingAdded = testLogic.assignTimingToExistingTask(timingType, testDateTime, lineNumberToBeAddedTiming);
 			int expectedYear = itemAfterTimingAdded.getEndTime().getYear();
@@ -379,8 +357,7 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedYear, 1990);
 			Assert::AreEqual(expectedMonth, 12);
 			Assert::AreEqual(expectedDay, 26);
-			Assert::AreEqual(expectedItemID, unsigned int(41));
-
+			Assert::AreEqual(expectedItemID, unsigned int(4));
 		}
 
 		TEST_METHOD(AssignTimingTest_AssignToExistingItem1_StartAndEndtime)
@@ -393,15 +370,10 @@ namespace iLogicTest {
 			string timingType = "start";
 			string timingType2 = "end";
 			unsigned int lineNumberToBeAddedTiming = 2;
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(36);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(41);
 			addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(267);
 			addedItemId = testLogic.addTask(testItem);
 			Item itemAfterTimingAdded = testLogic.assignTimingToExistingTask(timingType, testDateTime,lineNumberToBeAddedTiming);
 			int expectedYear = itemAfterTimingAdded.getStartTime().getYear();
@@ -418,8 +390,7 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedYear2, 2015);
 			Assert::AreEqual(expectedMonth2, 12);
 			Assert::AreEqual(expectedDay2, 25);
-			Assert::AreEqual(expectedItemID, unsigned int(25));
-
+			Assert::AreEqual(expectedItemID, unsigned int(2));
 		}
 	};
 }

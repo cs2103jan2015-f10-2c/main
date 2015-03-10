@@ -8,7 +8,8 @@ const string Logic::COMMAND_EDIT = "edit";
 const string Logic::COMMAND_EXIT = "exit";
 
 Logic::Logic() {
-	_nextItemID = 0;
+	_nextItemID = 1;
+	//failure in add,delete,add function will return an item with ID = 0
 }
 
 Logic::~Logic() {}
@@ -139,17 +140,27 @@ string Logic::showToUser(string text) {
 	return MESSAGE_SUCCESS;
 }
 // End of Beng's part ====================================================
+// Whats Up Beng Beng Di Di
+// Shuai ge is coding now
 */
 
 unsigned int Logic::addTask(Item itemToBeAdded){
-	unsigned int addedItemID = -1;
+	unsigned int addedItemID = 0;
 	if (isValidItem(itemToBeAdded)){
-		addedItemID = _logicSchedule.addItem(itemToBeAdded);
-		return addedItemID;
+			itemToBeAdded.setItemID(_nextItemID);
+			_nextItemID++;
+			addedItemID = _logicSchedule.addItem(itemToBeAdded);
 	}
-	else return addedItemID;
+	return addedItemID;
 }
 
+unsigned int Logic::addTaskForEdition(Item itemToBeAdded){
+	unsigned int addedItemID = 0;
+	if (isValidItem(itemToBeAdded)){
+		addedItemID = _logicSchedule.addItem(itemToBeAdded);
+	}
+	return addedItemID;
+}
 /*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
@@ -198,10 +209,10 @@ unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
 
-int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
+Item Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
 	deleteTask(lineIndexToBeEdited);
-	addTask(editedItemToBeAdded);
-	return 1;
+	addTaskForEdition(editedItemToBeAdded);
+	return editedItemToBeAdded;
 }
 
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
@@ -219,15 +230,15 @@ Item Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
 	int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
 	Item itemToBeAssignedTiming = getSchedule()[lastLineIndexOfSchedule];
 	Item itemAfterTimingAssigned = assignTiming(itemToBeAssignedTiming, timingType,dateTime);
-	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
-	return itemAfterTimingAssigned;
+	Item finalItemAdded = deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterTimingAssigned);
+	return finalItemAdded;
 }
 
 Item Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex){
 	Item itemToBeAssignedTiming = getSchedule()[lineIndex - 1];
 	Item itemAfterTimingAssigned = assignTiming(itemToBeAssignedTiming, timingType,datetime);
-	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
-	return itemAfterTimingAssigned;
+	Item finalItemAdded = deleteAndAddEditedItem(lineIndex-1, itemAfterTimingAssigned);
+	return finalItemAdded;
 }
 
 Item Logic::assignPriority(Item item, char priorityType){

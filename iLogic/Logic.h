@@ -59,6 +59,12 @@ public:
 	*/
 
 	unsigned int addTask(Item itemToBeAdded);
+	unsigned int addTaskForEdition(Item itemToBeAdded);
+	//addTask && addTaskForEdition works the same
+	//except that addTask increments the _nextItemID and addTaskForEdition doesn't
+	//addTask is for pure addition, and addTaskForEdition is used when editing 
+	//( e.g. delete and add back the edited Item)
+
 	bool isValidItem(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
 	unsigned int getItemIdFromLineIndex(int lineIndex);
@@ -66,7 +72,7 @@ public:
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
 
-	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
+	Item deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
 
 	Item assignTiming(Item item, string timingType, DateTime datetime);
 	Item assignTimingToNewTask(string timingType, DateTime datetime);
