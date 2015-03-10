@@ -246,52 +246,111 @@ int Logic::showHelpMenu(){
 void Logic::assignSaveFolder(){
 
 }
-
-int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
+*/
+int Logic::readDataFromFile(char * fileName) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 
 	ifstream infile(fileName, std::ios::_Nocreate);
-
+	string line;
+	int fileLength = 1; //Number of lines in Text File 
 	if (infile.is_open()) {
-		vector<Item>::iterator iterItem;
+
 		while (!infile.eof()) {
-			for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
-				infile.get(iterItem->getItemName);
-				/*
-				DateTime tempObj1 = iterItem->getStartTime();
-				infile.get(tempObj1.getDay());
-				infile.get(tempObj1.getMonth());
-				infile.get(tempObj1.getYear());
-				infile.get(tempObj1.getHour());
-				infile.get(tempObj1.getMinute());
-				
-				infile.get(iterItem->getEndTime);
-				/*DateTime tempObj2 = iterItem->getEndTime();
-				infile.get(tempObj2).getDay());
-				infile.get(tempObj2.getMonth());
-				infile.get(tempObj2.getYear());
-				infile.get(tempObj2.getHour());
-				infile.get(tempObj2.getMinute());
-<<<<<<< HEAD
+			Item readItem;
+			DateTime readTime;
+			int tempInt;
 			
-=======
->>>>>>> 75ecd23d5ba36c7c428e7b829b72e548560dddc4
-				infile.get(*iterItem->getStartTime);
-				infile.get(*iterItem->getEndTime);
-				infile.get(*iterItem->getItemID);
-				infile.get(*iterItem->getDescription);
-				infile.get(*iterItem->getPriority);
-				infile.get(*iterItem->getLabel);
-				infile.get(*iterItem->getCompletion);
+			if (fileLength % 16 == 1) {
+				getline(infile, line);
+				readItem.setItemName(line);
 			}
+			else if (fileLength % 16 == 2) {
+				for (int i = 0; i < 5; i++) {
+					char buffer[256];
+					infile.getline(buffer, 256);
+					tempInt = atoi(buffer);
+					if (i = 0) {
+						readTime.setDay(tempInt);
+					}
+					else if (i = 1) {
+						readTime.setMonth(tempInt);
+					}
+					else if (i = 2) {
+						readTime.setYear(tempInt);
+					}
+					else if (i = 3) {
+						readTime.setHour(tempInt);
+					}
+					else {
+						readTime.setMinute(tempInt);
+					}
+					fileLength++;
+				}
+				readItem.setStartTime(readTime);
+			}
+			else if (fileLength % 16 == 7) {
+				for (int i = 0; i < 5; i++) {
+					char buffer[256];
+					infile.getline(buffer, 256);
+					tempInt = atoi(buffer);
+					if (i = 0) {
+						readTime.setDay(tempInt);
+					}
+					else if (i = 1) {
+						readTime.setMonth(tempInt);
+					}
+					else if (i = 2) {
+						readTime.setYear(tempInt);
+					}
+					else if (i = 3) {
+						readTime.setHour(tempInt);
+					}
+					else {
+						readTime.setMinute(tempInt);
+					}
+					fileLength++;
+				}
+				readItem.setEndTime(readTime);
+			}
+			else if (fileLength % 16 == 12) {
+				char buffer[256];
+				infile.getline(buffer, 256);
+				tempInt = atoi(buffer);
+				readItem.setItemID(tempInt);
+			}
+			else if (fileLength % 16 == 13) {
+				getline(infile, line);
+				readItem.setDescription(line);
+			}
+			else if (fileLength % 16 == 14) {
+				char tempChar;
+				infile.get(tempChar);
+				readItem.setPriority(tempChar);
+			}
+			else if (fileLength % 16 == 15) {
+				char tempChar;
+				infile.get(tempChar);
+				readItem.setLabel(tempChar);
+			}
+			else if (fileLength % 16 == 0) {
+				getline(infile, line);
+				if (line.compare("true")) {
+					readItem.setCompletion(true);
+				}
+				else {
+					readItem.setCompletion(false);
+				}
+			}
+
 		}
 		infile.close();
 		retCode = 0;
 	}
+	
 	return retCode;
 }
-*/
+
 int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
