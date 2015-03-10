@@ -66,10 +66,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DateTimeVerification.h" />
+    <ClInclude Include="ItemVerification.h" />
     <ClInclude Include="Logic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DateTimeVerification.cpp" />
+    <ClCompile Include="ItemVerification.cpp" />
     <ClCompile Include="Logic.cpp" />
   </ItemGroup>
   <ItemGroup>
