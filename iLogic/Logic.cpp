@@ -1,19 +1,35 @@
 #include "Logic.h"
 
 const string Logic::MESSAGE_SUCCESS = "execution success";
-/*
-string Logic::readUserInput() {
+const string Logic::MESSAGE_INVALID_INPUT = "invalid input";
+const string Logic::COMMAND_ADD = "add";
+const string Logic::COMMAND_DELETE = "del";
+const string Logic::COMMAND_EDIT = "edit";
+const string Logic::COMMAND_EXIT = "exit";
+
+Logic::Logic() {
+	_nextItemID = 0;
+}
+
+Logic::~Logic() {}
+
+string Logic::executeLogic() {
 	string userInput;
 
-	while (userInput != "::exit") { // refractor this in the future
+	while (notExit(userInput)) {
 		iParser myParser;
 		list<userCommand> userCommandList;
 		getline(cin, userInput);
 		userCommandList = myParser.parse(userInput);
-		showUserInput(userCommandList);
+		executeCommand(userCommandList);	
+		//showUserInput(userCommandList);
 	}
 
 	return MESSAGE_SUCCESS;
+}
+
+bool Logic::notExit(string userInput) {
+	return userInput != COMMAND_EXIT;
 }
 
 string Logic::showUserInput(list<userCommand> userCommandList) {
@@ -26,12 +42,28 @@ string Logic::showUserInput(list<userCommand> userCommandList) {
 
 	return MESSAGE_SUCCESS;
 }
-*/
-Logic::Logic() {
-	_nextItemID = 0;
+
+string Logic::executeCommand(list<userCommand> userCommandList) {
+	list<userCommand>::iterator iter;
+
+	for (iter = userCommandList.begin(); iter != userCommandList.end(); iter++) {
+		if (!isValidCommand(iter->getCommand())) {
+			return MESSAGE_INVALID_INPUT;
+		}
+	}
+	return MESSAGE_SUCCESS;
 }
 
-Logic::~Logic() {}
+bool Logic::isValidCommand(string userCommand) {
+	bool isValid = false;
+
+	if (userCommand == COMMAND_ADD || userCommand == COMMAND_DELETE ||
+		userCommand == COMMAND_EDIT || userCommand == COMMAND_EXIT) {
+		isValid = true;
+	}
+
+	return isValid;
+}
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = -1;
@@ -249,7 +281,7 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 	}
 	return retCode;
 }
-
+*/
 int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
@@ -260,28 +292,51 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 
 		for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
 			outfile << iterItem->getItemName() << endl;
-			
+
 			DateTime tempObj1;
 			tempObj1 = iterItem->getStartTime();
-			outfile << tempObj1.getDay();
-			outfile << tempObj1.getMonth();
-			outfile << tempObj1.getYear();
-			outfile << tempObj1.getHour();
-			outfile << tempObj1.getMinute();
-			
+			outfile << tempObj1.getDay() << endl;
+			outfile << tempObj1.getMonth() << endl;
+			outfile << tempObj1.getYear() << endl;
+			outfile << tempObj1.getHour() << endl;
+			outfile << tempObj1.getMinute() << endl;
+
 			DateTime tempObj2;
 			tempObj2 = iterItem->getEndTime();
-			outfile << tempObj2.getDay();
-			outfile << tempObj2.getMonth();
-			outfile << tempObj2.getYear();
-			outfile << tempObj2.getHour();
-			outfile << tempObj2.getMinute();
-			
+			outfile << tempObj2.getDay() << endl;
+			outfile << tempObj2.getMonth() << endl;
+			outfile << tempObj2.getYear() << endl;
+			outfile << tempObj2.getHour() << endl;
+			outfile << tempObj2.getMinute() << endl;
+
 			outfile << iterItem->getItemID() << endl;
-			outfile << iterItem->getDescription() << endl;
-			outfile << iterItem->getPriority() << endl;
-			outfile << iterItem->getLabel() << endl;
-			outfile << iterItem->getCompletion() << endl;
+
+			string temp = iterItem->getDescription();
+			if (temp.size() != 0) {
+				outfile << iterItem->getDescription() << endl;
+			}
+			else {
+				outfile << endl;
+			}
+			if (iterItem->getPriority()) {
+				outfile << iterItem->getPriority() << endl;
+			}
+			else {
+				outfile << endl;
+			}
+			if (iterItem->getLabel()) {
+				outfile << iterItem->getLabel() << endl;
+			}
+			else {
+				outfile << endl;
+			}
+			if (iterItem->getCompletion()) {
+				outfile << iterItem->getCompletion() << endl;
+			}
+			else {
+				outfile << false << endl;
+			}
+
 		}
 		outfile.close();
 		retCode = 0;
@@ -290,8 +345,7 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 	return retCode;
 }
 
-
-
+/*
 
 void Logic::printItemVector(vector<Item> itemVector){
 	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
