@@ -9,9 +9,11 @@ Logic::~Logic(){
 
 }
 
-int Logic::addTask(Item itemToBeAdded){
-	_logicSchedule.addItem(itemToBeAdded);
+unsigned int Logic::addTask(Item itemToBeAdded){
+	int addedItemId = _logicSchedule.addItem(itemToBeAdded);
+	return addedItemId;
 }
+/*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
@@ -21,17 +23,21 @@ int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedI
 	addTask(editedItemToBeAdded);
 }
 
-int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
+Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	unsigned int itemIdToBeDeleted;
 	if (isValidLineIndex(lineIndexToBeDeleted)){
 		itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
-		_logicSchedule.deleteItem(itemIdToBeDeleted);
-		return 1;//Delete successful
+		Item deletedItem = _logicSchedule.deleteItem(itemIdToBeDeleted);
+		return deletedItem;//Delete successful
 	}
 	else{
-		return 0;//Delete failed
+		Item failedDelete;
+		failedDelete.setItemID(-1);
+		return failedDelete;//Delete failed
 	}
 }
+*/
+/*
 int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
 	unsigned int lineIndex;
@@ -177,7 +183,8 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 
 	return retCode;
 }
-
+*/
+/*
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	if (getScheduleSize() > lineIndexToBeChecked){
 		return true;
@@ -187,6 +194,12 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	}
 }
 
+unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
+	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
+	return Id;
+}
+*/
+/*
 void Logic::printItemVector(vector<Item> itemVector){
 	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
 		printItem(itemVector[lineIndex]);
@@ -207,10 +220,6 @@ void Logic::printItem(Item item){
 	return;
 }
 
-unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
-	return Id;
-}
 
 unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
@@ -251,3 +260,4 @@ Item Logic::setItem(string itemName, DateTime startTime, DateTime endTime, strin
 
 	return item;
 }
+*/
