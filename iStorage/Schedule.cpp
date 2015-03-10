@@ -24,6 +24,8 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 			return index;
 		}
 	}
+
+	return -1;
 }
 
 //	Adds the item to the schedule, returns the itemID
@@ -40,6 +42,53 @@ Item Schedule::deleteItem(unsigned int itemID) {
 	_schedule.erase(_schedule.begin() + index);
 	return itemToBeDeleted;
 }
+
+//	Filters the schedule by Priority
+const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char priority){
+	_filteredSchedule.clear();
+	
+	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
+		if (priority = _schedule[index].getPriority()) {
+			_filteredSchedule.push_back(_schedule[index]);
+		}
+	}
+
+	return _filteredSchedule;
+}
+
+//	Filters the schedule by Label
+const vector<Item>& Schedule::retrieveScheduleFilteredByLabel(char label){
+	_filteredSchedule.clear();
+
+	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
+		if (label = _schedule[index].getLabel()) {
+			_filteredSchedule.push_back(_schedule[index]);
+		}
+	}
+
+	return _filteredSchedule;
+}
+
+//	Filters the schedule by Completion
+const vector<Item>& Schedule::retrieveScheduleFilteredByCompletion(bool isCompleted){
+	_filteredSchedule.clear();
+
+	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
+		if (isCompleted = _schedule[index].getCompletion()) {
+			_filteredSchedule.push_back(_schedule[index]);
+		}
+	}
+
+	return _filteredSchedule;
+}
+
+
+
+
+
+
+
+
 
 
 

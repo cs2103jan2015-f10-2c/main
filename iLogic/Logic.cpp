@@ -34,7 +34,19 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 		addedItemID = _logicSchedule.addItem(itemToBeAdded);
 		return addedItemID;
 	}
+<<<<<<< HEAD
 	else return addedItemID;
+=======
+	if (addedItemID == _nextItemID) {
+		_nextItemID++;
+		return; //ADD SUCCESS MESSAGE ;
+	}
+	else return; //ADD FAILURE MESSAGE ;
+}
+
+int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
+
+>>>>>>> 5b46ae2c2f7a95b30c6fcf54478f8e10e5a68dca
 }
 
 bool Logic::isValidItem(Item itemToBeChecked){
@@ -195,13 +207,29 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 		while (!infile.eof()) {
 			for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
 				infile.get(iterItem->getItemName);
-				infile.get(iterItem->getStartTime);
+				/*
+				DateTime tempObj1 = iterItem->getStartTime();
+				infile.get(tempObj1.getDay());
+				infile.get(tempObj1.getMonth());
+				infile.get(tempObj1.getYear());
+				infile.get(tempObj1.getHour());
+				infile.get(tempObj1.getMinute());
+				
 				infile.get(iterItem->getEndTime);
-				infile.get(iterItem->getItemID);
-				infile.get(iterItem->getDescription);
-				infile.get(iterItem->getPriority);
-				infile.get(iterItem->getLabel);
-				infile.get(iterItem->getCompletion);
+				/*DateTime tempObj2 = iterItem->getEndTime();
+				infile.get(tempObj2).getDay());
+				infile.get(tempObj2.getMonth());
+				infile.get(tempObj2.getYear());
+				infile.get(tempObj2.getHour());
+				infile.get(tempObj2.getMinute());
+				*/
+				infile.get(*iterItem->getStartTime);
+				infile.get(*iterItem->getEndTime);
+				infile.get(*iterItem->getItemID);
+				infile.get(*iterItem->getDescription);
+				infile.get(*iterItem->getPriority);
+				infile.get(*iterItem->getLabel);
+				infile.get(*iterItem->getCompletion);
 			}
 		}
 		infile.close();
