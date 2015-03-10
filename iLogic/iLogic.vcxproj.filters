@@ -21,12 +21,18 @@
     <ClInclude Include="DateTimeVerification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ItemVerification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DateTimeVerification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemVerification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

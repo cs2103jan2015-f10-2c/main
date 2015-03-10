@@ -1,17 +1,17 @@
 #include "ItemVerification.h"
 
 bool ItemVerification::isValidName() {
-	string name = itemObjectToVerify.getItemName();
+	string name = _itemObjectToVerify.getItemName();
 	if (name == EMPTY_STRING) {
-		return 1;
-	} else {
 		cout << ERROR_EMPTY_STRING;
 		return 0;
+	} else {
+		return 1;
 	}
 }
 
 bool ItemVerification::isValidStartDateTime() {
-	DateTime startDateTime = itemObjectToVerify.getStartTime();
+	DateTime startDateTime = _itemObjectToVerify.getStartTime();
 	DateTimeVerification startDateTimeVerification(startDateTime);
 	if (startDateTimeVerification.isValidDate() && startDateTimeVerification.isValidTime()) {
 		return 1;
@@ -27,7 +27,7 @@ bool ItemVerification::isValidStartDateTime() {
 }
 
 bool ItemVerification::isValidEndDateTime() {
-	DateTime endDateTime = itemObjectToVerify.getStartTime();
+	DateTime endDateTime = _itemObjectToVerify.getStartTime();
 	DateTimeVerification endDateTimeVerification(endDateTime);
 	if (endDateTimeVerification.isValidDate() && endDateTimeVerification.isValidTime()) {
 		return 1;
@@ -43,18 +43,12 @@ bool ItemVerification::isValidEndDateTime() {
 }
 
 bool ItemVerification::isValidDescription() {
-	string description = itemObjectToVerify.getDescription();
-	if (description == EMPTY_STRING) {
-		return 1;
-	} else {
-		cout << ERROR_EMPTY_STRING;
-		return 0;
-	}
+	return 1;
 }
 
 bool ItemVerification::isValidItemID() {
-	unsigned int itemID = itemObjectToVerify.getItemID();
-	if (itemID <= maxID) {
+	unsigned int itemID = _itemObjectToVerify.getItemID();
+	if (itemID <= _maxID) {
 		return 1;
 	} else {
 		cout << ERROR_INVALID_ID;
@@ -64,7 +58,7 @@ bool ItemVerification::isValidItemID() {
 
 bool ItemVerification::isValidPriority() {
 	string priorityString;
-	char priorityChar = itemObjectToVerify.getPriority();
+	char priorityChar = _itemObjectToVerify.getPriority();
 	unsigned int priorityFound;
 	priorityString.push_back(priorityChar);
 	priorityFound = priorityString.find_first_of(AVAILABLE_PRIORITIES);
@@ -78,7 +72,7 @@ bool ItemVerification::isValidPriority() {
 
 bool ItemVerification::isValidLabel() {
 	string labelString;
-	char labelChar = itemObjectToVerify.getPriority();
+	char labelChar = _itemObjectToVerify.getLabel();
 	unsigned int labelFound;
 	labelString.push_back(labelChar);
 	labelFound = labelString.find_first_of(AVAILABLE_LABELS);
@@ -92,13 +86,13 @@ bool ItemVerification::isValidLabel() {
 }
 
 ItemVerification::ItemVerification(Item itemObject, unsigned int currentMaxID) {
-	itemObjectToVerify = itemObject;
-	maxID = currentMaxID;
+	_itemObjectToVerify = itemObject;
+	_maxID = currentMaxID;
 }
 
 bool ItemVerification::isValidItem() {
 	if (isValidName() && isValidStartDateTime() && isValidDescription() &&
-		isValidDescription() && isValidItemID() && isValidPriority() && isValidLabel())  {
+		isValidItemID() && isValidPriority() && isValidLabel())  {
 		return 1;
 	} else {
 		return 0;
