@@ -8,8 +8,8 @@
 using namespace std;
 
 static const string EMPTY_STRING = "";
-static const string AVAILABLE_PRIORITIES = "HMLN";
-static const string AVAILABLE_LABELS = "PMON";
+static const string AVAILABLE_PRIORITIES = "HML";
+static const string AVAILABLE_LABELS = "PMO";
 static const string ERROR_EMPTY_STRING = "Error: Empty String Specified.\n";
 static const string ERROR_INVALID_START_DATE = "Error: Invalid Start Date.\n";
 static const string ERROR_INVALID_START_TIME = "Error: Invalid Start Time.\n";

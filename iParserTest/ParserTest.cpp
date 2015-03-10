@@ -9,58 +9,58 @@ namespace iPlannerParserTest {
 private:
 	iParser testParser;
 	userCommand testUserCommand;
-
+	
 public:
 	// Unit testing for UserCommand Class
 	TEST_METHOD(findIndexUserCommandTest) {
 		string text = "::add submit CE";
 		string stringToFind = "submit";
-		int actualIndex;
-		int expectedIndex;
+		int actual;
+		int expected;
 
-		actualIndex = testUserCommand.findIndex(text, stringToFind);
-		expectedIndex = 6;
+		actual = testUserCommand.findIndex(text, stringToFind);
+		expected = 6;
 
-		Assert::AreEqual(expectedIndex, actualIndex);
+		Assert::AreEqual(expected, actual);
 	}
 
 	TEST_METHOD(getSubstringUserCommandTest) {
 		string text = "::add submit CE";
 		int start = 2;
 		int end = 5;
-		string actualString;
-		string expectedString;
+		string actual;
+		string expected;
 
-		actualString = testUserCommand.getSubstring(text, start, end);
-		expectedString = "add";
+		actual = testUserCommand.getSubstring(text, start, end);
+		expected = "add";
 
-		Assert::AreEqual(expectedString, actualString);
+		Assert::AreEqual(expected, actual);
 	}
 
 	TEST_METHOD(setAndGetCommandTest) {
 		string text = "::add submit CE";
-		string actualString;
-		string expectedString;
+		string actual;
+		string expected;
 
 		testUserCommand.setCommand(text);
 
-		actualString = testUserCommand.getCommand();
-		expectedString = "add";
+		actual = testUserCommand.getCommand();
+		expected = "add";
 
-		Assert::AreEqual(expectedString, actualString);
+		Assert::AreEqual(expected, actual);
 	}
 
 	TEST_METHOD(setAndGetTextTest) {
 		string text = "::add submit CE";
-		string actualString;
-		string expectedString;
+		string actual;
+		string expected;
 
 		testUserCommand.setText(text);
 
-		actualString = testUserCommand.getText();
-		expectedString = "submit CE";
+		actual = testUserCommand.getText();
+		expected = "submit CE";
 
-		Assert::AreEqual(expectedString, actualString);
+		Assert::AreEqual(expected, actual);
 	}
 
 	// Unit testing for iPlannerParser class
@@ -68,13 +68,13 @@ public:
 		string text = "test :: test";
 		string stringToFind = "::";
 		int start = 0;
-		int actualIndex;
-		int expectedIndex;
+		int actual;
+		int expected;
 
-		actualIndex = testParser.getFindIndex(text, stringToFind, start);
-		expectedIndex = 5;
+		actual = testParser.getFindIndex(text, stringToFind, start);
+		expected = 5;
 
-		Assert::AreEqual(expectedIndex, actualIndex);
+		Assert::AreEqual(expected, actual);
 	}
 	
 
@@ -82,13 +82,13 @@ public:
 		string text = "test :: test";
 		int start = 5;
 		int end = 7;
-		string actualString;
-		string expectedString;
+		string actual;
+		string expected;
 
-		actualString = testParser.getGetSubstring(text, start, end);
-		expectedString = "::";
+		actual = testParser.getGetSubstring(text, start, end);
+		expected = "::";
 
-		Assert::AreEqual(actualString, expectedString);
+		Assert::AreEqual(actual, expected);
 	}
 	};
 }
