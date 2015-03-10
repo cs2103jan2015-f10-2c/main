@@ -76,6 +76,7 @@ public:
 
 		Assert::AreEqual(expectedIndex, actualIndex);
 	}
+	
 
 	TEST_METHOD(findSubstringParserTest) {
 		string text = "test :: test";

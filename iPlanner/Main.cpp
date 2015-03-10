@@ -2,7 +2,6 @@
 
 int main() {
 	Logic myLogic;
-	userCommand myUserCommand;
-//	myLogic.readUserInput();
+	myLogic.readUserInput();
 	return 0;
 }

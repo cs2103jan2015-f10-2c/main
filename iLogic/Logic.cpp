@@ -1,6 +1,8 @@
 #include "Logic.h"
-/*
-void Logic::readUserInput() {
+
+const string Logic::MESSAGE_SUCCESS = "execution success";
+
+string Logic::readUserInput() {
 	string userInput;
 
 	while (userInput != "::exit") { // refractor this in the future
@@ -10,24 +12,28 @@ void Logic::readUserInput() {
 		userCommandList = myParser.parse(userInput);
 		showUserInput(userCommandList);
 	}
+
+	return MESSAGE_SUCCESS;
 }
 
-void Logic::showUserInput(list<userCommand> userCommandList) {
+string Logic::showUserInput(list<userCommand> userCommandList) {
 	list<userCommand>::iterator iter;
 	int i = 1; // refractor this in the future
 	for (iter = userCommandList.begin(); iter != userCommandList.end(); i++, iter++) {
 		cout << "Command " << i << ": " << iter->getCommand() << endl
 			<< "Text " << i << ": " << iter->getText() << endl;
 	}
+
+	return MESSAGE_SUCCESS;
 }
-*/
-Logic::Logic(){
+
+Logic::Logic() {
 	_nextItemID = 0;
 }
 
-
 Logic::~Logic() {}
 
+/*
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = -1;
 	if (isValidItem(itemToBeAdded)){
@@ -39,9 +45,15 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 /*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
+<<<<<<< HEAD
 
 }
 */
+=======
+}
+
+
+>>>>>>> 75ecd23d5ba36c7c428e7b829b72e548560dddc4
 bool Logic::isValidItem(Item itemToBeChecked){
 	return true;
 }
@@ -60,6 +72,7 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	}
 }
 
+/*
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
 	vector<Item> retrievedSchedule = _logicSchedule.retrieveSchedule();
 	unsigned int Id = retrievedSchedule[lineIndex].getItemID();
@@ -219,7 +232,10 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 				infile.get(tempObj2.getYear());
 				infile.get(tempObj2.getHour());
 				infile.get(tempObj2.getMinute());
+<<<<<<< HEAD
 			
+=======
+>>>>>>> 75ecd23d5ba36c7c428e7b829b72e548560dddc4
 				infile.get(*iterItem->getStartTime);
 				infile.get(*iterItem->getEndTime);
 				infile.get(*iterItem->getItemID);

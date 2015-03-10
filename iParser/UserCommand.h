@@ -20,20 +20,28 @@ public:
 	static const int INDEX_START_OF_TEXT;
 	static const int INDEX_DEFAULT;
 
+	// constructor and destructor
 	userCommand();
 	~userCommand();
-	userCommand(string singleInput);
+	userCommand(string input);
 
 	// setters
-	void setCommand(string singleInput);
-	void setText(string singleInput);
+	// pre: userInput split into command and text
+	// post: sets the respective command and text to private attributes
+	void setCommand(string input);
+	void setText(string input);
 
 	// getters
 	string getCommand();
 	string getText();
 
-	int findIndex(string singleInput, string stringToFind);
-	string getSubstring(string singleInput, int start, int end = INDEX_DEFAULT);
+	// Pre: string to find and start index required
+	// Post: returns index where the string to find is found
+	int findIndex(string input, string stringToFind);
+
+	// Pre: start and end index required
+	// Post: returns substring between start and end index
+	string getSubstring(string input, int start, int end = INDEX_DEFAULT);
 
 };
 

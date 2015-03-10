@@ -22,10 +22,18 @@ class Logic
 private:
 	Schedule _logicSchedule;
 	unsigned int _nextItemID;
+
+	static const string MESSAGE_SUCCESS;
 	
 public:
 	Logic();
 	~Logic();
+
+	// interactions with Parser
+	// Coded by Chon Beng
+	string readUserInput();
+	string showUserInput(list<userCommand> userCommandList);
+	bool isValidUserCommand();
 
 	unsigned int addTask(Item itemToBeAdded);
 	bool isValidItem(Item itemToBeChecked);
@@ -48,6 +56,7 @@ public:
 	/*
 	void readUserInput();
 	void showUserInput(list<userCommand> userCommandList);
+
 
 	
 	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
