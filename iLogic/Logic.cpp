@@ -253,14 +253,15 @@ int Logic::readDataFromFile(char * fileName) {
 
 	ifstream infile(fileName, std::ios::_Nocreate);
 	string line;
-	int fileLength = 1; //Number of lines in Text File 
+	//Number of lines in Text File
+	int fileLength = 1;  
 	if (infile.is_open()) {
 
 		while (!infile.eof()) {
 			Item readItem;
 			DateTime readTime;
 			int tempInt;
-			
+			// Total Number of Lines for each Item = 16
 			if (fileLength % 16 == 1) {
 				getline(infile, line);
 				readItem.setItemName(line);
@@ -285,7 +286,7 @@ int Logic::readDataFromFile(char * fileName) {
 					else {
 						readTime.setMinute(tempInt);
 					}
-					fileLength++;
+					fileLength+=5;
 				}
 				readItem.setStartTime(readTime);
 			}
@@ -309,7 +310,7 @@ int Logic::readDataFromFile(char * fileName) {
 					else {
 						readTime.setMinute(tempInt);
 					}
-					fileLength++;
+					fileLength += 5;
 				}
 				readItem.setEndTime(readTime);
 			}
@@ -318,20 +319,24 @@ int Logic::readDataFromFile(char * fileName) {
 				infile.getline(buffer, 256);
 				tempInt = atoi(buffer);
 				readItem.setItemID(tempInt);
+				fileLength++;
 			}
 			else if (fileLength % 16 == 13) {
 				getline(infile, line);
 				readItem.setDescription(line);
+				fileLength++;
 			}
 			else if (fileLength % 16 == 14) {
 				char tempChar;
 				infile.get(tempChar);
 				readItem.setPriority(tempChar);
+				fileLength++;
 			}
 			else if (fileLength % 16 == 15) {
 				char tempChar;
 				infile.get(tempChar);
 				readItem.setLabel(tempChar);
+				fileLength++;
 			}
 			else if (fileLength % 16 == 0) {
 				getline(infile, line);
@@ -341,6 +346,7 @@ int Logic::readDataFromFile(char * fileName) {
 				else {
 					readItem.setCompletion(false);
 				}
+				fileLength++;
 			}
 
 		}
