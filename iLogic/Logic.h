@@ -22,6 +22,10 @@ private:
 public:
 	Logic();
 	~Logic();
+
+	void readUserInput();
+	void showUserInput(list<userCommand> userCommandList);
+
 	unsigned int addTask(Item itemToBeAdded);
 	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
 	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);

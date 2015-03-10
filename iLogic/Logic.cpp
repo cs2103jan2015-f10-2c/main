@@ -1,13 +1,33 @@
 #include "Logic.h"
-/*
+
+void Logic::readUserInput() {
+	string userInput;
+
+	while (userInput != "::exit") { // refractor this in the future
+		iParser myParser;
+		list<userCommand> userCommandList;
+		getline(cin, userInput);
+		userCommandList = myParser.parse(userInput);
+		showUserInput(userCommandList);
+	}
+}
+
+void Logic::showUserInput(list<userCommand> userCommandList) {
+	list<userCommand>::iterator iter;
+	int i = 1; // refractor this in the future
+	for (iter = userCommandList.begin(); iter != userCommandList.end(); i++, iter++) {
+		cout << "Command " << i << ": " << iter->getCommand() << endl
+			<< "Text " << i << ": " << iter->getText() << endl;
+	}
+}
+
 Logic::Logic(){
 
 }
 
 
-Logic::~Logic(){
+Logic::~Logic() {}
 
-}
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID;
@@ -20,7 +40,11 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	}
 	else return /*ADD FAILURE MESSAGE ;
 }
+<<<<<<< HEAD
+/*
+=======
 */
+>>>>>>> b8f92e039121d9d2df5f5ddadd427d82520ae6cc
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
