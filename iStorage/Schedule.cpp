@@ -35,4 +35,11 @@ vector <Item>& Schedule::sortScheduleByLastUpdate() {
 	sort(_schedule.begin(), _schedule.end()/*, compare item update datetime*//*);
 	return _schedule;
 }
+
 */
+
+unsigned int Schedule::getSizeOfSchedule() {
+	unsigned int sizeOfSchedule;
+	sizeOfSchedule = _schedule.size();
+	return sizeOfSchedule;
+}

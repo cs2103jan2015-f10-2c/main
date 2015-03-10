@@ -36,6 +36,8 @@ public:
 	//  getter for schedule
 	vector<Item> getSchedule();
 
+	unsigned int getSizeOfSchedule();
+
 	//    Sorts the schedule according to date
 	//vector<Item>& sortScheduleByDate();
 
@@ -57,6 +59,7 @@ public:
 
 	//    Returns only items that are completed or otherwise
 	//vector<Item>& returnScheduleFilteredByCompletion();
+
 };
 
 #endif
