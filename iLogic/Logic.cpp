@@ -126,7 +126,7 @@ int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedI
 	addTask(editedItemToBeAdded);
 	return 1;
 }
-/*
+
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	if (timingType == "start"){
 		item.setStartTime(datetime);
@@ -138,48 +138,58 @@ Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 }
 
 
-int Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
-	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
-	unsigned int lastLineItemID = getItemIdFromLineIndex(lastLineIndexOfSchedule);
-	Item itemToBeAssignedTiming = assignTiming(itemToBeAssignedTiming, timingType, dateTime);
-	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedTiming);
-	return 1;
+Item Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
+	int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
+	Item itemToBeAssignedTiming = getSchedule()[lastLineIndexOfSchedule];
+	Item itemAfterTimingAssigned = assignTiming(itemToBeAssignedTiming, timingType,dateTime);
+	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
+	return itemAfterTimingAssigned;
 }
 
-int Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex){
-	Item itemToBeAssignedTiming = assignTiming(_logicSchedule.retrieveSchedule()[lineIndex], timingType, datetime);
-	deleteAndAddEditedItem(lineIndex, itemToBeAssignedTiming);
-	return 1;
-}*/
+Item Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex){
+	Item itemToBeAssignedTiming = getSchedule()[lineIndex - 1];
+	Item itemAfterTimingAssigned = assignTiming(itemToBeAssignedTiming, timingType,datetime);
+	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
+	return itemAfterTimingAssigned;
+}
 
 Item Logic::assignPriority(Item item, char priorityType){
 	item.setPriority(priorityType);
 	return item;
 }
 
-int Logic::assignPriorityToNewTask(char priorityType){
-	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
-	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.retrieveSchedule()[lastLineIndexOfSchedule], priorityType);
-	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedPriority);
-	return 1;
+Item Logic::assignPriorityToNewTask(char priorityType){
+	int lastLineIndexOfSchedule = getScheduleSize()-1;//new task will be at the very back of the schedule vector
+	Item itemToBeAssignedPriority = getSchedule()[lastLineIndexOfSchedule];
+	Item itemAfterPriorityAssigned = assignPriority(itemToBeAssignedPriority,priorityType);
+	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
+	return itemAfterPriorityAssigned;
 }
 
-int Logic::assignPriorityToExistingTask(char priorityType, unsigned int lineIndex){
-	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.retrieveSchedule()[lineIndex], priorityType);
-	deleteAndAddEditedItem(lineIndex, itemToBeAssignedPriority);
-	return 1;
+Item Logic::assignPriorityToExistingTask(char priorityType, unsigned int lineIndex){
+	Item itemToBeAssignedPriority = getSchedule()[lineIndex-1];
+	Item itemAfterPriorityAssigned = assignPriority(itemToBeAssignedPriority, priorityType);
+	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
+	return itemAfterPriorityAssigned;
 }
 
 Item Logic::assignLabel(Item item, char labelType){
 	item.setLabel(labelType);
 	return item;
 }
+Item Logic::assignLabelToNewTask(char labelType){
+	int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
+	Item itemToBeAssignedLabel = getSchedule()[lastLineIndexOfSchedule];
+	Item itemAfterLabelAssigned = assignLabel(itemToBeAssignedLabel, labelType);
+	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
+	return itemAfterLabelAssigned;
+}
 
-int Logic::assignLabelToNewTask(char labelType){
-	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
-	Item itemToBeAssignedLabel = assignLabel(_logicSchedule.retrieveSchedule()[lastLineIndexOfSchedule], labelType);
-	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedLabel);
-	return 1;
+Item Logic::assignLabelToExistingTask(char labelType, unsigned int lineIndex){
+	Item itemToBeAssignedLabel = getSchedule()[lineIndex - 1];
+	Item itemAfterLabelAssigned = assignLabel(itemToBeAssignedLabel, labelType);
+	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
+	return itemAfterLabelAssigned;
 }
 /*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
