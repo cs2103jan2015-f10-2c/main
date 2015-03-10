@@ -15,10 +15,7 @@ userCommand::userCommand() {
 	_text = "";
 }
 
-userCommand::~userCommand() {
-	_command = "";
-	_text = "";
-}
+userCommand::~userCommand() {}
 
 userCommand::userCommand(string singleInput) {
 	setCommand(singleInput);

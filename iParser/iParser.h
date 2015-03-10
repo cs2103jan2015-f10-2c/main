@@ -26,7 +26,7 @@ private:
 	void addToUserCommandList(userCommand tempUserCommand);
 
 public:
-	list<userCommand> main(string userInput);
+	list<userCommand> parse(string userInput);
 
 	// getters for unit testing
 	const int getFindIndex(string userInput, string stringToFind, int startingIndex);
