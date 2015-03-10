@@ -13,12 +13,26 @@ const vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
 }
 
+//	Retrieves the size of the schedule
+unsigned int Schedule::getSizeOfSchedule() {
+	return _schedule.size();
+}
+
+//	Retrieves vector index given itemID
+//	Pre:	Valid itemID
+//	Post:	Vector index is returned
+unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
+	for (vector <Item>::iterator it = _schedule.begin(); it != _schedule.end(); it++) {
+		//	something goes here
+	}
+}
+
 //	Adds the item to the schedule, returns the itemID
 unsigned int Schedule::addItem(Item item) {
 	_schedule.push_back(item);
 	return item.getItemID();
 }
-/*
+
 //	Deletes an item from the schedule, returns deleted item
 Item Schedule::deleteItem(unsigned int itemID) {
 	//	find the item based on itemID
@@ -28,6 +42,9 @@ Item Schedule::deleteItem(unsigned int itemID) {
 	//	return the item that was deleted
 	return _schedule[0];
 }
+
+
+
 /*
 vector <Item>& Schedule::sortScheduleByDate() {
 	sort(_schedule.begin(), _schedule.end()/*, compare item dates*//*);
@@ -41,13 +58,3 @@ vector <Item>& Schedule::sortScheduleByLastUpdate() {
 
 */
 
-unsigned int Schedule::getSizeOfSchedule() {
-	unsigned int sizeOfSchedule;
-	sizeOfSchedule = _schedule.size();
-	return sizeOfSchedule;
-}
-
-const Item Schedule::getItem(unsigned int itemID) {
-	// find the Item based on the itemID
-	// return the Item
-}
