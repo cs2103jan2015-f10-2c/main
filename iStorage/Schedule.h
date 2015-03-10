@@ -14,6 +14,7 @@ class Schedule
 {
 private:
 	vector <Item> _schedule;
+	vector <Item> _filteredSchedule;
 
 public:
 	//	Constructor
@@ -51,7 +52,24 @@ public:
 	//	Post:	Deleted item is returned
 	Item deleteItem(unsigned int);
 
-	
+	//	Filters the schedule by Priority
+	//	Pre:	Valid priority - L, M, or H
+	//	Post:	Constant reference to the filtered schedule is returned
+	const vector<Item>& retrieveScheduleFilteredByPriority(char);
+
+	//	Filters the schedule by Label
+	//	Pre:	Valid priority - P, O, or M
+	//	Post:	Constant reference to the filtered schedule is returned
+	const vector<Item>& retrieveScheduleFilteredByLabel(char);
+
+	//	Filters the schedule by Completion Status
+	//	Pre:	Valid completion status - true, false
+	//	Post:	Constant reference to the filtered schedule is returned
+	const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
+
+
+
+
 
 
 	//    Sorts the schedule according to date
@@ -64,18 +82,8 @@ public:
 	//    Post:    Sequence as follows - high, medium, low, none
 	//vector<Item>& sortScheduleByPriority();
 
-	//    Returns only items of a certain priority
-	//vector<Item>& returnScheduleFilteredByPriority();
-
 	//    Returns only items spanning a certain date
 	//vector<Item>& returnScheduleFilteredByDate();
-
-	//    Returns only items with a certain label
-	//vector<Item>& returnScheduleFilteredByLabel();
-
-	//    Returns only items that are completed or otherwise
-	//vector<Item>& returnScheduleFilteredByCompletion();
-
 };
 
 #endif
