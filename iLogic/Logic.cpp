@@ -1,6 +1,8 @@
 #include "Logic.h"
 
-void Logic::readUserInput() {
+const string Logic::MESSAGE_SUCCESS = "execution success";
+
+string Logic::readUserInput() {
 	string userInput;
 
 	while (userInput != "::exit") { // refractor this in the future
@@ -10,25 +12,27 @@ void Logic::readUserInput() {
 		userCommandList = myParser.parse(userInput);
 		showUserInput(userCommandList);
 	}
+
+	return MESSAGE_SUCCESS;
 }
 
-void Logic::showUserInput(list<userCommand> userCommandList) {
+//
+string Logic::showUserInput(list<userCommand> userCommandList) {
 	list<userCommand>::iterator iter;
 	int i = 1; // refractor this in the future
 	for (iter = userCommandList.begin(); iter != userCommandList.end(); i++, iter++) {
 		cout << "Command " << i << ": " << iter->getCommand() << endl
 			<< "Text " << i << ": " << iter->getText() << endl;
 	}
+
+	return MESSAGE_SUCCESS;
 }
 
-Logic::Logic(){
-
-}
-
+Logic::Logic(){}
 
 Logic::~Logic() {}
 
-
+/*
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID;
 	if (isValidItem(itemToBeAdded)) {
@@ -36,15 +40,10 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	}
 	if (addedItemID == _nextItemID) {
 		_nextItemID++;
-		return /*ADD SUCCESS MESSAGE ;
+		return 1;
 	}
-	else return /*ADD FAILURE MESSAGE ;
 }
-<<<<<<< HEAD
-/*
-=======
-*/
->>>>>>> b8f92e039121d9d2df5f5ddadd427d82520ae6cc
+
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
