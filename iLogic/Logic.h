@@ -24,16 +24,23 @@ private:
 	unsigned int _nextItemID;
 
 	static const string MESSAGE_SUCCESS;
-	
+	static const string MESSAGE_INVALID_INPUT;
+	static const string COMMAND_ADD;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_EDIT;
+	static const string COMMAND_EXIT;
+
 public:
 	Logic();
 	~Logic();
 
 	// interactions with Parser
-	// Coded by Chon Beng
-	string readUserInput();
+	// Coded by Ng Chon Beng
+	string executeLogic();
+	bool notExit(string userInput);
 	string showUserInput(list<userCommand> userCommandList);
-	bool isValidUserCommand();
+	string executeCommand(list<userCommand> userCommandList);
+	bool isValidCommand(string userCommand);
 
 	unsigned int addTask(Item itemToBeAdded);
 	bool isValidItem(Item itemToBeChecked);
@@ -42,11 +49,6 @@ public:
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
-	/*
-	void readUserInput();
-	void showUserInput(list<userCommand> userCommandList);
-
-
 	
 	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
 	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
@@ -81,8 +83,6 @@ public:
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
 	DateTime setDateTime(int year, int month, int day);
 	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted);
-	
-	*/
-	};
+};
 
 #endif

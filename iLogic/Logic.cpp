@@ -1,19 +1,35 @@
 #include "Logic.h"
 
 const string Logic::MESSAGE_SUCCESS = "execution success";
+const string Logic::MESSAGE_INVALID_INPUT = "invalid input";
+const string Logic::COMMAND_ADD = "add";
+const string Logic::COMMAND_DELETE = "del";
+const string Logic::COMMAND_EDIT = "edit";
+const string Logic::COMMAND_EXIT = "exit";
 
-string Logic::readUserInput() {
+Logic::Logic() {
+	_nextItemID = 0;
+}
+
+Logic::~Logic() {}
+
+string Logic::executeLogic() {
 	string userInput;
 
-	while (userInput != "::exit") { // refractor this in the future
+	while (notExit(userInput)) {
 		iParser myParser;
 		list<userCommand> userCommandList;
 		getline(cin, userInput);
 		userCommandList = myParser.parse(userInput);
-		showUserInput(userCommandList);
+		executeCommand(userCommandList);	
+		//showUserInput(userCommandList);
 	}
 
 	return MESSAGE_SUCCESS;
+}
+
+bool Logic::notExit(string userInput) {
+	return userInput != COMMAND_EXIT;
 }
 
 string Logic::showUserInput(list<userCommand> userCommandList) {
@@ -27,11 +43,31 @@ string Logic::showUserInput(list<userCommand> userCommandList) {
 	return MESSAGE_SUCCESS;
 }
 
-Logic::Logic() {
-	_nextItemID = 0;
+string Logic::executeCommand(list<userCommand> userCommandList) {
+	list<userCommand>::iterator iter;
+	
+	for (iter = userCommandList.begin(); iter != userCommandList.end(); iter++) {
+		if (!isValidCommand(iter->getCommand())) {
+			return MESSAGE_INVALID_INPUT;
+		}
+	}
+	cout << "success!!" << endl;
+
+	return MESSAGE_SUCCESS;
 }
 
-Logic::~Logic() {}
+bool Logic::isValidCommand(string userCommand) {
+	bool isValid = false;
+
+	if (userCommand == COMMAND_ADD || userCommand == COMMAND_DELETE ||
+		userCommand == COMMAND_EDIT || userCommand == COMMAND_EXIT) {
+		isValid = true;
+	}
+
+	cout << isValid << userCommand << endl;
+
+	return isValid;
+}
 
 /*
 unsigned int Logic::addTask(Item itemToBeAdded){
