@@ -20,7 +20,7 @@ unsigned int Schedule::getSizeOfSchedule() {
 //	Retrieves vector index given itemID
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-		if (itemID = _schedule[index].getItemID()) {
+		if (itemID == _schedule[index].getItemID()) {
 			return index;
 		}
 	}

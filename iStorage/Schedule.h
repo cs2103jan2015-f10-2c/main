@@ -67,11 +67,9 @@ public:
 	//	Post:	Constant reference to the filtered schedule is returned
 	const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
 
-
-
-
-
-
+	//    Returns only items spanning a certain date
+	//vector<Item>& returnScheduleFilteredByDate();
+	
 	//    Sorts the schedule according to date
 	//vector<Item>& sortScheduleByDate();
 
@@ -81,9 +79,6 @@ public:
 	//    Sorts the schedule according to priority
 	//    Post:    Sequence as follows - high, medium, low, none
 	//vector<Item>& sortScheduleByPriority();
-
-	//    Returns only items spanning a certain date
-	//vector<Item>& returnScheduleFilteredByDate();
 };
 
 #endif
