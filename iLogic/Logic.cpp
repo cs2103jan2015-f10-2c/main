@@ -1,5 +1,5 @@
 #include "Logic.h"
-
+/*
 void Logic::readUserInput() {
 	string userInput;
 
@@ -20,38 +20,25 @@ void Logic::showUserInput(list<userCommand> userCommandList) {
 			<< "Text " << i << ": " << iter->getText() << endl;
 	}
 }
-
+*/
 Logic::Logic(){
-
+	_nextItemID = 0;
 }
 
 
 Logic::~Logic() {}
 
-
 unsigned int Logic::addTask(Item itemToBeAdded){
-	unsigned int addedItemID;
-	if (isValidItem(itemToBeAdded)) {
+	unsigned int addedItemID = -1;
+	if (isValidItem(itemToBeAdded)){
 		addedItemID = _logicSchedule.addItem(itemToBeAdded);
+		return addedItemID;
 	}
-	if (addedItemID == _nextItemID) {
-		_nextItemID++;
-		return /*ADD SUCCESS MESSAGE ;
-	}
-	else return /*ADD FAILURE MESSAGE ;
-}
-<<<<<<< HEAD
-/*
-=======
-*/
->>>>>>> b8f92e039121d9d2df5f5ddadd427d82520ae6cc
-int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
-
+	else return addedItemID;
 }
 
-int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
-	deleteTask(lineIndexToBeEdited);
-	addTask(editedItemToBeAdded);
+bool Logic::isValidItem(Item itemToBeChecked){
+	return true;
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
@@ -67,6 +54,34 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 		return failedDelete;//Delete failed
 	}
 }
+
+unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
+	vector<Item> retrievedSchedule = _logicSchedule.retrieveSchedule();
+	unsigned int Id = retrievedSchedule[lineIndex].getItemID();
+	return Id;
+}
+
+bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
+	if (getScheduleSize() > lineIndexToBeChecked){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+unsigned int Logic::getScheduleSize(){
+	return _logicSchedule.getSizeOfSchedule();
+}
+/*
+int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
+
+}
+
+int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
+	deleteTask(lineIndexToBeEdited);
+	addTask(editedItemToBeAdded);
+}
+
 
 int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
@@ -235,19 +250,8 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 	return retCode;
 }
 
-bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
-	if (getScheduleSize() > lineIndexToBeChecked){
-		return true;
-	}
-	else{
-		return false;
-	}
-}
 
-unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = _logicSchedule.retrieveSchedule()[lineIndex].getItemID;
-	return Id;
-}
+
 
 void Logic::printItemVector(vector<Item> itemVector){
 	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
@@ -274,18 +278,12 @@ Item Logic::getItem(unsigned int itemID) {
 	itemToBeReturned = _logicSchedule.getItem(itemID);
 }
 
-vector<Item> Logic::getSchedule(){
-
-}
-
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
 	unsigned int Id = _logicSchedule.retrieveSchedule()[lineIndex].getItemID;
 	return Id;
 }
 
-unsigned int Logic::retrieveScheduleSize(){
-	return _logicSchedule.getSizeOfSchedule();
-}
+
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
 	DateTime datetime;
