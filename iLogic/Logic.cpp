@@ -348,6 +348,7 @@ int Logic::readDataFromFile(char * fileName) {
 				}
 				fileLength++;
 			}
+			_logicSchedule.addItem(readItem);
 
 		}
 		infile.close();
