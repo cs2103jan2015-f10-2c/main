@@ -67,8 +67,8 @@ bool ItemVerification::isValidPriority() {
 	char priorityChar = itemObjectToVerify.getPriority();
 	unsigned int priorityFound;
 	priorityString.push_back(priorityChar);
-	priorityFound = priorityString.find_first_of("HMLN");
-	if (priorityFound != string::npos) {
+	priorityFound = priorityString.find_first_of(AVAILABLE_PRIORITIES);
+	if (priorityFound != string::npos || priorityChar == '\0') {
 		return 1;
 	} else {
 		cout << ERROR_INVALID_PRIORITY;
@@ -81,8 +81,8 @@ bool ItemVerification::isValidLabel() {
 	char labelChar = itemObjectToVerify.getPriority();
 	unsigned int labelFound;
 	labelString.push_back(labelChar);
-	labelFound = labelString.find_first_of("PMON");
-	if (labelFound != string::npos) {
+	labelFound = labelString.find_first_of(AVAILABLE_LABELS);
+	if (labelFound != string::npos || labelChar =='\0') {
 		return 1;
 	}
 	else {
