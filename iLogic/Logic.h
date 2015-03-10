@@ -34,17 +34,8 @@ public:
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
-	/*
-	void readUserInput();
-	void showUserInput(list<userCommand> userCommandList);
-
-	
-	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
 	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
-	
-	int searchTask(string phraseToSearch);
-	bool isFound(int lineIndex, string& phraseToSearch);
-	int sortTask();
+
 	Item assignTiming(Item item, string timingType, DateTime datetime);
 	int assignTimingToNewTask(string timingType, DateTime datetime);
 	int assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex);
@@ -53,6 +44,18 @@ public:
 	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
 	Item assignLabel(Item item, char labelType);
 	int assignLabelToNewTask(char labelType);
+
+	/*
+	void readUserInput();
+	void showUserInput(list<userCommand> userCommandList);
+
+	
+	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
+	
+	
+	int searchTask(string phraseToSearch);
+	bool isFound(int lineIndex, string& phraseToSearch);
+	int sortTask();
 	int changeView();
 	int showHelpMenu();
 

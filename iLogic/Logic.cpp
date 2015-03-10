@@ -34,21 +34,14 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 		addedItemID = _logicSchedule.addItem(itemToBeAdded);
 		return addedItemID;
 	}
-<<<<<<< HEAD
 	else return addedItemID;
-=======
-	if (addedItemID == _nextItemID) {
-		_nextItemID++;
-		return; //ADD SUCCESS MESSAGE ;
-	}
-	else return; //ADD FAILURE MESSAGE ;
 }
-
+/*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
->>>>>>> 5b46ae2c2f7a95b30c6fcf54478f8e10e5a68dca
-}
 
+}
+*/
 bool Logic::isValidItem(Item itemToBeChecked){
 	return true;
 }
@@ -62,7 +55,7 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	}
 	else{
 		Item failedDelete;
-		failedDelete.setItemID(-1);
+		failedDelete.setItemID(0);
 		return failedDelete;//Delete failed
 	}
 }
@@ -84,50 +77,10 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
-/*
-int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
-
-}
-
 int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
 	deleteTask(lineIndexToBeEdited);
 	addTask(editedItemToBeAdded);
-}
-
-
-int Logic::searchTask(string phraseToSearch){
-	vector<Item> searchedItems;
-	Item foundItem;
-	unsigned int lineIndex;
-	unsigned int itemID;
-	unsigned int scheduleSize = getScheduleSize();
-	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
-		if (isFound(lineIndex, phraseToSearch)){
-			itemID = getItemIdFromLineIndex(lineIndex);
-			foundItem = getItem(itemID);
-			searchedItems.push_back(foundItem);
-		}
-	}
-}
-
-bool Logic::isFound(int lineIndex, string& phraseToSearch){
-	Item itemFromLogicSchedule;
-	itemFromLogicSchedule = getItem(lineIndex);
-	unsigned int phraseFoundFromItemName;
-	unsigned int phraseFoundFromItemDescription;
-	phraseFoundFromItemName = itemFromLogicSchedule.getItemName().find(phraseToSearch);
-	if (phraseFoundFromItemName != string::npos) {
-		return true;
-	}
-	phraseFoundFromItemDescription = itemFromLogicSchedule.getDescription().find(phraseToSearch);
-	if (phraseFoundFromItemDescription != string::npos) {
-		return true;
-	}
-	return false;
-}
-
-int Logic::sortTask(){
-
+	return 1;
 }
 
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
@@ -139,6 +92,7 @@ Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	}
 	return item;
 }
+
 
 int Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
 	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
@@ -183,6 +137,49 @@ int Logic::assignLabelToNewTask(char labelType){
 	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedLabel);
 	return 1;
 }
+/*
+int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
+
+}
+
+
+
+
+int Logic::searchTask(string phraseToSearch){
+	vector<Item> searchedItems;
+	Item foundItem;
+	unsigned int lineIndex;
+	unsigned int itemID;
+	unsigned int scheduleSize = getScheduleSize();
+	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
+		if (isFound(lineIndex, phraseToSearch)){
+			itemID = getItemIdFromLineIndex(lineIndex);
+			foundItem = getItem(itemID);
+			searchedItems.push_back(foundItem);
+		}
+	}
+}
+
+bool Logic::isFound(int lineIndex, string& phraseToSearch){
+	Item itemFromLogicSchedule;
+	itemFromLogicSchedule = getItem(lineIndex);
+	unsigned int phraseFoundFromItemName;
+	unsigned int phraseFoundFromItemDescription;
+	phraseFoundFromItemName = itemFromLogicSchedule.getItemName().find(phraseToSearch);
+	if (phraseFoundFromItemName != string::npos) {
+		return true;
+	}
+	phraseFoundFromItemDescription = itemFromLogicSchedule.getDescription().find(phraseToSearch);
+	if (phraseFoundFromItemDescription != string::npos) {
+		return true;
+	}
+	return false;
+}
+
+int Logic::sortTask(){
+
+}
+
 
 int Logic::changeView(){
 
@@ -222,7 +219,7 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 				infile.get(tempObj2.getYear());
 				infile.get(tempObj2.getHour());
 				infile.get(tempObj2.getMinute());
-				*/
+			
 				infile.get(*iterItem->getStartTime);
 				infile.get(*iterItem->getEndTime);
 				infile.get(*iterItem->getItemID);
