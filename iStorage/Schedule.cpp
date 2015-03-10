@@ -1,6 +1,5 @@
 //	Schedule
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
-//	Coder:	Andy Soh Wei Zhi, A0112042E
 
 #include "Schedule.h"
 
@@ -19,11 +18,11 @@ unsigned int Schedule::getSizeOfSchedule() {
 }
 
 //	Retrieves vector index given itemID
-//	Pre:	Valid itemID
-//	Post:	Vector index is returned
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
-	for (vector <Item>::iterator it = _schedule.begin(); it != _schedule.end(); it++) {
-		//	something goes here
+	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
+		if (itemID = _schedule[index].getItemID()) {
+			return index;
+		}
 	}
 }
 
@@ -35,12 +34,11 @@ unsigned int Schedule::addItem(Item item) {
 
 //	Deletes an item from the schedule, returns deleted item
 Item Schedule::deleteItem(unsigned int itemID) {
-	//	find the item based on itemID
-	//	obtain the vector index of the item
-	//	make a copy of the item
-	//	delete the item, via the vector index
-	//	return the item that was deleted
-	return _schedule[0];
+	unsigned int index = findVectorIndexGivenItemID(itemID);
+	Item itemToBeDeleted = _schedule[index];
+	
+	_schedule.erase(_schedule.begin() + index);
+	return itemToBeDeleted;
 }
 
 

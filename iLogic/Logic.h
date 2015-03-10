@@ -17,10 +17,15 @@ class Logic
 {
 private:
 	Schedule _logicSchedule;
+	unsigned int _nextItemID;
 
 public:
 	Logic();
 	~Logic();
+
+	void readUserInput();
+	void showUserInput(list<userCommand> userCommandList);
+
 	unsigned int addTask(Item itemToBeAdded);
 	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
 	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
@@ -52,9 +57,6 @@ public:
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
 	
-
-	unsigned int getItemIdFromLineIndex(int lineIndex);
-
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
 	DateTime setDateTime(int year, int month, int day);
 	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted);

@@ -1,19 +1,50 @@
 #include "Logic.h"
 
+void Logic::readUserInput() {
+	string userInput;
+
+	while (userInput != "::exit") { // refractor this in the future
+		iParser myParser;
+		list<userCommand> userCommandList;
+		getline(cin, userInput);
+		userCommandList = myParser.parse(userInput);
+		showUserInput(userCommandList);
+	}
+}
+
+void Logic::showUserInput(list<userCommand> userCommandList) {
+	list<userCommand>::iterator iter;
+	int i = 1; // refractor this in the future
+	for (iter = userCommandList.begin(); iter != userCommandList.end(); i++, iter++) {
+		cout << "Command " << i << ": " << iter->getCommand() << endl
+			<< "Text " << i << ": " << iter->getText() << endl;
+	}
+}
+
 Logic::Logic(){
 
 }
 
 
-Logic::~Logic(){
+Logic::~Logic() {}
 
-}
 
 unsigned int Logic::addTask(Item itemToBeAdded){
-	int addedItemId = _logicSchedule.addItem(itemToBeAdded);
-	return addedItemId;
+	unsigned int addedItemID;
+	if (isValidItem(itemToBeAdded)) {
+		addedItemID = _logicSchedule.addItem(itemToBeAdded);
+	}
+	if (addedItemID == _nextItemID) {
+		_nextItemID++;
+		return /*ADD SUCCESS MESSAGE ;
+	}
+	else return /*ADD FAILURE MESSAGE ;
 }
-
+<<<<<<< HEAD
+/*
+=======
+*/
+>>>>>>> b8f92e039121d9d2df5f5ddadd427d82520ae6cc
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
@@ -148,14 +179,14 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 		vector<Item>::iterator iterItem;
 		while (!infile.eof()) {
 			for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
-				infile.get(*iterItem->setItemName);
-				infile.get(*iterItem->setStartTime);
-				infile.get(*iterItem->setEndTime);
-				infile.get(*iterItem->setItemID);
-				infile.get(*iterItem->setDescription);
-				infile.get(*iterItem->setPriority);
-				infile.get(*iterItem->setLabel);
-				infile.get(*iterItem->setCompletion);
+				infile.get(iterItem->getItemName);
+				infile.get(iterItem->getStartTime);
+				infile.get(iterItem->getEndTime);
+				infile.get(iterItem->getItemID);
+				infile.get(iterItem->getDescription);
+				infile.get(iterItem->getPriority);
+				infile.get(iterItem->getLabel);
+				infile.get(iterItem->getCompletion);
 			}
 		}
 		infile.close();
@@ -173,14 +204,29 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 		vector<Item>::iterator iterItem;
 
 		for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
-			outfile << *iterItem->getItemName << endl;
-			outfile << *iterItem->getStartTime << endl;
-			outfile << *iterItem->getEndTime << endl;
-			outfile << *iterItem->getItemID << endl;
-			outfile << *iterItem->getDescription << endl;
-			outfile << *iterItem->getPriority << endl;
-			outfile << *iterItem->getLabel << endl;
-			outfile << *iterItem->getCompletion << endl;
+			outfile << iterItem->getItemName() << endl;
+			
+			DateTime tempObj1;
+			tempObj1 = iterItem->getStartTime();
+			outfile << tempObj1.getDay();
+			outfile << tempObj1.getMonth();
+			outfile << tempObj1.getYear();
+			outfile << tempObj1.getHour();
+			outfile << tempObj1.getMinute();
+			
+			DateTime tempObj2;
+			tempObj2 = iterItem->getEndTime();
+			outfile << tempObj2.getDay();
+			outfile << tempObj2.getMonth();
+			outfile << tempObj2.getYear();
+			outfile << tempObj2.getHour();
+			outfile << tempObj2.getMinute();
+			
+			outfile << iterItem->getItemID() << endl;
+			outfile << iterItem->getDescription() << endl;
+			outfile << iterItem->getPriority() << endl;
+			outfile << iterItem->getLabel() << endl;
+			outfile << iterItem->getCompletion() << endl;
 		}
 		outfile.close();
 		retCode = 0;
@@ -277,3 +323,4 @@ Item Logic::setItem(string itemName, DateTime startTime, DateTime endTime, strin
 
 	return item;
 }
+*/

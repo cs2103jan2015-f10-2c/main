@@ -6,7 +6,7 @@
 
 const string iParser::TOKEN_COMMAND = "::";
 
-list<userCommand> iParser::main(string userInput) {
+list<userCommand> iParser::parse(string userInput) {
 	splitUserInput(userInput);
 	return userCommandList;
 }

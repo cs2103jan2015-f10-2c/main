@@ -18,7 +18,6 @@ namespace iLogicTest
 			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
 			Assert::AreEqual(unsigned int(13), addedItemId);
-
 		}
 
 	};
