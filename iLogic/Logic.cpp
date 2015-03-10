@@ -30,8 +30,15 @@ Logic::~Logic() {}
 
 
 unsigned int Logic::addTask(Item itemToBeAdded){
-	int addedItemId = _logicSchedule.addItem(itemToBeAdded);
-	return addedItemId;
+	unsigned int addedItemID;
+	if (isValidItem(itemToBeAdded)) {
+		addedItemID = _logicSchedule.addItem(itemToBeAdded);
+	}
+	if (addedItemID == _nextItemID) {
+		_nextItemID++;
+		return /*ADD SUCCESS MESSAGE */;
+	}
+	else return /*ADD FAILURE MESSAGE */;
 }
 /*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){

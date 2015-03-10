@@ -17,6 +17,7 @@ class Logic
 {
 private:
 	Schedule _logicSchedule;
+	unsigned int _nextItemID;
 
 public:
 	Logic();
