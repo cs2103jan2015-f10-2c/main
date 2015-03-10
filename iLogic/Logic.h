@@ -11,6 +11,7 @@
 #include "..\iStorage\Item.h"
 #include "..\iParser\iParser.h"
 #include "..\iParser\UserCommand.h"
+#include "..\iLogic\ItemVerification.h"
 #include <iostream>
 #include <vector>
 #include <string>
