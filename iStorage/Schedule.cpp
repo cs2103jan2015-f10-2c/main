@@ -43,3 +43,8 @@ unsigned int Schedule::getSizeOfSchedule() {
 	sizeOfSchedule = _schedule.size();
 	return sizeOfSchedule;
 }
+
+const Item Schedule::getItem(unsigned int itemID) {
+	// find the Item based on the itemID
+	// return the Item
+}

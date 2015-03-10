@@ -38,6 +38,8 @@ public:
 
 	unsigned int getSizeOfSchedule();
 
+	const Item getItem(unsigned int itemID);
+
 	//    Sorts the schedule according to date
 	//vector<Item>& sortScheduleByDate();
 
