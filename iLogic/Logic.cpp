@@ -22,8 +22,9 @@ int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedI
 }
 
 int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
+	unsigned int itemIdToBeDeleted;
 	if (isValidLineIndex(lineIndexToBeDeleted)){
-		unsigned int itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
+		itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
 		_logicSchedule.deleteItem(itemIdToBeDeleted);
 		return 1;//Delete successful
 	}
@@ -33,7 +34,9 @@ int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 }
 int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
-	for (unsigned int lineIndex = 0; lineIndex < getScheduleSize(); lineIndex++){
+	unsigned int lineIndex;
+	int scheduleSize = getScheduleSize();
+	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
 		if (isFound(lineIndex, phraseToSearch)){
 			searchedItems.push_back(_logicSchedule.getSchedule()[lineIndex]);
 		}
@@ -210,7 +213,7 @@ unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
 }
 
 unsigned int Logic::getScheduleSize(){
-	return _logicSchedule.getSchedule().size();
+	return _logicSchedule.getSizeOfSchedule();
 }
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
