@@ -72,9 +72,11 @@ namespace iLogicTest
 			Assert::AreEqual(IdFromSchedule4, addedItemId4);
 			Assert::AreEqual(IdFromSchedule5, addedItemId5);
 			
-			Item deletedItem = testLogic.deleteTask(3);
+			Item deletedItem = testLogic.deleteTask(1);
 
-			Assert::AreEqual(addedItemId3, deletedItem.getItemID());
+			Assert::AreEqual(addedItemId, deletedItem.getItemID());
+			deletedItem = testLogic.deleteTask(1);
+			Assert::AreEqual(addedItemId2, deletedItem.getItemID());
 
 		}
 
@@ -90,7 +92,7 @@ namespace iLogicTest
 			unsigned int addedItemId2 = testLogic.addTask(testItem2);
 			Item deletedItem = testLogic.deleteTask(1);
 			Assert::AreEqual(addedItemId2, deletedItem.getItemID());
-			deletedItem = testLogic.deleteTask(0);
+			deletedItem = testLogic.deleteTask(1);
 			Assert::AreEqual(addedItemId, deletedItem.getItemID());
 		}
 
