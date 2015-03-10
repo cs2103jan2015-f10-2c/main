@@ -34,11 +34,15 @@ int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 }
 int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
+	Item foundItem;
 	unsigned int lineIndex;
-	int scheduleSize = getScheduleSize();
+	unsigned int itemID;
+	unsigned int scheduleSize = getScheduleSize();
 	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
 		if (isFound(lineIndex, phraseToSearch)){
-			searchedItems.push_back(_logicSchedule.getSchedule()[lineIndex]);
+			itemID = getItemIdFromLineIndex(lineIndex);
+			foundItem = getItem(itemID);
+			searchedItems.push_back(foundItem);
 		}
 	}
 }
@@ -205,6 +209,15 @@ void Logic::printItem(Item item){
 	cout << item.getLabel() << '\t';
 	cout << item.getPriority();
 	return;
+}
+
+Item Logic::getItem(unsigned int itemID) {
+	Item itemToBeReturned;
+	itemToBeReturned = _logicSchedule.getItem(itemID);
+}
+
+vector<Item> Logic::getSchedule(){
+
 }
 
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){

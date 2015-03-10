@@ -36,7 +36,6 @@ public:
 	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
 	Item assignLabel(Item item, char labelType);
 	int assignLabelToNewTask(char labelType);
-	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
 	int changeView();
 	int showHelpMenu();
 
@@ -47,10 +46,12 @@ public:
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	void printItem(Item item);
 	void printItemVector(vector<Item> itemVector);
-	Item getItem();
+
+	Item getItem(unsigned int itemID);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
 	unsigned int getItemIdFromLineIndex(int lineIndex);
+
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
 	DateTime setDateTime(int year, int month, int day);
 	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted);
