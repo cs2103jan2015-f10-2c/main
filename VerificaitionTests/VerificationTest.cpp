@@ -99,9 +99,43 @@ namespace VerificaitionTests
 	{
 	public:
 
-		TEST_METHOD(TestIsValidDate)
+		TEST_METHOD(TestIsValidItem)
 		{
+			DateTime startTime(2014,03,10,17,00);
+			DateTime endTime(2014,10,15,0,01);
+			Item item;
+			bool isValid;
 
+			item.setItemName("Buy yellow crayons from Borders.");
+			item.setDescription("only buy from Crayola!!");
+			item.setStartTime(startTime);
+			item.setEndTime(endTime);
+			item.setItemID(91823);
+			item.setPriority('H');
+			item.setLabel('P');
+			ItemVerification verify(item, 800000);
+
+			isValid = verify.isValidItem();
+			Assert::AreEqual(true, isValid);
+			
+			ItemVerification verify2(item, 91822);
+
+			isValid = verify2.isValidItem();
+			Assert::AreEqual(false, isValid);
+			
+			item.setItemName("");
+			ItemVerification verify3(item, 800000);
+
+			isValid = verify2.isValidItem();
+			Assert::AreEqual(false, isValid);
+			
+			item.setItemName("Hunt wild dogs in the prairie.");
+			item.setPriority('t');
+			ItemVerification verify4(item, 800000);
+
+			isValid = verify4.isValidItem();
+			Assert::AreEqual(false, isValid);
+			
 		}
 
 	};
