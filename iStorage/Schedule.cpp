@@ -17,7 +17,7 @@ const vector<Item>& Schedule::retrieveSchedule() {
 unsigned int Schedule::getSizeOfSchedule() {
 	return _schedule.size();
 }
-
+/*
 //	Retrieves vector index given itemID
 //	Pre:	Valid itemID
 //	Post:	Vector index is returned
@@ -26,7 +26,7 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 		//	something goes here
 	}
 }
-
+*/
 //	Adds the item to the schedule, returns the itemID
 unsigned int Schedule::addItem(Item item) {
 	_schedule.push_back(item);

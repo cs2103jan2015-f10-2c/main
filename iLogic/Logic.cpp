@@ -1,5 +1,5 @@
 #include "Logic.h"
-
+/*
 Logic::Logic(){
 
 }
@@ -277,3 +277,4 @@ Item Logic::setItem(string itemName, DateTime startTime, DateTime endTime, strin
 
 	return item;
 }
+*/
