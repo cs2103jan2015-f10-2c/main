@@ -54,14 +54,14 @@ public:
 	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
 
 	Item assignTiming(Item item, string timingType, DateTime datetime);
-	int assignTimingToNewTask(string timingType, DateTime datetime);
-	int assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex);
+	Item assignTimingToNewTask(string timingType, DateTime datetime);
+	Item assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex);
 	Item assignPriority(Item item, char priorityType);
-	int assignPriorityToNewTask(char priorityType);
-	int assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
+	Item assignPriorityToNewTask(char priorityType);
+	Item assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
 	Item assignLabel(Item item, char labelType);
-	int assignLabelToNewTask(char labelType);
-
+	Item assignLabelToNewTask(char labelType);
+	Item assignLabelToExistingTask(char labelType, unsigned int lineIndex);
 	/*
 	void readUserInput();
 	void showUserInput(list<userCommand> userCommandList);
@@ -75,8 +75,8 @@ public:
 	int changeView();
 	int showHelpMenu();
 
-	void assignSaveFolder();
-	int readDataFromFile(char * fileName, vector<Item> itemVector);*/
+	void assignSaveFolder();*/
+	int readDataFromFile(char * fileName);
 	int writeDataOntoFile(char * fileName, vector<Item> itemVector);
 	/*
 	
