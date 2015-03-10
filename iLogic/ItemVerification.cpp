@@ -67,7 +67,7 @@ bool ItemVerification::isValidPriority() {
 	char priorityChar = itemObjectToVerify.getPriority();
 	unsigned int priorityFound;
 	priorityString.push_back(priorityChar);
-	priorityFound = priorityString.find_first_of("HML");
+	priorityFound = priorityString.find_first_of("HMLN");
 	if (priorityFound != string::npos) {
 		return 1;
 	} else {
@@ -81,7 +81,7 @@ bool ItemVerification::isValidLabel() {
 	char labelChar = itemObjectToVerify.getPriority();
 	unsigned int labelFound;
 	labelString.push_back(labelChar);
-	labelFound = labelString.find_first_of("PMO");
+	labelFound = labelString.find_first_of("PMON");
 	if (labelFound != string::npos) {
 		return 1;
 	}
