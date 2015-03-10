@@ -1,6 +1,5 @@
 //	Schedule
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
-//	Coder:	Andy Soh Wei Zhi, A0112042E
 
 #include "Schedule.h"
 
@@ -17,10 +16,8 @@ const vector<Item>& Schedule::retrieveSchedule() {
 unsigned int Schedule::getSizeOfSchedule() {
 	return _schedule.size();
 }
-/*
+
 //	Retrieves vector index given itemID
-//	Pre:	Valid itemID
-//	Post:	Vector index is returned
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
 		if (itemID = _schedule[index].getItemID()) {
@@ -28,7 +25,7 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 		}
 	}
 }
-*/
+
 //	Adds the item to the schedule, returns the itemID
 unsigned int Schedule::addItem(Item item) {
 	_schedule.push_back(item);
