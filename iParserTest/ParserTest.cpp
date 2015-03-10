@@ -11,6 +11,7 @@ private:
 	userCommand testUserCommand;
 	
 public:
+	/*
 	// Unit testing for UserCommand Class
 	TEST_METHOD(findIndexUserCommandTest) {
 		string text = "::add submit CE";
@@ -90,5 +91,6 @@ public:
 
 		Assert::AreEqual(actual, expected);
 	}
+	*/
 	};
 }

@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="UserCommand.h">
+    <ClInclude Include="iParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="iParser.h">
+    <ClInclude Include="ParseInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="UserCommand.cpp">
+    <ClCompile Include="iParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="iParser.cpp">
+    <ClCompile Include="ParseInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,9 +2,7 @@
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng (A0111238U)
 
-#include "userCommand.h"
-#include <list>
-#include <iostream>
+#include "ParseInfo.h"
 using namespace std;
 
 #ifndef IPARSER_H_
@@ -13,38 +11,52 @@ using namespace std;
 class iParser {
 
 private:
-	list<userCommand> userCommandList;
+	ParseInfo _ParseInfo;
 
+	static const string COMMAND_ADD;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_EDIT;
+	static const string COMMAND_START;
+	static const string COMMAND_END;
+	static const string COMMAND_DESC;
+	static const string COMMAND_BLANK;
 	static const string TOKEN_COMMAND;
+	static const string TOKEN_SPACE;
+	static const string TOKEN_BLANK;
 	static const string MESSAGE_SUCCESS;
-	static const int INDEX_INVALID = -1;
+	static const string MESSAGE_INVALID;
 	static const int INDEX_ZERO = 0;
+	static const int INDEX_INVALID = -1;
 	static const int INDEX_NEXT = 1;
+	static const int INDEX_AFTER_TOKEN_COMMAND = 2;
 
-	// Splits user input amongst the token "::"
-	// Pre: nil
-	// Post: one user input returned
-	string splitUserInput(string userInput);
+	string tokeniseToCommands(string userInput);
+	bool areValidCommands();
+	string retrieveCommand(string command);
 
-	// Pre: string to find and start index required
-	// Post: returns index where the string to find is found
 	int findIndex(string userInput, string stringToFind, int startingIndex);
+	string retrieveSubstring(string userInput, int startIndex, int endIndex = INDEX_INVALID);
 
-	// Pre: start and end index required
-	// Post: returns substring between start and end index
-	string getSubstring(string userInput, int startIndex, int endIndex);
+	bool isCommand(string command);
+	bool isRequiredCommand(string command);
 
-	// Pre: userCommand class defined
-	// Post:adds to private attribute
-	string addToUserCommandList(userCommand tempUserCommand);
+	// getters
+	string getCommand();
+	int getIndex();
+
+	//setters
+	string setCommand(string command);
+	string setIndex(int index);
+	string setItem(string userInput);
+	string setToken(string userInput);
+
+	void displayTokens();
 
 public:
-	list<userCommand> parse(string userInput);
+	iParser();
+	~iParser();
 
-	// getters for unit testing
-	const int getFindIndex(string userInput, string stringToFind, int startingIndex);
-	const string getGetSubstring(string userInput, int startIndex, int endIndex);
-
+	ParseInfo parse(string Input);
 };
 
 #endif
