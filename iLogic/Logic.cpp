@@ -13,7 +13,7 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	int addedItemId = _logicSchedule.addItem(itemToBeAdded);
 	return addedItemId;
 }
-/*
+
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
@@ -36,15 +36,19 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 		return failedDelete;//Delete failed
 	}
 }
-*/
-/*
+
+
 int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
+	Item foundItem;
 	unsigned int lineIndex;
-	int scheduleSize = getScheduleSize();
+	unsigned int itemID;
+	unsigned int scheduleSize = getScheduleSize();
 	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
 		if (isFound(lineIndex, phraseToSearch)){
-			searchedItems.push_back(_logicSchedule.getSchedule()[lineIndex]);
+			itemID = getItemIdFromLineIndex(lineIndex);
+			foundItem = getItem(itemID);
+			searchedItems.push_back(foundItem);
 		}
 	}
 }
@@ -183,8 +187,7 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 
 	return retCode;
 }
-*/
-/*
+
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	if (getScheduleSize() > lineIndexToBeChecked){
 		return true;
@@ -198,8 +201,7 @@ unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
 	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
 	return Id;
 }
-*/
-/*
+
 void Logic::printItemVector(vector<Item> itemVector){
 	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
 		printItem(itemVector[lineIndex]);
@@ -220,6 +222,19 @@ void Logic::printItem(Item item){
 	return;
 }
 
+Item Logic::getItem(unsigned int itemID) {
+	Item itemToBeReturned;
+	itemToBeReturned = _logicSchedule.getItem(itemID);
+}
+
+vector<Item> Logic::getSchedule(){
+
+}
+
+unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
+	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
+	return Id;
+}
 
 unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
@@ -260,4 +275,4 @@ Item Logic::setItem(string itemName, DateTime startTime, DateTime endTime, strin
 
 	return item;
 }
-*/
+
