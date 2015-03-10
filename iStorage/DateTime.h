@@ -61,7 +61,7 @@ public:
 	int getMinute();
 
 	//	Checks if the attribute is in its valid range
-	//	Pre:	
+	//	Pre:	Nil
 	//	Post:	Returns true if (false otherwise):
 	//			Year ranges from 0 to 9999
 	//			Month ranges from 1 to 12
@@ -74,6 +74,17 @@ public:
 	bool isValidDate(int, int, int);
 	bool isValidHourRange(int);
 	bool isValidMinuteRange(int);
+
+	//	Comparators between DateTime objects
+	//	Pre:	Nil
+	//	Post:	Boolean == returns true if all attributes are equal
+	//			Boolean != returns true if at least one of the attributes are different
+	//			Boolean A.isAfter(B) returns true if A is later than B
+	//			Boolean B.isBefore(B) returns true if A is earlier than B
+	bool operator== (DateTime);
+	bool operator!= (DateTime);
+	bool isAfter(DateTime);
+	bool isBefore(DateTime);
 };
 
 #endif
