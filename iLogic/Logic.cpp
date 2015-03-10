@@ -94,7 +94,7 @@ int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedI
 	addTask(editedItemToBeAdded);
 	return 1;
 }
-
+/*
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	if (timingType == "start"){
 		item.setStartTime(datetime);
@@ -105,7 +105,7 @@ Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	return item;
 }
 
-/*
+
 int Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
 	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
 	unsigned int lastLineItemID = getItemIdFromLineIndex(lastLineIndexOfSchedule);
@@ -118,7 +118,7 @@ int Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsi
 	Item itemToBeAssignedTiming = assignTiming(_logicSchedule.retrieveSchedule()[lineIndex], timingType, datetime);
 	deleteAndAddEditedItem(lineIndex, itemToBeAssignedTiming);
 	return 1;
-}
+}*/
 
 Item Logic::assignPriority(Item item, char priorityType){
 	item.setPriority(priorityType);
