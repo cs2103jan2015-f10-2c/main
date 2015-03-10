@@ -103,13 +103,13 @@ Item Logic::assignPriority(Item item, char priorityType){
 
 int Logic::assignPriorityToNewTask(char priorityType){
 	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
-	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.getSchedule()[lastLineIndexOfSchedule], priorityType);
+	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.retrieveSchedule()[lastLineIndexOfSchedule], priorityType);
 	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedPriority);
 	return 1;
 }
 
 int Logic::assignPriorityToExistingTask(char priorityType, unsigned int lineIndex){
-	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.getSchedule()[lineIndex], priorityType);
+	Item itemToBeAssignedPriority = assignPriority(_logicSchedule.retrieveSchedule()[lineIndex], priorityType);
 	deleteAndAddEditedItem(lineIndex, itemToBeAssignedPriority);
 	return 1;
 }
@@ -121,7 +121,7 @@ Item Logic::assignLabel(Item item, char labelType){
 
 int Logic::assignLabelToNewTask(char labelType){
 	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
-	Item itemToBeAssignedLabel = assignLabel(_logicSchedule.getSchedule()[lastLineIndexOfSchedule], labelType);
+	Item itemToBeAssignedLabel = assignLabel(_logicSchedule.retrieveSchedule()[lastLineIndexOfSchedule], labelType);
 	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedLabel);
 	return 1;
 }
@@ -199,7 +199,7 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 }
 
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
+	unsigned int Id = _logicSchedule.retrieveSchedule()[lineIndex].getItemID;
 	return Id;
 }
 
@@ -233,11 +233,11 @@ vector<Item> Logic::getSchedule(){
 }
 
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
+	unsigned int Id = _logicSchedule.retrieveSchedule()[lineIndex].getItemID;
 	return Id;
 }
 
-unsigned int Logic::getScheduleSize(){
+unsigned int Logic::retrieveScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
 
