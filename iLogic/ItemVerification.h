@@ -21,20 +21,22 @@ static const string ERROR_INVALID_LABEL = "Error: An item has an invalid Label.\
 
 class ItemVerification {
 private:
-	Item itemObjectToVerify;
-	int maxID;
-
-	bool isValidName();
-	bool isValidStartDateTime();
-	bool isValidEndDateTime();
-	bool isValidDescription();
-	bool isValidItemID();
-	bool isValidPriority();
-	bool isValidLabel();
+	Item _itemObjectToVerify;
+	int _maxID;
 
 public:
 	ItemVerification(Item itemObject, unsigned int currentMaxID);
 	bool isValidItem();
+	
+	// PULLED TO PUBLIC FOR TESTING
+	bool isValidName();
+	bool isValidStartDateTime();
+	bool isValidEndDateTime();
+	// TO BE CODED LATER ON!! bool isValidTimeframe();
+	bool isValidDescription();
+	bool isValidItemID();
+	bool isValidPriority();
+	bool isValidLabel();
 
 };
 

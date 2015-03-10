@@ -1,7 +1,7 @@
 #include "DateTimeVerification.h"
 
 bool DateTimeVerification::isValidYearRange(){
-	int year = dateTimeObjectToVerify.getYear();
+	int year = _dateTimeObjectToVerify.getYear();
 	if (year >= MIN_YEAR && year <= MAX_YEAR) {
 		return 1;
 	} else {
@@ -10,7 +10,7 @@ bool DateTimeVerification::isValidYearRange(){
 }
 
 bool DateTimeVerification::isValidMonthRange(){
-	int month = dateTimeObjectToVerify.getMonth();
+	int month = _dateTimeObjectToVerify.getMonth();
 	if (month >= MIN_MONTH && month <= MAX_MONTH) {
 		return 1;
 	} else {
@@ -19,7 +19,7 @@ bool DateTimeVerification::isValidMonthRange(){
 }
 
 bool DateTimeVerification::isValidDayRange(){
-	int day = dateTimeObjectToVerify.getDay();
+	int day = _dateTimeObjectToVerify.getDay();
 	if (day >= MIN_DAY && day <= MAX_DAY) {
 		return 1;
 	} else {
@@ -36,7 +36,7 @@ bool DateTimeVerification::isValidDate(){
 }
 
 bool DateTimeVerification::isValidHourRange(){
-	int hour = dateTimeObjectToVerify.getHour();
+	int hour = _dateTimeObjectToVerify.getHour();
 	if (hour >= MIN_HOUR && hour <= MAX_HOUR) {
 		return 1;
 	} else {
@@ -45,7 +45,7 @@ bool DateTimeVerification::isValidHourRange(){
 }
 
 bool DateTimeVerification::isValidMinuteRange() {
-	int minute = dateTimeObjectToVerify.getMinute();
+	int minute = _dateTimeObjectToVerify.getMinute();
 	if (minute >= MIN_MINUTE && minute <= MAX_MINUTE) {
 		return 1;
 	} else {
@@ -62,7 +62,7 @@ bool DateTimeVerification::isValidTime(){
 }
 
 DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
-	dateTimeObjectToVerify = dateTimeObject;
+	_dateTimeObjectToVerify = dateTimeObject;
 }
 
 bool DateTimeVerification::isValidDateTime() {

@@ -145,3 +145,69 @@ bool DateTime::isValidMinuteRange(int minute) {
 		return false;
 	}
 }
+
+//	Checks if two DateTime objects are identical
+bool DateTime::operator== (DateTime secondaryDateTime) {
+	bool sameYear = (_year == secondaryDateTime.getYear());
+	bool sameMonth = (_month == secondaryDateTime.getMonth());
+	bool sameDay = (_day == secondaryDateTime.getDay());
+	bool sameHour = (_hour == secondaryDateTime.getHour());
+	bool sameMinute = (_minute == secondaryDateTime.getMinute());
+
+	return (sameYear && sameMonth && sameDay && sameHour && sameMinute);
+}
+
+//	Checks if two DateTime objects are not identical
+bool DateTime::operator!= (DateTime secondaryDateTime) {
+	bool differentYear = (_year != secondaryDateTime.getYear());
+	bool differentMonth = (_month != secondaryDateTime.getMonth());
+	bool differentDay = (_day != secondaryDateTime.getDay());
+	bool differentHour = (_hour != secondaryDateTime.getHour());
+	bool differentMinute = (_minute != secondaryDateTime.getMinute());
+
+	return (differentYear || differentMonth || differentDay || differentHour || differentMinute);
+}
+
+//	Checks if current DateTime object is after another
+bool DateTime::isAfter(DateTime secondaryDateTime) {
+	if (_year != secondaryDateTime.getYear()) {
+		return (_year > secondaryDateTime.getYear());
+	}
+	else if (_month != secondaryDateTime.getMonth()){
+		return (_month > secondaryDateTime.getMonth());
+	}
+	else if (_day != secondaryDateTime.getDay()) {
+		return (_day > secondaryDateTime.getDay());
+	}
+	else if (_hour != secondaryDateTime.getHour()) {
+		return (_hour > secondaryDateTime.getHour());
+}
+	else if (_minute != secondaryDateTime.getMinute()) {
+		return (_minute > secondaryDateTime.getMinute());
+	}
+	else {
+		return false;
+	}
+}
+
+//	Checks if current DateTime object is before another
+bool DateTime::isBefore(DateTime secondaryDateTime) {
+	if (_year != secondaryDateTime.getYear()) {
+		return (_year < secondaryDateTime.getYear());
+	}
+	else if (_month != secondaryDateTime.getMonth()){
+		return (_month < secondaryDateTime.getMonth());
+	}
+	else if (_day != secondaryDateTime.getDay()) {
+		return (_day < secondaryDateTime.getDay());
+	}
+	else if (_hour != secondaryDateTime.getHour()) {
+		return (_hour < secondaryDateTime.getHour());
+	}
+	else if (_minute != secondaryDateTime.getMinute()) {
+		return (_minute < secondaryDateTime.getMinute());
+	}
+	else {
+		return false;
+	}
+}
