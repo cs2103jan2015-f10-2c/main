@@ -255,6 +255,130 @@ namespace DateTimeTest
 			Assert::AreEqual(false, outputMinute);
 		}
 	};
+
+	TEST_CLASS(TEST_COMPARATORS) {
+	public:
+
+		TEST_METHOD(TestIsEqual)
+		{
+			DateTime primary(1994, 12, 12);
+			DateTime secondary(1994, 12, 12);
+			bool outputEqual = primary.operator==(secondary);
+			Assert::AreEqual(true, outputEqual);
+
+			primary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.operator==(secondary);
+			Assert::AreEqual(false, outputEqual);
+
+			primary.setYear(1994);
+			primary.setMonth(12);
+			primary.setDay(12);
+			primary.setHour(20);
+			primary.setMinute(9);
+			secondary.setHour(20);
+			secondary.setMinute(9);
+			outputEqual = primary.operator==(secondary);
+			Assert::AreEqual(true, outputEqual);
+
+			primary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.operator==(secondary);
+			Assert::AreEqual(false, outputEqual);
+		}
+
+		TEST_METHOD(TestIsNotEqual)
+		{
+			DateTime primary(1994, 12, 12);
+			DateTime secondary(1994, 12, 12);
+			bool outputEqual = primary.operator!=(secondary);
+			Assert::AreEqual(false, outputEqual);
+
+			primary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.operator!=(secondary);
+			Assert::AreEqual(true, outputEqual);
+
+			primary.setYear(1994);
+			primary.setMonth(12);
+			primary.setDay(12);
+			primary.setHour(20);
+			primary.setMinute(9);
+			secondary.setHour(20);
+			secondary.setMinute(9);
+			outputEqual = primary.operator!=(secondary);
+			Assert::AreEqual(false, outputEqual);
+
+			primary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.operator!=(secondary);
+			Assert::AreEqual(true, outputEqual);
+		}
+
+		TEST_METHOD(TestIsAfter)
+		{
+			DateTime primary(1994, 12, 12);
+			DateTime secondary(1994, 12, 12);
+			bool outputEqual = primary.isAfter(secondary);
+			Assert::AreEqual(false, outputEqual);
+
+			secondary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.isAfter(secondary);
+			Assert::AreEqual(true, outputEqual);
+
+			secondary.setYear(1994);
+			primary.setMonth(12);
+			primary.setDay(12);
+			primary.setHour(20);
+			primary.setMinute(9);
+			secondary.setHour(20);
+			secondary.setMinute(9);
+			outputEqual = primary.isAfter(secondary);
+			Assert::AreEqual(false, outputEqual);
+
+			secondary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.isAfter(secondary);
+			Assert::AreEqual(true, outputEqual);
+		}
+
+		TEST_METHOD(TestIsBefore)
+		{
+			DateTime primary(1994, 12, 12);
+			DateTime secondary(1994, 12, 12);
+			bool outputEqual = primary.isBefore(secondary);
+			Assert::AreEqual(false, outputEqual);
+
+			primary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.isBefore(secondary);
+			Assert::AreEqual(true, outputEqual);
+
+			primary.setYear(1994);
+			primary.setMonth(12);
+			primary.setDay(12);
+			primary.setHour(20);
+			primary.setMinute(9);
+			secondary.setHour(20);
+			secondary.setMinute(9);
+			outputEqual = primary.isBefore(secondary);
+			Assert::AreEqual(false, outputEqual);
+
+			primary.setYear(1992);
+			primary.setMonth(9);
+			primary.setDay(20);
+			outputEqual = primary.isBefore(secondary);
+			Assert::AreEqual(true, outputEqual);
+		}
+	};
 }
 
 namespace ItemTest

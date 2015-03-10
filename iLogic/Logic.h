@@ -76,9 +76,9 @@ public:
 	int showHelpMenu();
 
 	void assignSaveFolder();
-	int readDataFromFile(char * fileName, vector<Item> itemVector);
+	int readDataFromFile(char * fileName, vector<Item> itemVector);*/
 	int writeDataOntoFile(char * fileName, vector<Item> itemVector);
-
+	/*
 	
 	
 	
