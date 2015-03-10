@@ -42,7 +42,7 @@ public:
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
-	/*
+	
 	void readUserInput();
 	void showUserInput(list<userCommand> userCommandList);
 
@@ -66,7 +66,7 @@ public:
 	int showHelpMenu();
 
 	void assignSaveFolder();
-	int readDataFromFile(char * fileName, vector<Item> itemVector);
+	int readDataFromFile(char * fileName);
 	int writeDataOntoFile(char * fileName, vector<Item> itemVector);
 
 	
@@ -82,7 +82,7 @@ public:
 	DateTime setDateTime(int year, int month, int day);
 	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted);
 	
-	*/
+	
 	};
 
 #endif

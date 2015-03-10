@@ -195,18 +195,22 @@ int Logic::showHelpMenu(){
 void Logic::assignSaveFolder(){
 
 }
-
-int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
+*/
+int Logic::readDataFromFile(char * fileName){
 	// Variable to denote successful processing of function
 	int retCode = -1;
 
-	ifstream infile(fileName, std::ios::_Nocreate);
+	ifstream infile(fileName, ios::_Nocreate);
 
 	if (infile.is_open()) {
-		vector<Item>::iterator iterItem;
+		
 		while (!infile.eof()) {
-			for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
-				infile.get(iterItem->getItemName);
+			/*
+				//Item tempItem;
+				//tempItem = iterItem->getItemName;
+
+				infile.getline(*iterItem->getItemName);
+				
 				/*
 				DateTime tempObj1 = iterItem->getStartTime();
 				infile.get(tempObj1.getDay());
@@ -222,6 +226,7 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 				infile.get(tempObj2.getYear());
 				infile.get(tempObj2.getHour());
 				infile.get(tempObj2.getMinute());
+				
 				infile.get(*iterItem->getStartTime);
 				infile.get(*iterItem->getEndTime);
 				infile.get(*iterItem->getItemID);
@@ -229,7 +234,7 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 				infile.get(*iterItem->getPriority);
 				infile.get(*iterItem->getLabel);
 				infile.get(*iterItem->getCompletion);
-			}
+		*/	
 		}
 		infile.close();
 		retCode = 0;
@@ -250,25 +255,48 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 			
 			DateTime tempObj1;
 			tempObj1 = iterItem->getStartTime();
-			outfile << tempObj1.getDay();
-			outfile << tempObj1.getMonth();
-			outfile << tempObj1.getYear();
-			outfile << tempObj1.getHour();
-			outfile << tempObj1.getMinute();
+			outfile << tempObj1.getDay() << endl;
+			outfile << tempObj1.getMonth() << endl;
+			outfile << tempObj1.getYear() << endl;
+			outfile << tempObj1.getHour() << endl;
+			outfile << tempObj1.getMinute() << endl;
 			
 			DateTime tempObj2;
 			tempObj2 = iterItem->getEndTime();
-			outfile << tempObj2.getDay();
-			outfile << tempObj2.getMonth();
-			outfile << tempObj2.getYear();
-			outfile << tempObj2.getHour();
-			outfile << tempObj2.getMinute();
+			outfile << tempObj2.getDay() << endl;
+			outfile << tempObj2.getMonth() << endl;
+			outfile << tempObj2.getYear() << endl;
+			outfile << tempObj2.getHour() << endl;
+			outfile << tempObj2.getMinute() << endl;
 			
 			outfile << iterItem->getItemID() << endl;
-			outfile << iterItem->getDescription() << endl;
-			outfile << iterItem->getPriority() << endl;
-			outfile << iterItem->getLabel() << endl;
-			outfile << iterItem->getCompletion() << endl;
+			
+			string temp = iterItem->getDescription();
+			if (temp.size() != 0) {
+				outfile << iterItem->getDescription() << endl;
+			}
+			else {
+				outfile << endl;
+			}
+			if (iterItem->getPriority()) {
+				outfile << iterItem->getPriority() << endl;
+			}
+			else {
+				outfile << endl;
+			}
+			if (iterItem->getLabel()) {
+				outfile << iterItem->getLabel() << endl;
+			}
+			else {
+				outfile << endl;
+			}
+			if (iterItem->getCompletion()) {
+				outfile << iterItem->getCompletion() << endl;
+			}
+			else {
+				outfile << false <<endl;
+			}
+			
 		}
 		outfile.close();
 		retCode = 0;
