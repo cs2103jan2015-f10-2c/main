@@ -45,14 +45,12 @@ string Logic::showUserInput(list<userCommand> userCommandList) {
 
 string Logic::executeCommand(list<userCommand> userCommandList) {
 	list<userCommand>::iterator iter;
-	
+
 	for (iter = userCommandList.begin(); iter != userCommandList.end(); iter++) {
 		if (!isValidCommand(iter->getCommand())) {
 			return MESSAGE_INVALID_INPUT;
 		}
 	}
-	cout << "success!!" << endl;
-
 	return MESSAGE_SUCCESS;
 }
 
@@ -64,12 +62,9 @@ bool Logic::isValidCommand(string userCommand) {
 		isValid = true;
 	}
 
-	cout << isValid << userCommand << endl;
-
 	return isValid;
 }
 
-/*
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = -1;
 	if (isValidItem(itemToBeAdded)){
@@ -78,10 +73,11 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	}
 	else return addedItemID;
 }
-
+/*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
+*/
 
 
 bool Logic::isValidItem(Item itemToBeChecked){
@@ -97,16 +93,20 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	}
 	else{
 		Item failedDelete;
-		failedDelete.setItemID(-1);
+		failedDelete.setItemID(0);
 		return failedDelete;//Delete failed
 	}
 }
 
-/*
+
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
 	vector<Item> retrievedSchedule = _logicSchedule.retrieveSchedule();
-	unsigned int Id = retrievedSchedule[lineIndex].getItemID();
+	unsigned int Id = retrievedSchedule[lineIndex-1].getItemID();
 	return Id;
+}
+
+vector<Item> Logic::getSchedule(){
+	return _logicSchedule.retrieveSchedule();
 }
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
@@ -120,50 +120,11 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
-/*
-int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
-
-}
 
 int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
 	deleteTask(lineIndexToBeEdited);
 	addTask(editedItemToBeAdded);
-}
-
-
-int Logic::searchTask(string phraseToSearch){
-	vector<Item> searchedItems;
-	Item foundItem;
-	unsigned int lineIndex;
-	unsigned int itemID;
-	unsigned int scheduleSize = getScheduleSize();
-	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
-		if (isFound(lineIndex, phraseToSearch)){
-			itemID = getItemIdFromLineIndex(lineIndex);
-			foundItem = getItem(itemID);
-			searchedItems.push_back(foundItem);
-		}
-	}
-}
-
-bool Logic::isFound(int lineIndex, string& phraseToSearch){
-	Item itemFromLogicSchedule;
-	itemFromLogicSchedule = getItem(lineIndex);
-	unsigned int phraseFoundFromItemName;
-	unsigned int phraseFoundFromItemDescription;
-	phraseFoundFromItemName = itemFromLogicSchedule.getItemName().find(phraseToSearch);
-	if (phraseFoundFromItemName != string::npos) {
-		return true;
-	}
-	phraseFoundFromItemDescription = itemFromLogicSchedule.getDescription().find(phraseToSearch);
-	if (phraseFoundFromItemDescription != string::npos) {
-		return true;
-	}
-	return false;
-}
-
-int Logic::sortTask(){
-
+	return 1;
 }
 
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
@@ -176,6 +137,7 @@ Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	return item;
 }
 
+/*
 int Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
 	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
 	unsigned int lastLineItemID = getItemIdFromLineIndex(lastLineIndexOfSchedule);
@@ -219,6 +181,49 @@ int Logic::assignLabelToNewTask(char labelType){
 	deleteAndAddEditedItem(lastLineIndexOfSchedule, itemToBeAssignedLabel);
 	return 1;
 }
+/*
+int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
+
+}
+
+
+
+
+int Logic::searchTask(string phraseToSearch){
+	vector<Item> searchedItems;
+	Item foundItem;
+	unsigned int lineIndex;
+	unsigned int itemID;
+	unsigned int scheduleSize = getScheduleSize();
+	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
+		if (isFound(lineIndex, phraseToSearch)){
+			itemID = getItemIdFromLineIndex(lineIndex);
+			foundItem = getItem(itemID);
+			searchedItems.push_back(foundItem);
+		}
+	}
+}
+
+bool Logic::isFound(int lineIndex, string& phraseToSearch){
+	Item itemFromLogicSchedule;
+	itemFromLogicSchedule = getItem(lineIndex);
+	unsigned int phraseFoundFromItemName;
+	unsigned int phraseFoundFromItemDescription;
+	phraseFoundFromItemName = itemFromLogicSchedule.getItemName().find(phraseToSearch);
+	if (phraseFoundFromItemName != string::npos) {
+		return true;
+	}
+	phraseFoundFromItemDescription = itemFromLogicSchedule.getDescription().find(phraseToSearch);
+	if (phraseFoundFromItemDescription != string::npos) {
+		return true;
+	}
+	return false;
+}
+
+int Logic::sortTask(){
+
+}
+
 
 int Logic::changeView(){
 
@@ -258,6 +263,10 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 				infile.get(tempObj2.getYear());
 				infile.get(tempObj2.getHour());
 				infile.get(tempObj2.getMinute());
+<<<<<<< HEAD
+			
+=======
+>>>>>>> 75ecd23d5ba36c7c428e7b829b72e548560dddc4
 				infile.get(*iterItem->getStartTime);
 				infile.get(*iterItem->getEndTime);
 				infile.get(*iterItem->getItemID);
