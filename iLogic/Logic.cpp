@@ -36,15 +36,11 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	}
 	if (addedItemID == _nextItemID) {
 		_nextItemID++;
-		return /*ADD SUCCESS MESSAGE ;
+		return; //ADD SUCCESS MESSAGE ;
 	}
-	else return /*ADD FAILURE MESSAGE ;
+	else return; //ADD FAILURE MESSAGE ;
 }
-<<<<<<< HEAD
-/*
-=======
-*/
->>>>>>> b8f92e039121d9d2df5f5ddadd427d82520ae6cc
+
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
@@ -198,7 +194,7 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 				*/
 				infile.get(*iterItem->getStartTime);
 				infile.get(*iterItem->getEndTime);
-				infile.get((*iterItem)->getItemID);
+				infile.get(*iterItem->getItemID);
 				infile.get(*iterItem->getDescription);
 				infile.get(*iterItem->getPriority);
 				infile.get(*iterItem->getLabel);

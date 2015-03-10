@@ -3,6 +3,10 @@
 //	Coder:	Yu Young Bin A0116229J & Shri Kishen Rajendran A0105180W
 
 #pragma once
+
+#ifndef LOGIC_H
+#define LOGIC_H
+
 #include "..\iStorage\Schedule.h"
 #include "..\iStorage\Item.h"
 #include "..\iParser\iParser.h"
@@ -63,3 +67,4 @@ public:
 	
 	};
 
+#endif
