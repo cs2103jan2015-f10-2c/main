@@ -5,7 +5,8 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace iLogicTest
-{		
+{
+
 	TEST_CLASS(AddTaskTest)
 	{
 	public:
@@ -23,22 +24,23 @@ namespace iLogicTest
 		}
 
 	};
-	/*
+	
 	TEST_CLASS(DeleteTaskTest)
 	{
 	public:
 
 		TEST_METHOD(DeleteTaskTest1)
 		{
+			/*
+			Logic testLogic;
 			Schedule testSchedule;
 			Item testItem;
-			testItem.setItemName("TEST");
 			testItem.setItemID(13);
-			unsigned int addItemId = testSchedule.addItem(testItem);
-
-
-
+			unsigned int addedItemId = testLogic.addTask(testItem);
+			Item deletedItem = testLogic.deleteTask(0);
+			Assert::AreEqual(addedItemId, deletedItem.getItemID());
+			*/
 		}
 
-	};*/
+	};
 }

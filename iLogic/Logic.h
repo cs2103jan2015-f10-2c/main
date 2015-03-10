@@ -3,6 +3,10 @@
 //	Coder:	Yu Young Bin A0116229J & Shri Kishen Rajendran A0105180W
 
 #pragma once
+
+#ifndef LOGIC_H
+#define LOGIC_H
+
 #include "..\iStorage\Schedule.h"
 #include "..\iStorage\Item.h"
 #include "..\iParser\iParser.h"
@@ -20,7 +24,7 @@ private:
 	unsigned int _nextItemID;
 
 	static const string MESSAGE_SUCCESS;
-
+	
 public:
 	Logic();
 	~Logic();
@@ -32,9 +36,21 @@ public:
 	bool isValidUserCommand();
 
 	unsigned int addTask(Item itemToBeAdded);
+	bool isValidItem(Item itemToBeChecked);
+	Item deleteTask(unsigned int lineIndexToBeDeleted);
+	unsigned int getItemIdFromLineIndex(int lineIndex);
+	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
+	vector<Item> getSchedule();
+	unsigned int getScheduleSize();
+	/*
+	void readUserInput();
+	void showUserInput(list<userCommand> userCommandList);
+
+
+	
 	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
 	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
-	Item deleteTask(unsigned int lineIndexToBeDeleted);
+	
 	int searchTask(string phraseToSearch);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	int sortTask();
@@ -52,19 +68,21 @@ public:
 	void assignSaveFolder();
 	int readDataFromFile(char * fileName, vector<Item> itemVector);
 	int writeDataOntoFile(char * fileName, vector<Item> itemVector);
-	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
-	unsigned int getItemIdFromLineIndex(int lineIndex);
+
+	
+	
 	
 	void printItem(Item item);
 	void printItemVector(vector<Item> itemVector);
 
 	Item getItem(unsigned int itemID);
-	vector<Item> getSchedule();
-	unsigned int getScheduleSize();
+
 	
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
 	DateTime setDateTime(int year, int month, int day);
 	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted);
 	
+	*/
 	};
 
+#endif
