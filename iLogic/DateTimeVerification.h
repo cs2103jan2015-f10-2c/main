@@ -12,30 +12,29 @@ static const int MIN_MONTH = 1;
 static const int MAX_MONTH = 12;
 static const int MIN_DAY = 1;
 static const int MAX_DAY = 31;
-static const string ERROR_INVALID_DATE = "Error: Invalid Date Specified.\n";
 
 static const int MIN_HOUR = 0;
 static const int MAX_HOUR = 23;
 static const int MIN_MINUTE = 0;
 static const int MAX_MINUTE = 59;
-static const string ERROR_INVALID_TIME = "Error: Invalid Time Specified.\n";
 
 class DateTimeVerification {
-public:
-	DateTimeVerification(DateTime dateTimeObject);
-	bool isValidDateTime(); 
-
 private:
 	DateTime dateTimeObjectToVerify;
 
 	bool isValidYearRange();
 	bool isValidMonthRange();
 	bool isValidDayRange();
-	bool isValidDate();
 
 	bool isValidHourRange();
 	bool isValidMinuteRange();
+
+public:
+	DateTimeVerification(DateTime dateTimeObject);
+
+	bool isValidDate();
 	bool isValidTime();
+	bool isValidDateTime();
 
 };
 
