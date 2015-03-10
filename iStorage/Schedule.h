@@ -18,24 +18,33 @@ private:
 
 public:
 	//	Constructor
-	//    Pre:    Nil
-	//    Post:    Empty schedule is created without any Item objects
+	//	Pre:    Nil
+	//	Post:	Empty schedule is created without any Item objects
 	Schedule();
 
 	//	Destructor
-	//    Pre:    Nil
-	//    Post:    Schedule is destroyed, along with the items stored in it
+	//	Pre:    Nil
+	//	Post:	Schedule is destroyed, along with the items stored in it
 	~Schedule();
 
-	//    Adds an item to the schedule
+	//	Retrieves the entire schedule
+	//	Pre:	Nil
+	//	Post:	Constant reference to the schedule is returned
+	const vector<Item>& retrieveSchedule();
+
+	//	Adds an item to the schedule
+	//	Pre:	Valid Item object
+	//	Post:	Item is added to the schedule; itemID is returned
 	unsigned int addItem(Item);
-
-	//    Deletes an item from the schedule
+/*
+	//	Deletes an item from the schedule
+	//	Pre:	Valid itemID
+	//	Post:	Deleted item is returned
 	Item deleteItem(unsigned int);
-
-	//  getter for schedule
-	vector<Item> getSchedule();
-
+*/
+	//	Retrieves the size of the schedule
+	//	Pre:	Schedule exists
+	//	Post:	Returns the number of items within schedule
 	unsigned int getSizeOfSchedule();
 
 	//    Sorts the schedule according to date

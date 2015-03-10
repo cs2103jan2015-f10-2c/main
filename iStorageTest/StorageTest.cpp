@@ -257,20 +257,6 @@ namespace DateTimeTest
 	};
 }
 
-namespace ScheduleTest
-{
-	TEST_CLASS(UnitTest1)
-	{
-	public:
-
-		TEST_METHOD(TestMethod1)
-		{
-			// TODO: Your test code here
-		}
-
-	};
-}
-
 namespace ItemTest
 {
 	TEST_CLASS(TEST_SETITEM)
@@ -528,5 +514,19 @@ namespace ItemTest
 			outputCompletion = trueStory.getCompletion();
 			Assert::AreEqual(isCompleted, outputCompletion);
 		}
+	};
+}
+
+namespace ScheduleTest
+{
+	TEST_CLASS(UnitTest1)
+	{
+	public:
+
+		TEST_METHOD(TestMethod1)
+		{
+			// TODO: Your test code here
+		}
+
 	};
 }

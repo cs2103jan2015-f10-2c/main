@@ -8,15 +8,18 @@ Schedule::Schedule() {}
 
 Schedule::~Schedule() {}
 
+//	Retrieves the entire schedule
+const vector<Item>& Schedule::retrieveSchedule() {
+	return _schedule;
+}
+
+//	Adds the item to the schedule, returns the itemID
 unsigned int Schedule::addItem(Item item) {
 	_schedule.push_back(item);
 	return item.getItemID();
 }
-
-vector<Item> Schedule::getSchedule() {
-	return _schedule;
-}
-
+/*
+//	Deletes an item from the schedule, returns deleted item
 Item Schedule::deleteItem(unsigned int itemID) {
 	//	find the item based on itemID
 	//	obtain the vector index of the item
