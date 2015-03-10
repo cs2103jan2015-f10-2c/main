@@ -21,9 +21,12 @@ static const int MAX_MINUTE = 59;
 static const string ERROR_INVALID_TIME = "Error: Invalid Time Specified.\n";
 
 class DateTimeVerification {
+public:
+	DateTimeVerification(DateTime dateTimeObject);
+	bool isValidDateTime(); 
+
 private:
 	DateTime dateTimeObjectToVerify;
-	void setDateTimeObject(const DateTime dateTimeObject);
 
 	bool isValidYearRange();
 	bool isValidMonthRange();
@@ -34,8 +37,6 @@ private:
 	bool isValidMinuteRange();
 	bool isValidTime();
 
-public:
-	bool isValidDateTime();
 };
 
 #endif

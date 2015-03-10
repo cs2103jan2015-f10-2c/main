@@ -1,6 +1,6 @@
 #include "DateTimeVerification.h"
 
-void DateTimeVerification::setDateTimeObject(const DateTime dateTimeObject){
+DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
 	dateTimeObjectToVerify = dateTimeObject;
 }
 
