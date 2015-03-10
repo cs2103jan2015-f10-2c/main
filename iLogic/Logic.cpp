@@ -1,13 +1,33 @@
 #include "Logic.h"
-/*
+
+void Logic::readUserInput() {
+	string userInput;
+
+	while (userInput != "::exit") { // refractor this in the future
+		iParser myParser;
+		list<userCommand> userCommandList;
+		getline(cin, userInput);
+		userCommandList = myParser.parse(userInput);
+		showUserInput(userCommandList);
+	}
+}
+
+void Logic::showUserInput(list<userCommand> userCommandList) {
+	list<userCommand>::iterator iter;
+	int i = 1; // refractor this in the future
+	for (iter = userCommandList.begin(); iter != userCommandList.end(); i++, iter++) {
+		cout << "Command " << i << ": " << iter->getCommand() << endl
+			<< "Text " << i << ": " << iter->getText() << endl;
+	}
+}
+
 Logic::Logic(){
 
 }
 
 
-Logic::~Logic(){
+Logic::~Logic() {}
 
-}
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID;
@@ -20,7 +40,11 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	}
 	else return /*ADD FAILURE MESSAGE ;
 }
+<<<<<<< HEAD
+/*
+=======
 */
+>>>>>>> b8f92e039121d9d2df5f5ddadd427d82520ae6cc
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
@@ -156,13 +180,29 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 		while (!infile.eof()) {
 			for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
 				infile.get(iterItem->getItemName);
-				infile.get(iterItem->getStartTime);
+				/*
+				DateTime tempObj1 = iterItem->getStartTime();
+				infile.get(tempObj1.getDay());
+				infile.get(tempObj1.getMonth());
+				infile.get(tempObj1.getYear());
+				infile.get(tempObj1.getHour());
+				infile.get(tempObj1.getMinute());
+				
 				infile.get(iterItem->getEndTime);
-				infile.get(iterItem->getItemID);
-				infile.get(iterItem->getDescription);
-				infile.get(iterItem->getPriority);
-				infile.get(iterItem->getLabel);
-				infile.get(iterItem->getCompletion);
+				/*DateTime tempObj2 = iterItem->getEndTime();
+				infile.get(tempObj2).getDay());
+				infile.get(tempObj2.getMonth());
+				infile.get(tempObj2.getYear());
+				infile.get(tempObj2.getHour());
+				infile.get(tempObj2.getMinute());
+				*/
+				infile.get(*iterItem->getStartTime);
+				infile.get(*iterItem->getEndTime);
+				infile.get((*iterItem)->getItemID);
+				infile.get(*iterItem->getDescription);
+				infile.get(*iterItem->getPriority);
+				infile.get(*iterItem->getLabel);
+				infile.get(*iterItem->getCompletion);
 			}
 		}
 		infile.close();
