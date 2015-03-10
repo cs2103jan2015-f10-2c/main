@@ -1,7 +1,7 @@
 #include "Logic.h"
 
 const string Logic::MESSAGE_SUCCESS = "execution success";
-
+/*
 string Logic::readUserInput() {
 	string userInput;
 
@@ -26,14 +26,13 @@ string Logic::showUserInput(list<userCommand> userCommandList) {
 
 	return MESSAGE_SUCCESS;
 }
-
+*/
 Logic::Logic() {
 	_nextItemID = 0;
 }
 
 Logic::~Logic() {}
 
-/*
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = -1;
 	if (isValidItem(itemToBeAdded)){
@@ -45,15 +44,10 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 /*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
-<<<<<<< HEAD
-
 }
 */
-=======
-}
 
 
->>>>>>> 75ecd23d5ba36c7c428e7b829b72e548560dddc4
 bool Logic::isValidItem(Item itemToBeChecked){
 	return true;
 }
@@ -72,11 +66,15 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	}
 }
 
-/*
+
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
 	vector<Item> retrievedSchedule = _logicSchedule.retrieveSchedule();
-	unsigned int Id = retrievedSchedule[lineIndex].getItemID();
+	unsigned int Id = retrievedSchedule[lineIndex-1].getItemID();
 	return Id;
+}
+
+vector<Item> Logic::getSchedule(){
+	return _logicSchedule.retrieveSchedule();
 }
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
@@ -90,6 +88,7 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
+
 int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
 	deleteTask(lineIndexToBeEdited);
 	addTask(editedItemToBeAdded);
@@ -106,7 +105,7 @@ Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	return item;
 }
 
-
+/*
 int Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
 	unsigned int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
 	unsigned int lastLineItemID = getItemIdFromLineIndex(lastLineIndexOfSchedule);
