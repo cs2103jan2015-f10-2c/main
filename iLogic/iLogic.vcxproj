@@ -65,9 +65,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DateTimeVerification.h" />
     <ClInclude Include="Logic.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DateTimeVerification.cpp" />
     <ClCompile Include="Logic.cpp" />
   </ItemGroup>
   <ItemGroup>

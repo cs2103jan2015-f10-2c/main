@@ -17,32 +17,32 @@ userCommand::userCommand() {
 
 userCommand::~userCommand() {}
 
-userCommand::userCommand(string singleInput) {
-	setCommand(singleInput);
-	setText(singleInput);
+userCommand::userCommand(string input) {
+	setCommand(input);
+	setText(input);
 }
 
-void userCommand::setCommand(string singleInput) {
+void userCommand::setCommand(string input) {
 	int start;
 	int end;
 	string command;
 
-	start = findIndex(singleInput, TOKEN_COMMAND);
+	start = findIndex(input, TOKEN_COMMAND);
 	start = start + INDEX_START_OF_COMMAND;
-	end = findIndex(singleInput, TOKEN_SPACE);
-	command = getSubstring(singleInput, start, end);
+	end = findIndex(input, TOKEN_SPACE);
+	command = getSubstring(input, start, end);
 
 	_command = command;
 }
 
-void userCommand::setText(string singleInput) {
+void userCommand::setText(string input) {
 	int start;
 	int end;
 	string text;
 
-	start = findIndex(singleInput, TOKEN_SPACE);
+	start = findIndex(input, TOKEN_SPACE);
 	start = start + INDEX_START_OF_TEXT;
-	text = getSubstring(singleInput, start);
+	text = getSubstring(input, start);
 
 	_text = text;
 }
@@ -55,18 +55,18 @@ string userCommand::getText() {
 	return _text;
 }
 
-int userCommand::findIndex(string singleInput, string stringToFind) {
-	return singleInput.find(stringToFind);
+int userCommand::findIndex(string input, string stringToFind) {
+	return input.find(stringToFind);
 }
 
-string userCommand::getSubstring(string singleInput, int start, int end) {
+string userCommand::getSubstring(string input, int start, int end) {
 	string substring;
 
 	if (end != INDEX_DEFAULT) {
-		substring = singleInput.substr(start, end - start);
+		substring = input.substr(start, end - start);
 	}
 	else {
-		substring = singleInput.substr(start);
+		substring = input.substr(start);
 	}
 
 	return substring;

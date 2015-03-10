@@ -5,13 +5,14 @@
 #include "iParser.h"
 
 const string iParser::TOKEN_COMMAND = "::";
+const string iParser::MESSAGE_SUCCESS = "execution success";
 
 list<userCommand> iParser::parse(string userInput) {
 	splitUserInput(userInput);
 	return userCommandList;
 }
 
-void iParser::splitUserInput(string userInput) {
+string iParser::splitUserInput(string userInput) {
 	int startIndex = INDEX_ZERO;
 	int endIndex = INDEX_ZERO;
 
@@ -23,6 +24,8 @@ void iParser::splitUserInput(string userInput) {
 		userCommand tempUserCommand(splittedUserCommand);
 		addToUserCommandList(tempUserCommand);
 	}
+
+	return MESSAGE_SUCCESS;
 }
 
 int iParser::findIndex(string userInput, string stringToFind, int startingIndex) {
@@ -33,6 +36,7 @@ int iParser::findIndex(string userInput, string stringToFind, int startingIndex)
 	return returnIndex;
 }
 
+
 string iParser::getSubstring(string userInput, int startIndex, int endIndex) {
 	string substring;
 
@@ -41,9 +45,12 @@ string iParser::getSubstring(string userInput, int startIndex, int endIndex) {
 	return substring;
 }
 
-void iParser::addToUserCommandList(userCommand tempUserCommand) {
+string iParser::addToUserCommandList(userCommand tempUserCommand) {
 	userCommandList.push_back(tempUserCommand);
+
+	return MESSAGE_SUCCESS;
 }
+
 
 const int iParser::getFindIndex(string userInput, string stringToFind, int startingIndex) {
 	return findIndex(userInput, stringToFind, startingIndex);

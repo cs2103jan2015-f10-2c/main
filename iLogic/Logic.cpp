@@ -1,6 +1,8 @@
 #include "Logic.h"
 
-void Logic::readUserInput() {
+const string Logic::MESSAGE_SUCCESS = "execution success";
+
+string Logic::readUserInput() {
 	string userInput;
 
 	while (userInput != "::exit") { // refractor this in the future
@@ -10,48 +12,44 @@ void Logic::readUserInput() {
 		userCommandList = myParser.parse(userInput);
 		showUserInput(userCommandList);
 	}
+
+	return MESSAGE_SUCCESS;
 }
 
-void Logic::showUserInput(list<userCommand> userCommandList) {
+string Logic::showUserInput(list<userCommand> userCommandList) {
 	list<userCommand>::iterator iter;
 	int i = 1; // refractor this in the future
 	for (iter = userCommandList.begin(); iter != userCommandList.end(); i++, iter++) {
 		cout << "Command " << i << ": " << iter->getCommand() << endl
 			<< "Text " << i << ": " << iter->getText() << endl;
 	}
+
+	return MESSAGE_SUCCESS;
 }
 
-Logic::Logic(){
-
+Logic::Logic() {
+	_nextItemID = 0;
 }
-
 
 Logic::~Logic() {}
 
-
-unsigned int Logic::addTask(Item itemToBeAdded){
-	unsigned int addedItemID;
-	if (isValidItem(itemToBeAdded)) {
-		addedItemID = _logicSchedule.addItem(itemToBeAdded);
-	}
-	if (addedItemID == _nextItemID) {
-		_nextItemID++;
-		return /*ADD SUCCESS MESSAGE ;
-	}
-	else return /*ADD FAILURE MESSAGE ;
-}
-<<<<<<< HEAD
 /*
-=======
-*/
->>>>>>> b8f92e039121d9d2df5f5ddadd427d82520ae6cc
+unsigned int Logic::addTask(Item itemToBeAdded){
+	unsigned int addedItemID = -1;
+	if (isValidItem(itemToBeAdded)){
+		addedItemID = _logicSchedule.addItem(itemToBeAdded);
+		return addedItemID;
+	}
+	else return addedItemID;
+}
+
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 }
 
-int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
-	deleteTask(lineIndexToBeEdited);
-	addTask(editedItemToBeAdded);
+
+bool Logic::isValidItem(Item itemToBeChecked){
+	return true;
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
@@ -67,6 +65,35 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 		return failedDelete;//Delete failed
 	}
 }
+
+/*
+unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
+	vector<Item> retrievedSchedule = _logicSchedule.retrieveSchedule();
+	unsigned int Id = retrievedSchedule[lineIndex].getItemID();
+	return Id;
+}
+
+bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
+	if (getScheduleSize() > lineIndexToBeChecked){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+unsigned int Logic::getScheduleSize(){
+	return _logicSchedule.getSizeOfSchedule();
+}
+/*
+int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
+
+}
+
+int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
+	deleteTask(lineIndexToBeEdited);
+	addTask(editedItemToBeAdded);
+}
+
 
 int Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
@@ -195,10 +222,9 @@ int Logic::readDataFromFile(char * fileName, vector<Item> itemVector){
 				infile.get(tempObj2.getYear());
 				infile.get(tempObj2.getHour());
 				infile.get(tempObj2.getMinute());
-				*/
 				infile.get(*iterItem->getStartTime);
 				infile.get(*iterItem->getEndTime);
-				infile.get((*iterItem)->getItemID);
+				infile.get(*iterItem->getItemID);
 				infile.get(*iterItem->getDescription);
 				infile.get(*iterItem->getPriority);
 				infile.get(*iterItem->getLabel);
@@ -251,19 +277,8 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 	return retCode;
 }
 
-bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
-	if (getScheduleSize() > lineIndexToBeChecked){
-		return true;
-	}
-	else{
-		return false;
-	}
-}
 
-unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	unsigned int Id = _logicSchedule.retrieveSchedule()[lineIndex].getItemID;
-	return Id;
-}
+
 
 void Logic::printItemVector(vector<Item> itemVector){
 	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
@@ -290,18 +305,12 @@ Item Logic::getItem(unsigned int itemID) {
 	itemToBeReturned = _logicSchedule.getItem(itemID);
 }
 
-vector<Item> Logic::getSchedule(){
-
-}
-
 unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
 	unsigned int Id = _logicSchedule.retrieveSchedule()[lineIndex].getItemID;
 	return Id;
 }
 
-unsigned int Logic::retrieveScheduleSize(){
-	return _logicSchedule.getSizeOfSchedule();
-}
+
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
 	DateTime datetime;
