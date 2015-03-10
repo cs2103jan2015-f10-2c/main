@@ -9,8 +9,9 @@ Logic::~Logic(){
 
 }
 
-int Logic::addTask(Item itemToBeAdded){
-	_logicSchedule.addItem(itemToBeAdded);
+unsigned int Logic::addTask(Item itemToBeAdded){
+	int addedItemId = _logicSchedule.addItem(itemToBeAdded);
+	return addedItemId;
 }
 
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
@@ -22,15 +23,17 @@ int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedI
 	addTask(editedItemToBeAdded);
 }
 
-int Logic::deleteTask(unsigned int lineIndexToBeDeleted){
+Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	unsigned int itemIdToBeDeleted;
 	if (isValidLineIndex(lineIndexToBeDeleted)){
 		itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
-		_logicSchedule.deleteItem(itemIdToBeDeleted);
-		return 1;//Delete successful
+		Item deletedItem = _logicSchedule.deleteItem(itemIdToBeDeleted);
+		return deletedItem;//Delete successful
 	}
 	else{
-		return 0;//Delete failed
+		Item failedDelete;
+		failedDelete.setItemID(-1);
+		return failedDelete;//Delete failed
 	}
 }
 
@@ -193,6 +196,11 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	else{
 		return false;
 	}
+}
+
+unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
+	unsigned int Id = _logicSchedule.getSchedule()[lineIndex].getItemID;
+	return Id;
 }
 
 void Logic::printItemVector(vector<Item> itemVector){

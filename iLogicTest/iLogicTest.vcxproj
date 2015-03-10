@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5B6A7A2D-035B-455B-85DF-B7C272C64729}</ProjectGuid>
+    <ProjectGuid>{B84EF671-60C2-40DE-A822-5BB762746222}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>iLogicTest</RootNamespace>
   </PropertyGroup>
@@ -52,7 +52,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\iLogic;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
@@ -90,7 +90,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="LogicTest.cpp" />
+    <ClCompile Include="unittest1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\iLogic\iLogic.vcxproj">
