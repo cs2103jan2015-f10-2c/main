@@ -80,3 +80,14 @@ char Item::getLabel() {
 bool Item::getCompletion() {
 	return _isCompleted;
 }
+
+string Item::displayItem() {
+	ostringstream output;
+	
+	output	<< "ItemName: "		<< _itemName << endl
+			<< "StartTime: "	<< _startTime.displayDateTime() << endl
+			<< "EndTime: "		<< _endTime.displayDateTime() << endl
+			<< "Description: "	<< _description << endl;
+
+	return output.str();
+}

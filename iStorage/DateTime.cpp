@@ -211,3 +211,15 @@ bool DateTime::isBefore(DateTime secondaryDateTime) {
 		return false;
 	}
 }
+
+string DateTime::displayDateTime() {
+	ostringstream output;
+
+	output << _day << " "
+		<< _month << " "
+		<< _year << " "
+		<< _hour << ":"
+		<< _minute;
+
+	return output.str();
+}

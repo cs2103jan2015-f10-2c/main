@@ -49,19 +49,19 @@ Item ParseInfo::getItem() {
 	return _item;
 }
 
-bool ParseInfo::getIsValidInput() {
+bool ParseInfo::hasValidInput() {
 	return _isValidInput;
 }
 
-bool ParseInfo::getHasMainCommand() {
+bool ParseInfo::hasMainCommand() {
 	return !_mainCommand.empty();
 }
 
-bool ParseInfo::getHasIndex() {
+bool ParseInfo::hasIndex() {
 	return _index != 0;
 }
 
-bool ParseInfo::getHasItem() {
+bool ParseInfo::hasItem() {
 	string itemName;
 	itemName = _item.getItemName();
 

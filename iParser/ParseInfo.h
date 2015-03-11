@@ -43,10 +43,10 @@ public:
 	string getMainCommand();
 	unsigned int getIndex();
 	Item getItem();
-	bool getHasMainCommand();
-	bool getHasIndex();
-	bool getHasItem();
-	bool getIsValidInput();
+	bool hasMainCommand();
+	bool hasIndex();
+	bool hasItem();
+	bool hasValidInput();
 };
 
 #endif

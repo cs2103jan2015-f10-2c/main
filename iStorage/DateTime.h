@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 class DateTime
@@ -85,6 +86,11 @@ public:
 	bool operator!= (DateTime);
 	bool isAfter(DateTime);
 	bool isBefore(DateTime);
+
+	// display attributes
+	// Pre:		Nil
+	// Post:	Displays attributes in DD MM YYYY HHMM format
+	string displayDateTime();
 };
 
 #endif

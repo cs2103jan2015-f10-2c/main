@@ -23,11 +23,6 @@ using namespace std;
 #ifndef IPARSER_H_
 #define IPARSER_H_
 
-struct COMMAND_AND_TEXT {
-	string command;
-	string text;
-};
-
 class iParser {
 
 	// used for private method unit testing
@@ -39,22 +34,34 @@ class iParser {
 	// used for private method unit testing
 
 	ParseInfo _parseInfo;
-	list<COMMAND_AND_TEXT> _tokens;
+	list<string> _inputs;
+
+	enum CommandType {
+		ADD, DELETE, EDIT, START, END, DESCRIPTION, LABEL,
+		PRIORITY, UNDO, SORT, SEARCH, EXIT, INVALID
+	};
 
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_EDIT;
 	static const string COMMAND_START;
 	static const string COMMAND_END;
-	static const string COMMAND_DESC;
-	static const string COMMAND_BLANK;
+	static const string COMMAND_DESCRIPTION;
+	static const string COMMAND_EXIT;
 
 	static const string TOKEN_COMMAND;
 	static const string TOKEN_SPACE;
+	static const string TOKEN_OBLIQUE;
 	static const string TOKEN_BLANK;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID;
+	static const string MESSAGE_TERMINATE;
+
+	static const int LENGTH_VALID = 2;
+	static const int DIGIT_OF_TIME = 2;
+	static const int DIGIT_THREE = 3;
+	static const int DIGIT_FOUR = 4;
 
 	static const int INDEX_ZERO = 0;
 	static const int INDEX_ONE = 1;
@@ -63,26 +70,50 @@ class iParser {
 	static const int INDEX_AFTER_TOKEN_COMMAND = 2;
 
 	// main methods to be executed in public method parse 
-	string tokeniseToParts(string userInput);
-	bool areValidCommands();
+	string splitInput(string userInput);
+	string setInformation();
+	
+	// input retrieval and categorisation
+	string retrieveCommand(string userInput);
+	string retrieveText(string userInput);
+	CommandType determineCommandType(string command);
+	
+	// commandType functions
+	string setAddItemName(string text, Item& item);
+	string setDeleteIndex(string text, Item& item);
+	string setEditIndex(string text, Item& item);
+	string setStartDateTime(string text, Item& item);
+	string setEndDateTime(string text, Item& item);
+	string setDescription(string text, Item& item);
+	string setExit(string text);
 
-	// helper functions to assist main methods
-	int findIndex(string userInput, string stringToFind, int startIndex);
+	// helper functions assisting commandType functions
+	string addIndex(string text);
+	string splitAndSetDateTime(string text, Item& item, string command);
+	int retrieveYear(string text);
+	int retrieveMonth(string text);
+	int retrieveDay(string text);
+	int retrieveHour(string text);
+	int retrieveMinute(string text);
+
+	// string manipulation functions
+	int findIndex(string userInput, string stringToFind, int startIndex = INDEX_ZERO);
 	string retrieveSubstring(string userInput, int startIndex, int endIndex = INDEX_INVALID);
 	string trimText(string& text);
 	string trimFront(string text);
 	string trimBack(string text);
-
-	// boolean functions to assist main methods
-	bool isCommand(string command);
-	bool isMainCommand(string command);
+	int convertToDigit(string text);
+	
+	// boolean functions
 	bool isValidLength(string userInput);
+	bool isDigit(string text);
 
-	// Methods for _tokens
-	string setToken(string singleInput);
-	string setTokenToList(COMMAND_AND_TEXT token);
-	bool hasTokens();
-	string displayTokens();
+	//Methods for inputs
+	string setInputs(string individualInputs);
+	string displayInputs();
+
+	string displayParseInfo();
+	void showError(string text);
 
 public:
 	iParser();
