@@ -22,19 +22,31 @@ iParser::iParser() {}
 iParser::~iParser() {}
 
 ParseInfo iParser::parse(string userInput) {
+	ParseInfo parseInfo;
 	tokeniseToParts(userInput);
-	
 	if (!areValidCommands()) {
-		_ParseInfo.setIsNotValidInput();
+		
 	}
 
-	return _ParseInfo;
+	cout << displayTokens();
+	cout << "Valid Commands: " << boolalpha << _parseInfo.getIsValidInput() << endl;
+
+	parseInfo = _parseInfo;
+	return parseInfo;
 }
 
+// 1. seperate the userInput into "::"
+// 2. seperate each userInput into command and text
+// 3. pushes to _tokens list
 string iParser::tokeniseToParts(string userInput) {
 	int start = INDEX_ZERO;
 	int end = INDEX_ZERO;
 	
+	if (!isValidLength(userInput)) {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
 	while (end != INDEX_INVALID) {
 		string individualCommandLine;
 		start = findIndex(userInput, TOKEN_COMMAND, end);
@@ -42,22 +54,20 @@ string iParser::tokeniseToParts(string userInput) {
 		individualCommandLine = retrieveSubstring(userInput, start, end);
 		setToken(individualCommandLine);
 	}
-	displayTokens();
 
 	return MESSAGE_SUCCESS;
 }
 
 bool iParser::areValidCommands() {
 	bool isValid = true;
-	list<COMMAND_AND_TEXT>& tokens = _ParseInfo.getTokens();
 	list<COMMAND_AND_TEXT>::iterator iter;
 	
-	for (iter = tokens.begin(); iter != tokens.end(); iter++) {
+	for (iter = _tokens.begin(); isValid && iter != _tokens.end(); iter++) {
 		string command = iter->command;
 		if (isCommand(command)) {
-			if (isRequiredCommand(command)) {
-				if (!_ParseInfo.getHasMainCommand()) {
-					retrieveCommand(command);
+			if (isMainCommand(command)) {
+				if (!_parseInfo.getHasMainCommand()) {
+					_parseInfo.setMainCommand(command);
 				}
 				else {
 					isValid = false;
@@ -68,20 +78,21 @@ bool iParser::areValidCommands() {
 			isValid = false;
 		}
 	}
+	
+	// if any of the tokenised user inputs are not valid
+	// ParseInfo passed to iLogic will be invalid information
+	if (!isValid) {
+		_parseInfo.setIsNotValidInput();
+	}
 
 	return isValid;
 }
 
-string iParser::retrieveCommand(string command) {
-	_ParseInfo.setMainCommand(command);
 
-	return MESSAGE_SUCCESS;
-}
-
-int iParser::findIndex(string userInput, string stringToFind, int startingIndex) {
+int iParser::findIndex(string userInput, string stringToFind, int startIndex) {
 	int returnIndex;
 
-	returnIndex = userInput.find(stringToFind, startingIndex);
+	returnIndex = userInput.find(stringToFind, startIndex);
 
 	return returnIndex;
 }
@@ -95,6 +106,33 @@ string iParser::retrieveSubstring(string userInput, int startIndex, int endIndex
 	return substring;
 }
 
+string iParser::trimText(string& text) {
+	text = trimFront(text);
+	text = trimBack(text);
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::trimFront(string text) {
+	int startIndex = INDEX_ZERO;
+
+	while (text[startIndex] == ' ' || text[startIndex] == '\t') {
+		startIndex++;
+	}
+
+	return text.substr(startIndex);
+}
+
+string iParser::trimBack(string text) {
+	int endIndex = text.length() - INDEX_NEXT;
+
+	while (text[endIndex] == ' ' || text[endIndex] == '\t') {
+		endIndex--;
+	}
+
+	return text.substr(INDEX_ZERO, endIndex + INDEX_NEXT);
+}
+
 bool iParser::isCommand(string command) {
 	bool isValid = false;
 
@@ -106,7 +144,7 @@ bool iParser::isCommand(string command) {
 	return isValid;
 }
 
-bool iParser::isRequiredCommand(string command) {
+bool iParser::isMainCommand(string command) {
 	bool isValid = false;
 
 	if (command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_EDIT) {
@@ -116,40 +154,42 @@ bool iParser::isRequiredCommand(string command) {
 	return isValid;
 }
 
-string iParser::setCommand(string command) {
-	return MESSAGE_SUCCESS;
+bool iParser::isValidLength(string userInput) {
+	return userInput.length() >= 2;
 }
 
-string iParser::setIndex(int index) {
-	return MESSAGE_SUCCESS;
-}
-
-string iParser::setItem(string userInput) {
-	return MESSAGE_SUCCESS;
-}
-
-string iParser::setToken(string text) {
+string iParser::setToken(string singleInput) {
 	COMMAND_AND_TEXT line;
 	int start = INDEX_ZERO;
 	int end = INDEX_ZERO;
 
-	end = findIndex(text, TOKEN_SPACE, start);
-	line.command = retrieveSubstring(text, INDEX_AFTER_TOKEN_COMMAND, end);
+	end = findIndex(singleInput, TOKEN_SPACE, start);
+	line.command = retrieveSubstring(singleInput, INDEX_AFTER_TOKEN_COMMAND, end);
 	if (end != INDEX_INVALID) {
-		line.text = retrieveSubstring(text, end + INDEX_NEXT);
+		line.text = retrieveSubstring(singleInput, end + INDEX_NEXT);
 	}
-
-	_ParseInfo.setTokens(line);
+	trimText(line.text);
+	setTokenToList(line);
 
 	return MESSAGE_SUCCESS;
 }
 
-void iParser::displayTokens() {
+string iParser::setTokenToList(COMMAND_AND_TEXT token) {
+	_tokens.push_back(token);
+	return MESSAGE_SUCCESS;
+}
+
+bool iParser::hasTokens() {
+	return !_tokens.empty();
+}
+
+string iParser::displayTokens() {
 	list<COMMAND_AND_TEXT>::iterator iter;
-	list<COMMAND_AND_TEXT>& tokens = _ParseInfo.getTokens();
-	
-	for (iter = tokens.begin(); iter != tokens.end(); iter++) {
-		cout << "Command: " << iter->command << endl
-			<< "Text: " << iter->text << endl;
+	ostringstream output;
+
+	for (iter = _tokens.begin(); iter != _tokens.end(); iter++) {
+		output << "Command: \"" << iter->command << " Text: \"" << iter->text << "\"" << endl;
 	}
+
+	return output.str();
 }

@@ -7,11 +7,8 @@ namespace iPlannerParserTest {
 
 	TEST_CLASS(ParseInfoTest) {
 	private:
-		iParser testParser;
 		ParseInfo testParseInfo;
 	public:
-
-		// Unit testing for ParseInfo Class
 		TEST_METHOD(commandTest) {
 			string text = "add";
 			string actualSet;
@@ -101,46 +98,9 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedBool, actualBool);
 		}
 		
-		TEST_METHOD(TokensTest) {
-			list<COMMAND_AND_TEXT> testList;
-			COMMAND_AND_TEXT testStruct;
-			string actualSet;
-			string expectedSet;
-			string actualGetCommand;
-			string expectedGetCommand;
-			string actualGetText;
-			string expectedGetText;
-			bool actualBool;
-			bool expectedBool;
-
-			actualBool = testParseInfo.getHasTokens();
-			expectedBool = false;
-			Assert::AreEqual(expectedBool, actualBool);
-
-			testStruct.command = "add";
-			testStruct.text = "do CS2103";
-			actualSet = testParseInfo.setTokens(testStruct);
-			expectedSet = "successful execution";
-			Assert::AreEqual(expectedSet, actualSet);
-
-			testList = testParseInfo.getTokens();
-			list<COMMAND_AND_TEXT>::iterator iter;
-			iter = testList.begin();
-			actualGetCommand = iter->command;
-			actualGetText = iter->text;
-			expectedGetCommand = "add";
-			expectedGetText = "do CS2103";
-			Assert::AreEqual(expectedGetCommand, actualGetCommand);
-			Assert::AreEqual(expectedGetText, actualGetText);
-
-			actualBool = testParseInfo.getHasTokens();
-			expectedBool = true;
-			Assert::AreEqual(expectedBool, actualBool);
-		}
-
 		TEST_METHOD(ValidityTest) {
-			string actual;
-			string expected;
+			string actualString;
+			string expectedString;
 			bool actualBool;
 			bool expectedBool;
 
@@ -148,48 +108,43 @@ namespace iPlannerParserTest {
 			expectedBool = true;
 			Assert::AreEqual(expectedBool, actualBool);
 			
-			actual = testParseInfo.setIsNotValidInput();
-			expected = "successful execution";
-			Assert::AreEqual(expected, actual);
+			actualString = testParseInfo.setIsNotValidInput();
+			expectedString = "successful execution";
+			Assert::AreEqual(expectedString, actualString);
 
 			actualBool = testParseInfo.getIsValidInput();
 			expectedBool = false;
 			Assert::AreEqual(expectedBool, actualBool);
 		}
 	};
-	/*
-	TEST_CLASS(ParseInfoTest) {
+	
+	TEST_CLASS(iPlannerParserTest) {
 	private:
 		iParser testParser;
 		ParseInfo testParseInfo;
 	public:
-		// Unit testing for iParser class
-		TEST_METHOD(findIndexParserTest) {
-			string text = "test :: test";
-			string stringToFind = "::";
-			int start = 0;
-			int actual;
-			int expected;
+		TEST_METHOD(tokenTest) {
+			string text = "::add task ::desc this is a task";
+			string actualString;
+			string expectedString;
+			bool actualBool;
+			bool expectedBool;
 
-			actual = testParser.getFindIndex(text, stringToFind, start);
-			expected = 5;
+			//actualBool = testParser.hasTokens();
+			expectedBool = false;
+			Assert::AreEqual(expectedBool, actualBool);
 
-			Assert::AreEqual(expected, actual);
-		}
+			// calling this method tests for setToken and setTokenToList
+			//testParser.tokeniseToParts(text);
+			//actualBool = testParser.hasTokens();
+			expectedBool = true;
+			Assert::AreEqual(expectedBool, actualBool);
 
-
-		TEST_METHOD(findSubstringParserTest) {
-			string text = "test :: test";
-			int start = 5;
-			int end = 7;
-			string actual;
-			string expected;
-
-			actual = testParser.getGetSubstring(text, start, end);
-			expected = "::";
-
-			Assert::AreEqual(actual, expected);
+			//actualString = testParser.displayTokens();
+			string string1 = "Command: add / Text: task \n";
+			string string2 = "Command: desc / Text: this is a task";
+			expectedString = string1 + string2;
+			Assert::AreEqual(expectedString, actualString);
 		}
 	};
-	*/
 }

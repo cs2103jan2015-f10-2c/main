@@ -13,18 +13,33 @@ NOTES TO DEVELOPERS
 ===================================================================================================
 */
 
+#include <iostream>
 #include <string>
 #include <list>
+#include <sstream>
 #include "ParseInfo.h"
 using namespace std;
 
 #ifndef IPARSER_H_
 #define IPARSER_H_
 
+struct COMMAND_AND_TEXT {
+	string command;
+	string text;
+};
+
 class iParser {
 
-private:
-	ParseInfo _ParseInfo;
+	// used for private method unit testing
+	#ifndef TESTMODE 
+	private: 
+	#else 
+	public:
+	#endif
+	// used for private method unit testing
+
+	ParseInfo _parseInfo;
+	list<COMMAND_AND_TEXT> _tokens;
 
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
@@ -42,31 +57,32 @@ private:
 	static const string MESSAGE_INVALID;
 
 	static const int INDEX_ZERO = 0;
+	static const int INDEX_ONE = 1;
 	static const int INDEX_INVALID = -1;
 	static const int INDEX_NEXT = 1;
 	static const int INDEX_AFTER_TOKEN_COMMAND = 2;
 
+	// main methods to be executed in public method parse 
 	string tokeniseToParts(string userInput);
 	bool areValidCommands();
-	string retrieveCommand(string command);
 
-	int findIndex(string userInput, string stringToFind, int startingIndex);
+	// helper functions to assist main methods
+	int findIndex(string userInput, string stringToFind, int startIndex);
 	string retrieveSubstring(string userInput, int startIndex, int endIndex = INDEX_INVALID);
+	string trimText(string& text);
+	string trimFront(string text);
+	string trimBack(string text);
 
+	// boolean functions to assist main methods
 	bool isCommand(string command);
-	bool isRequiredCommand(string command);
+	bool isMainCommand(string command);
+	bool isValidLength(string userInput);
 
-	// getters
-	string getCommand();
-	int getIndex();
-
-	//setters
-	string setCommand(string command);
-	string setIndex(int index);
-	string setItem(string userInput);
-	string setToken(string userInput);
-
-	void displayTokens();
+	// Methods for _tokens
+	string setToken(string singleInput);
+	string setTokenToList(COMMAND_AND_TEXT token);
+	bool hasTokens();
+	string displayTokens();
 
 public:
 	iParser();
