@@ -27,7 +27,6 @@ ParseInfo iParser::parse(string userInput) {
 	ParseInfo parseInfo;
 	splitInput(userInput);
 	setInformation();
-	cout << endl << displayParseInfo();
 	parseInfo = _parseInfo;
 	return parseInfo;
 }
@@ -110,6 +109,12 @@ string iParser::setInformation() {
 		}
 		_parseInfo.setItem(tempItem);
 	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::setInputs(string individualInputs) {
+	_inputs.push_back(individualInputs);
 
 	return MESSAGE_SUCCESS;
 }
@@ -432,12 +437,6 @@ bool iParser::isDigit(string text) {
 	}
 
 	return isValid;
-}
-
-string iParser::setInputs(string individualInputs) {
-	_inputs.push_back(individualInputs);
-
-	return MESSAGE_SUCCESS;
 }
 
 string iParser::displayInputs() {

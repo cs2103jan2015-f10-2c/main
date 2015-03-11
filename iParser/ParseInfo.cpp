@@ -9,8 +9,15 @@ const string ParseInfo::TOKEN_BLANK = "";
 
 ParseInfo::ParseInfo() {
 	_mainCommand = TOKEN_BLANK;
-	_index = INDEX_ZERO;	
+	_index = INDEX_ZERO;
 	_isValidInput = true;
+}
+
+ParseInfo::ParseInfo(string mainCommand, unsigned int index, Item item, bool isValidInput) {
+	_mainCommand = mainCommand;
+	_index = index;
+	_item = item;
+	_isValidInput = isValidInput;
 }
 
 ParseInfo::~ParseInfo() {}
