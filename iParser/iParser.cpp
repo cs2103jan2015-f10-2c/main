@@ -22,7 +22,7 @@ iParser::iParser() {}
 iParser::~iParser() {}
 
 ParseInfo iParser::parse(string userInput) {
-	tokeniseToCommands(userInput);
+	tokeniseToParts(userInput);
 	
 	if (!areValidCommands()) {
 		_ParseInfo.setIsNotValidInput();
@@ -31,7 +31,7 @@ ParseInfo iParser::parse(string userInput) {
 	return _ParseInfo;
 }
 
-string iParser::tokeniseToCommands(string userInput) {
+string iParser::tokeniseToParts(string userInput) {
 	int start = INDEX_ZERO;
 	int end = INDEX_ZERO;
 	

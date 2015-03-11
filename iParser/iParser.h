@@ -2,6 +2,17 @@
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng (A0111238U)
 
+/*
+===================================================================================================
+NOTES TO DEVELOPERS
+- iParser takes in a string and returns ParseInfo class to iLogic
+- iParser splits string into individual fragments which is then assigned to the attributes in
+  ParseInfo class
+- Note that iParser does not do the validity check and only assigns to attributes
+  (validity check is done in iLogic)
+===================================================================================================
+*/
+
 #include <string>
 #include <list>
 #include "ParseInfo.h"
@@ -22,17 +33,20 @@ private:
 	static const string COMMAND_END;
 	static const string COMMAND_DESC;
 	static const string COMMAND_BLANK;
+
 	static const string TOKEN_COMMAND;
 	static const string TOKEN_SPACE;
 	static const string TOKEN_BLANK;
+
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID;
+
 	static const int INDEX_ZERO = 0;
 	static const int INDEX_INVALID = -1;
 	static const int INDEX_NEXT = 1;
 	static const int INDEX_AFTER_TOKEN_COMMAND = 2;
 
-	string tokeniseToCommands(string userInput);
+	string tokeniseToParts(string userInput);
 	bool areValidCommands();
 	string retrieveCommand(string command);
 

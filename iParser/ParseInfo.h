@@ -2,6 +2,15 @@
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng (A0111238U)
 
+/*
+===================================================================================================
+NOTES TO DEVELOPERS
+- _mainCommands: add / del / edit / exit
+- if _isValidInput is false, user input is definitely wrong
+  e.g. there is no _mainCommand
+===================================================================================================
+*/
+
 #include <string>
 #include <list>
 #include <iostream>
