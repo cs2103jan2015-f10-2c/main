@@ -145,8 +145,8 @@ string Logic::showToUser(string text) {
 */
 
 unsigned int Logic::addTask(Item itemToBeAdded){
-	unsigned int addedItemID = 0;
-	if (isValidItem(itemToBeAdded)){
+	unsigned int addedItemID = DEFAULT_ITEM_ID;
+	if (isValidItem(itemToBeAdded)) {
 			itemToBeAdded.setItemID(_nextItemID);
 			_nextItemID++;
 			addedItemID = _logicSchedule.addItem(itemToBeAdded);
@@ -155,8 +155,8 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 }
 
 unsigned int Logic::addTaskForEdition(Item itemToBeAdded){
-	unsigned int addedItemID = 0;
-	if (isValidItem(itemToBeAdded)){
+	unsigned int addedItemID = DEFAULT_ITEM_ID;
+	if (isValidItem(itemToBeAdded)) {
 		addedItemID = _logicSchedule.addItem(itemToBeAdded);
 	}
 	return addedItemID;
@@ -169,14 +169,19 @@ int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 
 
 bool Logic::isValidItem(Item itemToBeChecked){
-	return true;
+	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
+	if (itemVerifier.isValidItem()) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
-	unsigned int itemIdToBeDeleted;
+	unsigned int itemIDToBeDeleted;
 	if (isValidLineIndex(lineIndexToBeDeleted)){
-		itemIdToBeDeleted = getItemIdFromLineIndex(lineIndexToBeDeleted);
-		Item deletedItem = _logicSchedule.deleteItem(itemIdToBeDeleted);
+		itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
+		Item deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
 		return deletedItem;//Delete successful
 	}
 	else{
@@ -187,10 +192,10 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 }
 
 
-unsigned int Logic::getItemIdFromLineIndex(int lineIndex){
-	vector<Item> retrievedSchedule = _logicSchedule.retrieveSchedule();
-	unsigned int Id = retrievedSchedule[lineIndex-1].getItemID();
-	return Id;
+unsigned int Logic::getItemIDFromLineIndex(int lineIndex){
+	vector<Item> retrievedSchedule = getSchedule();
+	unsigned int id = retrievedSchedule[lineIndex-1].getItemID();
+	return id;
 }
 
 vector<Item> Logic::getSchedule(){

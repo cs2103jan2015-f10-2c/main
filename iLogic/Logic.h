@@ -30,6 +30,7 @@ private:
 	static const string COMMAND_EDIT;
 	static const string COMMAND_EXIT;
 	static const int ZERO_INDEX = 0;
+	static const unsigned int DEFAULT_ITEM_ID = 0;
 
 public:
 	Logic();
@@ -66,7 +67,7 @@ public:
 
 	bool isValidItem(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
-	unsigned int getItemIdFromLineIndex(int lineIndex);
+	unsigned int getItemIDFromLineIndex(int lineIndex);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
