@@ -94,8 +94,7 @@ namespace iLogicTest
 		Assert::AreEqual(addedItemId2, deletedItem.getItemID());
 		deletedItem = testLogic.deleteTask(1);
 		Assert::AreEqual(addedItemId, deletedItem.getItemID());
-		}
-		*/
+		}*/
 	};
 
 	TEST_CLASS(GetItemIDFromLineIndexTest)

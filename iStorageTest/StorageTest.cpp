@@ -662,7 +662,7 @@ namespace ScheduleTest
 	{
 		TEST_METHOD(TestFindVectorIndexGivenItemID)
 		{
-
+			// TODO: Your test code here
 		}
 	};
 
