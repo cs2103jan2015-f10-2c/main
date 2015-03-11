@@ -18,7 +18,7 @@ namespace iPlannerParserTest {
 			bool actualBool;
 			bool expectedBool;
 
-			actualBool = testParseInfo.getHasMainCommand();
+			actualBool = testParseInfo.hasMainCommand();
 			expectedBool = false;
 			Assert::AreEqual(expectedBool, actualBool);
 
@@ -29,7 +29,7 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedSet, actualSet);
 			Assert::AreEqual(expectedGet, actualGet);
 
-			actualBool = testParseInfo.getHasMainCommand();
+			actualBool = testParseInfo.hasMainCommand();
 			expectedBool = true;
 			Assert::AreEqual(expectedBool, actualBool);
 		}
@@ -44,7 +44,7 @@ namespace iPlannerParserTest {
 			bool actualBool;
 			bool expectedBool;
 
-			actualBool = testParseInfo.getHasIndex();
+			actualBool = testParseInfo.hasIndex();
 			expectedBool = false;
 			Assert::AreEqual(expectedBool, actualBool);
 
@@ -54,7 +54,7 @@ namespace iPlannerParserTest {
 			expectedGet = 1;
 			Assert::AreEqual(expectedGet, actualGet);
 
-			actualBool = testParseInfo.getHasIndex();
+			actualBool = testParseInfo.hasIndex();
 			expectedBool = true;
 			Assert::AreEqual(expectedBool, actualBool);
 
@@ -64,7 +64,7 @@ namespace iPlannerParserTest {
 			expectedGet = -1;
 			Assert::AreEqual(expectedGet, actualGet);
 			
-			actualBool = testParseInfo.getHasIndex();
+			actualBool = testParseInfo.hasIndex();
 			expectedBool = true;
 			Assert::AreEqual(expectedBool, actualBool);
 		}
@@ -79,7 +79,7 @@ namespace iPlannerParserTest {
 			bool actualBool;
 			bool expectedBool;
 
-			actualBool = testParseInfo.getHasItem();
+			actualBool = testParseInfo.hasItem();
 			expectedBool = false;
 			Assert::AreEqual(expectedBool, actualBool);
 
@@ -93,7 +93,7 @@ namespace iPlannerParserTest {
 			expectedGet = "itemName";
 			Assert::AreEqual(expectedGet, actualGet);
 
-			actualBool = testParseInfo.getHasItem();
+			actualBool = testParseInfo.hasItem();
 			expectedBool = true;
 			Assert::AreEqual(expectedBool, actualBool);
 		}
@@ -104,7 +104,7 @@ namespace iPlannerParserTest {
 			bool actualBool;
 			bool expectedBool;
 
-			actualBool = testParseInfo.getIsValidInput();
+			actualBool = testParseInfo.hasValidInput();
 			expectedBool = true;
 			Assert::AreEqual(expectedBool, actualBool);
 			
@@ -112,7 +112,7 @@ namespace iPlannerParserTest {
 			expectedString = "successful execution";
 			Assert::AreEqual(expectedString, actualString);
 
-			actualBool = testParseInfo.getIsValidInput();
+			actualBool = testParseInfo.hasValidInput();
 			expectedBool = false;
 			Assert::AreEqual(expectedBool, actualBool);
 		}

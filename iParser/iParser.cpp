@@ -9,13 +9,15 @@ const string iParser::COMMAND_DELETE = "del";
 const string iParser::COMMAND_EDIT = "edit";
 const string iParser::COMMAND_START = "start";
 const string iParser::COMMAND_END = "end";
-const string iParser::COMMAND_DESC = "desc";
+const string iParser::COMMAND_DESCRIPTION = "desc";
+const string iParser::COMMAND_EXIT = "exit";
 const string iParser::TOKEN_COMMAND = "::";
 const string iParser::TOKEN_SPACE = " ";
+const string iParser::TOKEN_OBLIQUE = "/";
 const string iParser::TOKEN_BLANK = "";
 const string iParser::MESSAGE_SUCCESS = "successful execution";
 const string iParser::MESSAGE_INVALID = "invalid input";
-const string iParser::COMMAND_BLANK = "";
+const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
 iParser::iParser() {}
 
@@ -23,72 +25,250 @@ iParser::~iParser() {}
 
 ParseInfo iParser::parse(string userInput) {
 	ParseInfo parseInfo;
-	tokeniseToParts(userInput);
-	if (!areValidCommands()) {
-		
-	}
+	splitInput(userInput);
+	setInformation();
 
-	cout << displayTokens();
-	cout << "Valid Commands: " << boolalpha << _parseInfo.getIsValidInput() << endl;
+	cout << displayParseInfo();
 
 	parseInfo = _parseInfo;
 	return parseInfo;
 }
 
-// 1. seperate the userInput into "::"
-// 2. seperate each userInput into command and text
-// 3. pushes to _tokens list
-string iParser::tokeniseToParts(string userInput) {
-	int start = INDEX_ZERO;
-	int end = INDEX_ZERO;
-	
+// splits inputs to fragments seperated by "::"
+string iParser::splitInput(string userInput) {
 	if (!isValidLength(userInput)) {
 		_parseInfo.setIsNotValidInput();
 		return MESSAGE_INVALID;
 	}
 
+	int start = INDEX_ZERO;
+	int end = INDEX_ZERO;
+
 	while (end != INDEX_INVALID) {
-		string individualCommandLine;
+		string individualInput;
 		start = findIndex(userInput, TOKEN_COMMAND, end);
-		end = findIndex(userInput, TOKEN_COMMAND, start + INDEX_NEXT);
-		individualCommandLine = retrieveSubstring(userInput, start, end);
-		setToken(individualCommandLine);
+		end = findIndex(userInput, TOKEN_COMMAND, ++start);
+		if (start != INDEX_INVALID) {
+			individualInput = retrieveSubstring(userInput, start, end);
+			setInputs(individualInput);
+		}
+		else {
+			_parseInfo.setIsNotValidInput();
+			return MESSAGE_INVALID;
+		}
 	}
 
 	return MESSAGE_SUCCESS;
 }
 
-bool iParser::areValidCommands() {
-	bool isValid = true;
-	list<COMMAND_AND_TEXT>::iterator iter;
-	
-	for (iter = _tokens.begin(); isValid && iter != _tokens.end(); iter++) {
-		string command = iter->command;
-		if (isCommand(command)) {
-			if (isMainCommand(command)) {
-				if (!_parseInfo.getHasMainCommand()) {
-					_parseInfo.setMainCommand(command);
-				}
-				else {
-					isValid = false;
-				}
-			}
-		}
-		else {
-			isValid = false;
-		}
+
+string iParser::setInformation() {
+	if (!_parseInfo.hasValidInput()) {
+		return MESSAGE_INVALID;
 	}
 	
-	// if any of the tokenised user inputs are not valid
-	// ParseInfo passed to iLogic will be invalid information
-	if (!isValid) {
-		_parseInfo.setIsNotValidInput();
+	list<string>::iterator iter;
+	Item tempItem;
+
+	for (iter = _inputs.begin(); _parseInfo.hasValidInput() && iter != _inputs.end(); iter++) {
+		CommandType commandType;
+		string userInput;
+		string command;
+		string text;
+
+		userInput = *iter;
+		command = retrieveCommand(userInput);
+		commandType = determineCommandType(command);
+		text = retrieveText(userInput);
+
+		switch (commandType) {
+		case ADD:
+			setAddItemName(text, tempItem);
+			break;
+		case DELETE:
+			setDeleteIndex(text, tempItem);
+			break;
+		case EDIT:
+			setEditIndex(text, tempItem);
+			break;
+		case START:
+			setStartDateTime(text, tempItem);
+			break;
+		case END:
+			setEndDateTime(text, tempItem);
+			break;
+		case DESCRIPTION:
+			setDescription(text, tempItem);
+			break;
+		case EXIT:
+			setExit(text);
+			break;
+		case INVALID:
+			_parseInfo.setIsNotValidInput();
+			return MESSAGE_INVALID;
+		default:
+			cout << MESSAGE_TERMINATE;
+			getchar();
+			exit(EXIT_FAILURE);
+		}
+		_parseInfo.setItem(tempItem);
 	}
 
-	return isValid;
+	return MESSAGE_SUCCESS;
 }
 
+string iParser::retrieveCommand(string userInput) {
+	string command;
+	int start = INDEX_AFTER_TOKEN_COMMAND;
+	int end = INDEX_ZERO;
 
+	end = findIndex(userInput, TOKEN_SPACE, --start);
+	command = retrieveSubstring(userInput, start, end);
+
+	return command;
+}
+
+string iParser::retrieveText(string userInput) {
+	string text;
+	int start;
+
+	start = findIndex(userInput, TOKEN_SPACE);
+	if (start != INDEX_INVALID) {
+		text = retrieveSubstring(userInput, start);
+		trimText(text);
+	}
+	else {
+		return TOKEN_BLANK;
+	}
+
+	return text;
+}
+
+iParser::CommandType iParser::determineCommandType(string command) {
+	if (command == COMMAND_ADD) {
+		return CommandType::ADD;
+	}
+	else if (command == COMMAND_DELETE) {
+		return CommandType::DELETE;
+	}
+	else if (command == COMMAND_EDIT) {
+		return CommandType::EDIT;
+	}
+	else if (command == COMMAND_START) {
+		return CommandType::START;
+	}
+	else if (command == COMMAND_END) {
+		return CommandType::END;
+	}
+	else if (command == COMMAND_DESCRIPTION) {
+		return CommandType::DESCRIPTION;
+	}
+	else if (command == COMMAND_EXIT) {
+		return CommandType::EXIT;
+	}
+	else {
+		return CommandType::INVALID;
+	}
+}
+
+string iParser::setAddItemName(string text, Item& item) {
+	if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand()) {
+		_parseInfo.setMainCommand(COMMAND_ADD);
+		item.setItemName(text);
+	}
+	else {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::setDeleteIndex(string text, Item& item) {
+	if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
+		_parseInfo.setMainCommand(COMMAND_DELETE);
+		addIndex(text);
+	}
+	else {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::setEditIndex(string text, Item& item) {
+	if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
+		_parseInfo.setMainCommand(COMMAND_EDIT);
+		addIndex(text);
+	}
+	else {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::setStartDateTime(string text, Item& item) {
+	if (text != TOKEN_BLANK) {
+		splitAndSetDateTime(text, item, COMMAND_START);
+	}
+	else {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
+	return MESSAGE_SUCCESS;
+
+}
+
+string iParser::setEndDateTime(string text, Item& item) {
+	if (text != TOKEN_BLANK) {
+		splitAndSetDateTime(text, item, COMMAND_END);
+	}
+	else {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
+	return MESSAGE_SUCCESS;
+
+}
+
+string iParser::setDescription(string text, Item& item) {
+	if (text != TOKEN_BLANK) {
+		item.setDescription(text);
+	}
+	else {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::setExit(string text) {
+	if (text == TOKEN_BLANK && !_parseInfo.hasMainCommand()) {
+		_parseInfo.setMainCommand(COMMAND_EXIT);
+	}
+	else {
+		_parseInfo.setIsNotValidInput();
+		return MESSAGE_INVALID;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::addIndex(string text) {
+	int index;
+	index = convertToDigit(text);
+	_parseInfo.setIndex(index);
+
+	return MESSAGE_SUCCESS;
+}
+
+// returns index where stringToFind is found
 int iParser::findIndex(string userInput, string stringToFind, int startIndex) {
 	int returnIndex;
 
@@ -97,11 +277,16 @@ int iParser::findIndex(string userInput, string stringToFind, int startIndex) {
 	return returnIndex;
 }
 
-
+// retrieves substring between start and end index
 string iParser::retrieveSubstring(string userInput, int startIndex, int endIndex) {
 	string substring;
 
-	substring = userInput.substr(startIndex, endIndex - startIndex);
+	if (endIndex != INDEX_INVALID) {
+		substring = userInput.substr(startIndex, endIndex - startIndex);
+	}
+	else {
+		substring = userInput.substr(startIndex);
+	}
 
 	return substring;
 }
@@ -116,7 +301,7 @@ string iParser::trimText(string& text) {
 string iParser::trimFront(string text) {
 	int startIndex = INDEX_ZERO;
 
-	while (text[startIndex] == ' ' || text[startIndex] == '\t') {
+	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
 		startIndex++;
 	}
 
@@ -124,72 +309,161 @@ string iParser::trimFront(string text) {
 }
 
 string iParser::trimBack(string text) {
-	int endIndex = text.length() - INDEX_NEXT;
+	int endIndex = text.length();
 
-	while (text[endIndex] == ' ' || text[endIndex] == '\t') {
+	while (endIndex > INDEX_ZERO && (text[endIndex] == ' ' || text[endIndex] == '\t')) {
 		endIndex--;
 	}
 
-	return text.substr(INDEX_ZERO, endIndex + INDEX_NEXT);
+	return text.substr(INDEX_ZERO, endIndex);
 }
 
-bool iParser::isCommand(string command) {
-	bool isValid = false;
-
-	if (command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_EDIT ||
-		command == COMMAND_START || command == COMMAND_END || command == COMMAND_DESC) {
-		isValid = true;
-	}
-
-	return isValid;
+int iParser::convertToDigit(string text) {
+	int digit;
+	istringstream convert(text);
+	convert >> digit;
+	
+	return digit;
 }
 
-bool iParser::isMainCommand(string command) {
-	bool isValid = false;
+// assume DateTime to be DD/MM/YY_HHMM
+string iParser::splitAndSetDateTime(string text, Item& item, string command) {
+	int year = retrieveYear(text);
+	int month = retrieveMonth(text);
+	int day = retrieveDay(text);
+	int hour = retrieveHour(text);
+	int minute = retrieveMinute(text);
 
-	if (command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_EDIT) {
-		isValid = true;
+	DateTime dateTime(year, month, day, hour, minute);
+	if (command == COMMAND_START) {
+		item.setStartTime(dateTime);
+	}
+	else if (command == COMMAND_END) {
+		item.setEndTime(dateTime);
 	}
 
-	return isValid;
+	return MESSAGE_SUCCESS;
+}
+
+int iParser::retrieveYear(string text) {
+	int year;
+	string stringToConvert;
+	int start = INDEX_ZERO;
+
+	stringToConvert = retrieveSubstring(text, start);
+	istringstream convert(stringToConvert);
+	convert >> year;
+
+	return year;
+}
+
+int iParser::retrieveMonth(string text) {
+	int month;
+	string stringToConvert;
+	int start;
+
+	start = findIndex(text, TOKEN_OBLIQUE);
+	stringToConvert = retrieveSubstring(text, ++start);
+	istringstream convert(stringToConvert);
+	convert >> month;
+
+	return month;
+}
+
+int iParser::retrieveDay(string text) {
+	int day;
+	string stringToConvert;
+	int start;
+
+	start = findIndex(text, TOKEN_OBLIQUE);
+	start = findIndex(text, TOKEN_OBLIQUE, ++start);
+	stringToConvert = retrieveSubstring(text, ++start);
+	istringstream convert(stringToConvert);
+	convert >> day;
+
+	return day;
+}
+
+int iParser::retrieveHour(string text) {
+	int hour;
+	string stringToConvert;
+	int start;
+
+	start = findIndex(text, TOKEN_SPACE);
+	stringToConvert = retrieveSubstring(text, ++start);
+	trimText(stringToConvert);
+	if (stringToConvert.size() == SIZE_TIME_THREE) {
+		stringToConvert = stringToConvert[INDEX_ZERO];
+	}
+	else {
+		stringToConvert = retrieveSubstring(stringToConvert, INDEX_ZERO, LENGTH_VALID);
+	}
+	istringstream convert(stringToConvert);
+	convert >> hour;
+	
+	return hour;
+}
+
+int iParser::retrieveMinute(string text) {
+	int minute;
+	string stringToConvert;
+	int start;
+
+	start = findIndex(text, TOKEN_SPACE);
+	stringToConvert = retrieveSubstring(text, ++start);
+	trimText(stringToConvert);
+	stringToConvert = retrieveSubstring(stringToConvert, INDEX_ONE);
+	istringstream convert(stringToConvert);
+	convert >> minute;
+
+	return minute;
 }
 
 bool iParser::isValidLength(string userInput) {
-	return userInput.length() >= 2;
+	return userInput.length() >= LENGTH_VALID;
 }
 
-string iParser::setToken(string singleInput) {
-	COMMAND_AND_TEXT line;
-	int start = INDEX_ZERO;
-	int end = INDEX_ZERO;
+bool iParser::isDigit(string text) {
+	bool isValid = true;
+	int index;
+	int textSize = text.size();
 
-	end = findIndex(singleInput, TOKEN_SPACE, start);
-	line.command = retrieveSubstring(singleInput, INDEX_AFTER_TOKEN_COMMAND, end);
-	if (end != INDEX_INVALID) {
-		line.text = retrieveSubstring(singleInput, end + INDEX_NEXT);
+	for (index = INDEX_ZERO; isValid && index < textSize; index++) {
+		if (!(text[index] >= '0' && text[index] <= '9')) {
+			isValid = false;
+		}
 	}
-	trimText(line.text);
-	setTokenToList(line);
+
+	return isValid;
+}
+
+string iParser::setInputs(string individualInputs) {
+	_inputs.push_back(individualInputs);
 
 	return MESSAGE_SUCCESS;
 }
 
-string iParser::setTokenToList(COMMAND_AND_TEXT token) {
-	_tokens.push_back(token);
-	return MESSAGE_SUCCESS;
+string iParser::displayInputs() {
+	list<string>::iterator iter;
+	ostringstream output;
+	int index = INDEX_ONE;
+
+	for (iter = _inputs.begin(); iter != _inputs.end(); index++, iter++) {
+		output << "Line " << index << ": " << *iter << endl;
+	}
+
+	return output.str();
 }
 
-bool iParser::hasTokens() {
-	return !_tokens.empty();
-}
-
-string iParser::displayTokens() {
-	list<COMMAND_AND_TEXT>::iterator iter;
+string iParser::displayParseInfo() {
 	ostringstream output;
 
-	for (iter = _tokens.begin(); iter != _tokens.end(); iter++) {
-		output << "Command: \"" << iter->command << " Text: \"" << iter->text << "\"" << endl;
-	}
+	output << "Valid input: " << boolalpha << _parseInfo.hasValidInput() << endl
+		<< "Main Command: " << _parseInfo.getMainCommand() << endl
+		<< "Index: " << _parseInfo.getIndex() << endl
+		<< "Item Name: " << _parseInfo.getItem().getItemName() << endl
+		// please create a display for Item and DataTime Class
+		<< "Description: " << _parseInfo.getItem().getDescription() << endl;
 
 	return output.str();
 }
