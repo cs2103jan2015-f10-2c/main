@@ -27,9 +27,7 @@ ParseInfo iParser::parse(string userInput) {
 	ParseInfo parseInfo;
 	splitInput(userInput);
 	setInformation();
-
-	cout << displayParseInfo();
-
+	cout << endl << displayParseInfo();
 	parseInfo = _parseInfo;
 	return parseInfo;
 }
@@ -43,11 +41,10 @@ string iParser::splitInput(string userInput) {
 
 	int start = INDEX_ZERO;
 	int end = INDEX_ZERO;
-
 	while (end != INDEX_INVALID) {
 		string individualInput;
 		start = findIndex(userInput, TOKEN_COMMAND, end);
-		end = findIndex(userInput, TOKEN_COMMAND, ++start);
+		end = findIndex(userInput, TOKEN_COMMAND, start + INDEX_AFTER_TOKEN_COMMAND);//
 		if (start != INDEX_INVALID) {
 			individualInput = retrieveSubstring(userInput, start, end);
 			setInputs(individualInput);
@@ -75,7 +72,7 @@ string iParser::setInformation() {
 		string userInput;
 		string command;
 		string text;
-
+		
 		userInput = *iter;
 		command = retrieveCommand(userInput);
 		commandType = determineCommandType(command);
@@ -107,7 +104,7 @@ string iParser::setInformation() {
 			_parseInfo.setIsNotValidInput();
 			return MESSAGE_INVALID;
 		default:
-			cout << MESSAGE_TERMINATE;
+			showError(MESSAGE_TERMINATE);
 			getchar();
 			exit(EXIT_FAILURE);
 		}
@@ -122,7 +119,7 @@ string iParser::retrieveCommand(string userInput) {
 	int start = INDEX_AFTER_TOKEN_COMMAND;
 	int end = INDEX_ZERO;
 
-	end = findIndex(userInput, TOKEN_SPACE, --start);
+	end = findIndex(userInput, TOKEN_SPACE, start);
 	command = retrieveSubstring(userInput, start, end);
 
 	return command;
@@ -185,7 +182,7 @@ string iParser::setAddItemName(string text, Item& item) {
 }
 
 string iParser::setDeleteIndex(string text, Item& item) {
-	if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
+	if (text == TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
 		_parseInfo.setMainCommand(COMMAND_DELETE);
 		addIndex(text);
 	}
@@ -311,7 +308,7 @@ string iParser::trimFront(string text) {
 string iParser::trimBack(string text) {
 	int endIndex = text.length();
 
-	while (endIndex > INDEX_ZERO && (text[endIndex] == ' ' || text[endIndex] == '\t')) {
+	while (endIndex > INDEX_ZERO && (text[endIndex-INDEX_ONE] == ' ' || text[endIndex-INDEX_ONE] == '\t')) {
 		endIndex--;
 	}
 
@@ -392,11 +389,11 @@ int iParser::retrieveHour(string text) {
 	start = findIndex(text, TOKEN_SPACE);
 	stringToConvert = retrieveSubstring(text, ++start);
 	trimText(stringToConvert);
-	if (stringToConvert.size() == SIZE_TIME_THREE) {
+	if (stringToConvert.size() == DIGIT_THREE) {
 		stringToConvert = stringToConvert[INDEX_ZERO];
 	}
 	else {
-		stringToConvert = retrieveSubstring(stringToConvert, INDEX_ZERO, LENGTH_VALID);
+		stringToConvert = retrieveSubstring(stringToConvert, INDEX_ZERO, DIGIT_OF_TIME);
 	}
 	istringstream convert(stringToConvert);
 	convert >> hour;
@@ -412,7 +409,7 @@ int iParser::retrieveMinute(string text) {
 	start = findIndex(text, TOKEN_SPACE);
 	stringToConvert = retrieveSubstring(text, ++start);
 	trimText(stringToConvert);
-	stringToConvert = retrieveSubstring(stringToConvert, INDEX_ONE);
+	stringToConvert = retrieveSubstring(stringToConvert, DIGIT_OF_TIME);
 	istringstream convert(stringToConvert);
 	convert >> minute;
 
@@ -461,9 +458,11 @@ string iParser::displayParseInfo() {
 	output << "Valid input: " << boolalpha << _parseInfo.hasValidInput() << endl
 		<< "Main Command: " << _parseInfo.getMainCommand() << endl
 		<< "Index: " << _parseInfo.getIndex() << endl
-		<< "Item Name: " << _parseInfo.getItem().getItemName() << endl
-		// please create a display for Item and DataTime Class
-		<< "Description: " << _parseInfo.getItem().getDescription() << endl;
+		<< _parseInfo.getItem().displayItem() << endl;
 
 	return output.str();
+}
+
+void iParser::showError(string text) {
+	cout << text;
 }

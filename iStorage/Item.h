@@ -61,6 +61,11 @@ public:
 	char getPriority();
 	char getLabel();
 	bool getCompletion();
+
+	// display attributes
+	// Pre:		Nil
+	// Post:	Displays all attributes
+	string displayItem();
 };
 
 #endif

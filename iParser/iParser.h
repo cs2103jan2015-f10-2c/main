@@ -37,8 +37,8 @@ class iParser {
 	list<string> _inputs;
 
 	enum CommandType {
-		ADD, DELETE, EDIT, START, END, DESCRIPTION, EXIT, INVALID
-		// LABEL PRIORITY UNDO SORT SEARCH
+		ADD, DELETE, EDIT, START, END, DESCRIPTION, LABEL,
+		PRIORITY, UNDO, SORT, SEARCH, EXIT, INVALID
 	};
 
 	static const string COMMAND_ADD;
@@ -59,8 +59,9 @@ class iParser {
 	static const string MESSAGE_TERMINATE;
 
 	static const int LENGTH_VALID = 2;
-	static const int SIZE_TIME_THREE = 3;
-	static const int SIZE_TIME_FOUR = 4;
+	static const int DIGIT_OF_TIME = 2;
+	static const int DIGIT_THREE = 3;
+	static const int DIGIT_FOUR = 4;
 
 	static const int INDEX_ZERO = 0;
 	static const int INDEX_ONE = 1;
@@ -112,6 +113,7 @@ class iParser {
 	string displayInputs();
 
 	string displayParseInfo();
+	void showError(string text);
 
 public:
 	iParser();
