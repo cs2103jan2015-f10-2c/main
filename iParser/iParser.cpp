@@ -25,7 +25,7 @@ ParseInfo iParser::parse(string userInput) {
 	tokeniseToCommands(userInput);
 	
 	if (!areValidCommands()) {
-		_ParseInfo.setIsValidInput();
+		_ParseInfo.setIsNotValidInput();
 	}
 
 	return _ParseInfo;

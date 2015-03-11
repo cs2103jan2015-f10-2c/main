@@ -2,6 +2,8 @@
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng (A0111238U)
 
+#include <string>
+#include <list>
 #include "ParseInfo.h"
 using namespace std;
 

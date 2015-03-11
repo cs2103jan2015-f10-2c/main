@@ -18,10 +18,11 @@ ParseInfo::~ParseInfo() {}
 
 string ParseInfo::setCommand(string text) {
 	_command = text;
+	setHasCommand();
 	return MESSAGE_SUCCESS;
 }
 
-string ParseInfo::setIndex(int index) {
+string ParseInfo::setIndex(unsigned int index) {
 	_index = index;
 	return MESSAGE_SUCCESS;
 }
@@ -36,7 +37,7 @@ string ParseInfo::setTokens(COMMAND_AND_TEXT token) {
 	return MESSAGE_SUCCESS;
 }
 
-string ParseInfo::setIsValidInput() {
+string ParseInfo::setIsNotValidInput() {
 	_isValidInput = false;
 	return MESSAGE_SUCCESS;
 }
@@ -50,7 +51,7 @@ string ParseInfo::getCommand() {
 	return _command;
 }
 
-int ParseInfo::getIndex() {
+unsigned int ParseInfo::getIndex() {
 	return _index;
 }
 
@@ -69,3 +70,19 @@ bool ParseInfo::getIsValidInput() {
 bool ParseInfo::getHasCommand() {
 	return _hasCommand;
 }
+
+bool ParseInfo::getHasIndex() {
+	return _index != 0;
+}
+
+bool ParseInfo::getHasItem() {
+	string itemName;
+	itemName = _item.getItemName();
+
+	return !itemName.empty();
+}
+
+bool ParseInfo::getHasTokens() {
+	return !_tokens.empty();
+}
+
