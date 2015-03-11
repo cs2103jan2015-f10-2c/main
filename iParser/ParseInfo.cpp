@@ -30,10 +30,7 @@ string ParseInfo::setItem(Item item) {
 	return MESSAGE_SUCCESS;
 }
 
-string ParseInfo::setTokens(COMMAND_AND_TEXT token) {
-	_tokens.push_back(token);
-	return MESSAGE_SUCCESS;
-}
+
 
 string ParseInfo::setIsNotValidInput() {
 	_isValidInput = false;
@@ -50,10 +47,6 @@ unsigned int ParseInfo::getIndex() {
 
 Item ParseInfo::getItem() {
 	return _item;
-}
-
-list<COMMAND_AND_TEXT> ParseInfo::getTokens() {
-	return _tokens;
 }
 
 bool ParseInfo::getIsValidInput() {
@@ -74,8 +67,3 @@ bool ParseInfo::getHasItem() {
 
 	return !itemName.empty();
 }
-
-bool ParseInfo::getHasTokens() {
-	return !_tokens.empty();
-}
-
