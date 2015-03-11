@@ -56,7 +56,7 @@ bool iParser::areValidCommands() {
 		string command = iter->command;
 		if (isCommand(command)) {
 			if (isRequiredCommand(command)) {
-				if (!_ParseInfo.getHasCommand()) {
+				if (!_ParseInfo.getHasMainCommand()) {
 					retrieveCommand(command);
 				}
 				else {
@@ -73,8 +73,7 @@ bool iParser::areValidCommands() {
 }
 
 string iParser::retrieveCommand(string command) {
-	_ParseInfo.setCommand(command);
-	_ParseInfo.setHasCommand();
+	_ParseInfo.setMainCommand(command);
 
 	return MESSAGE_SUCCESS;
 }

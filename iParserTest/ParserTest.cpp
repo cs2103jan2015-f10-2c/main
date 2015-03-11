@@ -21,18 +21,18 @@ namespace iPlannerParserTest {
 			bool actualBool;
 			bool expectedBool;
 
-			actualBool = testParseInfo.getHasCommand();
+			actualBool = testParseInfo.getHasMainCommand();
 			expectedBool = false;
 			Assert::AreEqual(expectedBool, actualBool);
 
-			actualSet = testParseInfo.setCommand(text);
+			actualSet = testParseInfo.setMainCommand(text);
 			expectedSet = "successful execution";
-			actualGet = testParseInfo.getCommand();
+			actualGet = testParseInfo.getMainCommand();
 			expectedGet = "add";	
 			Assert::AreEqual(expectedSet, actualSet);
 			Assert::AreEqual(expectedGet, actualGet);
 
-			actualBool = testParseInfo.getHasCommand();
+			actualBool = testParseInfo.getHasMainCommand();
 			expectedBool = true;
 			Assert::AreEqual(expectedBool, actualBool);
 		}

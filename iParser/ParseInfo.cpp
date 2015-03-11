@@ -8,17 +8,15 @@ const string ParseInfo::MESSAGE_SUCCESS = "successful execution";
 const string ParseInfo::TOKEN_BLANK = "";
 
 ParseInfo::ParseInfo() {
-	_command = TOKEN_BLANK;
+	_mainCommand = TOKEN_BLANK;
 	_index = INDEX_ZERO;	
 	_isValidInput = true;
-	_hasCommand = false;
 }
 
 ParseInfo::~ParseInfo() {}
 
-string ParseInfo::setCommand(string text) {
-	_command = text;
-	setHasCommand();
+string ParseInfo::setMainCommand(string text) {
+	_mainCommand = text;
 	return MESSAGE_SUCCESS;
 }
 
@@ -42,13 +40,8 @@ string ParseInfo::setIsNotValidInput() {
 	return MESSAGE_SUCCESS;
 }
 
-string ParseInfo::setHasCommand() {
-	_hasCommand = true;
-	return MESSAGE_SUCCESS;
-}
-
-string ParseInfo::getCommand() {
-	return _command;
+string ParseInfo::getMainCommand() {
+	return _mainCommand;
 }
 
 unsigned int ParseInfo::getIndex() {
@@ -67,8 +60,8 @@ bool ParseInfo::getIsValidInput() {
 	return _isValidInput;
 }
 
-bool ParseInfo::getHasCommand() {
-	return _hasCommand;
+bool ParseInfo::getHasMainCommand() {
+	return !_mainCommand.empty();
 }
 
 bool ParseInfo::getHasIndex() {
