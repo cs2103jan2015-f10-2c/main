@@ -4,6 +4,7 @@
 //
 
 #pragma once
+#define TESTMODE
 
 #include "targetver.h"
 
@@ -12,4 +13,4 @@
 
 // TODO: reference additional headers your program requires here
 #include "..\iParser\iParser.h"
-#include "..\iParser\UserCommand.h"
+#include "..\iParser\ParseInfo.h"

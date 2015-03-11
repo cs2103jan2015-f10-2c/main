@@ -1,7 +1,11 @@
 #include "..\iLogic\Logic.h"
+#include "..\iParser\iParser.h"
 
-int main() {
-	Logic myLogic;
-	myLogic.executeLogic();
-	return 0;
+void main() {
+	string input;
+	getline(cin, input);
+	iParser testParser;
+	ParseInfo testParseInfo;
+	testParseInfo =	testParser.parse(input);
+	
 }

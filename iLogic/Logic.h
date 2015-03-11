@@ -10,7 +10,6 @@
 #include "..\iStorage\Schedule.h"
 #include "..\iStorage\Item.h"
 #include "..\iParser\iParser.h"
-#include "..\iParser\UserCommand.h"
 #include "..\iLogic\ItemVerification.h"
 #include <iostream>
 #include <vector>
@@ -30,29 +29,50 @@ private:
 	static const string COMMAND_DELETE;
 	static const string COMMAND_EDIT;
 	static const string COMMAND_EXIT;
+	static const int ZERO_INDEX = 0;
+	static const unsigned int DEFAULT_ITEM_ID = 0;
 
 public:
 	Logic();
 	~Logic();
 
+	/*
 	// interactions with Parser
-	// Coded by Ng Chon Beng
+	// Coded by Ng Chon Beng ====================================================
 	string executeLogic();
-	bool notExit(string userInput);
-	string showUserInput(list<userCommand> userCommandList);
-	string executeCommand(list<userCommand> userCommandList);
-	bool isValidCommand(string userCommand);
-	// end of Ng Chon Beng's code
+	
+	string executeCommand(list<userCommand> userCommandList); // do unit test
+	string executeFunction(userCommand userCommand);
+	
+	bool notExit(string userInput); // do unit test
+	bool isValidInput(userCommand userCommand); // do unit test
+	bool isBlank(string text);
+	bool isDigit(string text);
+
+	bool isAdd(string command);
+	bool isDelete(string command);
+	bool isEdit(string command);
+
+	string showUserInput(list<userCommand> userCommandList); // do unit test
+	string showToUser(string text);
+	// end of Ng Chon Beng's code ===============================================
+	*/
 
 	unsigned int addTask(Item itemToBeAdded);
+	unsigned int addTaskForEdition(Item itemToBeAdded);
+	//addTask && addTaskForEdition works the same
+	//except that addTask increments the _nextItemID and addTaskForEdition doesn't
+	//addTask is for pure addition, and addTaskForEdition is used when editing 
+	//( e.g. delete and add back the edited Item)
+
 	bool isValidItem(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
-	unsigned int getItemIdFromLineIndex(int lineIndex);
+	unsigned int getItemIDFromLineIndex(int lineIndex);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
 
-	int deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
+	Item deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
 
 	Item assignTiming(Item item, string timingType, DateTime datetime);
 	Item assignTimingToNewTask(string timingType, DateTime datetime);

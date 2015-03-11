@@ -1,5 +1,17 @@
 #include "ItemVerification.h"
 
+const string EMPTY_STRING = "";
+const string AVAILABLE_PRIORITIES = "HML";
+const string AVAILABLE_LABELS = "PMO";
+const string ERROR_EMPTY_STRING = "Error: Empty String Specified.\n";
+const string ERROR_INVALID_START_DATE = "Error: Invalid Start Date.\n";
+const string ERROR_INVALID_START_TIME = "Error: Invalid Start Time.\n";
+const string ERROR_INVALID_END_DATE = "Error: Invalid End Date.\n";
+const string ERROR_INVALID_END_TIME = "Error: Invalid End Time.\n";
+const string ERROR_INVALID_ID = "Error: An item has an invalid ID.\n";
+const string ERROR_INVALID_PRIORITY = "Error: An item has an invalid Priority.\n";
+const string ERROR_INVALID_LABEL = "Error: An item has an invalid Label.\n";
+
 bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
 	if (name == EMPTY_STRING) {
@@ -48,7 +60,7 @@ bool ItemVerification::isValidDescription() {
 
 bool ItemVerification::isValidItemID() {
 	unsigned int itemID = _itemObjectToVerify.getItemID();
-	if (itemID <= _maxID) {
+	if (itemID < _nextID) {
 		return 1;
 	} else {
 		cout << ERROR_INVALID_ID;
@@ -85,9 +97,9 @@ bool ItemVerification::isValidLabel() {
 	}
 }
 
-ItemVerification::ItemVerification(Item itemObject, unsigned int currentMaxID) {
+ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 	_itemObjectToVerify = itemObject;
-	_maxID = currentMaxID;
+	_nextID = nextItemID;
 }
 
 bool ItemVerification::isValidItem() {

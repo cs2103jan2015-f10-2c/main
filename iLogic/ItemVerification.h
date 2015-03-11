@@ -7,25 +7,25 @@
 #include "..\iStorage\Item.h"
 using namespace std;
 
-static const string EMPTY_STRING = "";
-static const string AVAILABLE_PRIORITIES = "HML";
-static const string AVAILABLE_LABELS = "PMO";
-static const string ERROR_EMPTY_STRING = "Error: Empty String Specified.\n";
-static const string ERROR_INVALID_START_DATE = "Error: Invalid Start Date.\n";
-static const string ERROR_INVALID_START_TIME = "Error: Invalid Start Time.\n";
-static const string ERROR_INVALID_END_DATE = "Error: Invalid End Date.\n";
-static const string ERROR_INVALID_END_TIME = "Error: Invalid End Time.\n";
-static const string ERROR_INVALID_ID = "Error: An item has an invalid ID.\n";
-static const string ERROR_INVALID_PRIORITY = "Error: An item has an invalid Priority.\n";
-static const string ERROR_INVALID_LABEL = "Error: An item has an invalid Label.\n";
-
 class ItemVerification {
 private:
 	Item _itemObjectToVerify;
-	int _maxID;
+	int _nextID;
+
+	static const string EMPTY_STRING;
+	static const string AVAILABLE_PRIORITIES;
+	static const string AVAILABLE_LABELS;
+	static const string ERROR_EMPTY_STRING;
+	static const string ERROR_INVALID_START_DATE;
+	static const string ERROR_INVALID_START_TIME;
+	static const string ERROR_INVALID_END_DATE;
+	static const string ERROR_INVALID_END_TIME;
+	static const string ERROR_INVALID_ID;
+	static const string ERROR_INVALID_PRIORITY;
+	static const string ERROR_INVALID_LABEL;
 
 public:
-	ItemVerification(Item itemObject, unsigned int currentMaxID);
+	ItemVerification(Item itemObject, unsigned int nextItemID);
 	bool isValidItem();
 	
 	// PULLED TO PUBLIC FOR TESTING
