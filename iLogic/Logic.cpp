@@ -8,21 +8,59 @@ const string Logic::COMMAND_EDIT = "edit";
 const string Logic::COMMAND_EXIT = "exit";
 
 Logic::Logic() {
-	_nextItemID = 0;
+	_nextItemID = 1;
+	//failure in add,delete,add function will return an item with ID = 0
 }
 
 Logic::~Logic() {}
 
+/*
+// Start of Beng's Part ====================================================
 string Logic::executeLogic() {
 	string userInput;
 
 	while (notExit(userInput)) {
 		iParser myParser;
 		list<userCommand> userCommandList;
+		string feedback;
+
 		getline(cin, userInput);
 		userCommandList = myParser.parse(userInput);
-		executeCommand(userCommandList);	
-		//showUserInput(userCommandList);
+		feedback = executeCommand(userCommandList);	
+		showToUser(feedback);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string Logic::executeCommand(list<userCommand> userCommandList) {
+	list<userCommand>::iterator iter;
+
+	// if user input is wrong for any command, return invalid
+	for (iter = userCommandList.begin(); iter != userCommandList.end(); iter++) {
+		if (!isValidInput(*iter)) {
+			return MESSAGE_INVALID_INPUT;
+		}
+	}
+
+	for (iter = userCommandList.begin(); iter != userCommandList.end(); iter++) {
+		
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+
+string Logic::executeFunction(userCommand userCommand) {
+	string command = userCommand.getCommand();
+	if (isAdd(command)) {
+		// Insert add function here YB
+	}
+	else if (isDelete(command)) {
+		// Insert delete function here YB
+	}
+	else if (isEdit(command)) {
+		// insert edit function here YB
 	}
 
 	return MESSAGE_SUCCESS;
@@ -32,6 +70,59 @@ bool Logic::notExit(string userInput) {
 	return userInput != COMMAND_EXIT;
 }
 
+bool Logic::isValidInput(userCommand userCommand) {
+	bool isValid = false;
+	string command = userCommand.getCommand();
+	string text = userCommand.getText();
+
+	if (isAdd(command)) {
+		if (!isBlank(text)) {
+			isValid = true;
+		}
+	}
+	else if (isDelete(command) || isEdit(command)) {
+		if (isDigit(text)) {
+			isValid = true;
+		}
+	}
+	else if (command == COMMAND_EXIT) {
+		isValid = true;
+	}
+
+	return isValid;
+}
+
+bool Logic::isBlank(string text) {
+	return text == "";
+}
+
+bool Logic::isDigit(string text) {
+	bool isValid = true;
+	int index;
+	int textSize = text.size();
+
+	for (index = ZERO_INDEX; isValid && index < textSize; index++) {
+		if (!(text[index] >= '0' && text[index] <= '9')) {
+			isValid = false;
+		}
+	}
+
+	return isValid;
+}
+
+bool Logic::isAdd(string command) {
+	return command == COMMAND_ADD;
+}
+
+bool Logic::isDelete(string command) {
+	return command == COMMAND_DELETE;
+}
+
+bool Logic::isEdit(string command) {
+	return command == COMMAND_EDIT;
+}
+
+// used for debugging
 string Logic::showUserInput(list<userCommand> userCommandList) {
 	list<userCommand>::iterator iter;
 	int i = 1; // refractor this in the future
@@ -43,35 +134,32 @@ string Logic::showUserInput(list<userCommand> userCommandList) {
 	return MESSAGE_SUCCESS;
 }
 
-string Logic::executeCommand(list<userCommand> userCommandList) {
-	list<userCommand>::iterator iter;
+string Logic::showToUser(string text) {
+	cout << text << endl;
 
-	for (iter = userCommandList.begin(); iter != userCommandList.end(); iter++) {
-		if (!isValidCommand(iter->getCommand())) {
-			return MESSAGE_INVALID_INPUT;
-		}
-	}
 	return MESSAGE_SUCCESS;
 }
-
-bool Logic::isValidCommand(string userCommand) {
-	bool isValid = false;
-
-	if (userCommand == COMMAND_ADD || userCommand == COMMAND_DELETE ||
-		userCommand == COMMAND_EDIT || userCommand == COMMAND_EXIT) {
-		isValid = true;
-	}
-
-	return isValid;
-}
+// End of Beng's part ====================================================
+// Whats Up Beng Beng Di Di
+// Shuai ge is coding now
+*/
 
 unsigned int Logic::addTask(Item itemToBeAdded){
-	unsigned int addedItemID = -1;
+	unsigned int addedItemID = 0;
+	if (isValidItem(itemToBeAdded)){
+			itemToBeAdded.setItemID(_nextItemID);
+			_nextItemID++;
+			addedItemID = _logicSchedule.addItem(itemToBeAdded);
+	}
+	return addedItemID;
+}
+
+unsigned int Logic::addTaskForEdition(Item itemToBeAdded){
+	unsigned int addedItemID = 0;
 	if (isValidItem(itemToBeAdded)){
 		addedItemID = _logicSchedule.addItem(itemToBeAdded);
-		return addedItemID;
 	}
-	else return addedItemID;
+	return addedItemID;
 }
 /*
 int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
@@ -121,10 +209,10 @@ unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
 
-int Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
+Item Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
 	deleteTask(lineIndexToBeEdited);
-	addTask(editedItemToBeAdded);
-	return 1;
+	addTaskForEdition(editedItemToBeAdded);
+	return editedItemToBeAdded;
 }
 
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
@@ -142,15 +230,15 @@ Item Logic::assignTimingToNewTask(string timingType, DateTime dateTime){
 	int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
 	Item itemToBeAssignedTiming = getSchedule()[lastLineIndexOfSchedule];
 	Item itemAfterTimingAssigned = assignTiming(itemToBeAssignedTiming, timingType,dateTime);
-	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
-	return itemAfterTimingAssigned;
+	Item finalItemAdded = deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterTimingAssigned);
+	return finalItemAdded;
 }
 
 Item Logic::assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex){
 	Item itemToBeAssignedTiming = getSchedule()[lineIndex - 1];
 	Item itemAfterTimingAssigned = assignTiming(itemToBeAssignedTiming, timingType,datetime);
-	//DELETE AND EDIT NEEDED!!!!!!!deleteAndAddEditedItem(lastLineIndexOfSchedule, itemAfterAssignedPriority);
-	return itemAfterTimingAssigned;
+	Item finalItemAdded = deleteAndAddEditedItem(lineIndex-1, itemAfterTimingAssigned);
+	return finalItemAdded;
 }
 
 Item Logic::assignPriority(Item item, char priorityType){

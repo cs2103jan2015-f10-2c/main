@@ -146,6 +146,7 @@ bool DateTime::isValidMinuteRange(int minute) {
 	}
 }
 
+//	Checks if two DateTime objects are identical
 bool DateTime::operator== (DateTime secondaryDateTime) {
 	bool sameYear = (_year == secondaryDateTime.getYear());
 	bool sameMonth = (_month == secondaryDateTime.getMonth());
@@ -156,6 +157,7 @@ bool DateTime::operator== (DateTime secondaryDateTime) {
 	return (sameYear && sameMonth && sameDay && sameHour && sameMinute);
 }
 
+//	Checks if two DateTime objects are not identical
 bool DateTime::operator!= (DateTime secondaryDateTime) {
 	bool differentYear = (_year != secondaryDateTime.getYear());
 	bool differentMonth = (_month != secondaryDateTime.getMonth());
@@ -166,6 +168,7 @@ bool DateTime::operator!= (DateTime secondaryDateTime) {
 	return (differentYear || differentMonth || differentDay || differentHour || differentMinute);
 }
 
+//	Checks if current DateTime object is after another
 bool DateTime::isAfter(DateTime secondaryDateTime) {
 	if (_year != secondaryDateTime.getYear()) {
 		return (_year > secondaryDateTime.getYear());
@@ -187,6 +190,7 @@ bool DateTime::isAfter(DateTime secondaryDateTime) {
 	}
 }
 
+//	Checks if current DateTime object is before another
 bool DateTime::isBefore(DateTime secondaryDateTime) {
 	if (_year != secondaryDateTime.getYear()) {
 		return (_year < secondaryDateTime.getYear());
