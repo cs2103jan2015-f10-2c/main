@@ -26,6 +26,7 @@ Logic::~Logic() {}
 
 void Logic::printSchedule(){
 	vector<Item> retrievedSchedule = getSchedule();
+	cout << "PRINTSCHEDULE" << endl;
 	for (int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
 		printItem(getItemFromLineIndex(lineNumber));
 		if (lineNumber != getScheduleSize() - 1){
@@ -72,35 +73,24 @@ void Logic::printAssignedDescription(Item itemToBePrinted){
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
+	cout << "addTask" << endl;
 	if (isValidItemInLogic(itemToBeAdded)) {
 			itemToBeAdded.setItemID(_nextItemID);
 			_nextItemID++;
 			addedItemID = _logicSchedule.addItem(itemToBeAdded);
 	}
+	printSchedule();
 	return addedItemID;
 }
-
-unsigned int Logic::addTaskForEdition(Item itemToBeAdded){
-	unsigned int addedItemID = DEFAULT_ITEM_ID;
-	if (isValidItemInLogic(itemToBeAdded)) {
-		addedItemID = _logicSchedule.addItem(itemToBeAdded);
-	}
-	return addedItemID;
-}
-/*
-int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
-
-}
-*/
-
 
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
-	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
+	return true;
+	/*ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
 		return true;
 	} else {
 		return false;
-	}
+	}*/
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
@@ -108,11 +98,13 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	if (isValidLineIndex(lineIndexToBeDeleted)){
 		itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
 		Item deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
+		printSchedule();
 		return deletedItem;//Delete successful
 	}
 	else{
 		Item failedDelete;
 		failedDelete.setItemID(DEFAULT_ITEM_ID);
+		printSchedule();
 		return failedDelete;//Delete failed
 	}
 }
@@ -140,11 +132,7 @@ unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
 
-Item Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
-	deleteTask(lineIndexToBeEdited);
-	addTaskForEdition(editedItemToBeAdded);
-	return editedItemToBeAdded;
-}
+
 
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	if (timingType == "start"){
@@ -219,11 +207,10 @@ unsigned int Logic::processedLineIndex(ParseInfo parseInfoToBeProcessed){
 Item Logic::processedItem(ParseInfo parseInfoToBeProcessed){
 	return parseInfoToBeProcessed.getItem();
 }
-void Logic::initiateCommandAction() {
-	ParseInfo parseInfoToBeProcessed;
-	Item itemToBeProcessed;
-	string command;
-	unsigned int lineIndexToBeProcessed;
+void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
+	Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
+	string command = processedCommand(parseInfoToBeProcessed);
+	unsigned int lineIndexToBeProcessed = processedLineIndex(parseInfoToBeProcessed);
 	string commandAction = processedCommand(parseInfoToBeProcessed);
 	if (commandAction.compare("add")) {
 		addTask(itemToBeProcessed);
