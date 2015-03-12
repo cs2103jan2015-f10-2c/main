@@ -26,7 +26,6 @@ Logic::~Logic() {}
 
 void Logic::printSchedule(){
 	vector<Item> retrievedSchedule = getSchedule();
-	cout << "PRINTSCHEDULE" << endl;
 	for (int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
 		cout << lineNumber + 1;
 		printItem(getItemFromLineIndex(lineNumber));
@@ -93,19 +92,17 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 }
 
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
-	return true;
-	/*ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
+	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
 	return true;
 	} else {
 	return false;
-	}*/
+	}
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	unsigned int itemIDToBeDeleted;
 	if (isValidLineIndex(lineIndexToBeDeleted)){
-		cout << "lineindexcorrect" << endl;
 		itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
 		Item deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
 		printSchedule();
@@ -131,8 +128,6 @@ vector<Item> Logic::getSchedule(){
 }
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
-	cout << "schedulesize : " << getScheduleSize() << endl;
-	cout << "lineindex : " << lineIndexToBeChecked << endl;
 	if (getScheduleSize() > lineIndexToBeChecked){
 		return true;
 	}
@@ -144,7 +139,20 @@ unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
 
+Item Logic::assignDescription(Item item, string descriptionToBeAdded){
+	item.setDescription(descriptionToBeAdded);
+	return item;
+}
 
+Item Logic::assignDescriptionToNewTask(Item item, string descriptionToBeAdded){
+	int lastLineIndexOfSchedule = getScheduleSize() - 1;//new task will be at the very back of the schedule vector
+	_logicSchedule.retrieveSchedule()[lastLineIndexOfSchedule].setDescription(descriptionToBeAdded);
+	return _logicSchedule.retrieveSchedule()[lastLineIndexOfSchedule];
+}
+Item Logic::assignDescriptionToExistingTask(string descriptionToBeAdded, unsigned int lineIndex){
+	_logicSchedule.retrieveSchedule()[lineIndex - 1].setDescription(descriptionToBeAdded);
+	return _logicSchedule.retrieveSchedule()[lineIndex - 1];
+}
 
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	if (timingType == "start"){
@@ -229,9 +237,10 @@ void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
 	else if (command == "del") {
 		deleteTask(lineIndexToBeProcessed);
 	}
-	//else if (commandAction.compare("edit")) {
-	//	editTask(command, itemToBeProcessed, lineIndexToBeProcessed);
-	//}
+	else if (command == "edit") {
+		string partsToBeEdited = parseInfoToBeProcessed.getEditString();
+		editTask(partsToBeEdited, itemToBeProcessed, lineIndexToBeProcessed);
+	}
 
 }
 
@@ -247,12 +256,17 @@ int Logic::editTask(string command, Item itemToBeEdited, unsigned int lineIndexT
 	else if (command == "start"){
 		DateTime startTimeToBeAssigned = itemToBeEdited.getStartTime();
 		assignTimingToExistingTask("start", startTimeToBeAssigned, lineIndexToBeEdited);
-
+	}
+	else if (command == "desc"){
+		string descriptionToBeAssigned = itemToBeEdited.getDescription();
+		assignDescriptionToExistingTask(descriptionToBeAssigned, lineIndexToBeEdited);
 	}
 	else if (command == "end" || command == "due"){
 		DateTime endTimeToBeAssigned = itemToBeEdited.getEndTime();
 		assignTimingToExistingTask("end", endTimeToBeAssigned, lineIndexToBeEdited);
 	}
+
+	printSchedule();
 	return 1;
 }
 

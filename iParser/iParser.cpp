@@ -27,7 +27,6 @@ ParseInfo iParser::parse(string userInput) {
 	ParseInfo parseInfo;
 	splitInput(userInput);
 	setInformation();
-	cout << displayParseInfo();
 	parseInfo = _parseInfo;
 	return parseInfo;
 }
