@@ -3,19 +3,26 @@
 
 #include "DateTime.h"
 
-static const int MIN_YEAR = 0;
-static const int MAX_YEAR = 9999;
-static const int MIN_MONTH = 1;
-static const int MAX_MONTH = 12;
-static const int MIN_DAY = 1;
-static const int MAX_DAY = 31;
-static const int MIN_HOUR = 0;
-static const int MAX_HOUR = 23;
-static const int MIN_MINUTE = 0;
-static const int MAX_MINUTE = 59;
+const int DateTime::MIN_YEAR = 0;
+const int DateTime::MAX_YEAR = 9999;
+const int DateTime::MIN_MONTH = 1;
+const int DateTime::MAX_MONTH = 12;
+const int DateTime::MIN_DAY = 1;
+const int DateTime::MAX_DAY = 31;
+const int DateTime::MIN_HOUR = 0;
+const int DateTime::MAX_HOUR = 23;
+const int DateTime::MIN_MINUTE = 0;
+const int DateTime::MAX_MINUTE = 59;
+const int DateTime::EMPTYFIELD_DATETIME = -1;
 
 //	Constructor
-DateTime::DateTime() { }
+DateTime::DateTime() {
+	_year = EMPTYFIELD_DATETIME;
+	_month = EMPTYFIELD_DATETIME;
+	_day = EMPTYFIELD_DATETIME;
+	_hour = EMPTYFIELD_DATETIME;
+	_minute = EMPTYFIELD_DATETIME;
+}
 
 //	Overloaded Constructor with YYYY MM DD HH MM
 DateTime::DateTime(int year, int month, int day, int hour, int minute) {
@@ -31,6 +38,8 @@ DateTime::DateTime(int year, int month, int day) {
 	_year = year;
 	_month = month;
 	_day = day;
+	_hour = EMPTYFIELD_DATETIME;
+	_minute = EMPTYFIELD_DATETIME;
 }
 
 //	Destructor

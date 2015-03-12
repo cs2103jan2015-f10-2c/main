@@ -30,7 +30,7 @@ public:
 	//	Retrieves the entire schedule
 	//	Pre:	Nil
 	//	Post:	Constant reference to the schedule is returned
-	const vector<Item>& retrieveSchedule();
+	vector<Item>& retrieveSchedule();
 
 	//	Retrieves the size of the schedule
 	//	Pre:	Schedule exists
