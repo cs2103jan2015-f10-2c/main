@@ -232,23 +232,27 @@ Item Logic::processedItem(ParseInfo parseInfoToBeProcessed){
 	return parseInfoToBeProcessed.getItem();
 }
 void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
-	Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
-	string command = processedCommand(parseInfoToBeProcessed);
-	unsigned int lineIndexToBeProcessed = processedLineIndex(parseInfoToBeProcessed);
-	if (command == "add") {
-		addTask(itemToBeProcessed);
+	if (parseInfoToBeProcessed.hasValidInput()) {
+		Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
+		string command = processedCommand(parseInfoToBeProcessed);
+		unsigned int lineIndexToBeProcessed = processedLineIndex(parseInfoToBeProcessed);
+		if (command == "add") {
+			addTask(itemToBeProcessed);
+		}
+		else if (command == "del") {
+			deleteTask(lineIndexToBeProcessed);
+		}
+		else if (command == "edit") {
+			string partsToBeEdited = parseInfoToBeProcessed.getEditString();
+			editTask(partsToBeEdited, itemToBeProcessed, lineIndexToBeProcessed);
+		}
+		else if (command == "exit"){
+			exit(0);
+		}
 	}
-	else if (command == "del") {
-		deleteTask(lineIndexToBeProcessed);
+	else {
+		cout << MESSAGE_INVALID_INPUT << endl << endl;
 	}
-	else if (command == "edit") {
-		string partsToBeEdited = parseInfoToBeProcessed.getEditString();
-		editTask(partsToBeEdited, itemToBeProcessed, lineIndexToBeProcessed);
-	}
-	else if (command == "exit"){
-		exit(0);
-	}
-
 }
 
 int Logic::editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited){
