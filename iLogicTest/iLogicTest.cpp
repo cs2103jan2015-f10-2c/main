@@ -12,9 +12,7 @@ namespace iLogicTest {
 		TEST_METHOD(AddTaskTest1)
 		{
 			Logic testLogic;
-			Schedule testSchedule;
 			Item testItem;
-			testItem.setItemID(13);
 			unsigned int addedItemId = testLogic.addTask(testItem);
 			vector<Item> retrievedSchedule = testLogic.getSchedule();
 			unsigned int IdFromSchedule = retrievedSchedule[0].getItemID();
@@ -77,7 +75,7 @@ namespace iLogicTest {
 			Assert::AreEqual(addedItemId2, deletedItem.getItemID());
 
 		}
-		
+
 		TEST_METHOD(DeleteTaskTest2)
 		{
 			Logic testLogic;
@@ -111,7 +109,7 @@ namespace iLogicTest {
 			Assert::AreEqual(addedItemId4, deletedItem.getItemID());
 
 		}
-		
+
 	};
 
 	TEST_CLASS(GetItemIDFromLineIndexTest)
@@ -178,9 +176,30 @@ namespace iLogicTest {
 			char priorityType = 'h';
 			unsigned int addedItemId = testLogic.addTask(testItem);
 			addedItemId = testLogic.addTask(testItem);
-			Item itemAfterPriorityAdded = testLogic.assignPriorityToExistingTask(priorityType, 1);
+			addedItemId = testLogic.addTask(testItem);
+			addedItemId = testLogic.addTask(testItem);
+			addedItemId = testLogic.addTask(testItem);
+			Item itemAfterPriorityAdded = testLogic.assignPriorityToExistingTask(priorityType, 4);
 			Assert::AreEqual(itemAfterPriorityAdded.getPriority(), priorityType);
-			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(1));
+			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(4));
+
+		}
+
+		TEST_METHOD(AssignPriorityTest_AssignToexistingItem2)
+		{
+
+			Logic testLogic;
+			Schedule testSchedule;
+			Item testItem;
+			char priorityType = 'h';
+			unsigned int addedItemId = testLogic.addTask(testItem);
+			addedItemId = testLogic.addTask(testItem);
+			addedItemId = testLogic.addTask(testItem);
+			addedItemId = testLogic.addTask(testItem);
+			addedItemId = testLogic.addTask(testItem);
+			Item itemAfterPriorityAdded = testLogic.assignPriorityToExistingTask(priorityType, 2);
+			Assert::AreEqual(itemAfterPriorityAdded.getPriority(), priorityType);
+			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(2));
 
 		}
 	};
@@ -375,15 +394,17 @@ namespace iLogicTest {
 			addedItemId = testLogic.addTask(testItem);
 			addedItemId = testLogic.addTask(testItem);
 			addedItemId = testLogic.addTask(testItem);
-			Item itemAfterTimingAdded = testLogic.assignTimingToExistingTask(timingType, testDateTime,lineNumberToBeAddedTiming);
+			Item itemAfterTimingAdded = testLogic.assignTimingToExistingTask(timingType, testDateTime, lineNumberToBeAddedTiming);
 			int expectedYear = itemAfterTimingAdded.getStartTime().getYear();
 			int expectedMonth = itemAfterTimingAdded.getStartTime().getMonth();
 			int expectedDay = itemAfterTimingAdded.getStartTime().getDay();
-			itemAfterTimingAdded = testLogic.assignTimingToExistingTask(timingType2,testDateTime2, lineNumberToBeAddedTiming);
+			unsigned int expectedItemID = itemAfterTimingAdded.getItemID();
+			Assert::AreEqual(expectedItemID, unsigned int(2));
+			itemAfterTimingAdded = testLogic.assignTimingToExistingTask(timingType2, testDateTime2, lineNumberToBeAddedTiming);
 			int expectedYear2 = itemAfterTimingAdded.getEndTime().getYear();
 			int expectedMonth2 = itemAfterTimingAdded.getEndTime().getMonth();
 			int expectedDay2 = itemAfterTimingAdded.getEndTime().getDay();
-			unsigned int expectedItemID = itemAfterTimingAdded.getItemID();
+			expectedItemID = itemAfterTimingAdded.getItemID();
 			Assert::AreEqual(expectedYear, 1990);
 			Assert::AreEqual(expectedMonth, 12);
 			Assert::AreEqual(expectedDay, 26);
@@ -393,4 +414,44 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedItemID, unsigned int(2));
 		}
 	};
+
+	TEST_CLASS(SearchTaskTest)
+	{
+	public:
+
+		TEST_METHOD(SearchTaskTest1)
+		{
+			Logic testLogic;
+			Schedule testSchedule;
+			Item testItem;
+			testItem.setItemName("Hello");
+			unsigned int addedItemId = testLogic.addTask(testItem);
+			testItem.setItemName("Hi");
+			addedItemId = testLogic.addTask(testItem);
+			testItem.setItemName("Hey");
+			addedItemId = testLogic.addTask(testItem);
+			testItem.setItemName("sdfw");
+			addedItemId = testLogic.addTask(testItem);
+			testItem.setItemName("qwerqy");
+			addedItemId = testLogic.addTask(testItem);
+			testItem.setItemName("ccjh");
+			addedItemId = testLogic.addTask(testItem);
+			string phraseToBeSearched = "H";
+			vector<Item> searchedItems = testLogic.searchTask(phraseToBeSearched);
+			string expectedItemName1 = "Hello";
+			string expectedItemName2 = "Hi";
+			string expectedItemName3 = "Hey";
+
+			Assert::AreEqual(searchedItems[0].getItemName(), expectedItemName1);
+			Assert::AreEqual(searchedItems[1].getItemName(), expectedItemName2);
+			Assert::AreEqual(searchedItems[2].getItemName(), expectedItemName3);
+		}
+
+		TEST_METHOD(SearchTaskTest2)
+		{
+			Assert::AreEqual("Hi", "Hi");
+		}
+
+	};
+
 }
