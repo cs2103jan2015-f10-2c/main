@@ -31,6 +31,7 @@ private:
 	
 public:
 	ParseInfo();
+	ParseInfo(string mainCommand, unsigned int index, Item item, bool isValidInput);
 	~ParseInfo();
 
 	// setters

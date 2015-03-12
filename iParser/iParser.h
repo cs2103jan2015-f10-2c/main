@@ -69,11 +69,12 @@ class iParser {
 	static const int INDEX_NEXT = 1;
 	static const int INDEX_AFTER_TOKEN_COMMAND = 2;
 
-	// main methods to be executed in public method parse 
+	// main functions to be executed in public method parse 
 	string splitInput(string userInput);
 	string setInformation();
 	
 	// input retrieval and categorisation
+	string setInputs(string individualInputs);
 	string retrieveCommand(string userInput);
 	string retrieveText(string userInput);
 	CommandType determineCommandType(string command);
@@ -108,10 +109,8 @@ class iParser {
 	bool isValidLength(string userInput);
 	bool isDigit(string text);
 
-	//Methods for inputs
-	string setInputs(string individualInputs);
+	// Misc functions
 	string displayInputs();
-
 	string displayParseInfo();
 	void showError(string text);
 
@@ -119,6 +118,7 @@ public:
 	iParser();
 	~iParser();
 
+	// main function used to parse information to Logic
 	ParseInfo parse(string Input);
 };
 
