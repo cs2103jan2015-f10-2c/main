@@ -27,6 +27,7 @@ ParseInfo iParser::parse(string userInput) {
 	ParseInfo parseInfo;
 	splitInput(userInput);
 	setInformation();
+	cout << displayParseInfo();
 	parseInfo = _parseInfo;
 	return parseInfo;
 }
@@ -241,6 +242,7 @@ string iParser::setEndDateTime(string text, Item& item) {
 string iParser::setDescription(string text, Item& item) {
 	if (text != TOKEN_BLANK) {
 		item.setDescription(text);
+		_parseInfo.setEditString(COMMAND_EDIT);
 	}
 	else {
 		_parseInfo.setIsNotValidInput();
@@ -339,9 +341,11 @@ string iParser::splitAndSetDateTime(string text, Item& item, string command) {
 	DateTime dateTime(year, month, day, hour, minute);
 	if (command == COMMAND_START) {
 		item.setStartTime(dateTime);
+		_parseInfo.setEditString(COMMAND_START);
 	}
 	else if (command == COMMAND_END) {
 		item.setEndTime(dateTime);
+		_parseInfo.setEditString(COMMAND_END);
 	}
 
 	return MESSAGE_SUCCESS;
@@ -350,9 +354,11 @@ string iParser::splitAndSetDateTime(string text, Item& item, string command) {
 int iParser::retrieveYear(string text) {
 	int year;
 	string stringToConvert;
-	int start = INDEX_ZERO;
+	int start;
 
-	stringToConvert = retrieveSubstring(text, start);
+	start = findIndex(text, TOKEN_OBLIQUE);
+	start = findIndex(text, TOKEN_OBLIQUE, ++start);
+	stringToConvert = retrieveSubstring(text, ++start);
 	istringstream convert(stringToConvert);
 	convert >> year;
 
@@ -375,11 +381,9 @@ int iParser::retrieveMonth(string text) {
 int iParser::retrieveDay(string text) {
 	int day;
 	string stringToConvert;
-	int start;
+	int start = INDEX_ZERO;
 
-	start = findIndex(text, TOKEN_OBLIQUE);
-	start = findIndex(text, TOKEN_OBLIQUE, ++start);
-	stringToConvert = retrieveSubstring(text, ++start);
+	stringToConvert = retrieveSubstring(text, start);
 	istringstream convert(stringToConvert);
 	convert >> day;
 
@@ -414,11 +418,27 @@ int iParser::retrieveMinute(string text) {
 	start = findIndex(text, TOKEN_SPACE);
 	stringToConvert = retrieveSubstring(text, ++start);
 	trimText(stringToConvert);
-	stringToConvert = retrieveSubstring(stringToConvert, DIGIT_OF_TIME);
+	if (stringToConvert.size() == DIGIT_THREE) {
+		stringToConvert = retrieveSubstring(stringToConvert, INDEX_ONE);
+	}
+	else {
+		stringToConvert = retrieveSubstring(stringToConvert, DIGIT_OF_TIME);
+	}
 	istringstream convert(stringToConvert);
 	convert >> minute;
 
 	return minute;
+}
+
+string iParser::setEditString(string text) {
+	if (_parseInfo.hasMainCommand()) {
+		if (_parseInfo.getMainCommand() == COMMAND_EDIT) {
+			_parseInfo.setEditString(text);
+			return MESSAGE_SUCCESS;
+		}
+	}
+
+	return MESSAGE_INVALID;
 }
 
 bool iParser::isValidLength(string userInput) {
@@ -456,8 +476,9 @@ string iParser::displayParseInfo() {
 
 	output << "Valid input: " << boolalpha << _parseInfo.hasValidInput() << endl
 		<< "Main Command: " << _parseInfo.getMainCommand() << endl
+		<< "Edit String: " << _parseInfo.getEditString() << endl
 		<< "Index: " << _parseInfo.getIndex() << endl
-		<< _parseInfo.getItem().displayItem() << endl;
+		<< _parseInfo.getItem().displayItem();
 
 	return output.str();
 }
