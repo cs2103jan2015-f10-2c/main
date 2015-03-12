@@ -4,17 +4,13 @@
 void main() {
 	string input;
 	Logic testLogic;
+	cout << "Command : ";
 	while (getline(cin, input)) {
 		iParser testParser;
-		ParseInfo testParseInfo;
-
-		
+		ParseInfo testParseInfo;	
 		testParseInfo = testParser.parse(input);
-
-		cout << "Command : " << testParseInfo.getMainCommand() << endl;
-		cout << "LineIndex : " << testParseInfo.getIndex() << endl;
-
 		testLogic.initiateCommandAction(testParseInfo);
+		cout << "Command : ";
 	}
 	return;
 }

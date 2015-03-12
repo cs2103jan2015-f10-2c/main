@@ -26,11 +26,15 @@ Logic::~Logic() {}
 
 void Logic::printSchedule(){
 	vector<Item> retrievedSchedule = getSchedule();
+	cout << endl;
+	cout << "SCHEDULE" << endl;
+	cout << "--------" << endl;
 	for (int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
-		cout << lineNumber + 1;
+		cout << lineNumber + 1 << ". " ;
 		printItem(getItemFromLineIndex(lineNumber));
 		cout << endl;
 	}
+	cout << endl;
 }
 
 void Logic::printItem(Item itemToBePrinted){
@@ -240,6 +244,9 @@ void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
 	else if (command == "edit") {
 		string partsToBeEdited = parseInfoToBeProcessed.getEditString();
 		editTask(partsToBeEdited, itemToBeProcessed, lineIndexToBeProcessed);
+	}
+	else if (command == "exit"){
+		exit(0);
 	}
 
 }
