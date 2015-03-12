@@ -8,7 +8,7 @@ Schedule::Schedule() {}
 Schedule::~Schedule() {}
 
 //	Retrieves the entire schedule
-const vector<Item>& Schedule::retrieveSchedule() {
+vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
 }
 
