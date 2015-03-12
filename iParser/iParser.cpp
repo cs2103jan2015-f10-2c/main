@@ -418,7 +418,12 @@ int iParser::retrieveMinute(string text) {
 	start = findIndex(text, TOKEN_SPACE);
 	stringToConvert = retrieveSubstring(text, ++start);
 	trimText(stringToConvert);
-	stringToConvert = retrieveSubstring(stringToConvert, DIGIT_OF_TIME);
+	if (stringToConvert.size() == DIGIT_THREE) {
+		stringToConvert = retrieveSubstring(stringToConvert, INDEX_ONE);
+	}
+	else {
+		stringToConvert = retrieveSubstring(stringToConvert, DIGIT_OF_TIME);
+	}
 	istringstream convert(stringToConvert);
 	convert >> minute;
 
