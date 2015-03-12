@@ -121,12 +121,12 @@ namespace VerificaitionTests
 			ItemVerification verify2(item, 91822);
 
 			isValid = verify2.isValidItem();
-			Assert::AreEqual(false, isValid);
+			Assert::AreEqual(true, isValid);
 			
 			item.setItemName("");
 			ItemVerification verify3(item, 800000);
 
-			isValid = verify2.isValidItem();
+			isValid = verify3.isValidItem();
 			Assert::AreEqual(false, isValid);
 			
 			item.setItemName("Hunt wild dogs in the prairie.");
