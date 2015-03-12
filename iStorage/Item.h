@@ -59,14 +59,14 @@ public:
 	//	Sets the attribute
 	//	Pre:	Attribute has been previously set.
 	//	Post:	_(attribute) is returned
-	string getItemName();
-	string getDescription();
+	string& getItemName();
+	string& getDescription();
 	DateTime& getStartTime();
 	DateTime& getEndTime();
-	unsigned int getItemID();
-	char getPriority();
-	char getLabel();
-	bool getCompletion();
+	unsigned int& getItemID();
+	char& getPriority();
+	char& getLabel();
+	bool& getCompletion();
 
 	// display attributes
 	// Pre:		Nil
