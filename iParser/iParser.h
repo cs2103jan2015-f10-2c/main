@@ -25,13 +25,13 @@ using namespace std;
 
 class iParser {
 
-	// used for private method unit testing
-	#ifndef TESTMODE 
-	private: 
-	#else 
-	public:
-	#endif
-	// used for private method unit testing
+// used for private method unit testing
+#ifndef TESTMODE 
+private: 
+#else 
+public:
+#endif
+// used for private method unit testing
 
 	ParseInfo _parseInfo;
 	list<string> _inputs;
@@ -72,13 +72,13 @@ class iParser {
 	// main functions to be executed in public method parse 
 	string splitInput(string userInput);
 	string setInformation();
-	
+
 	// input retrieval and categorisation
 	string setInputs(string individualInputs);
 	string retrieveCommand(string userInput);
 	string retrieveText(string userInput);
 	CommandType determineCommandType(string command);
-	
+
 	// commandType functions
 	string setAddItemName(string text, Item& item);
 	string setDeleteIndex(string text, Item& item);
@@ -96,6 +96,7 @@ class iParser {
 	int retrieveDay(string text);
 	int retrieveHour(string text);
 	int retrieveMinute(string text);
+	string setEditString(string text);
 
 	// string manipulation functions
 	int findIndex(string userInput, string stringToFind, int startIndex = INDEX_ZERO);
@@ -104,7 +105,7 @@ class iParser {
 	string trimFront(string text);
 	string trimBack(string text);
 	int convertToDigit(string text);
-	
+
 	// boolean functions
 	bool isValidLength(string userInput);
 	bool isDigit(string text);
@@ -112,7 +113,7 @@ class iParser {
 	// Misc functions
 	string displayInputs();
 	string displayParseInfo();
-	void showError(string text);
+	void showError(string text);	
 
 public:
 	iParser();

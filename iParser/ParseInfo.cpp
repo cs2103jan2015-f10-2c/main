@@ -9,6 +9,7 @@ const string ParseInfo::TOKEN_BLANK = "";
 
 ParseInfo::ParseInfo() {
 	_mainCommand = TOKEN_BLANK;
+	_editString = TOKEN_BLANK;
 	_index = INDEX_ZERO;
 	_isValidInput = true;
 }
@@ -26,6 +27,10 @@ string ParseInfo::setMainCommand(string text) {
 	_mainCommand = text;
 	return MESSAGE_SUCCESS;
 }
+string ParseInfo::setEditString(string text) {
+	_editString = text;
+	return MESSAGE_SUCCESS;
+}
 
 string ParseInfo::setIndex(unsigned int index) {
 	_index = index;
@@ -37,8 +42,6 @@ string ParseInfo::setItem(Item item) {
 	return MESSAGE_SUCCESS;
 }
 
-
-
 string ParseInfo::setIsNotValidInput() {
 	_isValidInput = false;
 	return MESSAGE_SUCCESS;
@@ -46,6 +49,10 @@ string ParseInfo::setIsNotValidInput() {
 
 string ParseInfo::getMainCommand() {
 	return _mainCommand;
+}
+
+string ParseInfo::getEditString() {
+	return _editString;
 }
 
 unsigned int ParseInfo::getIndex() {
@@ -64,8 +71,12 @@ bool ParseInfo::hasMainCommand() {
 	return !_mainCommand.empty();
 }
 
+bool ParseInfo::hasEditString() {
+	return !_editString.empty();
+}
+
 bool ParseInfo::hasIndex() {
-	return _index != 0;
+	return _index != INDEX_ZERO;
 }
 
 bool ParseInfo::hasItem() {
