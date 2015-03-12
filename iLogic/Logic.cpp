@@ -10,10 +10,10 @@ const string Logic::COMMAND_EXIT = "exit";
 char Logic::buffer[300];
 const string Logic::ASSIGNED_PRIORITY = "Priority : %c ";
 const string Logic::ASSIGNED_LABEL = "Label : %c ";
-const string Logic::ASSIGNED_START_TIME = "Start Time : %i/%i/%i %i:%i";
-const string Logic::ASSIGNED_END_TIME = "End Time : %i/%i/%i %i:%i";
-const string Logic::ASSIGNED_NAME = "Item Name : %s";
-const string Logic::ASSIGNED_DESCRIPTION = "Item Description : %s";
+const string Logic::ASSIGNED_START_TIME = "Start Time : %i/%i/%i %i:%i ";
+const string Logic::ASSIGNED_END_TIME = "End Time : %i/%i/%i %i:%i ";
+const string Logic::ASSIGNED_NAME = "Item Name : %s ";
+const string Logic::ASSIGNED_DESCRIPTION = "Item Description : %s ";
 
 
 
@@ -28,10 +28,9 @@ void Logic::printSchedule(){
 	vector<Item> retrievedSchedule = getSchedule();
 	cout << "PRINTSCHEDULE" << endl;
 	for (int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
+		cout << lineNumber + 1;
 		printItem(getItemFromLineIndex(lineNumber));
-		if (lineNumber != getScheduleSize() - 1){
-			cout << endl;
-		}
+		cout << endl;
 	}
 }
 
@@ -44,40 +43,50 @@ void Logic::printItem(Item itemToBePrinted){
 	printAssignedLabel(itemToBePrinted);
 }
 void Logic::printAssignedPriority(Item itemToBePrinted){
-	sprintf_s(buffer, ASSIGNED_PRIORITY.c_str(), itemToBePrinted.getPriority());
-	cout << buffer;
+	if (itemToBePrinted.getPriority() != '\0'){
+		sprintf_s(buffer, ASSIGNED_PRIORITY.c_str(), itemToBePrinted.getPriority());
+		cout << buffer;
+	}
 }
 
 void Logic::printAssignedLabel(Item itemToBePrinted){
-	sprintf_s(buffer, ASSIGNED_LABEL.c_str(), itemToBePrinted.getLabel());
-	cout << buffer;
+	if (itemToBePrinted.getLabel() != '\0'){
+		sprintf_s(buffer, ASSIGNED_LABEL.c_str(), itemToBePrinted.getLabel());
+		cout << buffer;
+	}
 }
 
 void Logic::printAssignedStartTime(Item itemToBePrinted){
-	sprintf_s(buffer, ASSIGNED_START_TIME.c_str(), itemToBePrinted.getStartTime().getDay(), itemToBePrinted.getStartTime().getMonth(), itemToBePrinted.getStartTime().getYear(), itemToBePrinted.getStartTime().getHour(), itemToBePrinted.getStartTime().getMinute());
-	cout << buffer;
+	if (itemToBePrinted.getStartTime().getYear() != -1){
+		sprintf_s(buffer, ASSIGNED_START_TIME.c_str(), itemToBePrinted.getStartTime().getDay(), itemToBePrinted.getStartTime().getMonth(), itemToBePrinted.getStartTime().getYear(), itemToBePrinted.getStartTime().getHour(), itemToBePrinted.getStartTime().getMinute());
+		cout << buffer;
+	}
 }
 void Logic::printAssignedEndTime(Item itemToBePrinted){
-	sprintf_s(buffer, ASSIGNED_END_TIME.c_str(), itemToBePrinted.getEndTime().getDay(), itemToBePrinted.getEndTime().getMonth(), itemToBePrinted.getEndTime().getYear(), itemToBePrinted.getEndTime().getHour(), itemToBePrinted.getEndTime().getMinute());
-	cout << buffer;
+	if (itemToBePrinted.getStartTime().getYear() != -1){
+		sprintf_s(buffer, ASSIGNED_END_TIME.c_str(), itemToBePrinted.getEndTime().getDay(), itemToBePrinted.getEndTime().getMonth(), itemToBePrinted.getEndTime().getYear(), itemToBePrinted.getEndTime().getHour(), itemToBePrinted.getEndTime().getMinute());
+		cout << buffer;
+	}
 }
 
 void Logic::printAssignedName(Item itemToBePrinted){
-	sprintf_s(buffer, ASSIGNED_NAME.c_str(), itemToBePrinted.getItemName());
+	sprintf_s(buffer, ASSIGNED_NAME.c_str(), itemToBePrinted.getItemName().c_str());
 	cout << buffer;
 }
+
 void Logic::printAssignedDescription(Item itemToBePrinted){
-	sprintf_s(buffer, ASSIGNED_DESCRIPTION.c_str(), itemToBePrinted.getDescription());
-	cout << buffer;
+	if (itemToBePrinted.getDescription() != ""){
+		sprintf_s(buffer, ASSIGNED_DESCRIPTION.c_str(), itemToBePrinted.getDescription().c_str());
+		cout << buffer;
+	}
 }
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
-	cout << "addTask" << endl;
 	if (isValidItemInLogic(itemToBeAdded)) {
-			itemToBeAdded.setItemID(_nextItemID);
-			_nextItemID++;
-			addedItemID = _logicSchedule.addItem(itemToBeAdded);
+		itemToBeAdded.setItemID(_nextItemID);
+		_nextItemID++;
+		addedItemID = _logicSchedule.addItem(itemToBeAdded);
 	}
 	printSchedule();
 	return addedItemID;
@@ -87,9 +96,9 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 	return true;
 	/*ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
-		return true;
+	return true;
 	} else {
-		return false;
+	return false;
 	}*/
 }
 
@@ -112,7 +121,7 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 
 unsigned int Logic::getItemIDFromLineIndex(unsigned int lineIndex){
 	vector<Item> retrievedSchedule = getSchedule();
-	unsigned int id = retrievedSchedule[lineIndex-1].getItemID();
+	unsigned int id = retrievedSchedule[lineIndex - 1].getItemID();
 	return id;
 }
 
@@ -179,8 +188,8 @@ Item Logic::assignPriorityToNewTask(char priorityType){
 }
 
 Item Logic::assignPriorityToExistingTask(char priorityType, unsigned int lineIndex){
-	_logicSchedule.retrieveSchedule()[lineIndex-1].setPriority(priorityType);
-	return _logicSchedule.retrieveSchedule()[lineIndex-1];
+	_logicSchedule.retrieveSchedule()[lineIndex - 1].setPriority(priorityType);
+	return _logicSchedule.retrieveSchedule()[lineIndex - 1];
 }
 
 Item Logic::assignLabel(Item item, char labelType){
@@ -211,17 +220,16 @@ void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
 	Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
 	string command = processedCommand(parseInfoToBeProcessed);
 	unsigned int lineIndexToBeProcessed = processedLineIndex(parseInfoToBeProcessed);
-	string commandAction = processedCommand(parseInfoToBeProcessed);
-	if (commandAction.compare("add")) {
+	if (command == "add") {
 		addTask(itemToBeProcessed);
 	}
-	if (commandAction.compare("delete")) {
+	else if (command == "delete") {
 		deleteTask(lineIndexToBeProcessed);
 	}
 	//else if (commandAction.compare("edit")) {
 	//	editTask(command, itemToBeProcessed, lineIndexToBeProcessed);
 	//}
-	
+
 }
 
 int Logic::editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited){
@@ -301,7 +309,7 @@ int Logic::readDataFromFile(char * fileName) {
 	ifstream infile(fileName, std::ios::_Nocreate);
 	string line;
 	//Number of lines in Text File
-	int fileLength = 1;  
+	int fileLength = 1;
 	if (infile.is_open()) {
 
 		while (!infile.eof()) {
@@ -333,7 +341,7 @@ int Logic::readDataFromFile(char * fileName) {
 					else {
 						readTime.setMinute(tempInt);
 					}
-					fileLength+=5;
+					fileLength += 5;
 				}
 				readItem.setStartTime(readTime);
 			}
@@ -401,7 +409,7 @@ int Logic::readDataFromFile(char * fileName) {
 		infile.close();
 		retCode = 0;
 	}
-	
+
 	return retCode;
 }
 
@@ -471,60 +479,60 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 /*
 
 void Logic::printItemVector(vector<Item> itemVector){
-	for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
-		printItem(itemVector[lineIndex]);
-		if (lineIndex < itemVector.size() - 1){
-			cout << endl;
-		}
-	}
-	return;
+for (int lineIndex = 0; lineIndex < itemVector.size(); lineIndex++){
+printItem(itemVector[lineIndex]);
+if (lineIndex < itemVector.size() - 1){
+cout << endl;
+}
+}
+return;
 }
 
 void Logic::printItem(Item item){
-	cout << item.getItemName() << '\t';
-	cout << item.getDescription() << '\t';
-	//cout << item.getStartTime() << '\t';   Need print function for DateTime
-	//cout << item.getEndTime() << '\t';
-	cout << item.getLabel() << '\t';
-	cout << item.getPriority();
-	return;
+cout << item.getItemName() << '\t';
+cout << item.getDescription() << '\t';
+//cout << item.getStartTime() << '\t';   Need print function for DateTime
+//cout << item.getEndTime() << '\t';
+cout << item.getLabel() << '\t';
+cout << item.getPriority();
+return;
 }
 
 DateTime Logic::setDateTime(int year, int month, int day, int hour, int minute){
-	DateTime datetime;
-	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day, month, year)
-		&& datetime.isValidHourRange(hour) && datetime.isValidMinuteRange(minute)){
-		datetime.setYear(year);
-		datetime.setMonth(month);
-		datetime.setDay(day);
-		datetime.setHour(hour);
-		datetime.setMinute(minute);
-	}
-	return datetime;
+DateTime datetime;
+if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day, month, year)
+&& datetime.isValidHourRange(hour) && datetime.isValidMinuteRange(minute)){
+datetime.setYear(year);
+datetime.setMonth(month);
+datetime.setDay(day);
+datetime.setHour(hour);
+datetime.setMinute(minute);
+}
+return datetime;
 }
 
 DateTime Logic::setDateTime(int year, int month, int day){
-	DateTime datetime;
-	if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day, month, year)){
-		datetime.setYear(year);
-		datetime.setMonth(month);
-		datetime.setDay(day);
-	}
-	return datetime;
+DateTime datetime;
+if (datetime.isValidYearRange(year) && datetime.isValidMonthRange(month) && datetime.isValidDate(day, month, year)){
+datetime.setYear(year);
+datetime.setMonth(month);
+datetime.setDay(day);
+}
+return datetime;
 }
 
 Item Logic::setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted){
-	Item item;
+Item item;
 
-	item.setItemName(itemName);
-	item.setStartTime(startTime);
-	item.setEndTime(endTime);
-	item.setDescription(description);
-	item.setPriority(priority);
-	item.setLabel(label);
-	item.setCompletion(isCompleted);
+item.setItemName(itemName);
+item.setStartTime(startTime);
+item.setEndTime(endTime);
+item.setDescription(description);
+item.setPriority(priority);
+item.setLabel(label);
+item.setCompletion(isCompleted);
 
-	return item;
+return item;
 }
 */
 /*
