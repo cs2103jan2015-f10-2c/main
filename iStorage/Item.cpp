@@ -62,11 +62,11 @@ bool Item::setCompletion(bool isCompleted) {
 	return _isCompleted;
 }
 
-string Item::getItemName() {
+string& Item::getItemName() {
 	return _itemName;
 }
 
-string Item::getDescription()  {
+string& Item::getDescription()  {
 	return _description;
 }
 
@@ -78,19 +78,19 @@ DateTime& Item::getEndTime() {
 	return _endTime;
 }
 
-unsigned int Item::getItemID() {
+unsigned int& Item::getItemID() {
 	return _itemID;
 }
 
-char Item::getPriority() {
+char& Item::getPriority() {
 	return _priority;
 }
 
-char Item::getLabel() {
+char& Item::getLabel() {
 	return _label;
 }
 
-bool Item::getCompletion() {
+bool& Item::getCompletion() {
 	return _isCompleted;
 }
 
