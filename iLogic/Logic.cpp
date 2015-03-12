@@ -80,27 +80,14 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	return addedItemID;
 }
 
-unsigned int Logic::addTaskForEdition(Item itemToBeAdded){
-	unsigned int addedItemID = DEFAULT_ITEM_ID;
-	if (isValidItemInLogic(itemToBeAdded)) {
-		addedItemID = _logicSchedule.addItem(itemToBeAdded);
-	}
-	return addedItemID;
-}
-/*
-int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
-
-}
-*/
-
-
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
-	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
+	return true;
+	/*ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
 		return true;
 	} else {
 		return false;
-	}
+	}*/
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
@@ -140,11 +127,7 @@ unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
 
-Item Logic::deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded){
-	deleteTask(lineIndexToBeEdited);
-	addTaskForEdition(editedItemToBeAdded);
-	return editedItemToBeAdded;
-}
+
 
 Item Logic::assignTiming(Item item, string timingType, DateTime datetime){
 	if (timingType == "start"){

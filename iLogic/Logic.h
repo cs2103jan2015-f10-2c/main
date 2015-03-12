@@ -52,34 +52,9 @@ public:
 	void printAssignedEndTime(Item itemToBePrinted);
 	void printAssignedName(Item itemToBePrinted);
 	void printAssignedDescription(Item itemToBePrinted);
-	/*
-	// interactions with Parser
-	// Coded by Ng Chon Beng ====================================================
-	string executeLogic();
 	
-	string executeCommand(list<userCommand> userCommandList); // do unit test
-	string executeFunction(userCommand userCommand);
-	
-	bool notExit(string userInput); // do unit test
-	bool isValidInput(userCommand userCommand); // do unit test
-	bool isBlank(string text);
-	bool isDigit(string text);
-
-	bool isAdd(string command);
-	bool isDelete(string command);
-	bool isEdit(string command);
-
-	string showUserInput(list<userCommand> userCommandList); // do unit test
-	string showToUser(string text);
-	// end of Ng Chon Beng's code ===============================================
-	*/
-
 	unsigned int addTask(Item itemToBeAdded);
-	unsigned int addTaskForEdition(Item itemToBeAdded);
-	//addTask && addTaskForEdition works the same
-	//except that addTask increments the _nextItemID and addTaskForEdition doesn't
-	//addTask is for pure addition, and addTaskForEdition is used when editing 
-	//( e.g. delete and add back the edited Item)
+
 	string processedCommand(ParseInfo parseInfoToBeProcessed);
 	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
 	Item processedItem(ParseInfo parseInfoToBeProcessed);
