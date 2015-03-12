@@ -24,7 +24,6 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 			return index;
 		}
 	}
-
 	return -1;
 }
 
