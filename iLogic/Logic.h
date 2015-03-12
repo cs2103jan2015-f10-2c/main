@@ -68,6 +68,9 @@ public:
 	unsigned int getScheduleSize();
 	Item deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
 
+	Item assignDescription(Item item, string descriptionToBeAdded);
+	Item assignDescriptionToNewTask(Item item, string descriptionToBeAdded);
+	Item assignDescriptionToExistingTask(string descriptionToBeAdded, unsigned int lineIndex);
 	Item assignTiming(Item item, string timingType, DateTime datetime);
 	Item assignTimingToNewTask(string timingType, DateTime datetime);
 	Item assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex);
