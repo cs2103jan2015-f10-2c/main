@@ -219,7 +219,23 @@ unsigned int Logic::processedLineIndex(ParseInfo parseInfoToBeProcessed){
 Item Logic::processedItem(ParseInfo parseInfoToBeProcessed){
 	return parseInfoToBeProcessed.getItem();
 }
-
+void Logic::initiateCommandAction() {
+	ParseInfo parseInfoToBeProcessed;
+	Item itemToBeProcessed;
+	string command;
+	unsigned int lineIndexToBeProcessed;
+	string commandAction = processedCommand(parseInfoToBeProcessed);
+	if (commandAction.compare("add")) {
+		addTask(itemToBeProcessed);
+	}
+	if (commandAction.compare("delete")) {
+		deleteTask(lineIndexToBeProcessed);
+	}
+	//else if (commandAction.compare("edit")) {
+	//	editTask(command, itemToBeProcessed, lineIndexToBeProcessed);
+	//}
+	
+}
 
 int Logic::editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited){
 	if (command == "priority"){

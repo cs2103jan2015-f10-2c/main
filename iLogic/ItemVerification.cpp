@@ -12,13 +12,18 @@ const string ItemVerification::ERROR_INVALID_ID = "Error: An item has an invalid
 const string ItemVerification::ERROR_INVALID_PRIORITY = "Error: An item has an invalid Priority.\n";
 const string ItemVerification::ERROR_INVALID_LABEL = "Error: An item has an invalid Label.\n";
 
+ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
+	_itemObjectToVerify = itemObject;
+	_nextID = nextItemID;
+}
+
 bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
 	if (name == EMPTY_STRING) {
 		cout << ERROR_EMPTY_STRING;
-		return 0;
+		return false;
 	} else {
-		return 1;
+		return true;
 	}
 }
 
@@ -26,7 +31,7 @@ bool ItemVerification::isValidStartDateTime() {
 	DateTime startDateTime = _itemObjectToVerify.getStartTime();
 	DateTimeVerification startDateTimeVerification(startDateTime);
 	if (startDateTimeVerification.isValidDate() && startDateTimeVerification.isValidTime()) {
-		return 1;
+		return true;
 	} else {
 		if (!startDateTimeVerification.isValidDate()) {
 			cout << ERROR_INVALID_START_DATE;
@@ -34,7 +39,7 @@ bool ItemVerification::isValidStartDateTime() {
 		if (!startDateTimeVerification.isValidTime()) {
 			cout << ERROR_INVALID_START_TIME;
 		}
-		return 0;
+		return false;
 	}
 }
 
@@ -42,7 +47,7 @@ bool ItemVerification::isValidEndDateTime() {
 	DateTime endDateTime = _itemObjectToVerify.getStartTime();
 	DateTimeVerification endDateTimeVerification(endDateTime);
 	if (endDateTimeVerification.isValidDate() && endDateTimeVerification.isValidTime()) {
-		return 1;
+		return true;
 	} else {
 		if (!endDateTimeVerification.isValidDate()) {
 			cout << ERROR_INVALID_END_DATE;
@@ -50,21 +55,21 @@ bool ItemVerification::isValidEndDateTime() {
 		if (!endDateTimeVerification.isValidTime()) {
 			cout << ERROR_INVALID_END_TIME;
 		}
-		return 0;
+		return false;
 	}
 }
 
 bool ItemVerification::isValidDescription() {
-	return 1;
+	return true;
 }
 
 bool ItemVerification::isValidItemID() {
 	unsigned int itemID = _itemObjectToVerify.getItemID();
 	if (itemID < _nextID) {
-		return 1;
+		return true;
 	} else {
 		cout << ERROR_INVALID_ID;
-		return 0;
+		return false;
 	}
 }
 
@@ -75,10 +80,10 @@ bool ItemVerification::isValidPriority() {
 	priorityString.push_back(priorityChar);
 	priorityFound = priorityString.find_first_of(AVAILABLE_PRIORITIES);
 	if (priorityFound != string::npos || priorityChar == '\0') {
-		return 1;
+		return true;
 	} else {
 		cout << ERROR_INVALID_PRIORITY;
-		return 0;
+		return false;
 	}
 }
 
@@ -89,24 +94,19 @@ bool ItemVerification::isValidLabel() {
 	labelString.push_back(labelChar);
 	labelFound = labelString.find_first_of(AVAILABLE_LABELS);
 	if (labelFound != string::npos || labelChar =='\0') {
-		return 1;
+		return true;
 	}
 	else {
 		cout << ERROR_INVALID_LABEL;
-		return 0;
+		return false;
 	}
-}
-
-ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
-	_itemObjectToVerify = itemObject;
-	_nextID = nextItemID;
 }
 
 bool ItemVerification::isValidItem() {
 	if (isValidName() && isValidStartDateTime() && isValidDescription() &&
-		isValidItemID() && isValidPriority() && isValidLabel())  {
-		return 1;
+		/*isValidItemID() &&*/ isValidPriority() && isValidLabel())  {
+		return true;
 	} else {
-		return 0;
+		return false;
 	}
 }
