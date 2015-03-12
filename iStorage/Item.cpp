@@ -3,8 +3,21 @@
 
 #include "Item.h"
 
+const string EMPTYFIELD_ITEMNAME = "";
+const string EMPTYFIELD_DESCRIPTION = "";
+const int EMPTYFIELD_ITEMID = 0;
+const char EMPTYFIELD_PRIORITY = '\0';
+const char EMPTYFIELD_LABEL = '\0';
+
 //	Constructor
-Item::Item() { }
+Item::Item() {
+	_itemName = EMPTYFIELD_ITEMNAME;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_itemID = EMPTYFIELD_ITEMID;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+}
 
 //	Destructor
 Item::~Item() { }
@@ -57,11 +70,11 @@ string Item::getDescription()  {
 	return _description;
 }
 
-DateTime Item::getStartTime(){
+DateTime& Item::getStartTime(){
 	return _startTime;
 }
 
-DateTime Item::getEndTime() {
+DateTime& Item::getEndTime() {
 	return _endTime;
 }
 
