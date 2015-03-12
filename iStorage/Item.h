@@ -12,6 +12,12 @@ using namespace std;
 class Item
 {
 private:
+	static const string EMPTYFIELD_ITEMNAME;
+	static const string EMPTYFIELD_DESCRIPTION;
+	static const int EMPTYFIELD_ITEMID;
+	static const char EMPTYFIELD_PRIORITY;
+	static const char EMPTYFIELD_LABEL;
+
 	string _itemName;
 	DateTime _startTime;
 	DateTime _endTime;
@@ -55,8 +61,8 @@ public:
 	//	Post:	_(attribute) is returned
 	string getItemName();
 	string getDescription();
-	DateTime getStartTime();
-	DateTime getEndTime();
+	DateTime& getStartTime();
+	DateTime& getEndTime();
 	unsigned int getItemID();
 	char getPriority();
 	char getLabel();
