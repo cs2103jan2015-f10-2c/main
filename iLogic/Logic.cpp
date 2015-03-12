@@ -62,7 +62,7 @@ void Logic::printAssignedStartTime(Item itemToBePrinted){
 	}
 }
 void Logic::printAssignedEndTime(Item itemToBePrinted){
-	if (itemToBePrinted.getStartTime().getYear() != -1){
+	if (itemToBePrinted.getEndTime().getYear() != -1){
 		sprintf_s(buffer, ASSIGNED_END_TIME.c_str(), itemToBePrinted.getEndTime().getDay(), itemToBePrinted.getEndTime().getMonth(), itemToBePrinted.getEndTime().getYear(), itemToBePrinted.getEndTime().getHour(), itemToBePrinted.getEndTime().getMinute());
 		cout << buffer;
 	}
