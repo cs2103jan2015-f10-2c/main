@@ -105,6 +105,7 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	unsigned int itemIDToBeDeleted;
 	if (isValidLineIndex(lineIndexToBeDeleted)){
+		cout << "lineindexcorrect" << endl;
 		itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
 		Item deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
 		printSchedule();
@@ -130,6 +131,8 @@ vector<Item> Logic::getSchedule(){
 }
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
+	cout << "schedulesize : " << getScheduleSize() << endl;
+	cout << "lineindex : " << lineIndexToBeChecked << endl;
 	if (getScheduleSize() > lineIndexToBeChecked){
 		return true;
 	}
@@ -223,7 +226,7 @@ void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
 	if (command == "add") {
 		addTask(itemToBeProcessed);
 	}
-	else if (command == "delete") {
+	else if (command == "del") {
 		deleteTask(lineIndexToBeProcessed);
 	}
 	//else if (commandAction.compare("edit")) {

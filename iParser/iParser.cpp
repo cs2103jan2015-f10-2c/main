@@ -187,7 +187,7 @@ string iParser::setAddItemName(string text, Item& item) {
 }
 
 string iParser::setDeleteIndex(string text, Item& item) {
-	if (text == TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
+	if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
 		_parseInfo.setMainCommand(COMMAND_DELETE);
 		addIndex(text);
 	}
