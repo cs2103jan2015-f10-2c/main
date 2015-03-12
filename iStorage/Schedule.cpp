@@ -8,7 +8,7 @@ Schedule::Schedule() {}
 Schedule::~Schedule() {}
 
 //	Retrieves the entire schedule
-const vector<Item>& Schedule::retrieveSchedule() {
+vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
 }
 
@@ -24,7 +24,6 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 			return index;
 		}
 	}
-
 	return -1;
 }
 

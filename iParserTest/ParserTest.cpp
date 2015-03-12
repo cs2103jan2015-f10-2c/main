@@ -123,6 +123,7 @@ namespace iPlannerParserTest {
 		iParser testParser;
 		ParseInfo testParseInfo;
 	public:
+<<<<<<< HEAD
 		TEST_METHOD(isValidLengthTest) {
 			//string text = "testing";
 			//string actualString;
@@ -134,5 +135,30 @@ namespace iPlannerParserTest {
 			//expectedBool = true;
 			//Assert::AreEqual(expectedBool, actualBool);
 		}
+=======
+/*		TEST_METHOD(tokenTest) {
+			string text = "::add task ::desc this is a task";
+			string actualString;
+			string expectedString;
+			bool actualBool;
+			bool expectedBool;
+
+			//actualBool = testParser.hasTokens();
+			expectedBool = false;
+			Assert::AreEqual(expectedBool, actualBool);
+
+			// calling this method tests for setToken and setTokenToList
+			//testParser.tokeniseToParts(text);
+			//actualBool = testParser.hasTokens();
+			expectedBool = true;
+			Assert::AreEqual(expectedBool, actualBool);
+
+			//actualString = testParser.displayTokens();
+			string string1 = "Command: add / Text: task \n";
+			string string2 = "Command: desc / Text: this is a task";
+			expectedString = string1 + string2;
+			Assert::AreEqual(expectedString, actualString);
+		} */
+>>>>>>> c82fa8d64a9c7869938ef3dcff05088a23260e05
 	};
 }
