@@ -67,7 +67,8 @@ public:
 
 	bool isValidItem(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
-	unsigned int getItemIDFromLineIndex(int lineIndex);
+	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
+	Item getItemFromLineIndex(unsigned int lineIndex);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
@@ -83,20 +84,20 @@ public:
 	Item assignLabel(Item item, char labelType);
 	Item assignLabelToNewTask(char labelType);
 	Item assignLabelToExistingTask(char labelType, unsigned int lineIndex);
-	/*
-	void readUserInput();
-	void showUserInput(list<userCommand> userCommandList);
+	
+//	void readUserInput();
+//	void showUserInput(list<userCommand> userCommandList);
 	
 	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
 	
 	
-	int searchTask(string phraseToSearch);
+	vector<Item> searchTask(string phraseToSearch);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	int sortTask();
 	int changeView();
 	int showHelpMenu();
 
-	void assignSaveFolder();*/
+	//void assignSaveFolder();
 	int readDataFromFile(char * fileName);
 	int writeDataOntoFile(char * fileName, vector<Item> itemVector);
 	/*
@@ -106,7 +107,7 @@ public:
 	void printItem(Item item);
 	void printItemVector(vector<Item> itemVector);
 
-	Item getItem(unsigned int itemID);
+
 
 	
 	DateTime setDateTime(int year, int month, int day, int hour, int minute);
