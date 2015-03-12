@@ -84,7 +84,7 @@ public:
 	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
 	Item processedItem(ParseInfo parseInfoToBeProcessed);
 
-	bool isValidItem(Item itemToBeChecked);
+	bool isValidItemInLogic(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
 	Item getItemFromLineIndex(unsigned int lineIndex);
