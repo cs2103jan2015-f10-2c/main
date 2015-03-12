@@ -1,17 +1,16 @@
 #include "DateTimeVerification.h"
 
-const int MIN_YEAR;
-const int MAX_YEAR;
-const int MIN_MONTH;
-const int MAX_MONTH;
-const int MIN_DAY;
-const int MAX_DAY;
-
-const int MIN_HOUR;
-const int MAX_HOUR;
-const int MIN_MINUTE;
-const int MAX_MINUTE;
-const int EMPTYFIELD_DATETIME;
+const int DateTimeVerification::MIN_YEAR = 0;
+const int DateTimeVerification::MAX_YEAR = 9999;
+const int DateTimeVerification::MIN_MONTH= 1;
+const int DateTimeVerification::MAX_MONTH = 12;
+const int DateTimeVerification::MIN_DAY = 1;
+const int DateTimeVerification::MAX_DAY = 31;
+const int DateTimeVerification::MIN_HOUR = 0;
+const int DateTimeVerification::MAX_HOUR = 23;
+const int DateTimeVerification::MIN_MINUTE = 0;
+const int DateTimeVerification::MAX_MINUTE = 59;
+const int DateTimeVerification::EMPTYFIELD_DATETIME = -1;
 
 DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
 	_dateTimeObjectToVerify = dateTimeObject;
