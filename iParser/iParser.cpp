@@ -353,9 +353,11 @@ string iParser::splitAndSetDateTime(string text, Item& item, string command) {
 int iParser::retrieveYear(string text) {
 	int year;
 	string stringToConvert;
-	int start = INDEX_ZERO;
+	int start;
 
-	stringToConvert = retrieveSubstring(text, start);
+	start = findIndex(text, TOKEN_OBLIQUE);
+	start = findIndex(text, TOKEN_OBLIQUE, ++start);
+	stringToConvert = retrieveSubstring(text, ++start);
 	istringstream convert(stringToConvert);
 	convert >> year;
 
@@ -378,11 +380,9 @@ int iParser::retrieveMonth(string text) {
 int iParser::retrieveDay(string text) {
 	int day;
 	string stringToConvert;
-	int start;
+	int start = INDEX_ZERO;
 
-	start = findIndex(text, TOKEN_OBLIQUE);
-	start = findIndex(text, TOKEN_OBLIQUE, ++start);
-	stringToConvert = retrieveSubstring(text, ++start);
+	stringToConvert = retrieveSubstring(text, start);
 	istringstream convert(stringToConvert);
 	convert >> day;
 
