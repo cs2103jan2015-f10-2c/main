@@ -44,7 +44,7 @@ bool ItemVerification::isValidStartDateTime() {
 }
 
 bool ItemVerification::isValidEndDateTime() {
-	DateTime endDateTime = _itemObjectToVerify.getStartTime();
+	DateTime endDateTime = _itemObjectToVerify.getEndTime();
 	DateTimeVerification endDateTimeVerification(endDateTime);
 	if (endDateTimeVerification.isValidDate() && endDateTimeVerification.isValidTime()) {
 		return true;
