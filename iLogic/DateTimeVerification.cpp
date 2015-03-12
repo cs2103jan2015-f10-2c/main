@@ -72,31 +72,39 @@ bool DateTimeVerification::isValidMinuteRange() {
 }
 
 bool DateTimeVerification::hasYear() {
-	if (isValidYearRange() && _year == -1) {
+	if (!isValidYearRange()) {
 		return false;
-	} else { 
-		return true; 
+	} else if (_year == -1) {
+		return false;
+	} else {
+		return true;
 	}
 }
 
 bool DateTimeVerification::hasMonth() {
-	if (isValidMonthRange() && _month == -1) {
+	if (!isValidMonthRange()) {
 		return false;
-	} else { 
-		return true; 
+	} else if (_month == -1) {
+		return false;
+	} else {
+		return true;
 	}
 }
 
 bool DateTimeVerification::hasDay() {
-	if (isValidDayRange() && _day == -1) {
+	if (!isValidDayRange()) {
 		return false;
-	} else { 
-		return true; 
+	} else if (_day == -1) {
+		return false;
+	} else {
+		return true;
 	}
 }
 
 bool DateTimeVerification::hasHour() {
-	if (isValidHourRange() && _hour == -1) {
+	if (!isValidHourRange()) {
+		return false;
+	} else if (_hour == -1) {
 		return false;
 	} else {
 		return true;
@@ -104,10 +112,12 @@ bool DateTimeVerification::hasHour() {
 }
 
 bool DateTimeVerification::hasMinute() {
-	if (isValidMinuteRange() && _minute == -1) {
+	if (!isValidMinuteRange()) {
 		return false;
-	} else { 
-		return true; 
+	} else if (_minute == -1) {
+		return false;
+	} else {
+		return true;
 	}
 }
 
