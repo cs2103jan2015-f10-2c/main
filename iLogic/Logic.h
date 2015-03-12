@@ -15,6 +15,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <cctype>
+#include <algorithm>
 using namespace std;
 
 class Logic
@@ -32,10 +34,24 @@ private:
 	static const int ZERO_INDEX = 0;
 	static const unsigned int DEFAULT_ITEM_ID = 0;
 
+	static char buffer[300];
+	static const string ASSIGNED_PRIORITY;
+	static const string ASSIGNED_LABEL;
+	static const string ASSIGNED_START_TIME;
+	static const string ASSIGNED_END_TIME;
+	static const string ASSIGNED_NAME;
+	static const string ASSIGNED_DESCRIPTION;
 public:
 	Logic();
 	~Logic();
-
+	void printSchedule();
+	void printItem(Item itemToBePrinted);
+	void printAssignedPriority(Item itemToBePrinted);
+	void printAssignedLabel(Item itemToBePrinted);
+	void printAssignedStartTime(Item itemToBePrinted);
+	void printAssignedEndTime(Item itemToBePrinted);
+	void printAssignedName(Item itemToBePrinted);
+	void printAssignedDescription(Item itemToBePrinted);
 	/*
 	// interactions with Parser
 	// Coded by Ng Chon Beng ====================================================
@@ -64,6 +80,9 @@ public:
 	//except that addTask increments the _nextItemID and addTaskForEdition doesn't
 	//addTask is for pure addition, and addTaskForEdition is used when editing 
 	//( e.g. delete and add back the edited Item)
+	string processedCommand(ParseInfo parseInfoToBeProcessed);
+	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
+	Item processedItem(ParseInfo parseInfoToBeProcessed);
 
 	bool isValidItem(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
@@ -72,7 +91,6 @@ public:
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
-
 	Item deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
 
 	Item assignTiming(Item item, string timingType, DateTime datetime);
@@ -88,7 +106,7 @@ public:
 //	void readUserInput();
 //	void showUserInput(list<userCommand> userCommandList);
 	
-	int editTask(string partToEdit, unsigned int lineIndexToBeEdited);
+	int editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited);
 	
 	
 	vector<Item> searchTask(string phraseToSearch);
