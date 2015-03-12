@@ -10,7 +10,7 @@ using namespace std;
 class ItemVerification {
 private:
 	Item _itemObjectToVerify;
-	int _nextID;
+	unsigned int _nextID;
 
 	static const string EMPTY_STRING;
 	static const string AVAILABLE_PRIORITIES;

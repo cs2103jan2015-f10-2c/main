@@ -134,11 +134,11 @@ namespace iLogicTest {
 			testItem.setItemID(356);
 			unsigned int addedItemId5 = testLogic.addTask(testItem);
 
-			unsigned int IdFromSchedule = testLogic.getItemIdFromLineIndex(1);
-			unsigned int IdFromSchedule2 = testLogic.getItemIdFromLineIndex(2);
-			unsigned int IdFromSchedule3 = testLogic.getItemIdFromLineIndex(3);
-			unsigned int IdFromSchedule4 = testLogic.getItemIdFromLineIndex(4);
-			unsigned int IdFromSchedule5 = testLogic.getItemIdFromLineIndex(5);
+			unsigned int IdFromSchedule = testLogic.getItemIDFromLineIndex(1);
+			unsigned int IdFromSchedule2 = testLogic.getItemIDFromLineIndex(2);
+			unsigned int IdFromSchedule3 = testLogic.getItemIDFromLineIndex(3);
+			unsigned int IdFromSchedule4 = testLogic.getItemIDFromLineIndex(4);
+			unsigned int IdFromSchedule5 = testLogic.getItemIDFromLineIndex(5);
 
 
 			Assert::AreEqual(IdFromSchedule, addedItemId);
