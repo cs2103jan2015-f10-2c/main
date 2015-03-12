@@ -26,6 +26,7 @@ Logic::~Logic() {}
 
 void Logic::printSchedule(){
 	vector<Item> retrievedSchedule = getSchedule();
+	cout << "PRINTSCHEDULE" << endl;
 	for (int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
 		printItem(getItemFromLineIndex(lineNumber));
 		if (lineNumber != getScheduleSize() - 1){
@@ -72,11 +73,13 @@ void Logic::printAssignedDescription(Item itemToBePrinted){
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
+	cout << "addTask" << endl;
 	if (isValidItemInLogic(itemToBeAdded)) {
 			itemToBeAdded.setItemID(_nextItemID);
 			_nextItemID++;
 			addedItemID = _logicSchedule.addItem(itemToBeAdded);
 	}
+	printSchedule();
 	return addedItemID;
 }
 
@@ -95,11 +98,13 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	if (isValidLineIndex(lineIndexToBeDeleted)){
 		itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
 		Item deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
+		printSchedule();
 		return deletedItem;//Delete successful
 	}
 	else{
 		Item failedDelete;
 		failedDelete.setItemID(DEFAULT_ITEM_ID);
+		printSchedule();
 		return failedDelete;//Delete failed
 	}
 }
@@ -202,11 +207,10 @@ unsigned int Logic::processedLineIndex(ParseInfo parseInfoToBeProcessed){
 Item Logic::processedItem(ParseInfo parseInfoToBeProcessed){
 	return parseInfoToBeProcessed.getItem();
 }
-void Logic::initiateCommandAction() {
-	ParseInfo parseInfoToBeProcessed;
-	Item itemToBeProcessed;
-	string command;
-	unsigned int lineIndexToBeProcessed;
+void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
+	Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
+	string command = processedCommand(parseInfoToBeProcessed);
+	unsigned int lineIndexToBeProcessed = processedLineIndex(parseInfoToBeProcessed);
 	string commandAction = processedCommand(parseInfoToBeProcessed);
 	if (commandAction.compare("add")) {
 		addTask(itemToBeProcessed);

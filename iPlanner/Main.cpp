@@ -3,9 +3,14 @@
 
 void main() {
 	string input;
-	getline(cin, input);
+//	getline(cin, input);
 	iParser testParser;
+	Logic testLogic;
 	ParseInfo testParseInfo;
-	testParseInfo =	testParser.parse(input);
-	
+	cout << "Hi" << endl;
+/*	testParseInfo =	testParser.parse(input);
+	cout << testParseInfo.getItem().getItemName() << endl;
+	testLogic.initiateCommandAction(testParseInfo);
+	*/
+	return;
 }

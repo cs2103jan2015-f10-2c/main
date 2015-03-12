@@ -3,11 +3,11 @@
 
 #include "Item.h"
 
-const string EMPTYFIELD_ITEMNAME = "";
-const string EMPTYFIELD_DESCRIPTION = "";
-const int EMPTYFIELD_ITEMID = 0;
-const char EMPTYFIELD_PRIORITY = '\0';
-const char EMPTYFIELD_LABEL = '\0';
+const string Item::EMPTYFIELD_ITEMNAME = "";
+const string Item::EMPTYFIELD_DESCRIPTION = "";
+const int Item::EMPTYFIELD_ITEMID = 0;
+const char Item::EMPTYFIELD_PRIORITY = '\0';
+const char Item::EMPTYFIELD_LABEL = '\0';
 
 //	Constructor
 Item::Item() {

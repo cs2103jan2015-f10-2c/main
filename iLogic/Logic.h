@@ -58,7 +58,7 @@ public:
 	string processedCommand(ParseInfo parseInfoToBeProcessed);
 	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
 	Item processedItem(ParseInfo parseInfoToBeProcessed);
-	void initiateCommandAction();
+	void initiateCommandAction(ParseInfo parseInfoToBeProcessed);
 	bool isValidItemInLogic(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
