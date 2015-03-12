@@ -123,7 +123,7 @@ namespace iPlannerParserTest {
 		iParser testParser;
 		ParseInfo testParseInfo;
 	public:
-		TEST_METHOD(tokenTest) {
+/*		TEST_METHOD(tokenTest) {
 			string text = "::add task ::desc this is a task";
 			string actualString;
 			string expectedString;
@@ -145,6 +145,6 @@ namespace iPlannerParserTest {
 			string string2 = "Command: desc / Text: this is a task";
 			expectedString = string1 + string2;
 			Assert::AreEqual(expectedString, actualString);
-		}
+		} */
 	};
 }
