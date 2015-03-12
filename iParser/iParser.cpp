@@ -27,6 +27,7 @@ ParseInfo iParser::parse(string userInput) {
 	ParseInfo parseInfo;
 	splitInput(userInput);
 	setInformation();
+	cout << displayParseInfo();
 	parseInfo = _parseInfo;
 	return parseInfo;
 }
@@ -241,6 +242,7 @@ string iParser::setEndDateTime(string text, Item& item) {
 string iParser::setDescription(string text, Item& item) {
 	if (text != TOKEN_BLANK) {
 		item.setDescription(text);
+		_parseInfo.setEditString(COMMAND_EDIT);
 	}
 	else {
 		_parseInfo.setIsNotValidInput();
@@ -339,9 +341,11 @@ string iParser::splitAndSetDateTime(string text, Item& item, string command) {
 	DateTime dateTime(year, month, day, hour, minute);
 	if (command == COMMAND_START) {
 		item.setStartTime(dateTime);
+		_parseInfo.setEditString(COMMAND_START);
 	}
 	else if (command == COMMAND_END) {
 		item.setEndTime(dateTime);
+		_parseInfo.setEditString(COMMAND_END);
 	}
 
 	return MESSAGE_SUCCESS;
@@ -421,6 +425,17 @@ int iParser::retrieveMinute(string text) {
 	return minute;
 }
 
+string iParser::setEditString(string text) {
+	if (_parseInfo.hasMainCommand()) {
+		if (_parseInfo.getMainCommand() == COMMAND_EDIT) {
+			_parseInfo.setEditString(text);
+			return MESSAGE_SUCCESS;
+		}
+	}
+
+	return MESSAGE_INVALID;
+}
+
 bool iParser::isValidLength(string userInput) {
 	return userInput.length() >= LENGTH_VALID;
 }
@@ -456,8 +471,9 @@ string iParser::displayParseInfo() {
 
 	output << "Valid input: " << boolalpha << _parseInfo.hasValidInput() << endl
 		<< "Main Command: " << _parseInfo.getMainCommand() << endl
+		<< "Edit String: " << _parseInfo.getEditString() << endl
 		<< "Index: " << _parseInfo.getIndex() << endl
-		<< _parseInfo.getItem().displayItem() << endl;
+		<< _parseInfo.getItem().displayItem();
 
 	return output.str();
 }

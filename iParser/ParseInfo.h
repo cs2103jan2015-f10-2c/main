@@ -21,6 +21,7 @@ NOTES TO DEVELOPERS
 class ParseInfo {
 private:
 	string _mainCommand;
+	string _editString;
 	unsigned int _index;
 	Item _item;
 	bool _isValidInput;
@@ -36,15 +37,18 @@ public:
 
 	// setters
 	string setMainCommand(string text);
+	string setEditString(string text);
 	string setIndex(unsigned int index);
 	string setItem(Item item);
 	string setIsNotValidInput();
 
 	//getters
 	string getMainCommand();
+	string getEditString();
 	unsigned int getIndex();
 	Item getItem();
 	bool hasMainCommand();
+	bool hasEditString();
 	bool hasIndex();
 	bool hasItem();
 	bool hasValidInput();
