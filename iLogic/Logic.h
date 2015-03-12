@@ -65,7 +65,7 @@ public:
 	//addTask is for pure addition, and addTaskForEdition is used when editing 
 	//( e.g. delete and add back the edited Item)
 
-	bool isValidItem(Item itemToBeChecked);
+	bool isValidItemInLogic(Item itemToBeChecked);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
 	Item getItemFromLineIndex(unsigned int lineIndex);

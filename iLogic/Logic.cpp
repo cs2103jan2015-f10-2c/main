@@ -146,7 +146,7 @@ string Logic::showToUser(string text) {
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
-	if (isValidItem(itemToBeAdded)) {
+	if (isValidItemInLogic(itemToBeAdded)) {
 			itemToBeAdded.setItemID(_nextItemID);
 			_nextItemID++;
 			addedItemID = _logicSchedule.addItem(itemToBeAdded);
@@ -156,7 +156,7 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 
 unsigned int Logic::addTaskForEdition(Item itemToBeAdded){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
-	if (isValidItem(itemToBeAdded)) {
+	if (isValidItemInLogic(itemToBeAdded)) {
 		addedItemID = _logicSchedule.addItem(itemToBeAdded);
 	}
 	return addedItemID;
@@ -168,14 +168,13 @@ int Logic::editTask(string partToEdit, unsigned int lineIndexToBeEdited){
 */
 
 
-bool Logic::isValidItem(Item itemToBeChecked){
-	return true;
-	/*ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
+bool Logic::isValidItemInLogic(Item itemToBeChecked){
+	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
 		return true;
 	} else {
 		return false;
-	}*/
+	}
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
