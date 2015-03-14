@@ -231,7 +231,16 @@ unsigned int Logic::processedLineIndex(ParseInfo parseInfoToBeProcessed){
 Item Logic::processedItem(ParseInfo parseInfoToBeProcessed){
 	return parseInfoToBeProcessed.getItem();
 }
-void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
+
+ParseInfo Logic::getParseInfo(string input){
+	iParser parser;
+	ParseInfo parseInfoToBeProcessed;
+	parseInfoToBeProcessed = parser.parse(input);
+	return parseInfoToBeProcessed;
+}
+
+void Logic::initiateCommandAction(string input) {
+	ParseInfo parseInfoToBeProcessed = getParseInfo(input);
 	if (parseInfoToBeProcessed.hasValidInput()) {
 		Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
 		string command = processedCommand(parseInfoToBeProcessed);
