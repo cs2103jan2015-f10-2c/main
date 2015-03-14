@@ -8,12 +8,12 @@ const string Logic::COMMAND_EDIT = "edit";
 const string Logic::COMMAND_EXIT = "exit";
 
 char Logic::buffer[300];
-const string Logic::ASSIGNED_PRIORITY = "Priority : %c ";
-const string Logic::ASSIGNED_LABEL = "Label : %c ";
-const string Logic::ASSIGNED_START_TIME = "Start Time : %i/%i/%i %i:%i ";
-const string Logic::ASSIGNED_END_TIME = "End Time : %i/%i/%i %i:%i ";
-const string Logic::ASSIGNED_NAME = "Item Name : %s ";
-const string Logic::ASSIGNED_DESCRIPTION = "Item Description : %s ";
+const string Logic::ASSIGNED_PRIORITY = "Priority: %c ";
+const string Logic::ASSIGNED_LABEL = "Label: %c ";
+const string Logic::ASSIGNED_START_TIME = "Start Time: %i/%i/%i %i:%i ";
+const string Logic::ASSIGNED_END_TIME = "End Time: %i/%i/%i %i:%i ";
+const string Logic::ASSIGNED_NAME = "Item Name: %s ";
+const string Logic::ASSIGNED_DESCRIPTION = "Item Description: %s ";
 
 
 
@@ -132,7 +132,7 @@ vector<Item> Logic::getSchedule(){
 }
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
-	if (getScheduleSize() > lineIndexToBeChecked){
+	if (getScheduleSize() >= lineIndexToBeChecked){
 		return true;
 	}
 	else{
@@ -260,7 +260,7 @@ void Logic::initiateCommandAction(string input) {
 		}
 	}
 	else {
-		cout << MESSAGE_INVALID_INPUT << endl << endl;
+		cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
 	}
 }
 

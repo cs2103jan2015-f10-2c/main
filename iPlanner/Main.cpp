@@ -4,9 +4,8 @@
 void main() {
 	string input;
 	Logic testLogic;
-	cout << "Command : ";
+	cout << "Command: ";
 	while (getline(cin, input)) {
-		cout << "input" << input << endl;
 		testLogic.initiateCommandAction(input);
 		cout << "Command : ";
 	}
