@@ -241,7 +241,7 @@ string iParser::setEndDateTime(string text, Item& item) {
 string iParser::setDescription(string text, Item& item) {
 	if (text != TOKEN_BLANK) {
 		item.setDescription(text);
-		_parseInfo.setEditString(COMMAND_EDIT);
+		_parseInfo.setEditString(COMMAND_DESCRIPTION);
 	}
 	else {
 		_parseInfo.setIsNotValidInput();

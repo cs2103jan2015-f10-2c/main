@@ -103,7 +103,7 @@ bool ItemVerification::isValidLabel() {
 }
 
 bool ItemVerification::isValidItem() {
-	if (isValidName() && isValidStartDateTime() && isValidDescription() &&
+	if (isValidName() && isValidStartDateTime() && isValidEndDateTime() && isValidDescription() &&
 		/*isValidItemID() &&*/ isValidPriority() && isValidLabel())  {
 		return true;
 	} else {

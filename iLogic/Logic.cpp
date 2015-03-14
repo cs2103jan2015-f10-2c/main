@@ -8,12 +8,12 @@ const string Logic::COMMAND_EDIT = "edit";
 const string Logic::COMMAND_EXIT = "exit";
 
 char Logic::buffer[300];
-const string Logic::ASSIGNED_PRIORITY = "Priority : %c ";
-const string Logic::ASSIGNED_LABEL = "Label : %c ";
-const string Logic::ASSIGNED_START_TIME = "Start Time : %i/%i/%i %i:%i ";
-const string Logic::ASSIGNED_END_TIME = "End Time : %i/%i/%i %i:%i ";
-const string Logic::ASSIGNED_NAME = "Item Name : %s ";
-const string Logic::ASSIGNED_DESCRIPTION = "Item Description : %s ";
+const string Logic::ASSIGNED_PRIORITY = "Priority: %c ";
+const string Logic::ASSIGNED_LABEL = "Label: %c ";
+const string Logic::ASSIGNED_START_TIME = "Start Time: %i/%i/%i %i:%i ";
+const string Logic::ASSIGNED_END_TIME = "End Time: %i/%i/%i %i:%i ";
+const string Logic::ASSIGNED_NAME = "Item Name: %s ";
+const string Logic::ASSIGNED_DESCRIPTION = "Item Description: %s ";
 
 
 
@@ -26,11 +26,15 @@ Logic::~Logic() {}
 
 void Logic::printSchedule(){
 	vector<Item> retrievedSchedule = getSchedule();
+	cout << endl;
+	cout << "SCHEDULE" << endl;
+	cout << "--------" << endl;
 	for (int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
-		cout << lineNumber + 1;
+		cout << lineNumber + 1 << ". " ;
 		printItem(getItemFromLineIndex(lineNumber));
 		cout << endl;
 	}
+	cout << endl;
 }
 
 void Logic::printItem(Item itemToBePrinted){
@@ -128,7 +132,7 @@ vector<Item> Logic::getSchedule(){
 }
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
-	if (getScheduleSize() > lineIndexToBeChecked){
+	if (getScheduleSize() >= lineIndexToBeChecked){
 		return true;
 	}
 	else{
@@ -228,20 +232,27 @@ Item Logic::processedItem(ParseInfo parseInfoToBeProcessed){
 	return parseInfoToBeProcessed.getItem();
 }
 void Logic::initiateCommandAction(ParseInfo parseInfoToBeProcessed) {
-	Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
-	string command = processedCommand(parseInfoToBeProcessed);
-	unsigned int lineIndexToBeProcessed = processedLineIndex(parseInfoToBeProcessed);
-	if (command == "add") {
-		addTask(itemToBeProcessed);
+	if (parseInfoToBeProcessed.hasValidInput()) {
+		Item itemToBeProcessed = processedItem(parseInfoToBeProcessed);
+		string command = processedCommand(parseInfoToBeProcessed);
+		unsigned int lineIndexToBeProcessed = processedLineIndex(parseInfoToBeProcessed);
+		if (command == "add") {
+			addTask(itemToBeProcessed);
+		}
+		else if (command == "del") {
+			deleteTask(lineIndexToBeProcessed);
+		}
+		else if (command == "edit") {
+			string partsToBeEdited = parseInfoToBeProcessed.getEditString();
+			editTask(partsToBeEdited, itemToBeProcessed, lineIndexToBeProcessed);
+		}
+		else if (command == "exit"){
+			exit(0);
+		}
 	}
-	else if (command == "del") {
-		deleteTask(lineIndexToBeProcessed);
+	else {
+		cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
 	}
-	else if (command == "edit") {
-		string partsToBeEdited = parseInfoToBeProcessed.getEditString();
-		editTask(partsToBeEdited, itemToBeProcessed, lineIndexToBeProcessed);
-	}
-
 }
 
 int Logic::editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited){
