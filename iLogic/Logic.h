@@ -52,21 +52,19 @@ public:
 	void printAssignedEndTime(Item itemToBePrinted);
 	void printAssignedName(Item itemToBePrinted);
 	void printAssignedDescription(Item itemToBePrinted);
-	
-	unsigned int addTask(Item itemToBeAdded);
 
+	ParseInfo getParseInfo(string input);
 	string processedCommand(ParseInfo parseInfoToBeProcessed);
 	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
 	Item processedItem(ParseInfo parseInfoToBeProcessed);
-	void initiateCommandAction(ParseInfo parseInfoToBeProcessed);
-	bool isValidItemInLogic(Item itemToBeChecked);
+	void initiateCommandAction(string input);
+	
+	unsigned int addTask(Item itemToBeAdded);
 	Item deleteTask(unsigned int lineIndexToBeDeleted);
+	int editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
 	Item getItemFromLineIndex(unsigned int lineIndex);
-	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
-	vector<Item> getSchedule();
-	unsigned int getScheduleSize();
-	Item deleteAndAddEditedItem(unsigned int lineIndexToBeEdited, Item editedItemToBeAdded);
+	vector<Item> searchTask(string phraseToSearch);
 
 	Item assignDescription(Item item, string descriptionToBeAdded);
 	Item assignDescriptionToNewTask(Item item, string descriptionToBeAdded);
@@ -81,35 +79,18 @@ public:
 	Item assignLabelToNewTask(char labelType);
 	Item assignLabelToExistingTask(char labelType, unsigned int lineIndex);
 	
-//	void readUserInput();
-//	void showUserInput(list<userCommand> userCommandList);
-	
-	int editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited);
-	
-	
-	vector<Item> searchTask(string phraseToSearch);
-	bool isFound(int lineIndex, string& phraseToSearch);
-	int sortTask();
-	int changeView();
-	int showHelpMenu();
+	vector<Item> getSchedule();
+	unsigned int getScheduleSize();
 
 	//void assignSaveFolder();
 	int readDataFromFile(char * fileName);
 	int writeDataOntoFile(char * fileName, vector<Item> itemVector);
-	/*
-	
-	
-	
-	void printItem(Item item);
-	void printItemVector(vector<Item> itemVector);
-
-
 
 	
-	DateTime setDateTime(int year, int month, int day, int hour, int minute);
-	DateTime setDateTime(int year, int month, int day);
-	Item setItem(string itemName, DateTime startTime, DateTime endTime, string description, char priority, char label, bool isCompleted);
-	*/
+	bool isValidItemInLogic(Item itemToBeChecked);
+	bool isFound(int lineIndex, string& phraseToSearch);
+	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
+	
 };
 
 #endif

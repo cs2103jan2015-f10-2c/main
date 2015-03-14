@@ -6,11 +6,8 @@ void main() {
 	Logic testLogic;
 	cout << "Command: ";
 	while (getline(cin, input)) {
-		iParser testParser;
-		ParseInfo testParseInfo;	
-		testParseInfo = testParser.parse(input);
-		testLogic.initiateCommandAction(testParseInfo);
-		cout << "Command: ";
+		testLogic.initiateCommandAction(input);
+		cout << "Command : ";
 	}
 	return;
 }
