@@ -15,11 +15,17 @@ const string Logic::ASSIGNED_END_TIME = "End Time: %i/%i/%i %i:%i ";
 const string Logic::ASSIGNED_NAME = "Item Name: %s ";
 const string Logic::ASSIGNED_DESCRIPTION = "Item Description: %s ";
 
+const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "directory.txt";
+
 
 
 Logic::Logic() {
 	_nextItemID = 1;
 	//failure in add,delete,add function will return an item with ID = 0
+	_directoryToBeSaved = ""; 
+	//if saving directory is an empty string, the directory is set to default
+	_fileNameToBeSaved = "save.txt";
+	//default file name is save.txt
 }
 
 Logic::~Logic() {}
@@ -337,9 +343,56 @@ Item Logic::getItemFromLineIndex(unsigned int lineIndex) {
 	return itemToBeReturned;
 }
 
+string Logic::changeSavingDirectory(string directoryToBeSaved){
+	string directoryToMake = "";
+	int truncateDirectory;
+	
+	while (directoryToBeSaved != ""){
+		truncateDirectory = directoryToBeSaved.find_first_of('/');
+		if (truncateDirectory != -1){
+			directoryToMake = directoryToMake + directoryToBeSaved.substr(0, truncateDirectory + 1);
+			directoryToBeSaved = directoryToBeSaved.substr(truncateDirectory + 1);
+		}
+		else {
+			directoryToMake = directoryToMake + directoryToBeSaved;
+			directoryToBeSaved = "";
+		}
+		_mkdir(directoryToMake.c_str());
+	}
+	_directoryToBeSaved = directoryToMake;
 
+	return directoryToMake;
+}
 
-int Logic::readDataFromFile(char * fileName) {
+void Logic::saveDirectoryToTextFile(){
+	ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
+	writeFile << _directoryToBeSaved << endl;
+	writeFile << _fileNameToBeSaved;
+}
+
+string Logic::retrieveDirectoryFromTextFile(){
+	ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
+	getline(readFile,_directoryToBeSaved);
+	getline(readFile,_fileNameToBeSaved);
+	return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+}
+
+string Logic::changeSavingFileName(string FileNameToBeSaved){
+	ofstream saveFileName("directory.txt");
+	_fileNameToBeSaved = FileNameToBeSaved;
+	saveFileName << _directoryToBeSaved << endl;
+	saveFileName << _fileNameToBeSaved;
+	return FileNameToBeSaved;
+}
+
+string Logic::getDirectoryAndFileName(){
+	if (_directoryToBeSaved != ""){
+		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	}
+
+}
+
+int Logic::readDataFromFile(string fileName) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 
@@ -450,15 +503,14 @@ int Logic::readDataFromFile(char * fileName) {
 	return retCode;
 }
 
-int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
+int Logic::writeDataOntoFile(string fileName) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 	ofstream outfile(fileName);
-
 	if (!outfile.bad()) {
 		vector<Item>::iterator iterItem;
 
-		for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
+		for (iterItem = _logicSchedule.retrieveSchedule().begin(); iterItem != _logicSchedule.retrieveSchedule().end(); ++iterItem) {
 			outfile << iterItem->getItemName() << endl;
 
 			DateTime tempObj1;

@@ -17,6 +17,7 @@
 #include <fstream>
 #include <cctype>
 #include <algorithm>
+#include <direct.h>
 using namespace std;
 
 class Logic
@@ -24,6 +25,8 @@ class Logic
 private:
 	Schedule _logicSchedule;
 	unsigned int _nextItemID;
+	string _directoryToBeSaved;
+	string _fileNameToBeSaved;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
@@ -41,6 +44,8 @@ private:
 	static const string ASSIGNED_END_TIME;
 	static const string ASSIGNED_NAME;
 	static const string ASSIGNED_DESCRIPTION;
+
+	static const string TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME;
 public:
 	Logic();
 	~Logic();
@@ -83,8 +88,15 @@ public:
 	unsigned int getScheduleSize();
 
 	//void assignSaveFolder();
-	int readDataFromFile(char * fileName);
-	int writeDataOntoFile(char * fileName, vector<Item> itemVector);
+	string changeSavingDirectory(string directoryToBeSaved);
+	string changeSavingFileName(string FileNameToBeSaved);
+	string getDirectoryAndFileName();
+	void saveDirectoryToTextFile();
+	string retrieveDirectoryFromTextFile();
+	//store saving directory and file name in order to 
+	//retrieve directory and filename when the program is rebooted
+	int readDataFromFile(string fileName);
+	int writeDataOntoFile(string fileName);
 
 	
 	bool isValidItemInLogic(Item itemToBeChecked);
