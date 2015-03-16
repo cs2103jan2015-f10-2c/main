@@ -397,7 +397,7 @@ int Logic::readDataFromFile(string fileName) {
 	int retCode = -1;
 
 	ifstream infile(fileName, std::ios::_Nocreate);
-	string line;
+	
 	//Number of lines in Text File
 	int fileLength = 1;
 	if (infile.is_open()) {
@@ -406,10 +406,12 @@ int Logic::readDataFromFile(string fileName) {
 			Item readItem;
 			DateTime readTime;
 			int tempInt;
+			string line;
 			// Total Number of Lines for each Item = 16
 			if (fileLength % 16 == 1) {
 				getline(infile, line);
 				readItem.setItemName(line);
+				fileLength++;
 			}
 			else if (fileLength % 16 == 2) {
 				for (int i = 0; i < 5; i++) {
