@@ -20,6 +20,10 @@ const string Logic::ASSIGNED_DESCRIPTION = "Item Description: %s ";
 Logic::Logic() {
 	_nextItemID = 1;
 	//failure in add,delete,add function will return an item with ID = 0
+	_directoryToBeSaved = ""; 
+	//if saving directory is an empty string, the directory is set to default
+	_fileNameToBeSaved = "save.txt";
+	//default file name is save.txt
 }
 
 Logic::~Logic() {}
@@ -337,7 +341,37 @@ Item Logic::getItemFromLineIndex(unsigned int lineIndex) {
 	return itemToBeReturned;
 }
 
+string Logic::changeSavingDirectory(string directoryToBeSaved){
+	string directoryToMake = "";
+	int truncateDirectory;
 
+	while (directoryToBeSaved != ""){
+		truncateDirectory = directoryToBeSaved.find_first_of('/');
+		if (truncateDirectory != -1){
+			directoryToMake = directoryToMake + directoryToBeSaved.substr(0, truncateDirectory + 1);
+			directoryToBeSaved = directoryToBeSaved.substr(truncateDirectory + 1);
+		}
+		else {
+			directoryToMake = directoryToMake + directoryToBeSaved;
+			directoryToBeSaved = "";
+		}
+		_mkdir(directoryToMake.c_str());
+	}
+	_directoryToBeSaved = directoryToMake;
+	return directoryToMake;
+}
+
+string Logic::changeSavingFileName(string FileNameToBeSaved){
+	_fileNameToBeSaved = FileNameToBeSaved;
+	return FileNameToBeSaved;
+}
+
+string Logic::getDirectoryAndFileName(){
+	if (_directoryToBeSaved != ""){
+		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	}
+
+}
 
 int Logic::readDataFromFile(char * fileName) {
 	// Variable to denote successful processing of function
@@ -450,7 +484,7 @@ int Logic::readDataFromFile(char * fileName) {
 	return retCode;
 }
 
-int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
+int Logic::writeDataOntoFile(string fileName) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 	ofstream outfile(fileName);
@@ -458,7 +492,7 @@ int Logic::writeDataOntoFile(char * fileName, vector<Item> itemVector) {
 	if (!outfile.bad()) {
 		vector<Item>::iterator iterItem;
 
-		for (iterItem = itemVector.begin(); iterItem != itemVector.end(); ++iterItem) {
+		for (iterItem = _logicSchedule.retrieveSchedule().begin(); iterItem != _logicSchedule.retrieveSchedule().end(); ++iterItem) {
 			outfile << iterItem->getItemName() << endl;
 
 			DateTime tempObj1;
