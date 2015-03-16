@@ -372,9 +372,14 @@ void Logic::saveDirectoryToTextFile(){
 
 string Logic::retrieveDirectoryFromTextFile(){
 	ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
-	getline(readFile,_directoryToBeSaved);
-	getline(readFile,_fileNameToBeSaved);
-	return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	getline(readFile, _directoryToBeSaved);
+	getline(readFile, _fileNameToBeSaved);
+	if (_directoryToBeSaved == ""){
+		return _fileNameToBeSaved;
+	}
+	else{
+		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	}
 }
 
 string Logic::changeSavingFileName(string FileNameToBeSaved){
@@ -397,7 +402,7 @@ int Logic::readDataFromFile(string fileName) {
 	int retCode = -1;
 
 	ifstream infile(fileName, std::ios::_Nocreate);
-	string line;
+	
 	//Number of lines in Text File
 	int fileLength = 1;
 	if (infile.is_open()) {
@@ -406,10 +411,12 @@ int Logic::readDataFromFile(string fileName) {
 			Item readItem;
 			DateTime readTime;
 			int tempInt;
+			string line;
 			// Total Number of Lines for each Item = 16
 			if (fileLength % 16 == 1) {
 				getline(infile, line);
 				readItem.setItemName(line);
+				fileLength++;
 			}
 			else if (fileLength % 16 == 2) {
 				for (int i = 0; i < 5; i++) {
