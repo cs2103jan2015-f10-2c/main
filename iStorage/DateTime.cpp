@@ -14,6 +14,10 @@ const int DateTime::MAX_HOUR = 23;
 const int DateTime::MIN_MINUTE = 0;
 const int DateTime::MAX_MINUTE = 59;
 const int DateTime::EMPTYFIELD_DATETIME = -1;
+const char DateTime::DISPLAY_SEPARATOR_DATE = ' ';
+const char DateTime::DISPLAY_SEPARATOR_TIME = ':';
+const char DateTime::DISPLAY_SEPARATOR_DATETIME = ' ';
+const char DateTime::DISPLAY_FILLER = '0';
 
 //	Constructor
 DateTime::DateTime() {
@@ -221,14 +225,43 @@ bool DateTime::isBefore(DateTime secondaryDateTime) {
 	}
 }
 
+//	Returns string with YYYY MM DD
+string DateTime::displayDate() {
+	ostringstream displayOutput;
+
+	displayOutput
+		<< setw(4) << _year
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _month
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _day;
+
+	return displayOutput.str();
+}
+
+//	Returns string with HH:MM
+string DateTime::displayTime() {
+	ostringstream displayOutput;
+
+	displayOutput
+		<< setfill(DISPLAY_FILLER) << setw(2) << _hour
+		<< DISPLAY_SEPARATOR_TIME << setfill(DISPLAY_FILLER) << setw(2) << _minute;
+
+	return displayOutput.str();
+}
+
+//	Returns date in YYYY MM DD, time in HH:MM, and both in YYYY MM DD HH:MM
 string DateTime::displayDateTime() {
-	ostringstream output;
+	ostringstream displayOutput;
 
-	output << _day << " "
-		<< _month << " "
-		<< _year << " "
-		<< _hour << ":"
-		<< _minute;
+	if (_year != EMPTYFIELD_DATETIME && _month != EMPTYFIELD_DATETIME && _day != EMPTYFIELD_DATETIME) {
+		displayOutput << displayDate();
+		if (_hour != EMPTYFIELD_DATETIME && _minute != EMPTYFIELD_DATETIME) {
+			displayOutput << DISPLAY_SEPARATOR_DATETIME;
+			displayOutput << displayTime();
+		}
+	}
+	else if (_hour != EMPTYFIELD_DATETIME && _minute != EMPTYFIELD_DATETIME) {
+		displayOutput << displayTime();
+	}
 
-	return output.str();
+	return displayOutput.str();
 }

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 class DateTime
@@ -23,7 +24,11 @@ private:
 	static const int MIN_MINUTE;
 	static const int MAX_MINUTE;
 	static const int EMPTYFIELD_DATETIME;
-	
+	static const char DISPLAY_SEPARATOR_DATE;
+	static const char DISPLAY_SEPARATOR_TIME;
+	static const char DISPLAY_SEPARATOR_DATETIME;
+	static const char DISPLAY_FILLER;
+
 	int _year;
 	int _month;
 	int _day;
@@ -99,9 +104,11 @@ public:
 	bool isAfter(DateTime);
 	bool isBefore(DateTime);
 
-	// display attributes
+	// Returns string with YYYY MM DD and HH:MM
 	// Pre:		Nil
-	// Post:	Displays attributes in DD MM YYYY HHMM format
+	// Post:	String with attributes in YYYY MM DD and HH:MM format is returned
+	string displayDate();
+	string displayTime();
 	string displayDateTime();
 };
 
