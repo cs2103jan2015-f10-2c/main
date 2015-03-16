@@ -35,6 +35,22 @@ private:
 	int _hour;
 	int _minute;
 
+	//	Checks if the attribute is in its valid range
+	//	Pre:	Nil
+	//	Post:	Returns true if (false otherwise):
+	//			Year ranges from 0 to 9999
+	//			Month ranges from 1 to 12
+	//			Day ranges from 1 to 31
+	//			Hour ranges from 0 to 23
+	//			Minute ranges from 0 to 59
+	bool isValidYearRange(int);
+	bool isValidMonthRange(int);
+	bool isValidDayRange(int);
+	bool isValidDate(int, int, int);
+	bool isValidHourRange(int);
+	bool isValidMinuteRange(int);
+	bool isValidTime(int, int);
+
 public:
 	//	Constructor
 	//	Pre:	Nil
@@ -77,22 +93,6 @@ public:
 	int getDay();
 	int getHour();
 	int getMinute();
-
-	//	Checks if the attribute is in its valid range
-	//	Pre:	Nil
-	//	Post:	Returns true if (false otherwise):
-	//			Year ranges from 0 to 9999
-	//			Month ranges from 1 to 12
-	//			Day ranges from 1 to 31
-	//			Hour ranges from 0 to 23
-	//			Minute ranges from 0 to 59
-	bool isValidYearRange(int);
-	bool isValidMonthRange(int);
-	bool isValidDayRange(int);
-	bool isValidDate(int, int, int);
-	bool isValidHourRange(int);
-	bool isValidMinuteRange(int);
-	bool isValidTime(int, int);
 
 	//	Comparators between DateTime objects
 	//	Pre:	Nil

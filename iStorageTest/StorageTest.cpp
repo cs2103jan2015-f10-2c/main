@@ -121,7 +121,8 @@ namespace DateTimeTest
 		}
 	};
 
-	TEST_CLASS(TEST_IS_WITHIN_RANGE)
+//	Boolean functions tested before classifying them as private functions
+/*	TEST_CLASS(TEST_IS_WITHIN_RANGE)
 	{
 	public:
 
@@ -254,7 +255,7 @@ namespace DateTimeTest
 			outputMinute = dateTime.isValidMinuteRange(minute);
 			Assert::AreEqual(false, outputMinute);
 		}
-	};
+	}; */
 
 	TEST_CLASS(TEST_COMPARATORS) {
 	public:
@@ -424,6 +425,22 @@ namespace DateTimeTest
 
 	TEST_CLASS(TEST_DISPLAY) {
 	public:
+
+		TEST_METHOD(TestDisplayDate)
+		{
+			DateTime dateOnly(1992, 9, 20);
+			string outputString = dateOnly.displayDate();
+			Assert::AreEqual((string) "1992 09 20", outputString);
+		}
+
+		TEST_METHOD(TestDisplayTime)
+		{
+			DateTime timeOnly;
+			timeOnly.setHour(9);
+			timeOnly.setMinute(20);
+			string outputString = timeOnly.displayTime();
+			Assert::AreEqual((string) "09:20", outputString);
+		}
 
 		TEST_METHOD(TestDisplayDateTime)
 		{

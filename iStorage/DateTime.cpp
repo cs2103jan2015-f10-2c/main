@@ -51,31 +51,41 @@ DateTime::~DateTime() { }
 
 //	Sets the year
 int DateTime::setYear(int year) {
-	_year = year;
+	if (isValidYearRange(year)) {
+		_year = year;
+	}	
 	return _year;
 }
 
 //	Sets the month
 int DateTime::setMonth(int month) {
-	_month = month;
+	if (isValidMonthRange(month)) {
+		_month = month;
+	}
 	return _month;
 }
 
 //	Sets the day of the month
 int DateTime::setDay(int day) {
-	_day = day;
+	if (isValidDayRange(day)) {
+		_day = day;
+	}
 	return _day;
 }
 
 //	Sets the hour of the day (in 24-hour format)
 int DateTime::setHour(int hour) {
-	_hour = hour;
+	if (isValidHourRange(hour)) {
+		_hour = hour;
+	}
 	return _hour;
 }
 
 //	Sets the minute of the hour
 int DateTime::setMinute(int minute) {
-	_minute = minute;
+	if (isValidMinuteRange(minute)) {
+		_minute = minute;
+	}
 	return _minute;
 }
 
