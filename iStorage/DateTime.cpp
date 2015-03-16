@@ -84,22 +84,22 @@ int DateTime::getYear() {
 	return _year;
 }
 
-//	Returns the month
+//	Retrieves the month
 int DateTime::getMonth() {
 	return _month;
 }
 
-//	Returns the day of the month
+//	Retrieves the day of the month
 int DateTime::getDay() {
 	return _day;
 }
 
-//	Returns the hour of the day (24-hour format)
+//	Retrieves the hour of the day (24-hour format)
 int DateTime::getHour() {
 	return _hour;
 }
 
-//	Returns the minute
+//	Retrieves the minute
 int DateTime::getMinute() {
 	return _minute;
 }
@@ -136,7 +136,29 @@ bool DateTime::isValidDayRange(int day) {
 
 //	Checks if the entire date is valid (inclusive of year, month, and day)
 bool DateTime::isValidDate(int year, int month, int day) {
-	return 0;
+	if (!isValidYearRange(year) || !isValidMonthRange(month) || !isValidDayRange(day)) {
+		return false;
+	}
+	else if ((day == 31) && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
+		return false;
+	}
+	else if ((day == 30) && (month == 2)) {
+		return false;
+	}		
+	else if ((month == 2) && (day == 29) && (year % 4 != 0)){
+		return false;
+	}		
+	else if ((month == 2) && (day == 29) && (year % 400 == 0)) {
+		return true;
+	}
+	else if ((month == 2) && (day == 29) && (year % 100 == 0)) {
+		return false;
+	}	
+	else if ((month == 2) && (day == 29) && (year % 4 == 0)){
+		return true;
+	}
+
+	return true;
 }
 
 //	Checks if hour ranges from 0 to 23
@@ -157,6 +179,11 @@ bool DateTime::isValidMinuteRange(int minute) {
 	else {
 		return false;
 	}
+}
+
+//	Checks if entire time is valid
+bool DateTime::isValidTime(int hour, int minute) {
+	return (isValidHourRange(hour) && isValidMinuteRange(minute));
 }
 
 //	Checks if two DateTime objects are identical
@@ -252,14 +279,15 @@ string DateTime::displayTime() {
 string DateTime::displayDateTime() {
 	ostringstream displayOutput;
 
-	if (_year != EMPTYFIELD_DATETIME && _month != EMPTYFIELD_DATETIME && _day != EMPTYFIELD_DATETIME) {
+	if (isValidDate(_year, _month, _day)) {
 		displayOutput << displayDate();
-		if (_hour != EMPTYFIELD_DATETIME && _minute != EMPTYFIELD_DATETIME) {
+
+		if (isValidTime(_hour, _minute)) {
 			displayOutput << DISPLAY_SEPARATOR_DATETIME;
 			displayOutput << displayTime();
 		}
 	}
-	else if (_hour != EMPTYFIELD_DATETIME && _minute != EMPTYFIELD_DATETIME) {
+	else if (isValidTime(_hour,_minute)) {
 		displayOutput << displayTime();
 	}
 

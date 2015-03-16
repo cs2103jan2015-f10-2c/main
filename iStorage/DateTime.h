@@ -92,6 +92,7 @@ public:
 	bool isValidDate(int, int, int);
 	bool isValidHourRange(int);
 	bool isValidMinuteRange(int);
+	bool isValidTime(int, int);
 
 	//	Comparators between DateTime objects
 	//	Pre:	Nil
