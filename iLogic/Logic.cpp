@@ -15,6 +15,8 @@ const string Logic::ASSIGNED_END_TIME = "End Time: %i/%i/%i %i:%i ";
 const string Logic::ASSIGNED_NAME = "Item Name: %s ";
 const string Logic::ASSIGNED_DESCRIPTION = "Item Description: %s ";
 
+const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "directory.txt";
+
 
 
 Logic::Logic() {
@@ -344,7 +346,7 @@ Item Logic::getItemFromLineIndex(unsigned int lineIndex) {
 string Logic::changeSavingDirectory(string directoryToBeSaved){
 	string directoryToMake = "";
 	int truncateDirectory;
-
+	
 	while (directoryToBeSaved != ""){
 		truncateDirectory = directoryToBeSaved.find_first_of('/');
 		if (truncateDirectory != -1){
@@ -358,11 +360,28 @@ string Logic::changeSavingDirectory(string directoryToBeSaved){
 		_mkdir(directoryToMake.c_str());
 	}
 	_directoryToBeSaved = directoryToMake;
+
 	return directoryToMake;
 }
 
+void Logic::saveDirectoryToTextFile(){
+	ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
+	writeFile << _directoryToBeSaved << endl;
+	writeFile << _fileNameToBeSaved;
+}
+
+string Logic::retrieveDirectoryFromTextFile(){
+	ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
+	getline(readFile,_directoryToBeSaved);
+	getline(readFile,_fileNameToBeSaved);
+	return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+}
+
 string Logic::changeSavingFileName(string FileNameToBeSaved){
+	ofstream saveFileName("directory.txt");
 	_fileNameToBeSaved = FileNameToBeSaved;
+	saveFileName << _directoryToBeSaved << endl;
+	saveFileName << _fileNameToBeSaved;
 	return FileNameToBeSaved;
 }
 
@@ -373,7 +392,7 @@ string Logic::getDirectoryAndFileName(){
 
 }
 
-int Logic::readDataFromFile(char * fileName) {
+int Logic::readDataFromFile(string fileName) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 
@@ -488,7 +507,6 @@ int Logic::writeDataOntoFile(string fileName) {
 	// Variable to denote successful processing of function
 	int retCode = -1;
 	ofstream outfile(fileName);
-
 	if (!outfile.bad()) {
 		vector<Item>::iterator iterItem;
 

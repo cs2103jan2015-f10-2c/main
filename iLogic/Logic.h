@@ -44,6 +44,8 @@ private:
 	static const string ASSIGNED_END_TIME;
 	static const string ASSIGNED_NAME;
 	static const string ASSIGNED_DESCRIPTION;
+
+	static const string TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME;
 public:
 	Logic();
 	~Logic();
@@ -89,7 +91,11 @@ public:
 	string changeSavingDirectory(string directoryToBeSaved);
 	string changeSavingFileName(string FileNameToBeSaved);
 	string getDirectoryAndFileName();
-	int readDataFromFile(char * fileName);
+	void saveDirectoryToTextFile();
+	string retrieveDirectoryFromTextFile();
+	//store saving directory and file name in order to 
+	//retrieve directory and filename when the program is rebooted
+	int readDataFromFile(string fileName);
 	int writeDataOntoFile(string fileName);
 
 	
