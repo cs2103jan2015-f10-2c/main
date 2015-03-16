@@ -372,9 +372,14 @@ void Logic::saveDirectoryToTextFile(){
 
 string Logic::retrieveDirectoryFromTextFile(){
 	ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
-	getline(readFile,_directoryToBeSaved);
-	getline(readFile,_fileNameToBeSaved);
-	return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	getline(readFile, _directoryToBeSaved);
+	getline(readFile, _fileNameToBeSaved);
+	if (_directoryToBeSaved == ""){
+		return _fileNameToBeSaved;
+	}
+	else{
+		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	}
 }
 
 string Logic::changeSavingFileName(string FileNameToBeSaved){
