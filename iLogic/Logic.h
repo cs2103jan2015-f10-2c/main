@@ -25,6 +25,7 @@ class Logic
 private:
 	Schedule _logicSchedule;
 	unsigned int _nextItemID;
+	unsigned int _scheduleSize;
 	string _directoryToBeSaved;
 	string _fileNameToBeSaved;
 
@@ -46,6 +47,7 @@ private:
 	static const string ASSIGNED_DESCRIPTION;
 
 	static const string TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME;
+	static const string DEFAULT_FILENAME;
 public:
 	Logic();
 	~Logic();
@@ -95,8 +97,8 @@ public:
 	string retrieveDirectoryFromTextFile();
 	//store saving directory and file name in order to 
 	//retrieve directory and filename when the program is rebooted
-	int readDataFromFile(string fileName);
-	int writeDataOntoFile(string fileName);
+	int readDataFromFile();
+	int writeDataOntoFile();
 
 	
 	bool isValidItemInLogic(Item itemToBeChecked);

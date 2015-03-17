@@ -6,8 +6,8 @@
 const string Item::EMPTYFIELD_ITEMNAME = "";
 const string Item::EMPTYFIELD_DESCRIPTION = "";
 const int Item::EMPTYFIELD_ITEMID = 0;
-const char Item::EMPTYFIELD_PRIORITY = '\0';
-const char Item::EMPTYFIELD_LABEL = '\0';
+const char Item::EMPTYFIELD_PRIORITY = 'E';
+const char Item::EMPTYFIELD_LABEL = 'E';
 
 //	Constructor
 Item::Item() {
