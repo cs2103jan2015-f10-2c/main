@@ -25,14 +25,7 @@ using namespace std;
 
 class iParser {
 
-// used for private method unit testing
-#ifndef TESTMODE 
-private: 
-#else 
-public:
-#endif
-// used for private method unit testing
-
+private:
 	ParseInfo _parseInfo;
 	list<string> _inputs;
 
