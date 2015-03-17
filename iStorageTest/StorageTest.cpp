@@ -58,6 +58,16 @@ namespace DateTimeTest
 
 			Assert::AreEqual(minute, outputMinute);
 		}
+
+		TEST_METHOD(TestConstructor){
+			DateTime dateTime;
+
+			Assert::AreEqual(-1, dateTime.getYear());
+			Assert::AreEqual(-1, dateTime.getMonth());
+			Assert::AreEqual(-1, dateTime.getDay());
+			Assert::AreEqual(-1, dateTime.getHour());
+			Assert::AreEqual(-1, dateTime.getMinute());
+		}
 	};
 
 	TEST_CLASS(TEST_GET_DATETIME)
@@ -73,7 +83,6 @@ namespace DateTimeTest
 			int outputYear = dateTime.getYear();
 
 			Assert::AreEqual(year, outputYear);
-
 		}
 
 		TEST_METHOD(TestGetMonth)
