@@ -33,6 +33,13 @@ public:
 	//	Post:	Item object is created; attributes have no assigned values
 	Item();
 
+	//	Overloaded Constructors
+	//	Pre:	itemName and itemID are valid
+	//	Post:	Item is created with _itemName and _itemID assigned
+	Item(string);
+	Item(unsigned int);
+	Item(string, unsigned int);
+
 	//	Destructor
 	//	Pre:	Nil
 	//	Post:	Item object is destroyed
@@ -59,14 +66,14 @@ public:
 	//	Sets the attribute
 	//	Pre:	Attribute has been previously set.
 	//	Post:	_(attribute) is returned
-	string& getItemName();
-	string& getDescription();
-	DateTime& getStartTime();
-	DateTime& getEndTime();
-	unsigned int& getItemID();
-	char& getPriority();
-	char& getLabel();
-	bool& getCompletion();
+	string getItemName();
+	string getDescription();
+	DateTime getStartTime();
+	DateTime getEndTime();
+	unsigned int getItemID();
+	char getPriority();
+	char getLabel();
+	bool getCompletion();
 
 	// display attributes
 	// Pre:		Nil

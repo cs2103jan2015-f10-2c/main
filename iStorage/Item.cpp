@@ -19,6 +19,36 @@ Item::Item() {
 	_isCompleted = false;
 }
 
+//	Overloaded Constructor with itemName
+Item::Item(string itemName){
+	_itemName = itemName;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_itemID = EMPTYFIELD_ITEMID;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+}
+
+//	Overloaded Constructor with itemID
+Item::Item(unsigned int itemID){
+	_itemID = itemID;
+	_itemName = EMPTYFIELD_ITEMNAME;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+}
+
+//	Overloaded Constructor with itemName and itemID
+Item::Item(string itemName, unsigned int itemID){
+	_itemID = itemID;
+	_itemName = itemName;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+}
+
 //	Destructor
 Item::~Item() { }
 
@@ -62,35 +92,35 @@ bool Item::setCompletion(bool isCompleted) {
 	return _isCompleted;
 }
 
-string& Item::getItemName() {
+string Item::getItemName() {
 	return _itemName;
 }
 
-string& Item::getDescription()  {
+string Item::getDescription()  {
 	return _description;
 }
 
-DateTime& Item::getStartTime(){
+DateTime Item::getStartTime(){
 	return _startTime;
 }
 
-DateTime& Item::getEndTime() {
+DateTime Item::getEndTime() {
 	return _endTime;
 }
 
-unsigned int& Item::getItemID() {
+unsigned int Item::getItemID() {
 	return _itemID;
 }
 
-char& Item::getPriority() {
+char Item::getPriority() {
 	return _priority;
 }
 
-char& Item::getLabel() {
+char Item::getLabel() {
 	return _label;
 }
 
-bool& Item::getCompletion() {
+bool Item::getCompletion() {
 	return _isCompleted;
 }
 
