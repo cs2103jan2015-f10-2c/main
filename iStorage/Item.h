@@ -30,7 +30,7 @@ private:
 public:
 	//	Constructor
 	//	Pre:	Nil
-	//	Post:	Item object is created; attributes have no assigned values
+	//	Post:	Item object is created; attributes have assigned to defaults
 	Item();
 
 	//	Overloaded Constructors
@@ -79,10 +79,12 @@ public:
 	char getLabel();
 	bool getCompletion();
 
-	// display attributes
+	// Returns string with item details
 	// Pre:		Nil
-	// Post:	Displays all attributes
+	// Post:	String with existing details are returned
 	string displayItem();
+	string displayStartTime();
+	string displayEndTime();
 };
 
 #endif
