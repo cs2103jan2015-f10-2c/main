@@ -67,8 +67,32 @@ DateTime Item::setStartTime(DateTime startTime) {
 	return _startTime;
 }
 
+DateTime Item::setStartTime(int year, int month, int day) {
+	DateTime dateTime(year, month, day);
+	_startTime = dateTime;
+	return _startTime;
+}
+
+DateTime Item::setStartTime(int year, int month, int day, int hour, int minute) {
+	DateTime dateTime(year, month, day, hour, minute);
+	_startTime = dateTime;
+	return _startTime;
+}
+
 DateTime Item::setEndTime(DateTime endTime) {
 	_endTime = endTime;
+	return _endTime;
+}
+
+DateTime Item::setEndTime(int year, int month, int day) {
+	DateTime dateTime(year, month, day);
+	_endTime = dateTime;
+	return _endTime;
+}
+
+DateTime Item::setEndTime(int year, int month, int day, int hour, int minute) {
+	DateTime dateTime(year, month, day, hour, minute);
+	_endTime = dateTime;
 	return _endTime;
 }
 

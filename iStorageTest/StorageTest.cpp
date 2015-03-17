@@ -528,6 +528,20 @@ namespace ItemTest
 			Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
 			Assert::AreEqual(dateTime.getHour(), outputDateTime.getHour());
 			Assert::AreEqual(dateTime.getMinute(), outputDateTime.getMinute());
+
+			outputDateTime = trueStory.setStartTime(1992, 9, 20, 12, 12);
+			Assert::AreEqual(1992, outputDateTime.getYear());
+			Assert::AreEqual(9, outputDateTime.getMonth());
+			Assert::AreEqual(20, outputDateTime.getDay());
+			Assert::AreEqual(12, outputDateTime.getHour());
+			Assert::AreEqual(12, outputDateTime.getMinute());
+
+			outputDateTime = trueStory.setStartTime(1995, 11, 19);
+			Assert::AreEqual(1995, outputDateTime.getYear());
+			Assert::AreEqual(11, outputDateTime.getMonth());
+			Assert::AreEqual(19, outputDateTime.getDay());
+			Assert::AreEqual(-1, outputDateTime.getHour());
+			Assert::AreEqual(-1, outputDateTime.getMinute());
 		}
 
 		TEST_METHOD(TestSetEndTime)
@@ -548,6 +562,20 @@ namespace ItemTest
 			Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
 			Assert::AreEqual(dateTime.getHour(), outputDateTime.getHour());
 			Assert::AreEqual(dateTime.getMinute(), outputDateTime.getMinute());
+
+			outputDateTime = trueStory.setEndTime(1992, 9, 20, 12, 12);
+			Assert::AreEqual(1992, outputDateTime.getYear());
+			Assert::AreEqual(9, outputDateTime.getMonth());
+			Assert::AreEqual(20, outputDateTime.getDay());
+			Assert::AreEqual(12, outputDateTime.getHour());
+			Assert::AreEqual(12, outputDateTime.getMinute());
+
+			outputDateTime = trueStory.setEndTime(1995, 11, 19);
+			Assert::AreEqual(1995, outputDateTime.getYear());
+			Assert::AreEqual(11, outputDateTime.getMonth());
+			Assert::AreEqual(19, outputDateTime.getDay());
+			Assert::AreEqual(-1, outputDateTime.getHour());
+			Assert::AreEqual(-1, outputDateTime.getMinute());
 		}
 
 		TEST_METHOD(TestSetItemID)

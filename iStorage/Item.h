@@ -57,7 +57,11 @@ public:
 	string setItemName(string);
 	string setDescription(string);
 	DateTime setStartTime(DateTime);
+	DateTime setStartTime(int, int, int);
+	DateTime setStartTime(int, int, int, int, int);
 	DateTime setEndTime(DateTime);
+	DateTime setEndTime(int, int, int);
+	DateTime setEndTime(int, int, int, int, int);
 	unsigned int setItemID(unsigned int);
 	char setPriority(char);
 	char setLabel(char);
