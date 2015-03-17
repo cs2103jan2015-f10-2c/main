@@ -38,7 +38,7 @@ void Logic::printSchedule(){
 	cout << endl;
 	cout << "SCHEDULE" << endl;
 	cout << "--------" << endl;
-	for (int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
+	for (unsigned int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
 		cout << lineNumber + 1 << ". " ;
 		printItem(getItemFromLineIndex(lineNumber));
 		cout << endl;
@@ -312,7 +312,6 @@ vector<Item> Logic::searchTask(string phraseToSearch){
 	vector<Item> searchedItems;
 	Item foundItem;
 	unsigned int lineIndex;
-	unsigned int itemID;
 	unsigned int scheduleSize = getScheduleSize();
 	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
 		if (isFound(lineIndex, phraseToSearch)){
@@ -416,7 +415,7 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 
 int Logic::readDataFromFile() {
 	ifstream readFile(getDirectoryAndFileName());
-	for(int lineNumber = 0; lineNumber < _scheduleSize ; lineNumber++){
+	for(unsigned int lineNumber = 0; lineNumber < _scheduleSize ; lineNumber++){
 	//while (!readFile.eof()){
 		string itemName;
 		string description;
@@ -462,7 +461,7 @@ int Logic::readDataFromFile() {
 
 int Logic::writeDataOntoFile(){
 	ofstream writeFile(getDirectoryAndFileName());
-	for (int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
+	for (unsigned int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
 		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getItemName() << endl;
 		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getYear() << endl;
 		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMonth() << endl;

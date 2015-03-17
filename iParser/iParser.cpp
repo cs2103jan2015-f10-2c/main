@@ -302,7 +302,7 @@ string iParser::trimText(string& text) {
 }
 
 string iParser::trimFront(string text) {
-	int startIndex = INDEX_ZERO;
+	unsigned int startIndex = INDEX_ZERO;
 
 	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
 		startIndex++;
@@ -477,7 +477,7 @@ string iParser::displayParseInfo() {
 		<< "Main Command: " << _parseInfo.getMainCommand() << endl
 		<< "Edit String: " << _parseInfo.getEditString() << endl
 		<< "Index: " << _parseInfo.getIndex() << endl
-		<< _parseInfo.getItem().displayItem();
+		<< _parseInfo.getItem().displayItemForUser();
 
 	return output.str();
 }
