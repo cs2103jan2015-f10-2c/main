@@ -14,6 +14,10 @@ const int DateTime::MAX_HOUR = 23;
 const int DateTime::MIN_MINUTE = 0;
 const int DateTime::MAX_MINUTE = 59;
 const int DateTime::EMPTYFIELD_DATETIME = -1;
+const char DateTime::DISPLAY_SEPARATOR_DATE = ' ';
+const char DateTime::DISPLAY_SEPARATOR_TIME = ':';
+const char DateTime::DISPLAY_SEPARATOR_DATETIME = ' ';
+const char DateTime::DISPLAY_FILLER = '0';
 
 //	Constructor
 DateTime::DateTime() {
@@ -47,31 +51,41 @@ DateTime::~DateTime() { }
 
 //	Sets the year
 int DateTime::setYear(int year) {
-	_year = year;
+	if (isValidYearRange(year)) {
+		_year = year;
+	}	
 	return _year;
 }
 
 //	Sets the month
 int DateTime::setMonth(int month) {
-	_month = month;
+	if (isValidMonthRange(month)) {
+		_month = month;
+	}
 	return _month;
 }
 
 //	Sets the day of the month
 int DateTime::setDay(int day) {
-	_day = day;
+	if (isValidDayRange(day)) {
+		_day = day;
+	}
 	return _day;
 }
 
 //	Sets the hour of the day (in 24-hour format)
 int DateTime::setHour(int hour) {
-	_hour = hour;
+	if (isValidHourRange(hour)) {
+		_hour = hour;
+	}
 	return _hour;
 }
 
 //	Sets the minute of the hour
 int DateTime::setMinute(int minute) {
-	_minute = minute;
+	if (isValidMinuteRange(minute)) {
+		_minute = minute;
+	}
 	return _minute;
 }
 
@@ -80,22 +94,22 @@ int DateTime::getYear() {
 	return _year;
 }
 
-//	Returns the month
+//	Retrieves the month
 int DateTime::getMonth() {
 	return _month;
 }
 
-//	Returns the day of the month
+//	Retrieves the day of the month
 int DateTime::getDay() {
 	return _day;
 }
 
-//	Returns the hour of the day (24-hour format)
+//	Retrieves the hour of the day (24-hour format)
 int DateTime::getHour() {
 	return _hour;
 }
 
-//	Returns the minute
+//	Retrieves the minute
 int DateTime::getMinute() {
 	return _minute;
 }
@@ -132,7 +146,29 @@ bool DateTime::isValidDayRange(int day) {
 
 //	Checks if the entire date is valid (inclusive of year, month, and day)
 bool DateTime::isValidDate(int year, int month, int day) {
-	return 0;
+	if (!isValidYearRange(year) || !isValidMonthRange(month) || !isValidDayRange(day)) {
+		return false;
+	}
+	else if ((day == 31) && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
+		return false;
+	}
+	else if ((day == 30) && (month == 2)) {
+		return false;
+	}		
+	else if ((month == 2) && (day == 29) && (year % 4 != 0)){
+		return false;
+	}		
+	else if ((month == 2) && (day == 29) && (year % 400 == 0)) {
+		return true;
+	}
+	else if ((month == 2) && (day == 29) && (year % 100 == 0)) {
+		return false;
+	}	
+	else if ((month == 2) && (day == 29) && (year % 4 == 0)){
+		return true;
+	}
+
+	return true;
 }
 
 //	Checks if hour ranges from 0 to 23
@@ -153,6 +189,11 @@ bool DateTime::isValidMinuteRange(int minute) {
 	else {
 		return false;
 	}
+}
+
+//	Checks if entire time is valid
+bool DateTime::isValidTime(int hour, int minute) {
+	return (isValidHourRange(hour) && isValidMinuteRange(minute));
 }
 
 //	Checks if two DateTime objects are identical
@@ -221,14 +262,44 @@ bool DateTime::isBefore(DateTime secondaryDateTime) {
 	}
 }
 
+//	Returns string with YYYY MM DD
+string DateTime::displayDate() {
+	ostringstream displayOutput;
+
+	displayOutput
+		<< setw(4) << _year
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _month
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _day;
+
+	return displayOutput.str();
+}
+
+//	Returns string with HH:MM
+string DateTime::displayTime() {
+	ostringstream displayOutput;
+
+	displayOutput
+		<< setfill(DISPLAY_FILLER) << setw(2) << _hour
+		<< DISPLAY_SEPARATOR_TIME << setfill(DISPLAY_FILLER) << setw(2) << _minute;
+
+	return displayOutput.str();
+}
+
+//	Returns date in YYYY MM DD, time in HH:MM, and both in YYYY MM DD HH:MM
 string DateTime::displayDateTime() {
-	ostringstream output;
+	ostringstream displayOutput;
 
-	output << _day << " "
-		<< _month << " "
-		<< _year << " "
-		<< _hour << ":"
-		<< _minute;
+	if (isValidDate(_year, _month, _day)) {
+		displayOutput << displayDate();
 
-	return output.str();
+		if (isValidTime(_hour, _minute)) {
+			displayOutput << DISPLAY_SEPARATOR_DATETIME;
+			displayOutput << displayTime();
+		}
+	}
+	else if (isValidTime(_hour,_minute)) {
+		displayOutput << displayTime();
+	}
+
+	return displayOutput.str();
 }

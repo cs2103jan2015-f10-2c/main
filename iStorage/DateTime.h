@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 class DateTime
@@ -23,12 +24,32 @@ private:
 	static const int MIN_MINUTE;
 	static const int MAX_MINUTE;
 	static const int EMPTYFIELD_DATETIME;
-	
+	static const char DISPLAY_SEPARATOR_DATE;
+	static const char DISPLAY_SEPARATOR_TIME;
+	static const char DISPLAY_SEPARATOR_DATETIME;
+	static const char DISPLAY_FILLER;
+
 	int _year;
 	int _month;
 	int _day;
 	int _hour;
 	int _minute;
+
+	//	Checks if the attribute is in its valid range
+	//	Pre:	Nil
+	//	Post:	Returns true if (false otherwise):
+	//			Year ranges from 0 to 9999
+	//			Month ranges from 1 to 12
+	//			Day ranges from 1 to 31
+	//			Hour ranges from 0 to 23
+	//			Minute ranges from 0 to 59
+	bool isValidYearRange(int);
+	bool isValidMonthRange(int);
+	bool isValidDayRange(int);
+	bool isValidDate(int, int, int);
+	bool isValidHourRange(int);
+	bool isValidMinuteRange(int);
+	bool isValidTime(int, int);
 
 public:
 	//	Constructor
@@ -73,21 +94,6 @@ public:
 	int getHour();
 	int getMinute();
 
-	//	Checks if the attribute is in its valid range
-	//	Pre:	Nil
-	//	Post:	Returns true if (false otherwise):
-	//			Year ranges from 0 to 9999
-	//			Month ranges from 1 to 12
-	//			Day ranges from 1 to 31
-	//			Hour ranges from 0 to 23
-	//			Minute ranges from 0 to 59
-	bool isValidYearRange(int);
-	bool isValidMonthRange(int);
-	bool isValidDayRange(int);
-	bool isValidDate(int, int, int);
-	bool isValidHourRange(int);
-	bool isValidMinuteRange(int);
-
 	//	Comparators between DateTime objects
 	//	Pre:	Nil
 	//	Post:	Boolean == returns true if all attributes are equal
@@ -99,9 +105,11 @@ public:
 	bool isAfter(DateTime);
 	bool isBefore(DateTime);
 
-	// display attributes
+	// Returns string with YYYY MM DD and HH:MM
 	// Pre:		Nil
-	// Post:	Displays attributes in DD MM YYYY HHMM format
+	// Post:	String with attributes in YYYY MM DD and HH:MM format is returned
+	string displayDate();
+	string displayTime();
 	string displayDateTime();
 };
 
