@@ -16,15 +16,18 @@ const string Logic::ASSIGNED_NAME = "Item Name: %s ";
 const string Logic::ASSIGNED_DESCRIPTION = "Item Description: %s ";
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "directory.txt";
+const string Logic::DEFAULT_FILENAME = "save.txt";
 
 
 
 Logic::Logic() {
 	_nextItemID = 1;
 	//failure in add,delete,add function will return an item with ID = 0
+	_scheduleSize = 0;
+	//schedule size initialised to 0
 	_directoryToBeSaved = ""; 
 	//if saving directory is an empty string, the directory is set to default
-	_fileNameToBeSaved = "save.txt";
+	_fileNameToBeSaved = DEFAULT_FILENAME;
 	//default file name is save.txt
 }
 
@@ -52,14 +55,14 @@ void Logic::printItem(Item itemToBePrinted){
 	printAssignedLabel(itemToBePrinted);
 }
 void Logic::printAssignedPriority(Item itemToBePrinted){
-	if (itemToBePrinted.getPriority() != '\0'){
+	if (itemToBePrinted.getPriority() != 'E'){
 		sprintf_s(buffer, ASSIGNED_PRIORITY.c_str(), itemToBePrinted.getPriority());
 		cout << buffer;
 	}
 }
 
 void Logic::printAssignedLabel(Item itemToBePrinted){
-	if (itemToBePrinted.getLabel() != '\0'){
+	if (itemToBePrinted.getLabel() != 'E'){
 		sprintf_s(buffer, ASSIGNED_LABEL.c_str(), itemToBePrinted.getLabel());
 		cout << buffer;
 	}
@@ -95,6 +98,7 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 	if (isValidItemInLogic(itemToBeAdded)) {
 		itemToBeAdded.setItemID(_nextItemID);
 		_nextItemID++;
+		_scheduleSize++;
 		addedItemID = _logicSchedule.addItem(itemToBeAdded);
 	}
 	printSchedule();
@@ -115,6 +119,7 @@ Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	if (isValidLineIndex(lineIndexToBeDeleted)){
 		itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
 		Item deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
+		_scheduleSize--;
 		printSchedule();
 		return deletedItem;//Delete successful
 	}
@@ -262,6 +267,10 @@ void Logic::initiateCommandAction(string input) {
 			editTask(partsToBeEdited, itemToBeProcessed, lineIndexToBeProcessed);
 		}
 		else if (command == "exit"){
+			ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
+			writeFile << _directoryToBeSaved << endl;
+			writeFile << _fileNameToBeSaved << endl;
+			writeFile << _scheduleSize;
 			exit(0);
 		}
 	}
@@ -360,21 +369,38 @@ string Logic::changeSavingDirectory(string directoryToBeSaved){
 		_mkdir(directoryToMake.c_str());
 	}
 	_directoryToBeSaved = directoryToMake;
-
 	return directoryToMake;
 }
 
 void Logic::saveDirectoryToTextFile(){
 	ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
 	writeFile << _directoryToBeSaved << endl;
-	writeFile << _fileNameToBeSaved;
+	writeFile << _fileNameToBeSaved << endl;
+	writeFile << _scheduleSize;
+}
+
+string Logic::getDirectoryAndFileName(){
+	if (_directoryToBeSaved == ""){
+		if (_fileNameToBeSaved == ""){
+			_fileNameToBeSaved == DEFAULT_FILENAME;
+		}
+		return _fileNameToBeSaved;
+	}
+	else{
+		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	}
 }
 
 string Logic::retrieveDirectoryFromTextFile(){
 	ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
 	getline(readFile, _directoryToBeSaved);
 	getline(readFile, _fileNameToBeSaved);
+	readFile >> _scheduleSize;
+	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
 	if (_directoryToBeSaved == ""){
+		if (_fileNameToBeSaved == ""){
+			_fileNameToBeSaved == DEFAULT_FILENAME;
+		}
 		return _fileNameToBeSaved;
 	}
 	else{
@@ -383,195 +409,78 @@ string Logic::retrieveDirectoryFromTextFile(){
 }
 
 string Logic::changeSavingFileName(string FileNameToBeSaved){
-	ofstream saveFileName("directory.txt");
 	_fileNameToBeSaved = FileNameToBeSaved;
-	saveFileName << _directoryToBeSaved << endl;
-	saveFileName << _fileNameToBeSaved;
+	saveDirectoryToTextFile();
 	return FileNameToBeSaved;
 }
 
-string Logic::getDirectoryAndFileName(){
-	if (_directoryToBeSaved != ""){
-		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+int Logic::readDataFromFile() {
+	ifstream readFile(getDirectoryAndFileName());
+	for(int lineNumber = 0; lineNumber < _scheduleSize ; lineNumber++){
+	//while (!readFile.eof()){
+		string itemName;
+		string description;
+		string junk;
+		char priority;
+		char label;
+		int DD;
+		int MM;
+		int YYYY;
+		int hh;
+		int mm;
+		getline(readFile, itemName);
+		readFile >> YYYY;
+		readFile >> MM;
+		readFile >> DD;
+		readFile >> hh;
+		readFile >> mm;
+		DateTime startTime(YYYY,MM,DD,hh,mm);
+		readFile >> YYYY;
+		readFile >> MM;
+		readFile >> DD;
+		readFile >> hh;
+		readFile >> mm;
+		DateTime EndTime(YYYY, MM, DD, hh, mm);
+		getline(readFile, junk);
+		getline(readFile, description);
+		readFile >> priority;
+		readFile >> label;
+		getline(readFile, junk);
+		Item item;
+		item.setItemName(itemName);
+		item.setStartTime(startTime);
+		item.setEndTime(EndTime);
+		item.setDescription(description);
+		item.setPriority(priority);
+		item.setLabel(label);
+		_logicSchedule.addItem(item);
 	}
-
+	cout << "Schedule received" << endl;
+	printSchedule();
+	return 1;
 }
 
-int Logic::readDataFromFile(string fileName) {
-	// Variable to denote successful processing of function
-	int retCode = -1;
-
-	ifstream infile(fileName, std::ios::_Nocreate);
-	
-	//Number of lines in Text File
-	int fileLength = 1;
-	if (infile.is_open()) {
-
-		while (!infile.eof()) {
-			Item readItem;
-			DateTime readTime;
-			int tempInt;
-			string line;
-			// Total Number of Lines for each Item = 16
-			if (fileLength % 16 == 1) {
-				getline(infile, line);
-				readItem.setItemName(line);
-				fileLength++;
-			}
-			else if (fileLength % 16 == 2) {
-				for (int i = 0; i < 5; i++) {
-					char buffer[256];
-					infile.getline(buffer, 256);
-					tempInt = atoi(buffer);
-					if (i = 0) {
-						readTime.setDay(tempInt);
-					}
-					else if (i = 1) {
-						readTime.setMonth(tempInt);
-					}
-					else if (i = 2) {
-						readTime.setYear(tempInt);
-					}
-					else if (i = 3) {
-						readTime.setHour(tempInt);
-					}
-					else {
-						readTime.setMinute(tempInt);
-					}
-					fileLength += 5;
-				}
-				readItem.setStartTime(readTime);
-			}
-			else if (fileLength % 16 == 7) {
-				for (int i = 0; i < 5; i++) {
-					char buffer[256];
-					infile.getline(buffer, 256);
-					tempInt = atoi(buffer);
-					if (i = 0) {
-						readTime.setDay(tempInt);
-					}
-					else if (i = 1) {
-						readTime.setMonth(tempInt);
-					}
-					else if (i = 2) {
-						readTime.setYear(tempInt);
-					}
-					else if (i = 3) {
-						readTime.setHour(tempInt);
-					}
-					else {
-						readTime.setMinute(tempInt);
-					}
-					fileLength += 5;
-				}
-				readItem.setEndTime(readTime);
-			}
-			else if (fileLength % 16 == 12) {
-				char buffer[256];
-				infile.getline(buffer, 256);
-				tempInt = atoi(buffer);
-				readItem.setItemID(tempInt);
-				fileLength++;
-			}
-			else if (fileLength % 16 == 13) {
-				getline(infile, line);
-				readItem.setDescription(line);
-				fileLength++;
-			}
-			else if (fileLength % 16 == 14) {
-				char tempChar;
-				infile.get(tempChar);
-				readItem.setPriority(tempChar);
-				fileLength++;
-			}
-			else if (fileLength % 16 == 15) {
-				char tempChar;
-				infile.get(tempChar);
-				readItem.setLabel(tempChar);
-				fileLength++;
-			}
-			else if (fileLength % 16 == 0) {
-				getline(infile, line);
-				if (line.compare("true")) {
-					readItem.setCompletion(true);
-				}
-				else {
-					readItem.setCompletion(false);
-				}
-				fileLength++;
-			}
-			_logicSchedule.addItem(readItem);
-
-		}
-		infile.close();
-		retCode = 0;
+int Logic::writeDataOntoFile(){
+	ofstream writeFile(getDirectoryAndFileName());
+	for (int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getItemName() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getYear() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMonth() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getDay() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getHour() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMinute() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getYear() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMonth() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getDay() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getHour() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMinute() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getDescription() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getPriority() << endl;
+		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getLabel() << endl;
 	}
-
-	return retCode;
+	saveDirectoryToTextFile();
+	return 1;
 }
-
-int Logic::writeDataOntoFile(string fileName) {
-	// Variable to denote successful processing of function
-	int retCode = -1;
-	ofstream outfile(fileName);
-	if (!outfile.bad()) {
-		vector<Item>::iterator iterItem;
-
-		for (iterItem = _logicSchedule.retrieveSchedule().begin(); iterItem != _logicSchedule.retrieveSchedule().end(); ++iterItem) {
-			outfile << iterItem->getItemName() << endl;
-
-			DateTime tempObj1;
-			tempObj1 = iterItem->getStartTime();
-			outfile << tempObj1.getDay() << endl;
-			outfile << tempObj1.getMonth() << endl;
-			outfile << tempObj1.getYear() << endl;
-			outfile << tempObj1.getHour() << endl;
-			outfile << tempObj1.getMinute() << endl;
-
-			DateTime tempObj2;
-			tempObj2 = iterItem->getEndTime();
-			outfile << tempObj2.getDay() << endl;
-			outfile << tempObj2.getMonth() << endl;
-			outfile << tempObj2.getYear() << endl;
-			outfile << tempObj2.getHour() << endl;
-			outfile << tempObj2.getMinute() << endl;
-
-			outfile << iterItem->getItemID() << endl;
-
-			string temp = iterItem->getDescription();
-			if (temp.size() != 0) {
-				outfile << iterItem->getDescription() << endl;
-			}
-			else {
-				outfile << endl;
-			}
-			if (iterItem->getPriority()) {
-				outfile << iterItem->getPriority() << endl;
-			}
-			else {
-				outfile << endl;
-			}
-			if (iterItem->getLabel()) {
-				outfile << iterItem->getLabel() << endl;
-			}
-			else {
-				outfile << endl;
-			}
-			if (iterItem->getCompletion()) {
-				outfile << iterItem->getCompletion() << endl;
-			}
-			else {
-				outfile << false << endl;
-			}
-
-		}
-		outfile.close();
-		retCode = 0;
-	}
-
-	return retCode;
-}
-
 /*
 
 void Logic::printItemVector(vector<Item> itemVector){
