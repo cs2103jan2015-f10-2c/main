@@ -14,7 +14,10 @@ class Item
 private:
 	static const string EMPTYFIELD_ITEMNAME;
 	static const string EMPTYFIELD_DESCRIPTION;
-	static const int EMPTYFIELD_ITEMID;
+	static const string EMPTYFIELD_TIME;
+	static const string ALLOWABLEOPTIONS_PRIORITY;
+	static const string ALLOWABLEOPTIONS_LABEL;
+	static const unsigned int EMPTYFIELD_ITEMID;
 	static const char EMPTYFIELD_PRIORITY;
 	static const char EMPTYFIELD_LABEL;
 
@@ -26,6 +29,14 @@ private:
 	char _priority;
 	char _label;
 	bool _isCompleted;
+
+	bool hasValidItemName();
+	bool hasValidItemStartTime();
+	bool hasValidItemEndTime();
+	bool hasValidItemDescription();
+	bool hasValidItemID();
+	bool hasValidItemPriority();
+	bool hasValidItemLabel();
 
 public:
 	//	Constructor
@@ -82,7 +93,8 @@ public:
 	// Returns string with item details
 	// Pre:		Nil
 	// Post:	String with existing details are returned
-	string displayItem();
+	string displayItemForUser();
+	string displayItemFullDetails();
 	string displayStartTime();
 	string displayEndTime();
 };

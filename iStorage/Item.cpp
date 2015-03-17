@@ -5,9 +5,68 @@
 
 const string Item::EMPTYFIELD_ITEMNAME = "";
 const string Item::EMPTYFIELD_DESCRIPTION = "";
-const int Item::EMPTYFIELD_ITEMID = 0;
+const string Item::EMPTYFIELD_TIME = "";
+const string Item::ALLOWABLEOPTIONS_PRIORITY = "LMH";
+const string Item::ALLOWABLEOPTIONS_LABEL = "POM";
+const unsigned int Item::EMPTYFIELD_ITEMID = 0;
 const char Item::EMPTYFIELD_PRIORITY = 'E';
 const char Item::EMPTYFIELD_LABEL = 'E';
+
+//	Checks if item has a valid item name
+bool Item::hasValidItemName(){
+	if (_itemName != EMPTYFIELD_ITEMNAME) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if item has a valid start time
+bool Item::hasValidItemStartTime(){
+	if (_startTime.displayDateTime() != EMPTYFIELD_TIME){
+		return true;
+	}
+	return false;
+}
+
+//	Checks if item has a valid end time
+bool Item::hasValidItemEndTime(){
+	if (_endTime.displayDateTime() != EMPTYFIELD_TIME){
+		return true;
+	}
+	return false;
+}
+
+//	Checks if item has a valid description
+bool Item::hasValidItemDescription(){
+	if (_description != EMPTYFIELD_DESCRIPTION) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if item has a valid item ID
+bool Item::hasValidItemID(){
+	if (_itemID > EMPTYFIELD_ITEMID) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if item has a valid priority
+bool Item::hasValidItemPriority(){
+	if (ALLOWABLEOPTIONS_PRIORITY.find_first_of(_priority) != string::npos) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if item has a valid label
+bool Item::hasValidItemLabel(){
+	if (ALLOWABLEOPTIONS_LABEL.find_first_of(_label) != string::npos) {
+		return true;
+	}
+	return false;
+}
 
 //	Default Constructor
 Item::Item() {
@@ -168,16 +227,50 @@ bool Item::getCompletion() {
 	return _isCompleted;
 }
 
-//	Retrieves the item full details (string)
-string Item::displayItem() {
-	ostringstream output;
+//	Retrieves the key item details for user display (string)
+string Item::displayItemForUser() {
+	ostringstream displayOutput;
 	
-	output	<< "ItemName: "		<< _itemName << endl
-			<< "StartTime: "	<< _startTime.displayDateTime() << endl
-			<< "EndTime: "		<< _endTime.displayDateTime() << endl
-			<< "Description: "	<< _description << endl;
+	if (hasValidItemName()) {
+		displayOutput << "Name:\t" << _itemName << endl;
+	}
 
-	return output.str();
+	if (hasValidItemStartTime()) {
+		displayOutput << "Start Time:\t" << _startTime.displayDateTime() << endl;
+	}
+
+	if (hasValidItemEndTime()) {
+		displayOutput << "End Time:\t" << _endTime.displayDateTime() << endl;
+	}
+
+	if (hasValidItemDescription()) {
+		displayOutput << "Description:\t" << _description << endl;
+	}
+
+	return displayOutput.str();
+}
+
+//	Retrieves the full item details (string)
+string Item::displayItemFullDetails() {
+	ostringstream displayOutput;
+
+	if (hasValidItemID()){
+		displayOutput << "Item ID:\t" << _itemID << endl;
+	}
+
+	displayOutput << displayItemForUser();
+
+	if (hasValidItemPriority()) {
+		displayOutput << "Priority:\t" << _priority << endl;
+	}
+	
+	if (hasValidItemLabel()) {
+		displayOutput << "Label:\t" << _label << endl;
+	}
+
+	displayOutput << "Completed?\t" << boolalpha << _isCompleted << endl;
+
+	return displayOutput.str();
 }
 
 //	Retrieves the item start time (string)

@@ -466,6 +466,10 @@ namespace DateTimeTest
 			timeOnly.setMinute(20);
 			outputString = timeOnly.displayDateTime();
 			Assert::AreEqual((string) "09:20", outputString);
+
+			DateTime emptyDateTime;
+			outputString = emptyDateTime.displayDateTime();
+			Assert::AreEqual((string)"", outputString);
 		}
 	};
 }
@@ -754,6 +758,114 @@ namespace ItemTest
 			trueStory.setCompletion(isCompleted);
 			outputCompletion = trueStory.getCompletion();
 			Assert::AreEqual(isCompleted, outputCompletion);
+		}
+	};
+
+	TEST_CLASS(TEST_DISPLAY){
+	public:
+		TEST_METHOD(TestDisplayStartTime){
+			Item item;
+			
+			DateTime dateTime(1994, 12, 12, 20, 9);
+			item.setStartTime(dateTime);
+			string outputString = item.displayStartTime();
+			Assert::AreEqual((string) "1994 12 12 20:09", outputString);
+
+			DateTime dateOnly(1992, 9, 20);
+			item.setStartTime(dateOnly);
+			outputString = item.displayStartTime();
+			Assert::AreEqual((string) "1992 09 20", outputString);
+
+			DateTime timeOnly;
+			timeOnly.setHour(9);
+			timeOnly.setMinute(20);
+			item.setStartTime(timeOnly);
+			outputString = item.displayStartTime();
+			Assert::AreEqual((string) "09:20", outputString);
+		}
+
+		TEST_METHOD(TestDisplayEndTime){
+			Item item;
+
+			DateTime dateTime(1994, 12, 12, 20, 9);
+			item.setEndTime(dateTime);
+			string outputString = item.displayEndTime();
+			Assert::AreEqual((string) "1994 12 12 20:09", outputString);
+
+			DateTime dateOnly(1992, 9, 20);
+			item.setEndTime(dateOnly);
+			outputString = item.displayEndTime();
+			Assert::AreEqual((string) "1992 09 20", outputString);
+
+			DateTime timeOnly;
+			timeOnly.setHour(9);
+			timeOnly.setMinute(20);
+			item.setEndTime(timeOnly);
+			outputString = item.displayEndTime();
+			Assert::AreEqual((string) "09:20", outputString);
+		}
+
+		TEST_METHOD(TestDisplayItemForUser){
+			Item item;
+			ostringstream outputString;
+
+			item.setItemName("Short Jog");
+			outputString << "Name:\tShort Jog\n";
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+			item.setStartTime(2015, 3, 17, 6, 30);
+			outputString << "Start Time:\t2015 03 17 06:30\n";
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+			item.setEndTime(2015, 3, 17, 7, 0);
+			outputString << "End Time:\t2015 03 17 07:00\n";
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+			item.setDescription("4km in 30 minutes");
+			outputString << "Description:\t4km in 30 minutes\n";
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+			item.setItemID(1992);
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+			item.setLabel('P');
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+			item.setPriority('H');
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+			item.setCompletion(true);
+			Assert::AreEqual(outputString.str(), item.displayItemForUser());
+		}
+
+		TEST_METHOD(TestDisplayItemFullDetails){
+			Item item;
+			ostringstream outputString;
+
+			item.setItemID(1992);
+			outputString << "Item ID:\t1992\n";
+
+			item.setItemName("Short Jog");
+			outputString << "Name:\tShort Jog\n";
+
+			item.setStartTime(2015, 3, 17, 6, 30);
+			outputString << "Start Time:\t2015 03 17 06:30\n";
+
+			item.setEndTime(2015, 3, 17, 7, 0);
+			outputString << "End Time:\t2015 03 17 07:00\n";
+
+			item.setDescription("4km in 30 minutes");
+			outputString << "Description:\t4km in 30 minutes\n";
+
+			item.setPriority('H');
+			outputString << "Priority:\tH\n";
+
+			item.setLabel('P');
+			outputString << "Label:\tP\n";
+
+			item.setCompletion(true);
+			outputString << "Completed?\ttrue\n";
+			Assert::AreEqual(outputString.str(), item.displayItemFullDetails());
 		}
 	};
 }
