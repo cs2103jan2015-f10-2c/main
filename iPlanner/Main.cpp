@@ -1,8 +1,13 @@
-#include "..\iLogic\Logic.h"
+//#include "..\iLogic\Logic.h"
 #include "..\iParser\iParser.h"
 
 void main() {
-	string input;
+	iParser testParser;
+	string userInput;
+	getline(cin, userInput);
+	testParser.parse(userInput);
+
+	/*string input;
 	Logic testLogic;
 	string directory;
 	string filename;
@@ -15,7 +20,7 @@ void main() {
 		testLogic.initiateCommandAction(input);
 		cout << "Command : ";
 		testLogic.writeDataOntoFile();
-	}
+	}*/
 	
 	return;
 }

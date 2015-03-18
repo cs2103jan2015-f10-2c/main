@@ -17,51 +17,85 @@ NOTES TO DEVELOPERS
 #include <string>
 #include <list>
 #include <sstream>
-#include "ParseInfo.h"
+#include <assert.h>
 using namespace std;
 
 #ifndef IPARSER_H_
 #define IPARSER_H_
 
+struct COMMAND_AND_TEXT {
+	string command;
+	string text;
+};
+
 class iParser {
 
-private:
-	ParseInfo _parseInfo;
-	list<string> _inputs;
-
-	enum CommandType {
-		ADD, DELETE, EDIT, START, END, DESCRIPTION, LABEL,
-		PRIORITY, UNDO, SORT, SEARCH, EXIT, INVALID
-	};
+public:
+	list<COMMAND_AND_TEXT> _parseInfo;
+	string _mainCommand;
 
 	static const string COMMAND_ADD;
-	static const string COMMAND_DELETE;
+	static const string COMMAND_DELETE_ONE;
+	static const string COMMAND_DELETE_TWO;
 	static const string COMMAND_EDIT;
-	static const string COMMAND_START;
-	static const string COMMAND_END;
-	static const string COMMAND_DESCRIPTION;
+	static const string COMMAND_UNDO;
+	static const string COMMAND_SORT;
+	static const string COMMAND_SEARCH;
+	static const string COMMAND_VIEW;
 	static const string COMMAND_EXIT;
 
-	static const string TOKEN_COMMAND;
-	static const string TOKEN_SPACE;
-	static const string TOKEN_OBLIQUE;
-	static const string TOKEN_BLANK;
+	static const string MODIFIER_START;
+	static const string MODIFIER_END;
+	static const string MODIFIER_DESCRIPTION;
+
+	//static const string TOKEN_COMMAND;
+	//static const string TOKEN_SPACE;
+	//static const string TOKEN_OBLIQUE;
+	//static const string TOKEN_BLANK;
 
 	static const string MESSAGE_SUCCESS;
-	static const string MESSAGE_INVALID;
+	//static const string MESSAGE_INVALID;
 	static const string MESSAGE_TERMINATE;
 
-	static const int LENGTH_VALID = 2;
-	static const int DIGIT_OF_TIME = 2;
-	static const int DIGIT_THREE = 3;
-	static const int DIGIT_FOUR = 4;
+	//static const int LENGTH_VALID;
+	//static const int DIGIT_OF_TIME;
+	//static const int DIGIT_THREE;
+	//static const int DIGIT_FOUR;
 
-	static const int INDEX_ZERO = 0;
-	static const int INDEX_ONE = 1;
-	static const int INDEX_INVALID = -1;
-	static const int INDEX_NEXT = 1;
-	static const int INDEX_AFTER_TOKEN_COMMAND = 2;
+	//static const int INDEX_ZERO;
+	static const int INDEX_ONE;
+	static const int INDEX_INVALID;
+	static const int INDEX_START;
+	//static const int INDEX_NEXT;
+	//static const int INDEX_AFTER_TOKEN_COMMAND;
 
+	enum CommandType {
+		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, EXIT, INVALID
+	};
+
+	// main functions to be executed in public method parse 
+	string retrieveMainCommand(string);
+	string executeParsing(string);
+
+	// input retrieval and categorisation
+	CommandType determineCommandType(string);
+
+	// string manipulation functions
+	unsigned int findWhiteSpace(string);
+	//unsigned int findIndex(string userInput, string stringToFind, int startIndex = INDEX_ZERO);
+	string retrieveSubstring(string, int, int = INDEX_INVALID);
+	string trimText(string&);
+	string trimFront(string);
+	string trimBack(string);
+
+	// assertion
+	void checkString(string);
+
+	// misc functions
+	string getMainCommand();
+	void showError(string text);
+
+	/*
 	// main functions to be executed in public method parse 
 	string splitInput(string userInput);
 	string setInformation();
@@ -105,15 +139,14 @@ private:
 
 	// Misc functions
 	string displayInputs();
-	string displayParseInfo();
-	void showError(string text);	
-
+	string displayParseInfo();	
+	*/
 public:
 	iParser();
 	~iParser();
 
 	// main function used to parse information to Logic
-	ParseInfo parse(string Input);
+	list<COMMAND_AND_TEXT> parse(string Input);
 };
 
 #endif

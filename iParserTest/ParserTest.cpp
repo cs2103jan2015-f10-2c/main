@@ -4,7 +4,7 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace iPlannerParserTest {
-
+	/*
 	TEST_CLASS(ParseInfoTest) {
 	private:
 		ParseInfo testParseInfo;
@@ -117,22 +117,56 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedBool, actualBool);
 		}
 	};
-	
+	*/
 	TEST_CLASS(iPlannerParserTest) {
 	private:
 		iParser testParser;
-		ParseInfo testParseInfo;
 	public:
-		TEST_METHOD(isValidLengthTest) {
-			//string text = "testing";
-			//string actualString;
-			//string expectedString;
-			//bool actualBool;
-			//bool expectedBool;
+		TEST_METHOD(trimTextTest) {
+			string stringOne = "   add text   ";
+			string stringTwo = "\t\t del text \t\t\t";
+			string stringThree = "  exit\t\t";
+			string actualOne = testParser.trimText(stringOne);
+			string actualTwo = testParser.trimText(stringTwo);
+			string actualThree = testParser.trimText(stringThree);
+			string expectedOne = "add text";
+			string expectedTwo = "del text";
+			string expectedThree = "exit";
+			string expected = "success";
 
-			//actualBool = testParser.isValidLength(text);
-			//expectedBool = true;
-			//Assert::AreEqual(expectedBool, actualBool);
+			Assert::AreEqual(expected, actualOne);
+			Assert::AreEqual(expected, actualTwo);
+			Assert::AreEqual(expected, actualThree);
+			Assert::AreEqual(expectedOne, stringOne);
+			Assert::AreEqual(expectedTwo, stringTwo);
+			Assert::AreEqual(expectedThree, stringThree);
+		}
+
+		TEST_METHOD(retrieveMainCommandTest) {
+			string stringOne = "add text";
+			string stringTwo = "del\ttext";
+			string stringThree = "exit\t";
+			string expected = "success";
+			string expectedCommandOne = "add";
+			string expectedCommandTwo = "del";
+			string expectedCommandThree = "exit";
+			string actual;
+			string actualCommand;
+
+			actual = testParser.retrieveMainCommand(stringOne);
+			actualCommand = testParser.getMainCommand();
+			Assert::AreEqual(expected, actual);
+			Assert::AreEqual(expectedCommandOne, actualCommand);
+
+			actual = testParser.retrieveMainCommand(stringTwo);
+			actualCommand = testParser.getMainCommand();
+			Assert::AreEqual(expected, actual);
+			Assert::AreEqual(expectedCommandTwo, actualCommand);
+
+			actual = testParser.retrieveMainCommand(stringThree);
+			actualCommand = testParser.getMainCommand();
+			Assert::AreEqual(expected, actual);			
+			Assert::AreEqual(expectedCommandThree, actualCommand);
 		}
 	};
 }
