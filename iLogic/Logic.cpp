@@ -26,7 +26,7 @@ Logic::Logic() {
 	//failure in add,delete,add function will return an item with ID = 0
 	_scheduleSize = 0;
 	//schedule size initialised to 0
-	_directoryToBeSaved = ""; 
+	_directoryToBeSaved = "";
 	//if saving directory is an empty string, the directory is set to default
 	_fileNameToBeSaved = DEFAULT_FILENAME;
 	//default file name is save.txt
@@ -40,7 +40,7 @@ void Logic::printSchedule(){
 	cout << "SCHEDULE" << endl;
 	cout << "--------" << endl;
 	for (unsigned int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
-		cout << lineNumber + 1 << ". " ;
+		cout << lineNumber + 1 << ". ";
 		printItem(getItemFromLineIndex(lineNumber));
 		cout << endl;
 	}
@@ -96,12 +96,31 @@ void Logic::printAssignedDescription(Item itemToBePrinted){
 
 unsigned int Logic::addTask(Item itemToBeAdded){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
-	if (isValidItemInLogic(itemToBeAdded)) {
-		itemToBeAdded.setItemID(_nextItemID);
-		_nextItemID++;
-		_scheduleSize++;
-		addedItemID = _logicSchedule.addItem(itemToBeAdded);
+	try{
+		if (isValidItemInLogic(itemToBeAdded)) {
+			itemToBeAdded.setItemID(_nextItemID);
+			_nextItemID++;
+			_scheduleSize++;
+			addedItemID = _logicSchedule.addItem(itemToBeAdded);
+		}
+		else{
+			throw ("invalid input for addTask");
+		}
 	}
+	catch (const char* e){
+		cout << e << endl;
+	}
+	printSchedule();
+	return addedItemID;
+}
+
+unsigned int Logic::addTask(Item itemToBeAdded){
+	unsigned int addedItemID = DEFAULT_ITEM_ID;
+	Item *newItemToBeAdded;
+	newItemToBeAdded = new Item;
+	newItemToBeAdded->setItemName("hello");
+	newItemToBeAdded->setItemID(_nextItemID);
+	_logicSchedule.addItem(newItemToBeAdded);
 	printSchedule();
 	return addedItemID;
 }
@@ -109,27 +128,33 @@ unsigned int Logic::addTask(Item itemToBeAdded){
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
 	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
-	return true;
-	} else {
-	return false;
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
 Item Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	unsigned int itemIDToBeDeleted;
-	if (isValidLineIndex(lineIndexToBeDeleted)){
-		itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
-		Item deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
-		_scheduleSize--;
-		printSchedule();
-		return deletedItem;//Delete successful
+	Item deletedItem;
+	try{
+		if (isValidLineIndex(lineIndexToBeDeleted)){
+			itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
+			deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
+			_scheduleSize--;//Delete successful
+			printSchedule();
+		}
+		else{
+			deletedItem.setItemID(DEFAULT_ITEM_ID); //Delete failed
+			printSchedule();
+			throw("invalid lineIndex for deleteTask");
+		}
 	}
-	else{
-		Item failedDelete;
-		failedDelete.setItemID(DEFAULT_ITEM_ID);
-		printSchedule();
-		return failedDelete;//Delete failed
+	catch (const char* e){
+		cout << e << endl;
 	}
+	return deletedItem;
 }
 
 
@@ -367,7 +392,7 @@ Item Logic::getItemFromLineIndex(unsigned int lineIndex) {
 string Logic::changeSavingDirectory(string directoryToBeSaved){
 	string directoryToMake = "";
 	int truncateDirectory;
-	
+
 	while (directoryToBeSaved != ""){
 		truncateDirectory = directoryToBeSaved.find_first_of('/');
 		if (truncateDirectory != -1){
@@ -428,8 +453,8 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 
 int Logic::readDataFromFile() {
 	ifstream readFile(getDirectoryAndFileName());
-	for(unsigned int lineNumber = 0; lineNumber < _scheduleSize ; lineNumber++){
-	//while (!readFile.eof()){
+	for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
+		//while (!readFile.eof()){
 		string itemName;
 		string description;
 		string junk;
@@ -446,7 +471,7 @@ int Logic::readDataFromFile() {
 		readFile >> DD;
 		readFile >> hh;
 		readFile >> mm;
-		DateTime startTime(YYYY,MM,DD,hh,mm);
+		DateTime startTime(YYYY, MM, DD, hh, mm);
 		readFile >> YYYY;
 		readFile >> MM;
 		readFile >> DD;
