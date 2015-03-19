@@ -264,17 +264,16 @@ namespace DateTimeTest
 		outputMinute = dateTime.isValidMinuteRange(minute);
 		Assert::AreEqual(false, outputMinute);
 		}
-<<<<<<< HEAD
-	}; */
 
+	}; 
+	*/
+/*
 	TEST_CLASS(TEST_COMPARATORS) {
-=======
-		<<<<<<< HEAD
-		}; */
+
 
 	TEST_CLASS(TEST_COMPARATORS)
 	{
->>>>>>> e3c21f35d3e33f2442f126f8f2fdc2ed49c4b631
+
 	public:
 
 		TEST_METHOD(TestIsEqual)
@@ -1217,6 +1216,6 @@ namespace ScheduleTest
 	};
 <<<<<<< HEAD
 =======
-	*/
+	
 >>>>>>> e3c21f35d3e33f2442f126f8f2fdc2ed49c4b631
-}
+}*/}
