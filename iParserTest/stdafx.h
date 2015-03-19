@@ -4,7 +4,7 @@
 //
 
 #pragma once
-#define TESTMODE
+#define TESTPARSER
 
 #include "targetver.h"
 

@@ -52,6 +52,7 @@ public:
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_COMMAND;
+	static const string MESSAGE_INVALID_EDIT;
 	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_TERMINATE;
 
@@ -75,25 +76,27 @@ public:
 	string executeParsing(string);
 
 	// helper functions to main functions
-	string retrieveCommand(string);
+	string retrieveCommand(string); // unit tested
 	CommandType determineCommandType(string);
-	string removeCommand(string);
 
 	// commandType functions
-	string executeAddParsing(string);
-	string executeDeleteParsing(string);
+	string executeAddParsing(string); // unit tested
+	string executeDeleteParsing(string); // unit tested
+	string executeEditParsing(string);
 
 	// string manipulation functions
-	string trimText(string&);
-	string trimFront(string);
-	string trimBack(string);
-	string removeConsecutiveWhiteSpace(string&);
-	string convertToLowerCase(string&);
+	string trimText(string&); // unit tested
+	string trimFront(string); // unit tested
+	string trimBack(string); // unit tested
+	string removeFirstStringToken(string);  // unit tested
+	string removeConsecutiveWhiteSpace(string&); // unit tested
+	string convertToLowerCase(string&); // unit tested
+	string retrieveFirstStringToken(string); // unit tested
 
 	// boolean functions
 	//bool isValidLength(string userInput);
-	bool areDigits(string text);
-	bool isWhiteSpace(char);
+	bool areDigits(string text); // unit tested
+	bool isWhiteSpace(char); // unit tested
 
 	// setters and getters
 	list<COMMAND_AND_TEXT> getParseInfo();
