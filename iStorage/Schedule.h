@@ -14,8 +14,14 @@ using namespace std;
 class Schedule
 {
 private:
-	vector <Item*> _schedule;
+	vector <Item> _schedule;
+	vector <Item> _filteredSchedule;
 //	History _scheduleHistory;
+
+	//	Checks if an itemID matches the itemID of an item in a given vector cell
+	//	Pre:	Valid itemID, valid vectorIndex
+	//	Post:	Returns true if the itemID matches; false otherwise
+	bool isMatchingItemID(unsigned int, unsigned int);
 
 public:
 	//	Constructor
@@ -30,8 +36,8 @@ public:
 
 	//	Retrieves the entire schedule
 	//	Pre:	Nil
-	//	Post:	Vector of (pointers to constant Items) is returned.
-	const vector <const Item*> retrieveSchedule();
+	//	Post:	Constant reference to vector of Item is returned.
+	const vector <Item>& retrieveSchedule();
 
 	//	Retrieves the size of the schedule
 	//	Pre:	Nil
@@ -45,7 +51,7 @@ public:
 
 	//	Adds an item to the schedule
 	//	Pre:	Valid Item object
-	//	Post:	Item is added to the schedule; itemID is returned
+	//	Post:	Item is added to the schedule; full details of the item is returned (string)
 	string addItem(Item*);
 
 	//	Edits an existing item in the schedule
@@ -61,17 +67,17 @@ public:
 	//	Filters the schedule by Priority
 	//	Pre:	Valid priority - L, M, or H
 	//	Post:	Constant reference to the filtered schedule is returned
-	const vector<const Item*> retrieveScheduleFilteredByPriority(char);
+	const vector<Item>& retrieveScheduleFilteredByPriority(char);
 
 	//	Filters the schedule by Label
 	//	Pre:	Valid priority - P, O, or M
 	//	Post:	Constant reference to the filtered schedule is returned
-	const vector<const Item*> retrieveScheduleFilteredByLabel(char);
+	const vector<Item>& retrieveScheduleFilteredByLabel(char);
 
 	//	Filters the schedule by Completion Status
 	//	Pre:	Valid completion status - true, false
 	//	Post:	Constant reference to the filtered schedule is returned
-	const vector<const Item*> retrieveScheduleFilteredByCompletion(bool);
+	const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
 
 	//    Returns only items spanning a certain date
 	//vector<Item>& returnScheduleFilteredByDate();

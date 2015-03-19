@@ -3,12 +3,14 @@
 
 #include "Schedule.h"
 
+//	Constructor
 Schedule::Schedule() {}
 
+//	Destructor
 Schedule::~Schedule() {}
 
 //	Retrieves the entire schedule
-vector<Item>& Schedule::retrieveSchedule() {
+const vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
 }
 
@@ -17,29 +19,42 @@ unsigned int Schedule::getSizeOfSchedule() {
 	return _schedule.size();
 }
 
+bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
+	if (_schedule[vectorIndex].getItemID() == itemID) {
+		return true;
+	}
+	return false;
+}
+
 //	Retrieves vector index given itemID
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
-	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-		if (itemID == _schedule[index].getItemID()) {
-			return index;
-		}
+	unsigned int vectorIndex = 0;
+
+	while (vectorIndex != _schedule.size() && !isMatchingItemID(vectorIndex, itemID)) {
+		vectorIndex++;
 	}
-	return -1;
+
+	return vectorIndex;
 }
 
-//	Adds the item to the schedule, returns the itemID
-unsigned int Schedule::addItem(Item item) {
-	_schedule.push_back(item);
-	return item.getItemID();
+//	Adds the item to the schedule, returns full details of the item (string)
+string Schedule::addItem(Item* item) {
+	_schedule.push_back(*item);
+	return _schedule.back().displayItemFullDetails();
 }
 
-//	Deletes an item from the schedule, returns deleted item
-Item Schedule::deleteItem(unsigned int itemID) {
+//	Edits an existing item in the schedule, returns full details of the item (string)
+string Schedule::editItem(Item*, unsigned int) {
+	return (string) "I'm editing this later.";
+}
+
+//	Deletes an item from the schedule, returns full details of the item (string)
+string Schedule::deleteItem(unsigned int itemID) {
 	unsigned int index = findVectorIndexGivenItemID(itemID);
 	Item itemToBeDeleted = _schedule[index];
 	
 	_schedule.erase(_schedule.begin() + index);
-	return itemToBeDeleted;
+	return itemToBeDeleted.displayItemFullDetails();
 }
 
 //	Filters the schedule by Priority
