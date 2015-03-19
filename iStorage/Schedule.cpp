@@ -43,9 +43,19 @@ string Schedule::addItem(Item* item) {
 	return _schedule.back().displayItemFullDetails();
 }
 
+//	Retrieves a copy of the item
+Item Schedule::retrieveItem(unsigned int itemID){
+	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+	return _schedule[vectorIndex];
+}
+
 //	Edits an existing item in the schedule, returns full details of the item (string)
-string Schedule::editItem(Item*, unsigned int) {
-	return (string) "I'm editing this later.";
+string Schedule::replaceItem(Item* replacementItem, unsigned int itemID) {
+	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+//	Item previousItem = _schedule[vectorIndex];
+
+	_schedule[vectorIndex] = *replacementItem;
+	return _schedule[vectorIndex].displayItemFullDetails();
 }
 
 //	Deletes an item from the schedule, returns full details of the item (string)

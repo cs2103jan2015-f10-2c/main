@@ -54,10 +54,15 @@ public:
 	//	Post:	Item is added to the schedule; full details of the item is returned (string)
 	string addItem(Item*);
 
+	//	Retrieves a copy of an existing item in the schedule
+	//	Pre:	Valid itemID
+	//	Post:	Returns a copy of the existing item
+	Item retrieveItem(unsigned int);
+
 	//	Edits an existing item in the schedule
 	//	Pre:	Valid itemID, valid Item object
 	//	Post:	Given itemID, replaces existing item with updated item
-	string editItem(Item*, unsigned int);
+	string replaceItem(Item*, unsigned int);
 
 	//	Deletes an item from the schedule
 	//	Pre:	Valid itemID
