@@ -58,7 +58,7 @@ public:
 	void printSchedule();
 	void printItem(string itemToBePrinted);
 	void printAddTaskSuccessful(string itemInformationToBePrinted);
-	void printDeleteTaskSuccessful(string itemInformationToBePrinted);
+	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
 
 	COMMAND_AND_TEXT getParseInfo(iParser parser, string input);
 	string getCommand(COMMAND_AND_TEXT parseInfoToBeProcessed);

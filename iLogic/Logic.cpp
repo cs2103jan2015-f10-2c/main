@@ -51,8 +51,8 @@ void Logic::printAddTaskSuccessful(string itemInformationToBePrinted){
 	cout << buffer << endl;
 }
 
-void Logic::printDeleteTaskSuccessful(string itemInformationToBePrinted){
-	sprintf_s(buffer, ADD_TASK_SUCCESSFUL.c_str(), itemInformationToBePrinted);
+void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
+	sprintf_s(buffer, DELETE_TASK_SUCCESSFUL.c_str(), lineNumberToBeDeleted);
 	cout << buffer << endl;
 }
 /*
@@ -101,15 +101,13 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 }
 
 int Logic::deleteTask(string itemInformation){
-	int lineIndexToBeDeleted = stoi(itemInformation);
+	int lineIndexToBeDeleted = convertToDigit(itemInformation);
 	unsigned int itemIDToBeDeleted;
-	cout << "lineIndex = " << lineIndexToBeDeleted << endl;
 //	try{
 		if (isValidLineIndex(lineIndexToBeDeleted)){
-			cout << "HERE" << endl;
 			itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
 			string deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
-			printDeleteTaskSuccessful(deletedItem);
+			printDeleteTaskSuccessful(lineIndexToBeDeleted);
 			_scheduleSize--;//Delete successful
 			printSchedule();
 //		}
@@ -252,6 +250,14 @@ string Logic::getText(COMMAND_AND_TEXT parseInfoToBeProcessed){
 COMMAND_AND_TEXT Logic::getParseInfo(iParser parser, string input){
 	parser.parse(input);
 	return parser.getParseInfo().back();
+}
+
+int Logic::convertToDigit(string text) {
+	int digit;
+	istringstream convert(text);
+	convert >> digit;
+
+	return digit;
 }
 
 void Logic::initiateCommandAction(iParser parser, string input) {

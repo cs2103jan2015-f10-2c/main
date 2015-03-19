@@ -168,7 +168,9 @@ string iParser::trimBack(string text) {
 	return text.substr(INDEX_START, endIndex);
 }
 
-
+//isDigit FAULTY!!!!!!!!!!!!!!!!!!!!!!!
+//CB!!!!!!!!!!!!!!!!!!
+//CHECK AGAIN!!!!!!
 bool iParser::isDigit(string text) {
 	bool isValid = true;
 	unsigned int index;
