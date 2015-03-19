@@ -72,6 +72,7 @@ string iParser::executeParsing(string userInput) {
 	case SAVE:
 		break;
 	case DONE:
+		executeDoneParsing(textWithoutCommand);
 		break;
 	case EXIT:
 		executeExitParsing(userInput);
@@ -176,6 +177,17 @@ string iParser::executeUndoParsing(string userInput) {
 	}
 	else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeDoneParsing(string indexToMarkAsDone) {
+	if (areDigits(indexToMarkAsDone)) {
+		setParseInfo(COMMAND_DONE, indexToMarkAsDone);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
 	}
 
 	return MESSAGE_SUCCESS;

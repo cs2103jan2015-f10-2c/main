@@ -106,6 +106,26 @@ namespace iPlannerParserTest {
 			}
 		}
 
+		TEST_METHOD(executeDoneParsingTest) {
+			string text[2] = { "123", "abc" };
+			string expectedCommand[2] = { "done", "invalid" };
+			string expectedText[2] = { "123", "Invalid index" };
+
+			testParser.executeDoneParsing(text[0]);
+			testParser.executeDoneParsing(text[1]);
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int index = 0;
+
+			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+
+				Assert::AreEqual(expectedCommand[index], actualCommand);
+				Assert::AreEqual(expectedText[index], actualText);
+			}
+		}
+
 		TEST_METHOD(executeExitParsingTest) {
 			string text[2] = { "exit", "exit 123" };
 			string expectedCommand[2] = { "exit", "invalid" };

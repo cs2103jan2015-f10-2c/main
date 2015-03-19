@@ -85,6 +85,7 @@ public:
 	string executeDeleteParsing(string); // unit tested
 	string executeEditParsing(string);
 	string executeUndoParsing(string);
+	string executeDoneParsing(string);
 	string executeExitParsing(string);
 
 	// string manipulation functions
