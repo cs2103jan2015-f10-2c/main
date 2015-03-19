@@ -1,5 +1,5 @@
 #include "Logic.h"
-#include "exception.h"
+#include <exception>
 
 const string Logic::MESSAGE_SUCCESS = "execution success";
 const string Logic::MESSAGE_INVALID_INPUT = "invalid input";
