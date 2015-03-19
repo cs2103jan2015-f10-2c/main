@@ -1,4 +1,5 @@
 #include "Logic.h"
+#include "exception.h"
 
 const string Logic::MESSAGE_SUCCESS = "execution success";
 const string Logic::MESSAGE_INVALID_INPUT = "invalid input";
@@ -203,6 +204,12 @@ Item Logic::assignTimingToExistingTask(string timingType, DateTime datetime, uns
 }
 
 Item Logic::assignPriority(Item item, char priorityType){
+	try {
+		throw "";
+	}
+	catch (char priorityType) {
+		item.setPriority('L');
+	}
 	item.setPriority(priorityType);
 	return item;
 }
@@ -219,6 +226,12 @@ Item Logic::assignPriorityToExistingTask(char priorityType, unsigned int lineInd
 }
 
 Item Logic::assignLabel(Item item, char labelType){
+	try {
+		throw "";
+	}
+	catch (char labelType) {
+		item.setLabel('P');
+	}
 	item.setLabel(labelType);
 	return item;
 }
