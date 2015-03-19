@@ -11,22 +11,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5B4A7470-0D1D-452F-BFA7-722F5D15B0D2}</ProjectGuid>
-    <RootNamespace>iPlanner</RootNamespace>
+    <ProjectGuid>{7665C93D-BA71-4A8F-B49C-FEF4CF9DA7DC}</ProjectGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <Keyword>ManagedCProj</Keyword>
+    <RootNamespace>iPlannerUI</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -38,44 +41,81 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\VerificaitionTests;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iStorageTest;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iStorage;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iPlanner;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iParserTest;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iParser;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iLogicTest;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies />
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies />
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\iLogicTest\iLogicTest.vcxproj">
+      <Project>{b84ef671-60c2-40de-a822-5bb762746222}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\iLogic\iLogic.vcxproj">
       <Project>{709815aa-4941-4364-a3a1-40d61151d7be}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\iParserTest\iParserTest.vcxproj">
+      <Project>{af856c7b-6c4e-4900-80d3-58f88dd5abb2}</Project>
     </ProjectReference>
     <ProjectReference Include="..\iParser\iParser.vcxproj">
       <Project>{0bd891d4-882d-4b27-a8c8-b3c06dc73829}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\iPlanner\iPlanner.vcxproj">
+      <Project>{5b4a7470-0d1d-452f-bfa7-722f5d15b0d2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\iStorageTest\iStorageTest.vcxproj">
+      <Project>{7b08df25-0ec6-4580-82d8-bf69ea9c9cb2}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\iStorage\iStorage.vcxproj">
       <Project>{46c693bb-9cef-4d7c-b8ab-6489af895d25}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\VerificaitionTests\VerificaitionTests.vcxproj">
+      <Project>{3234f365-bcd4-42db-9335-a8b23be020e8}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="iPlannerUI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="iPlannerUI.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="iPlannerUI.resx">
+      <DependentUpon>iPlannerUI.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
