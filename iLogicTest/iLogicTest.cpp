@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "Logic.h"
-/*
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace iLogicTest {
@@ -12,8 +12,8 @@ namespace iLogicTest {
 		TEST_METHOD(AddTaskTest1)
 		{
 			Logic testLogic;
-			Item testItem;
-			unsigned int addedItemId = testLogic.addTask(testItem);
+			string testItemName;
+			unsigned int addedItemId = testLogic.addTask(testItemName);
 			vector<Item> retrievedSchedule = testLogic.getSchedule();
 			unsigned int IdFromSchedule = retrievedSchedule[0].getItemID();
 			Assert::AreEqual(addedItemId, IdFromSchedule);
@@ -24,10 +24,11 @@ namespace iLogicTest {
 			Logic testLogic;
 			Schedule testSchedule;
 			Item testItem;
+			string testItemName;
 			testItem.setItemID(13);
-			unsigned int addedItemId = testLogic.addTask(testItem);
+			unsigned int addedItemId = testLogic.addTask(testItemName);
 			testItem.setItemID(25);
-			unsigned int addedItemId2 = testLogic.addTask(testItem);
+			unsigned int addedItemId2 = testLogic.addTask(testItemName);
 			unsigned int IdFromSchedule = testLogic.getSchedule()[0].getItemID();
 			unsigned int IdFromSchedule2 = testLogic.getSchedule()[1].getItemID();
 
@@ -45,17 +46,22 @@ namespace iLogicTest {
 		{
 			Logic testLogic;
 			Schedule testSchedule;
-			Item testItem;
-			testItem.setItemID(13);
-			unsigned int addedItemId = testLogic.addTask(testItem);
-			testItem.setItemID(25);
-			unsigned int addedItemId2 = testLogic.addTask(testItem);
-			testItem.setItemID(35);
-			unsigned int addedItemId3 = testLogic.addTask(testItem);
-			testItem.setItemID(45);
-			unsigned int addedItemId4 = testLogic.addTask(testItem);
-			testItem.setItemID(356);
-			unsigned int addedItemId5 = testLogic.addTask(testItem);
+			Item testItem1;
+			Item testItem2;
+			Item testItem3;
+			Item testItem4;
+			Item testItem5;
+			string testItemName;
+			testItem1.setItemID(13);
+			unsigned int addedItemId = testLogic.addTask(testItemName);
+			testItem2.setItemID(25);
+			unsigned int addedItemId2 = testLogic.addTask(testItemName);
+			testItem3.setItemID(35);
+			unsigned int addedItemId3 = testLogic.addTask(testItemName);
+			testItem4.setItemID(45);
+			unsigned int addedItemId4 = testLogic.addTask(testItemName);
+			testItem5.setItemID(356);
+			unsigned int addedItemId5 = testLogic.addTask(testItemName);
 
 			unsigned int IdFromSchedule = testLogic.getSchedule()[0].getItemID();
 			unsigned int IdFromSchedule2 = testLogic.getSchedule()[1].getItemID();
@@ -68,10 +74,10 @@ namespace iLogicTest {
 			Assert::AreEqual(IdFromSchedule4, addedItemId4);
 			Assert::AreEqual(IdFromSchedule5, addedItemId5);
 
-			Item deletedItem = testLogic.deleteTask(1);
+			Item deletedItem = testLogic.deleteTask("1");
 
 			Assert::AreEqual(addedItemId, deletedItem.getItemID());
-			deletedItem = testLogic.deleteTask(1);
+			deletedItem = testLogic.deleteTask("1");
 			Assert::AreEqual(addedItemId2, deletedItem.getItemID());
 
 		}
@@ -81,16 +87,17 @@ namespace iLogicTest {
 			Logic testLogic;
 			Schedule testSchedule;
 			Item testItem;
+			string testItemName;
 			testItem.setItemID(13);
-			unsigned int addedItemId = testLogic.addTask(testItem);
+			unsigned int addedItemId = testLogic.addTask(testItemName);
 			testItem.setItemID(25);
-			unsigned int addedItemId2 = testLogic.addTask(testItem);
+			unsigned int addedItemId2 = testLogic.addTask(testItemName);
 			testItem.setItemID(35);
-			unsigned int addedItemId3 = testLogic.addTask(testItem);
+			unsigned int addedItemId3 = testLogic.addTask(testItemName);
 			testItem.setItemID(45);
-			unsigned int addedItemId4 = testLogic.addTask(testItem);
+			unsigned int addedItemId4 = testLogic.addTask(testItemName);
 			testItem.setItemID(356);
-			unsigned int addedItemId5 = testLogic.addTask(testItem);
+			unsigned int addedItemId5 = testLogic.addTask(testItemName);
 
 			unsigned int IdFromSchedule = testLogic.getSchedule()[0].getItemID();
 			unsigned int IdFromSchedule2 = testLogic.getSchedule()[1].getItemID();
@@ -103,13 +110,12 @@ namespace iLogicTest {
 			Assert::AreEqual(IdFromSchedule4, addedItemId4);
 			Assert::AreEqual(IdFromSchedule5, addedItemId5);
 
-			Item deletedItem = testLogic.deleteTask(2);
+			Item deletedItem = testLogic.deleteTask("2");
 			Assert::AreEqual(addedItemId2, deletedItem.getItemID());
-			deletedItem = testLogic.deleteTask(3);
+			deletedItem = testLogic.deleteTask("3");
 			Assert::AreEqual(addedItemId4, deletedItem.getItemID());
 
 		}
-
 	};
 
 	TEST_CLASS(GetItemIDFromLineIndexTest)
@@ -121,16 +127,17 @@ namespace iLogicTest {
 			Logic testLogic;
 			Schedule testSchedule;
 			Item testItem;
+			string testItemName;
 			testItem.setItemID(13);
-			unsigned int addedItemId = testLogic.addTask(testItem);
+			unsigned int addedItemId = testLogic.addTask(testItemName);
 			testItem.setItemID(25);
-			unsigned int addedItemId2 = testLogic.addTask(testItem);
+			unsigned int addedItemId2 = testLogic.addTask(testItemName);
 			testItem.setItemID(35);
-			unsigned int addedItemId3 = testLogic.addTask(testItem);
+			unsigned int addedItemId3 = testLogic.addTask(testItemName);
 			testItem.setItemID(45);
-			unsigned int addedItemId4 = testLogic.addTask(testItem);
+			unsigned int addedItemId4 = testLogic.addTask(testItemName);
 			testItem.setItemID(356);
-			unsigned int addedItemId5 = testLogic.addTask(testItem);
+			unsigned int addedItemId5 = testLogic.addTask(testItemName);
 
 			unsigned int IdFromSchedule = testLogic.getItemIDFromLineIndex(1);
 			unsigned int IdFromSchedule2 = testLogic.getItemIDFromLineIndex(2);
@@ -147,7 +154,8 @@ namespace iLogicTest {
 
 		}
 	};
-
+}
+	/*
 	TEST_CLASS(AssignPriorityTest)
 	{
 	public:
@@ -158,27 +166,30 @@ namespace iLogicTest {
 			Logic testLogic;
 			Schedule testSchedule;
 			Item testItem;
+			string testItemName;
 			char priorityType = 'h';
-			unsigned int addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
+			testItem.setItemID(356);
+			unsigned int addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
 			Item itemAfterPriorityAdded = testLogic.assignPriorityToNewTask(priorityType);
-			Assert::AreEqual(itemAfterPriorityAdded.getPriority(), priorityType);
-			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(2));
+			Assert::AreSame(itemAfterPriorityAdded.getPriority(), priorityType);
+			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(356));
 
 		}
-
-		TEST_METHOD(AssignPriorityTest_AssignToexistingItem1)
+	};
+}
+		/*TEST_METHOD(AssignPriorityTest_AssignToexistingItem1)
 		{
 
 			Logic testLogic;
 			Schedule testSchedule;
-			Item testItem;
+			string testItemName;
 			char priorityType = 'h';
-			unsigned int addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
+			unsigned int addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
 			Item itemAfterPriorityAdded = testLogic.assignPriorityToExistingTask(priorityType, 4);
 			Assert::AreEqual(itemAfterPriorityAdded.getPriority(), priorityType);
 			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(4));
@@ -190,21 +201,21 @@ namespace iLogicTest {
 
 			Logic testLogic;
 			Schedule testSchedule;
-			Item testItem;
+			string testItemName;
 			char priorityType = 'h';
-			unsigned int addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
-			addedItemId = testLogic.addTask(testItem);
+			unsigned int addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
+			addedItemId = testLogic.addTask(testItemName);
 			Item itemAfterPriorityAdded = testLogic.assignPriorityToExistingTask(priorityType, 2);
 			Assert::AreEqual(itemAfterPriorityAdded.getPriority(), priorityType);
 			Assert::AreEqual(itemAfterPriorityAdded.getItemID(), unsigned int(2));
 
 		}
 	};
-
-	TEST_CLASS(AssignLabelTest)
+}
+	/*TEST_CLASS(AssignLabelTest)
 	{
 	public:
 

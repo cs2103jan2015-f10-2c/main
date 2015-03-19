@@ -120,7 +120,14 @@ int Logic::deleteTask(string itemInformation){
 	catch (const char* e){
 		cout << e << endl;
 	}
+<<<<<<< HEAD
 	return 1;
+=======
+	//catch (const char* e){
+//cout << e << endl;
+	//}
+	return itemIDToBeDeleted;
+>>>>>>> e3c21f35d3e33f2442f126f8f2fdc2ed49c4b631
 }
 
 
