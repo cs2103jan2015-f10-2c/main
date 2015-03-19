@@ -188,7 +188,6 @@ string iParser::trimBack(string text) {
 	return text.substr(INDEX_START, endIndex);
 }
 
-<<<<<<< HEAD
 string iParser::removeFirstStringToken(string userInput) {
 	unsigned int startIndex = userInput.find_first_of(" \t");
 	string text;
@@ -202,8 +201,6 @@ string iParser::removeFirstStringToken(string userInput) {
 
 	return text;
 }
-=======
->>>>>>> 1f814429c34efc159f6ba8f1bb02d85d47329ff5
 
 string iParser::removeConsecutiveWhiteSpace(string& text) {
 	int index;
