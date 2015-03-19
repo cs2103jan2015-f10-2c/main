@@ -5,70 +5,107 @@
 /*
 ===================================================================================================
 NOTES TO DEVELOPERS
-- iParser takes in a string and returns ParseInfo class to iLogic
-- iParser splits string into individual fragments which is then assigned to the attributes in
-  ParseInfo class
-- Note that iParser does not do the validity check and only assigns to attributes
-  (validity check is done in iLogic)
 ===================================================================================================
 */
 
 #include <iostream>
 #include <string>
 #include <list>
+#include <cctype>
 #include <sstream>
-#include "ParseInfo.h"
+#include <assert.h>
 using namespace std;
 
 #ifndef IPARSER_H_
 #define IPARSER_H_
 
+struct COMMAND_AND_TEXT {
+	string command;
+	string text;
+};
+
 class iParser {
-
-// used for private method unit testing
-#ifndef TESTMODE 
-private: 
-#else 
 public:
-#endif
-// used for private method unit testing
-
-	ParseInfo _parseInfo;
-	list<string> _inputs;
-
-	enum CommandType {
-		ADD, DELETE, EDIT, START, END, DESCRIPTION, LABEL,
-		PRIORITY, UNDO, SORT, SEARCH, EXIT, INVALID
-	};
+	list<COMMAND_AND_TEXT> _parseInfo;
 
 	static const string COMMAND_ADD;
-	static const string COMMAND_DELETE;
+	static const string COMMAND_DELETE_ONE;
+	static const string COMMAND_DELETE_TWO;
 	static const string COMMAND_EDIT;
-	static const string COMMAND_START;
-	static const string COMMAND_END;
-	static const string COMMAND_DESCRIPTION;
+	static const string COMMAND_UNDO;
+	static const string COMMAND_SORT;
+	static const string COMMAND_SEARCH;
+	static const string COMMAND_VIEW;
+	static const string COMMAND_SAVE;
+	static const string COMMAND_DONE;
 	static const string COMMAND_EXIT;
+	static const string COMMAND_INVALID;
 
-	static const string TOKEN_COMMAND;
-	static const string TOKEN_SPACE;
-	static const string TOKEN_OBLIQUE;
-	static const string TOKEN_BLANK;
+	static const string MODIFIER_START;
+	static const string MODIFIER_END;
+	static const string MODIFIER_DESCRIPTION;
+
+	//static const string TOKEN_COMMAND;
+	static const string STRING_BLANK;
+	static const char CHAR_SPACE;
+	static const char CHAR_TAB;
 
 	static const string MESSAGE_SUCCESS;
-	static const string MESSAGE_INVALID;
+	static const string MESSAGE_INVALID_COMMAND;
+	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_TERMINATE;
 
-	static const int LENGTH_VALID = 2;
-	static const int DIGIT_OF_TIME = 2;
-	static const int DIGIT_THREE = 3;
-	static const int DIGIT_FOUR = 4;
+	//static const int LENGTH_VALID;
+	//static const int DIGIT_OF_TIME;
+	//static const int DIGIT_THREE;
+	//static const int DIGIT_FOUR;
 
-	static const int INDEX_ZERO = 0;
-	static const int INDEX_ONE = 1;
-	static const int INDEX_INVALID = -1;
-	static const int INDEX_NEXT = 1;
-	static const int INDEX_AFTER_TOKEN_COMMAND = 2;
+	//static const int INDEX_ZERO;
+	static const int INDEX_ONE;
+	static const int INDEX_INVALID;
+	static const int INDEX_START;
+	//static const int INDEX_NEXT;
+	//static const int INDEX_AFTER_TOKEN_COMMAND;
 
+	enum CommandType {
+		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
+	};
+
+	// main functions to be executed in public method parse
+	string executeParsing(string);
+
+	// helper functions to main functions
+	string retrieveCommand(string);
+	CommandType determineCommandType(string);
+	string removeCommand(string);
+
+	// commandType functions
+	string executeAddParsing(string);
+	string executeDeleteParsing(string);
+
+	// string manipulation functions
+	string trimText(string&);
+	string trimFront(string);
+	string trimBack(string);
+	string removeConsecutiveWhiteSpace(string&);
+	string convertToLowerCase(string&);
+
+	// boolean functions
+	//bool isValidLength(string userInput);
+	bool areDigits(string text);
+	bool isWhiteSpace(char);
+
+	// setters and getters
+	list<COMMAND_AND_TEXT> getParseInfo();
+	string setParseInfo(string, string);
+	
+	// assertion
+	void checkString(string);
+
+	// misc functions
+	void showError(string text);
+
+	/*
 	// main functions to be executed in public method parse 
 	string splitInput(string userInput);
 	string setInformation();
@@ -112,15 +149,14 @@ public:
 
 	// Misc functions
 	string displayInputs();
-	string displayParseInfo();
-	void showError(string text);	
-
+	string displayParseInfo();	
+	*/
 public:
 	iParser();
 	~iParser();
 
 	// main function used to parse information to Logic
-	ParseInfo parse(string Input);
+	list<COMMAND_AND_TEXT> parse(string Input);
 };
 
 #endif
