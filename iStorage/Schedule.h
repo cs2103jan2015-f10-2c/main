@@ -34,11 +34,6 @@ public:
 	//	Post:	Schedule is destroyed, along with the items stored in it
 	~Schedule();
 
-	//	Retrieves the entire schedule
-	//	Pre:	Nil
-	//	Post:	Constant reference to vector of Item is returned.
-	const vector <Item>& retrieveSchedule();
-
 	//	Retrieves the size of the schedule
 	//	Pre:	Nil
 	//	Post:	Returns the number of items within _schedule
@@ -54,29 +49,41 @@ public:
 	//	Post:	Item is added to the schedule; full details of the item is returned (string)
 	string addItem(Item*);
 
+	//	Retrieves a copy of an existing item in the schedule
+	//	Pre:	Valid itemID
+	//	Post:	Returns a copy of the existing item
+	Item retrieveItem(unsigned int);
+
 	//	Edits an existing item in the schedule
 	//	Pre:	Valid itemID, valid Item object
 	//	Post:	Given itemID, replaces existing item with updated item
-	string editItem(Item*, unsigned int);
+	string replaceItem(Item*, unsigned int);
 
 	//	Deletes an item from the schedule
 	//	Pre:	Valid itemID
 	//	Post:	Deleted item is returned
 	string deleteItem(unsigned int);
 
-	//	Filters the schedule by Priority
+	//	Retrieves the entire schedule
+	//	Pre:	Nil
+	//	Post:	Constant reference to vector of Item is returned.
+	const vector <Item>& retrieveSchedule();
+
+	//	Sorts the schedule by attribute (date - if any, item name, priority, completion status)
+	//	Pre:	Valid date, if any - YYYY MM DD HH:MM or YYYY MM DD
+	//			Valid item name (string)
+	//			Valid priority, if any - P, O, M
+	//			Valid completion status - true, false
+	//	Post:	Constant reference to the sorted schedule is returned
+
+
+	//	Filters the schedule by attribute (priority, label, or completion status)
 	//	Pre:	Valid priority - L, M, or H
+	//			Valid label - P, O, or M
+	//			Valid completion status - true, false
 	//	Post:	Constant reference to the filtered schedule is returned
 	const vector<Item>& retrieveScheduleFilteredByPriority(char);
-
-	//	Filters the schedule by Label
-	//	Pre:	Valid priority - P, O, or M
-	//	Post:	Constant reference to the filtered schedule is returned
 	const vector<Item>& retrieveScheduleFilteredByLabel(char);
-
-	//	Filters the schedule by Completion Status
-	//	Pre:	Valid completion status - true, false
-	//	Post:	Constant reference to the filtered schedule is returned
 	const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
 
 	//    Returns only items spanning a certain date

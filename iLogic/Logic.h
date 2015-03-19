@@ -48,26 +48,26 @@ private:
 
 	static const string TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME;
 	static const string DEFAULT_FILENAME;
+
+	static const string ADD_TASK_SUCCESSFUL;
+	static const string DELETE_TASK_SUCCESSFUL;
+
 public:
 	Logic();
 	~Logic();
 	void printSchedule();
-	void printItem(Item itemToBePrinted);
-	void printAssignedPriority(Item itemToBePrinted);
-	void printAssignedLabel(Item itemToBePrinted);
-	void printAssignedStartTime(Item itemToBePrinted);
-	void printAssignedEndTime(Item itemToBePrinted);
-	void printAssignedName(Item itemToBePrinted);
-	void printAssignedDescription(Item itemToBePrinted);
+	void printItem(string itemToBePrinted);
+	void printAddTaskSuccessful(string itemInformationToBePrinted);
+	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
 
-	ParseInfo getParseInfo(string input);
-	string processedCommand(ParseInfo parseInfoToBeProcessed);
-	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
-	Item processedItem(ParseInfo parseInfoToBeProcessed);
-	void initiateCommandAction(string input);
+	COMMAND_AND_TEXT getParseInfo(iParser parser, string input);
+	string getCommand(COMMAND_AND_TEXT parseInfoToBeProcessed);
+	string getText(COMMAND_AND_TEXT parseInfoToBeProcessed);
+//	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
+	void initiateCommandAction(iParser parser, string input);
 	
-	unsigned int addTask(Item itemToBeAdded);
-	Item deleteTask(unsigned int lineIndexToBeDeleted);
+	unsigned int addTask(string itemInformation);
+	int deleteTask(string lineIndexToBeDeleted);
 	int editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
 	Item getItemFromLineIndex(unsigned int lineIndex);
@@ -100,7 +100,10 @@ public:
 	int readDataFromFile();
 	int writeDataOntoFile();
 
-	
+	// with much love,
+	// Chon Beng
+	int convertToDigit(string text);
+
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);

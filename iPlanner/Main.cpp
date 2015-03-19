@@ -2,7 +2,18 @@
 #include "..\iParser\iParser.h"
 
 void main() {
-	string input;
+	iParser testParser;
+	Logic testLogic;
+	string userInput;
+
+	cout << "command : ";
+	while (getline(cin, userInput)){
+		testLogic.initiateCommandAction(testParser, userInput);
+		cout << "command : ";
+	}
+	
+
+	/*string input;
 	Logic testLogic;
 	string directory;
 	string filename;
@@ -15,7 +26,7 @@ void main() {
 		testLogic.initiateCommandAction(input);
 		cout << "Command : ";
 		testLogic.writeDataOntoFile();
-	}
+	}*/
 	
 	return;
 }

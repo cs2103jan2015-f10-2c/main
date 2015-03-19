@@ -5,32 +5,242 @@
 #include "iParser.h"
 
 const string iParser::COMMAND_ADD = "add";
-const string iParser::COMMAND_DELETE = "del";
+const string iParser::COMMAND_DELETE_ONE = "del";
+const string iParser::COMMAND_DELETE_TWO = "delete";
 const string iParser::COMMAND_EDIT = "edit";
-const string iParser::COMMAND_START = "start";
-const string iParser::COMMAND_END = "end";
-const string iParser::COMMAND_DESCRIPTION = "desc";
+const string iParser::COMMAND_UNDO = "undo";
+const string iParser::COMMAND_SORT = "sort";
+const string iParser::COMMAND_SEARCH = "search";
+const string iParser::COMMAND_VIEW = "view";
+const string iParser::COMMAND_SAVE = "save";
+const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
-const string iParser::TOKEN_COMMAND = "::";
-const string iParser::TOKEN_SPACE = " ";
-const string iParser::TOKEN_OBLIQUE = "/";
-const string iParser::TOKEN_BLANK = "";
-const string iParser::MESSAGE_SUCCESS = "successful execution";
-const string iParser::MESSAGE_INVALID = "invalid input";
+const string iParser::COMMAND_INVALID = "invalid";
+const string iParser::MODIFIER_START = "start";
+const string iParser::MODIFIER_END = "end";
+const string iParser::MODIFIER_DESCRIPTION = "desc";
+//const string iParser::TOKEN_COMMAND = "::";
+const string iParser::STRING_BLANK = "";
+const char iParser::CHAR_SPACE = ' ';
+const char iParser::CHAR_TAB = '\t';
+const string iParser::MESSAGE_SUCCESS = "success";
+const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
+const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
+
+const int iParser::INDEX_INVALID = -1;
+const int iParser::INDEX_ONE = 1;
+const int iParser::INDEX_START = 0;
 
 iParser::iParser() {}
 
 iParser::~iParser() {}
 
-ParseInfo iParser::parse(string userInput) {
-	ParseInfo parseInfo;
-	splitInput(userInput);
-	setInformation();
-	parseInfo = _parseInfo;
-	return parseInfo;
+list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
+	checkString(userInput);
+	executeParsing(userInput);
+	return _parseInfo;
 }
 
+string iParser::executeParsing(string userInput) {
+	trimText(userInput);
+	string command = retrieveCommand(userInput);
+	CommandType commandType = determineCommandType(command);
+	string textWithoutCommand = removeCommand(userInput);
+
+	switch (commandType) {
+	case ADD:
+		executeAddParsing(textWithoutCommand);
+		break;
+	case DELETE:
+		executeDeleteParsing(textWithoutCommand);
+		break;
+	case EDIT:
+		break;
+	case UNDO:
+		break;
+	case SORT:
+		break;
+	case SEARCH:
+		break;
+	case VIEW:
+		break;
+	case SAVE:
+		break;
+	case DONE:
+		break;
+	case EXIT:
+		break;
+	case INVALID:
+		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_COMMAND);
+		break;
+	default:
+		showError(MESSAGE_TERMINATE);
+		getchar();
+		exit(EXIT_FAILURE);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::retrieveCommand(string userInput) {
+	unsigned int endIndex = userInput.find_first_of(" \t");
+	string command = userInput.substr(INDEX_START, endIndex);
+	return command;
+}
+
+iParser::CommandType iParser::determineCommandType(string command) {
+	if (command == COMMAND_ADD) {
+		return CommandType::ADD;
+	}
+	else if (command == COMMAND_DELETE_ONE || command == COMMAND_DELETE_TWO) {
+		return CommandType::DELETE;
+	}
+	else if (command == COMMAND_EDIT) {
+		return CommandType::EDIT;
+	}
+	else if (command == COMMAND_UNDO) {
+		return CommandType::UNDO;
+	}
+	else if (command == COMMAND_SORT) {
+		return CommandType::SORT;
+	}
+	else if (command == COMMAND_SEARCH) {
+		return CommandType::SEARCH;
+	}
+	else if (command == COMMAND_VIEW) {
+		return CommandType::VIEW;
+	}
+	else if (command == COMMAND_SAVE) {
+		return CommandType::SAVE;
+	}
+	else if (command == COMMAND_DONE) {
+		return CommandType::DONE;
+	}
+	else if (command == COMMAND_EXIT) {
+		return CommandType::EXIT;
+	}
+	else {
+		return CommandType::INVALID;
+	}
+}
+
+string iParser::removeCommand(string userInput) {
+	unsigned int startIndex = userInput.find_first_of(" \t");
+	string text;
+
+	if (startIndex != INDEX_INVALID) {
+		text = userInput.substr(startIndex + INDEX_ONE);
+	}
+	else {
+		return STRING_BLANK;
+	}
+	trimText(text);
+	
+	return text;
+}
+
+string iParser::executeAddParsing(string text) {
+	setParseInfo(COMMAND_ADD, text);
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeDeleteParsing(string text) {
+	if (areDigits(text)) {
+		setParseInfo(COMMAND_DELETE_TWO, text);
+	}
+	else {
+		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+	}
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::trimText(string& text) {
+	text = trimFront(text);
+	text = trimBack(text);
+	removeConsecutiveWhiteSpace(text);
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::trimFront(string text) {
+	unsigned int startIndex = INDEX_START;
+	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
+		startIndex++;
+	}
+
+	return text.substr(startIndex);
+}
+
+string iParser::trimBack(string text) {
+	unsigned int endIndex = text.length();
+	while (endIndex > INDEX_START && (text[endIndex - INDEX_ONE] == ' ' || text[endIndex - INDEX_ONE] == '\t')) {
+		endIndex--;
+	}
+
+	return text.substr(INDEX_START, endIndex);
+}
+
+
+string iParser::removeConsecutiveWhiteSpace(string& text) {
+	int index;
+	int endIndex = text.length();
+	for (index = INDEX_START; index < endIndex - INDEX_ONE; index++) {
+		if (isWhiteSpace(text[index]) && isWhiteSpace(text[index + INDEX_ONE])) {
+			text.erase(index + INDEX_ONE, INDEX_ONE);
+			index--;
+		}
+	}
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::convertToLowerCase(string& text) {
+	int index;
+	int endIndex = text.length();
+	for (index = INDEX_START; index < endIndex - INDEX_ONE; index++) {
+		text[index] = tolower(text[index]);
+	}
+	return MESSAGE_SUCCESS;
+}
+
+bool iParser::areDigits(string text) {
+	bool isValid = true;
+	unsigned int index;
+	unsigned int textSize = text.size();
+	for (index = INDEX_START; isValid && index < textSize; index++) {
+		if (!isdigit(text[index])) {
+			isValid = false;
+		}
+	}
+
+	return isValid;
+}
+
+bool iParser::isWhiteSpace(char character) {
+	return (character == CHAR_SPACE || character == CHAR_TAB);
+}
+
+list<COMMAND_AND_TEXT> iParser::getParseInfo() {
+	return _parseInfo;
+}
+
+string iParser::setParseInfo(string command, string text) {
+	COMMAND_AND_TEXT information;
+	information.command = command;
+	information.text = text;
+	_parseInfo.push_back(information);
+	return MESSAGE_SUCCESS;
+}
+
+void iParser::checkString(string string) {
+	assert(string[INDEX_START] != NULL);
+	assert(string != "");
+}
+
+void iParser::showError(string text) {
+	cout << text;
+}
+
+/*
 // splits inputs to fragments seperated by "::"
 string iParser::splitInput(string userInput) {
 	if (!isValidLength(userInput)) {
@@ -146,33 +356,6 @@ string iParser::retrieveText(string userInput) {
 	return text;
 }
 
-iParser::CommandType iParser::determineCommandType(string command) {
-	if (command == COMMAND_ADD) {
-		return CommandType::ADD;
-	}
-	else if (command == COMMAND_DELETE) {
-		return CommandType::DELETE;
-	}
-	else if (command == COMMAND_EDIT) {
-		return CommandType::EDIT;
-	}
-	else if (command == COMMAND_START) {
-		return CommandType::START;
-	}
-	else if (command == COMMAND_END) {
-		return CommandType::END;
-	}
-	else if (command == COMMAND_DESCRIPTION) {
-		return CommandType::DESCRIPTION;
-	}
-	else if (command == COMMAND_EXIT) {
-		return CommandType::EXIT;
-	}
-	else {
-		return CommandType::INVALID;
-	}
-}
-
 string iParser::setAddItemName(string text, Item& item) {
 	if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand()) {
 		_parseInfo.setMainCommand(COMMAND_ADD);
@@ -278,20 +461,6 @@ int iParser::findIndex(string userInput, string stringToFind, int startIndex) {
 	returnIndex = userInput.find(stringToFind, startIndex);
 
 	return returnIndex;
-}
-
-// retrieves substring between start and end index
-string iParser::retrieveSubstring(string userInput, int startIndex, int endIndex) {
-	string substring;
-
-	if (endIndex != INDEX_INVALID) {
-		substring = userInput.substr(startIndex, endIndex - startIndex);
-	}
-	else {
-		substring = userInput.substr(startIndex);
-	}
-
-	return substring;
 }
 
 string iParser::trimText(string& text) {
@@ -482,6 +651,5 @@ string iParser::displayParseInfo() {
 	return output.str();
 }
 
-void iParser::showError(string text) {
-	cout << text;
-}
+
+*/
