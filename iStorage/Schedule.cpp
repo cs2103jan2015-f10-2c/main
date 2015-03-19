@@ -30,7 +30,7 @@ bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = 0;
 
-	while (vectorIndex != _schedule.size() && !isMatchingItemID(vectorIndex, itemID)) {
+	while (vectorIndex <= _schedule.size() && !isMatchingItemID(vectorIndex, itemID)) {
 		vectorIndex++;
 	}
 
@@ -67,6 +67,7 @@ string Schedule::deleteItem(unsigned int itemID) {
 	return itemToBeDeleted.displayItemFullDetails();
 }
 
+/*
 //	Filters the schedule by Priority
 const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char priority){
 	_filteredSchedule.clear();
@@ -116,7 +117,7 @@ const vector<Item>& Schedule::retrieveScheduleFilteredByCompletion(bool isComple
 
 
 
-/*
+
 vector <Item>& Schedule::sortScheduleByDate() {
 	sort(_schedule.begin(), _schedule.end()/*, compare item dates*//*);
 	return _schedule;
@@ -128,4 +129,3 @@ vector <Item>& Schedule::sortScheduleByLastUpdate() {
 }
 
 */
-

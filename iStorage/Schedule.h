@@ -68,7 +68,7 @@ public:
 	//	Pre:	Nil
 	//	Post:	Constant reference to vector of Item is returned.
 	const vector <Item>& retrieveSchedule();
-
+	/*
 	//	Sorts the schedule by attribute (date - if any, item name, priority, completion status)
 	//	Pre:	Valid date, if any - YYYY MM DD HH:MM or YYYY MM DD
 	//			Valid item name (string)
@@ -98,6 +98,8 @@ public:
 	//    Sorts the schedule according to priority
 	//    Post:    Sequence as follows - high, medium, low, none
 	//vector<Item>& sortScheduleByPriority();
+
+	*/
 };
 
 #endif
