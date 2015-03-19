@@ -139,7 +139,9 @@ string iParser::executeDeleteParsing(string text) {
 		setInformation(COMMAND_DELETE_TWO, text);
 	}
 	else {
-		setInformation(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+		//setInformation(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+		setInformation(COMMAND_DELETE_TWO, text);
+
 	}
 	return MESSAGE_SUCCESS;
 }

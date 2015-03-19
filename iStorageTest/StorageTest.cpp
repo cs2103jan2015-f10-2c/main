@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-
+/*
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DateTimeTest
@@ -265,7 +265,7 @@ namespace DateTimeTest
 			Assert::AreEqual(false, outputMinute);
 		}
 	}; */
-
+/*
 	TEST_CLASS(TEST_COMPARATORS) {
 	public:
 
@@ -1145,4 +1145,4 @@ namespace ScheduleTest
 			Assert::AreEqual('P', tempItem1.getLabel());
 		}
 	};
-}
+}*/

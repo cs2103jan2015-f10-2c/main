@@ -1,11 +1,17 @@
-//#include "..\iLogic\Logic.h"
+#include "..\iLogic\Logic.h"
 #include "..\iParser\iParser.h"
 
 void main() {
 	iParser testParser;
+	Logic testLogic;
 	string userInput;
-	getline(cin, userInput);
-	testParser.parse(userInput);
+
+	cout << "command : ";
+	while (getline(cin, userInput)){
+		testLogic.initiateCommandAction(testParser, userInput);
+		cout << "command : ";
+	}
+	
 
 	/*string input;
 	Logic testLogic;
