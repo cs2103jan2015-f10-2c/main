@@ -55,27 +55,27 @@ void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
 	sprintf_s(buffer, DELETE_TASK_SUCCESSFUL.c_str(), lineNumberToBeDeleted);
 	cout << buffer << endl;
 }
-/*
+
 unsigned int Logic::addTask(Item itemToBeAdded){
-unsigned int addedItemID = DEFAULT_ITEM_ID;
-try{
-if (isValidItemInLogic(itemToBeAdded)) {
-itemToBeAdded.setItemID(_nextItemID);
-_nextItemID++;
-_scheduleSize++;
-addedItemID = _logicSchedule.addItem(itemToBeAdded);
+	unsigned int addedItemID = DEFAULT_ITEM_ID;
+	try{
+		if (isValidItemInLogic(itemToBeAdded)) {
+			itemToBeAdded.setItemID(_nextItemID);
+			_nextItemID++;
+			_scheduleSize++;
+			addedItemID = _logicSchedule.addItem(itemToBeAdded);
+		}
+		else{
+			throw ("invalid input for addTask");
+		}
+	}
+	catch (const char* e){
+		cout << e << endl;
+	}
+	printSchedule();
+	return addedItemID;
 }
-else{
-throw ("invalid input for addTask");
-}
-}
-catch (const char* e){
-cout << e << endl;
-}
-printSchedule();
-return addedItemID;
-}
-*/
+
 unsigned int Logic::addTask(string itemInformation){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
 	Item *newItemToBeAdded;
@@ -103,23 +103,23 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 int Logic::deleteTask(string itemInformation){
 	int lineIndexToBeDeleted = convertToDigit(itemInformation);
 	unsigned int itemIDToBeDeleted;
-//	try{
+	try{
 		if (isValidLineIndex(lineIndexToBeDeleted)){
 			itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
 			string deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
 			printDeleteTaskSuccessful(lineIndexToBeDeleted);
 			_scheduleSize--;//Delete successful
 			printSchedule();
-//		}
-/*		else{
+		}
+		else{
 			throw("invalid lineIndex for deleteTask"); //Delete failed
 			printSchedule();
-			
-		}*/
+
+		}
 	}
-	//catch (const char* e){
-//cout << e << endl;
-	//}
+	catch (const char* e){
+		cout << e << endl;
+	}
 	return 1;
 }
 
@@ -494,11 +494,11 @@ return 1;
 // With much love,
 // Chon Beng
 int iParser::convertToDigit(string text) {
-	int digit;
-	istringstream convert(text);
-	convert >> digit;
+int digit;
+istringstream convert(text);
+convert >> digit;
 
-	return digit;
+return digit;
 }
 
 /*
