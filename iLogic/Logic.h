@@ -100,7 +100,10 @@ public:
 	int readDataFromFile();
 	int writeDataOntoFile();
 
-	
+	// with much love,
+	// Chon Beng
+	int convertToDigit(string text);
+
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);

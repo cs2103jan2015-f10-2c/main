@@ -24,10 +24,8 @@ struct COMMAND_AND_TEXT {
 };
 
 class iParser {
-
 public:
 	list<COMMAND_AND_TEXT> _parseInfo;
-	string _command;
 
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE_ONE;
@@ -69,11 +67,11 @@ public:
 		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, EXIT, INVALID
 	};
 
-	// main functions to be executed in public method parse 
-	string retrieveCommand(string);
+	// main functions to be executed in public method parse
 	string executeParsing(string);
 
 	// helper functions to main functions
+	string retrieveCommand(string);
 	CommandType determineCommandType(string);
 	string removeCommand(string);
 
@@ -83,8 +81,6 @@ public:
 
 	// string manipulation functions
 	unsigned int findWhiteSpace(string);
-	//unsigned int findIndex(string userInput, string stringToFind, int startIndex = INDEX_ZERO);
-	string retrieveSubstring(string, int, int = INDEX_INVALID);
 	string trimText(string&);
 	string trimFront(string);
 	string trimBack(string);
@@ -95,7 +91,6 @@ public:
 
 	// setters and getters
 	list<COMMAND_AND_TEXT> getParseInfo();
-	string getMainCommand();
 	string setInformation(string, string);
 	
 	// assertion

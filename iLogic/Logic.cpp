@@ -484,6 +484,17 @@ writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getLabel() << endl;
 saveDirectoryToTextFile();
 return 1;
 }
+
+// With much love,
+// Chon Beng
+int iParser::convertToDigit(string text) {
+	int digit;
+	istringstream convert(text);
+	convert >> digit;
+
+	return digit;
+}
+
 /*
 
 void Logic::printItemVector(vector<Item> itemVector){
