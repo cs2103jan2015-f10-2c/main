@@ -15,16 +15,18 @@ const string iParser::COMMAND_VIEW = "view";
 const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
-const string iParser::COMMAND_INVALID = "invalid";
 const string iParser::MODIFIER_START = "start";
 const string iParser::MODIFIER_END = "end";
-const string iParser::MODIFIER_DESCRIPTION = "desc";
+const string iParser::MODIFIER_DESCRIPTION = "description";
 //const string iParser::TOKEN_COMMAND = "::";
 const string iParser::STRING_BLANK = "";
 const char iParser::CHAR_SPACE = ' ';
 const char iParser::CHAR_TAB = '\t';
 const string iParser::MESSAGE_SUCCESS = "success";
+const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
+const string iParser::MESSAGE_INVALID_ADD = "Invalid text added";
+const string iParser::MESSAGE_INVALID_EDIT = "Invalid edit";
 const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
@@ -46,7 +48,7 @@ string iParser::executeParsing(string userInput) {
 	trimText(userInput);
 	string command = retrieveCommand(userInput);
 	CommandType commandType = determineCommandType(command);
-	string textWithoutCommand = removeCommand(userInput);
+	string textWithoutCommand = removeFirstStringToken(userInput);
 
 	switch (commandType) {
 	case ADD:
@@ -56,8 +58,10 @@ string iParser::executeParsing(string userInput) {
 		executeDeleteParsing(textWithoutCommand);
 		break;
 	case EDIT:
+		executeEditParsing(textWithoutCommand);
 		break;
 	case UNDO:
+		executeUndoParsing(userInput);
 		break;
 	case SORT:
 		break;
@@ -68,11 +72,13 @@ string iParser::executeParsing(string userInput) {
 	case SAVE:
 		break;
 	case DONE:
+		executeDoneParsing(textWithoutCommand);
 		break;
 	case EXIT:
+		executeExitParsing(userInput);
 		break;
 	case INVALID:
-		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_COMMAND);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
 		break;
 	default:
 		showError(MESSAGE_TERMINATE);
@@ -86,6 +92,7 @@ string iParser::executeParsing(string userInput) {
 string iParser::retrieveCommand(string userInput) {
 	unsigned int endIndex = userInput.find_first_of(" \t");
 	string command = userInput.substr(INDEX_START, endIndex);
+	convertToLowerCase(command);
 	return command;
 }
 
@@ -125,35 +132,78 @@ iParser::CommandType iParser::determineCommandType(string command) {
 	}
 }
 
-string iParser::removeCommand(string userInput) {
-	unsigned int startIndex = userInput.find_first_of(" \t");
-	string text;
-
-	if (startIndex != INDEX_INVALID) {
-		text = userInput.substr(startIndex + INDEX_ONE);
-	}
-	else {
-		return STRING_BLANK;
-	}
-	trimText(text);
-	
-	return text;
-}
-
 string iParser::executeAddParsing(string text) {
-	setParseInfo(COMMAND_ADD, text);
+	if (text != STRING_BLANK) {
+		setParseInfo(COMMAND_ADD, text);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_ADD);
+	}
+
 	return MESSAGE_SUCCESS;
 }
 
-string iParser::executeDeleteParsing(string text) {
-	if (areDigits(text)) {
-		setParseInfo(COMMAND_DELETE_TWO, text);
+string iParser::executeDeleteParsing(string indexToDelete) {
+	if (areDigits(indexToDelete)) {
+		setParseInfo(COMMAND_DELETE_TWO, indexToDelete);
 	}
 	else {
-		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
 	}
+
 	return MESSAGE_SUCCESS;
 }
+
+string iParser::executeEditParsing(string text) {
+	string indexToEdit = retrieveFirstStringToken(text);
+	string textToEdit = removeFirstStringToken(text);
+
+	if (!areDigits(indexToEdit)) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
+	}
+	else if (textToEdit == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_EDIT);
+	}
+	else {
+		setParseInfo(COMMAND_EDIT, indexToEdit);
+		setParseInfo(MODIFIER_DESCRIPTION, textToEdit);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+string iParser::executeUndoParsing(string userInput) {
+	if (userInput == COMMAND_UNDO) {
+		setParseInfo(COMMAND_UNDO);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeDoneParsing(string indexToMarkAsDone) {
+	if (areDigits(indexToMarkAsDone)) {
+		setParseInfo(COMMAND_DONE, indexToMarkAsDone);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeExitParsing(string userInput) {
+	if (userInput == COMMAND_EXIT) {
+		setParseInfo(COMMAND_EXIT);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
 
 string iParser::trimText(string& text) {
 	text = trimFront(text);
@@ -164,15 +214,16 @@ string iParser::trimText(string& text) {
 
 string iParser::trimFront(string text) {
 	unsigned int startIndex = INDEX_START;
+
 	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
 		startIndex++;
 	}
-
 	return text.substr(startIndex);
 }
 
 string iParser::trimBack(string text) {
 	unsigned int endIndex = text.length();
+
 	while (endIndex > INDEX_START && (text[endIndex - INDEX_ONE] == ' ' || text[endIndex - INDEX_ONE] == '\t')) {
 		endIndex--;
 	}
@@ -180,32 +231,56 @@ string iParser::trimBack(string text) {
 	return text.substr(INDEX_START, endIndex);
 }
 
+string iParser::removeFirstStringToken(string userInput) {
+	unsigned int startIndex = userInput.find_first_of(" \t");
+	string text;
+
+	if (startIndex != INDEX_INVALID) {
+		text = userInput.substr(startIndex + INDEX_ONE);
+	}
+	else {
+		return STRING_BLANK;
+	}
+
+	return text;
+}
 
 string iParser::removeConsecutiveWhiteSpace(string& text) {
 	int index;
 	int endIndex = text.length();
+
 	for (index = INDEX_START; index < endIndex - INDEX_ONE; index++) {
 		if (isWhiteSpace(text[index]) && isWhiteSpace(text[index + INDEX_ONE])) {
 			text.erase(index + INDEX_ONE, INDEX_ONE);
 			index--;
 		}
 	}
+
 	return MESSAGE_SUCCESS;
 }
 
 string iParser::convertToLowerCase(string& text) {
 	int index;
 	int endIndex = text.length();
-	for (index = INDEX_START; index < endIndex - INDEX_ONE; index++) {
+
+	for (index = INDEX_START; index < endIndex; index++) {
 		text[index] = tolower(text[index]);
 	}
+
 	return MESSAGE_SUCCESS;
+}
+
+string iParser::retrieveFirstStringToken(string text) {
+	unsigned int endIndex = text.find_first_of(" \t");
+	string token = text.substr(INDEX_START, endIndex);
+	return token;
 }
 
 bool iParser::areDigits(string text) {
 	bool isValid = true;
 	unsigned int index;
 	unsigned int textSize = text.size();
+
 	for (index = INDEX_START; isValid && index < textSize; index++) {
 		if (!isdigit(text[index])) {
 			isValid = false;
