@@ -2,6 +2,7 @@
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
 
 #include "Item.h"
+#include "assert.h"
 
 const string Item::EMPTYFIELD_ITEMNAME = "";
 const string Item::EMPTYFIELD_DESCRIPTION = "";
@@ -17,6 +18,8 @@ bool Item::hasValidItemName(){
 	if (_itemName != EMPTYFIELD_ITEMNAME) {
 		return true;
 	}
+
+	assert(_itemName == EMPTYFIELD_ITEMNAME);
 	return false;
 }
 
@@ -25,6 +28,8 @@ bool Item::hasValidItemStartTime(){
 	if (_startTime.displayDateTime() != EMPTYFIELD_TIME){
 		return true;
 	}
+
+	assert(_startTime.displayDateTime() == EMPTYFIELD_TIME);
 	return false;
 }
 
@@ -33,6 +38,8 @@ bool Item::hasValidItemEndTime(){
 	if (_endTime.displayDateTime() != EMPTYFIELD_TIME){
 		return true;
 	}
+	
+	assert(_endTime.displayDateTime() == EMPTYFIELD_TIME);
 	return false;
 }
 
@@ -41,6 +48,8 @@ bool Item::hasValidItemDescription(){
 	if (_description != EMPTYFIELD_DESCRIPTION) {
 		return true;
 	}
+
+	assert(_description == EMPTYFIELD_DESCRIPTION);
 	return false;
 }
 
@@ -49,6 +58,8 @@ bool Item::hasValidItemID(){
 	if (_itemID > EMPTYFIELD_ITEMID) {
 		return true;
 	}
+
+	assert(_itemID <= EMPTYFIELD_ITEMID);
 	return false;
 }
 
@@ -57,6 +68,8 @@ bool Item::hasValidItemPriority(){
 	if (ALLOWABLEOPTIONS_PRIORITY.find_first_of(_priority) != string::npos) {
 		return true;
 	}
+
+	assert(_priority != 'L' && _priority != 'M' &&_priority != 'H');
 	return false;
 }
 
@@ -65,6 +78,8 @@ bool Item::hasValidItemLabel(){
 	if (ALLOWABLEOPTIONS_LABEL.find_first_of(_label) != string::npos) {
 		return true;
 	}
+
+	assert(_priority != 'P' && _priority != 'O' &&_priority != 'M');
 	return false;
 }
 
