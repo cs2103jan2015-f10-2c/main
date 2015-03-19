@@ -15,7 +15,6 @@ const string iParser::COMMAND_VIEW = "view";
 const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
-const string iParser::COMMAND_INVALID = "invalid";
 const string iParser::MODIFIER_START = "start";
 const string iParser::MODIFIER_END = "end";
 const string iParser::MODIFIER_DESCRIPTION = "description";
@@ -24,7 +23,9 @@ const string iParser::STRING_BLANK = "";
 const char iParser::CHAR_SPACE = ' ';
 const char iParser::CHAR_TAB = '\t';
 const string iParser::MESSAGE_SUCCESS = "success";
+const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
+const string iParser::MESSAGE_INVALID_ADD = "Invalid text added";
 const string iParser::MESSAGE_INVALID_EDIT = "Invalid edit";
 const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
@@ -60,6 +61,7 @@ string iParser::executeParsing(string userInput) {
 		executeEditParsing(textWithoutCommand);
 		break;
 	case UNDO:
+		executeUndoParsing(userInput);
 		break;
 	case SORT:
 		break;
@@ -72,9 +74,10 @@ string iParser::executeParsing(string userInput) {
 	case DONE:
 		break;
 	case EXIT:
+		executeExitParsing(userInput);
 		break;
 	case INVALID:
-		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_COMMAND);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
 		break;
 	default:
 		showError(MESSAGE_TERMINATE);
@@ -129,7 +132,13 @@ iParser::CommandType iParser::determineCommandType(string command) {
 }
 
 string iParser::executeAddParsing(string text) {
-	setParseInfo(COMMAND_ADD, text);
+	if (text != STRING_BLANK) {
+		setParseInfo(COMMAND_ADD, text);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_ADD);
+	}
+
 	return MESSAGE_SUCCESS;
 }
 
@@ -138,7 +147,7 @@ string iParser::executeDeleteParsing(string indexToDelete) {
 		setParseInfo(COMMAND_DELETE_TWO, indexToDelete);
 	}
 	else {
-		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
 	}
 
 	return MESSAGE_SUCCESS;
@@ -149,10 +158,10 @@ string iParser::executeEditParsing(string text) {
 	string textToEdit = removeFirstStringToken(text);
 
 	if (!areDigits(indexToEdit)) {
-		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
 	}
 	else if (textToEdit == STRING_BLANK) {
-		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_EDIT);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_EDIT);
 	}
 	else {
 		setParseInfo(COMMAND_EDIT, indexToEdit);
@@ -161,6 +170,28 @@ string iParser::executeEditParsing(string text) {
 
 	return MESSAGE_SUCCESS;
 }
+string iParser::executeUndoParsing(string userInput) {
+	if (userInput == COMMAND_UNDO) {
+		setParseInfo(COMMAND_UNDO);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeExitParsing(string userInput) {
+	if (userInput == COMMAND_EXIT) {
+		setParseInfo(COMMAND_EXIT);
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
 
 string iParser::trimText(string& text) {
 	text = trimFront(text);

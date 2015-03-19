@@ -39,7 +39,6 @@ public:
 	static const string COMMAND_SAVE;
 	static const string COMMAND_DONE;
 	static const string COMMAND_EXIT;
-	static const string COMMAND_INVALID;
 
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
@@ -51,7 +50,9 @@ public:
 	static const char CHAR_TAB;
 
 	static const string MESSAGE_SUCCESS;
+	static const string MESSAGE_INVALID;
 	static const string MESSAGE_INVALID_COMMAND;
+	static const string MESSAGE_INVALID_ADD;
 	static const string MESSAGE_INVALID_EDIT;
 	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_TERMINATE;
@@ -83,6 +84,8 @@ public:
 	string executeAddParsing(string); // unit tested
 	string executeDeleteParsing(string); // unit tested
 	string executeEditParsing(string);
+	string executeUndoParsing(string);
+	string executeExitParsing(string);
 
 	// string manipulation functions
 	string trimText(string&); // unit tested
@@ -100,7 +103,7 @@ public:
 
 	// setters and getters
 	list<COMMAND_AND_TEXT> getParseInfo();
-	string setParseInfo(string, string);
+	string setParseInfo(string, string = "");
 	
 	// assertion
 	void checkString(string);
