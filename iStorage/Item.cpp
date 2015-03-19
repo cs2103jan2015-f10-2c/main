@@ -1,6 +1,7 @@
 //	Item (Tasks, Deadlines, Events)
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
 
+#include <iostream>
 #include "Item.h"
 #include "assert.h"
 
@@ -38,7 +39,7 @@ bool Item::hasValidItemEndTime(){
 	if (_endTime.displayDateTime() != EMPTYFIELD_TIME){
 		return true;
 	}
-	
+
 	assert(_endTime.displayDateTime() == EMPTYFIELD_TIME);
 	return false;
 }
@@ -245,18 +246,37 @@ bool Item::getCompletion() {
 //	Retrieves the key item details for user display (string)
 string Item::displayItemForUser() {
 	ostringstream displayOutput;
-	
+
 	if (hasValidItemName()) {
 		displayOutput << "Name:\t" << _itemName << endl;
 	}
 
-	if (hasValidItemStartTime()) {
-		displayOutput << "Start Time:\t" << _startTime.displayDateTime() << endl;
+	try{
+		if (hasValidItemStartTime()) {
+			displayOutput << "Start Time:\t" << _startTime.displayDateTime() << endl;
+		}
+
+		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
+			throw "Printing of of field in Start Time that does not exist!";
+		}
+	}
+	catch (const char* msg) {
+		cerr << msg << endl;
 	}
 
-	if (hasValidItemEndTime()) {
-		displayOutput << "End Time:\t" << _endTime.displayDateTime() << endl;
+	try {
+		if (hasValidItemEndTime()) {
+			displayOutput << "End Time:\t" << _endTime.displayDateTime() << endl;
+		}
+
+		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
+			throw "Printing of of field in End Time that does not exist!";
+		}
 	}
+	catch (const char* msg) {
+		cerr << msg << endl;
+	}
+
 
 	if (hasValidItemDescription()) {
 		displayOutput << "Description:\t" << _description << endl;
@@ -278,7 +298,7 @@ string Item::displayItemFullDetails() {
 	if (hasValidItemPriority()) {
 		displayOutput << "Priority:\t" << _priority << endl;
 	}
-	
+
 	if (hasValidItemLabel()) {
 		displayOutput << "Label:\t" << _label << endl;
 	}
