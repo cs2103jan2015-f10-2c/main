@@ -142,7 +142,7 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedThree, stringThree);
 		}
 
-		TEST_METHOD(retrieveMainCommandTest) {
+		TEST_METHOD(retrieveCommandTest) {
 			string stringOne = "add text";
 			string stringTwo = "del\ttext";
 			string stringThree = "exit\t";
@@ -153,20 +153,88 @@ namespace iPlannerParserTest {
 			string actual;
 			string actualCommand;
 
-			actual = testParser.retrieveMainCommand(stringOne);
+			actual = testParser.retrieveCommand(stringOne);
 			actualCommand = testParser.getMainCommand();
 			Assert::AreEqual(expected, actual);
 			Assert::AreEqual(expectedCommandOne, actualCommand);
 
-			actual = testParser.retrieveMainCommand(stringTwo);
+			actual = testParser.retrieveCommand(stringTwo);
 			actualCommand = testParser.getMainCommand();
 			Assert::AreEqual(expected, actual);
 			Assert::AreEqual(expectedCommandTwo, actualCommand);
 
-			actual = testParser.retrieveMainCommand(stringThree);
+			actual = testParser.retrieveCommand(stringThree);
 			actualCommand = testParser.getMainCommand();
 			Assert::AreEqual(expected, actual);			
 			Assert::AreEqual(expectedCommandThree, actualCommand);
+		}
+
+		TEST_METHOD(removeCommandTest) {
+			string stringOne = "add   text   ";
+			string stringTwo = "del\t\t\ttext\t\t\t";
+			string stringThree = "exit";
+			string expectedOne = "text";
+			string expectedTwo = "text";
+			string expectedThree = "";
+
+			string actualOne = testParser.removeCommand(stringOne);
+			Assert::AreEqual(expectedOne, actualOne);
+
+			string actualTwo = testParser.removeCommand(stringTwo);
+			Assert::AreEqual(expectedTwo, actualTwo);
+
+			string actualThree = testParser.removeCommand(stringThree);
+			Assert::AreEqual(expectedThree, actualThree);
+		}
+		
+		TEST_METHOD(executeAddParsingTest) {
+			string text = "text";
+			string expectedCommand = "add";
+			string expectedText = "text";
+			
+			testParser.executeAddParsing(text);
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+
+			list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText, actualText);
+		}
+
+		TEST_METHOD(executeDeleteParsingTest) {
+			string text[2] = { "123", "abc" };
+			string expectedCommand[2] = { "delete", "invalid" };
+			string expectedText[2] = { "123", "Invalid index" };
+		
+			testParser.executeDeleteParsing(text[0]);
+			testParser.executeDeleteParsing(text[1]);
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int index = 0;
+
+			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+
+				Assert::AreEqual(expectedCommand[index], actualCommand);
+				Assert::AreEqual(expectedText[index], actualText);
+			}
+		}
+
+		TEST_METHOD(isDigitTest) {
+			string stringOne = "123456789";
+			string stringTwo = "123a456b789c";
+			string stringThree = "123 456 789";
+
+			bool actualOne = testParser.isDigit(stringOne);
+			bool actualTwo = testParser.isDigit(stringTwo);
+			bool actualThree = testParser.isDigit(stringThree);
+
+			Assert::IsTrue(actualOne);
+			Assert::IsFalse(actualTwo);
+			Assert::IsFalse(actualThree);
 		}
 	};
 }

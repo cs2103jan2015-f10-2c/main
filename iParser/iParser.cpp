@@ -13,15 +13,16 @@ const string iParser::COMMAND_SORT = "sort";
 const string iParser::COMMAND_SEARCH = "search";
 const string iParser::COMMAND_VIEW = "view";
 const string iParser::COMMAND_EXIT = "exit";
+const string iParser::COMMAND_INVALID = "invalid";
 const string iParser::MODIFIER_START = "start";
 const string iParser::MODIFIER_END = "end";
 const string iParser::MODIFIER_DESCRIPTION = "desc";
 //const string iParser::TOKEN_COMMAND = "::";
 //const string iParser::TOKEN_SPACE = " ";
 //const string iParser::TOKEN_OBLIQUE = "/";
-//const string iParser::TOKEN_BLANK = "";
+const string iParser::STRING_BLANK = "";
 const string iParser::MESSAGE_SUCCESS = "success";
-//const string iParser::MESSAGE_INVALID = "invalid";
+const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
 const int iParser::INDEX_INVALID = -1;
@@ -34,27 +35,30 @@ iParser::~iParser() {}
 
 list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
 	checkString(userInput);
-	trimText(userInput);
-	retrieveMainCommand(userInput);
+	retrieveCommand(userInput);
 	executeParsing(userInput);
 
 	return _parseInfo;
 }
 
-string iParser::retrieveMainCommand(string userInput) {
-	int endIndex = userInput.find_first_of(" \t");
+string iParser::retrieveCommand(string userInput) {
+	trimText(userInput);
+	unsigned int endIndex = userInput.find_first_of(" \t");
 	string mainCommand = userInput.substr(INDEX_START, endIndex);
-	_mainCommand = mainCommand;
+	_command = mainCommand;
 	return MESSAGE_SUCCESS;
 }
 
 string iParser::executeParsing(string userInput) {
-	CommandType commandType = determineCommandType(_mainCommand);
+	CommandType commandType = determineCommandType(_command);
+	string text = removeCommand(userInput);
 
 	switch (commandType) {
 	case ADD:
+		executeAddParsing(userInput);
 		break;
 	case DELETE:
+		executeDeleteParsing(userInput);
 		break;
 	case EDIT:
 		break;
@@ -108,6 +112,37 @@ iParser::CommandType iParser::determineCommandType(string command) {
 	}
 }
 
+string iParser::removeCommand(string userInput) {
+	unsigned int startIndex = userInput.find_first_of(" \t");
+	string text;
+
+	if (startIndex != INDEX_INVALID) {
+		text = userInput.substr(startIndex + INDEX_ONE);
+	}
+	else {
+		return STRING_BLANK;
+	}
+	trimText(text);
+	
+	return text;
+}
+
+string iParser::executeAddParsing(string text) {
+	COMMAND_AND_TEXT information;
+	setInformation(COMMAND_ADD, text);
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeDeleteParsing(string text) {
+	COMMAND_AND_TEXT information;
+	if (isDigit(text)) {
+		setInformation(COMMAND_DELETE_TWO, text);
+	}
+	else {
+		setInformation(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+	}
+	return MESSAGE_SUCCESS;
+}
 
 string iParser::trimText(string& text) {
 	text = trimFront(text);
@@ -125,7 +160,7 @@ string iParser::trimFront(string text) {
 }
 
 string iParser::trimBack(string text) {
-	int endIndex = text.length();
+	unsigned int endIndex = text.length();
 	while (endIndex > INDEX_START && (text[endIndex - INDEX_ONE] == ' ' || text[endIndex - INDEX_ONE] == '\t')) {
 		endIndex--;
 	}
@@ -133,13 +168,39 @@ string iParser::trimBack(string text) {
 	return text.substr(INDEX_START, endIndex);
 }
 
-void iParser::checkString(string string) {
-	assert(string[INDEX_START] != NULL);
-	assert(string != "");
+
+bool iParser::isDigit(string text) {
+	bool isValid = true;
+	unsigned int index;
+	unsigned int textSize = text.size();
+	for (index = INDEX_START; isValid && index < textSize; index++) {
+		if (!(text[index] >= '0' && text[index] <= '9')) {
+			isValid = false;
+		}
+	}
+
+	return isValid;
+}
+
+list<COMMAND_AND_TEXT> iParser::getParseInfo() {
+	return _parseInfo;
 }
 
 string iParser::getMainCommand() {
-	return _mainCommand;
+	return _command;
+}
+
+string iParser::setInformation(string command, string text) {
+	COMMAND_AND_TEXT information;
+	information.command = command;
+	information.text = text;
+	_parseInfo.push_back(information);
+	return MESSAGE_SUCCESS;
+}
+
+void iParser::checkString(string string) {
+	assert(string[INDEX_START] != NULL);
+	assert(string != "");
 }
 
 void iParser::showError(string text) {

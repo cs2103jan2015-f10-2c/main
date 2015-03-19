@@ -5,11 +5,6 @@
 /*
 ===================================================================================================
 NOTES TO DEVELOPERS
-- iParser takes in a string and returns ParseInfo class to iLogic
-- iParser splits string into individual fragments which is then assigned to the attributes in
-  ParseInfo class
-- Note that iParser does not do the validity check and only assigns to attributes
-  (validity check is done in iLogic)
 ===================================================================================================
 */
 
@@ -32,7 +27,7 @@ class iParser {
 
 public:
 	list<COMMAND_AND_TEXT> _parseInfo;
-	string _mainCommand;
+	string _command;
 
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE_ONE;
@@ -43,6 +38,7 @@ public:
 	static const string COMMAND_SEARCH;
 	static const string COMMAND_VIEW;
 	static const string COMMAND_EXIT;
+	static const string COMMAND_INVALID;
 
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
@@ -51,10 +47,10 @@ public:
 	//static const string TOKEN_COMMAND;
 	//static const string TOKEN_SPACE;
 	//static const string TOKEN_OBLIQUE;
-	//static const string TOKEN_BLANK;
+	static const string STRING_BLANK;
 
 	static const string MESSAGE_SUCCESS;
-	//static const string MESSAGE_INVALID;
+	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_TERMINATE;
 
 	//static const int LENGTH_VALID;
@@ -74,11 +70,16 @@ public:
 	};
 
 	// main functions to be executed in public method parse 
-	string retrieveMainCommand(string);
+	string retrieveCommand(string);
 	string executeParsing(string);
 
-	// input retrieval and categorisation
+	// helper functions to main functions
 	CommandType determineCommandType(string);
+	string removeCommand(string);
+
+	// commandType functions
+	string executeAddParsing(string);
+	string executeDeleteParsing(string);
 
 	// string manipulation functions
 	unsigned int findWhiteSpace(string);
@@ -88,11 +89,19 @@ public:
 	string trimFront(string);
 	string trimBack(string);
 
+	// boolean functions
+	//bool isValidLength(string userInput);
+	bool isDigit(string text);
+
+	// setters and getters
+	list<COMMAND_AND_TEXT> getParseInfo();
+	string getMainCommand();
+	string setInformation(string, string);
+	
 	// assertion
 	void checkString(string);
 
 	// misc functions
-	string getMainCommand();
 	void showError(string text);
 
 	/*
