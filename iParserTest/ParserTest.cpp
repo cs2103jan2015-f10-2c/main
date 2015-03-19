@@ -146,27 +146,18 @@ namespace iPlannerParserTest {
 			string stringOne = "add text";
 			string stringTwo = "del\ttext";
 			string stringThree = "exit\t";
-			string expected = "success";
-			string expectedCommandOne = "add";
-			string expectedCommandTwo = "del";
-			string expectedCommandThree = "exit";
-			string actual;
-			string actualCommand;
+			string expectedOne = "add";
+			string expectedTwo = "del";
+			string expectedThree = "exit";
 
-			actual = testParser.retrieveCommand(stringOne);
-			actualCommand = testParser.getMainCommand();
-			Assert::AreEqual(expected, actual);
-			Assert::AreEqual(expectedCommandOne, actualCommand);
+			string actualOne = testParser.retrieveCommand(stringOne);
+			Assert::AreEqual(expectedOne, actualOne);
 
-			actual = testParser.retrieveCommand(stringTwo);
-			actualCommand = testParser.getMainCommand();
-			Assert::AreEqual(expected, actual);
-			Assert::AreEqual(expectedCommandTwo, actualCommand);
+			string actualTwo = testParser.retrieveCommand(stringTwo);
+			Assert::AreEqual(expectedTwo, actualTwo);
 
-			actual = testParser.retrieveCommand(stringThree);
-			actualCommand = testParser.getMainCommand();
-			Assert::AreEqual(expected, actual);			
-			Assert::AreEqual(expectedCommandThree, actualCommand);
+			string actualThree = testParser.retrieveCommand(stringThree);
+			Assert::AreEqual(expectedThree, actualThree);
 		}
 
 		TEST_METHOD(removeCommandTest) {

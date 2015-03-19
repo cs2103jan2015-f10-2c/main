@@ -35,30 +35,21 @@ iParser::~iParser() {}
 
 list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
 	checkString(userInput);
-	retrieveCommand(userInput);
 	executeParsing(userInput);
-
 	return _parseInfo;
 }
 
-string iParser::retrieveCommand(string userInput) {
-	trimText(userInput);
-	unsigned int endIndex = userInput.find_first_of(" \t");
-	string mainCommand = userInput.substr(INDEX_START, endIndex);
-	_command = mainCommand;
-	return MESSAGE_SUCCESS;
-}
-
 string iParser::executeParsing(string userInput) {
-	CommandType commandType = determineCommandType(_command);
-	string text = removeCommand(userInput);
+	string command = retrieveCommand(userInput);
+	CommandType commandType = determineCommandType(command);
+	string textWithoutCommand = removeCommand(userInput);
 
 	switch (commandType) {
 	case ADD:
-		executeAddParsing(userInput);
+		executeAddParsing(textWithoutCommand);
 		break;
 	case DELETE:
-		executeDeleteParsing(userInput);
+		executeDeleteParsing(textWithoutCommand);
 		break;
 	case EDIT:
 		break;
@@ -80,6 +71,13 @@ string iParser::executeParsing(string userInput) {
 	}
 
 	return MESSAGE_SUCCESS;
+}
+
+string iParser::retrieveCommand(string userInput) {
+	trimText(userInput);
+	unsigned int endIndex = userInput.find_first_of(" \t");
+	string command = userInput.substr(INDEX_START, endIndex);
+	return command;
 }
 
 iParser::CommandType iParser::determineCommandType(string command) {
@@ -184,10 +182,6 @@ bool iParser::isDigit(string text) {
 
 list<COMMAND_AND_TEXT> iParser::getParseInfo() {
 	return _parseInfo;
-}
-
-string iParser::getMainCommand() {
-	return _command;
 }
 
 string iParser::setInformation(string command, string text) {
