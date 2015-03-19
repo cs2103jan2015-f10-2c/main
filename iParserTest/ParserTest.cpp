@@ -123,17 +123,18 @@ namespace iPlannerParserTest {
 		iParser testParser;
 	public:
 		TEST_METHOD(trimTextTest) {
-			string stringOne = "   add text   ";
-			string stringTwo = "\t\t del text \t\t\t";
+			string stringOne = "   add    text   ";
+			string stringTwo = "\t\t del \t text \t\t\t";
 			string stringThree = "  exit\t\t";
-			string actualOne = testParser.trimText(stringOne);
-			string actualTwo = testParser.trimText(stringTwo);
-			string actualThree = testParser.trimText(stringThree);
 			string expectedOne = "add text";
 			string expectedTwo = "del text";
 			string expectedThree = "exit";
 			string expected = "success";
 
+			string actualOne = testParser.trimText(stringOne);
+			string actualTwo = testParser.trimText(stringTwo);
+			string actualThree = testParser.trimText(stringThree);
+			
 			Assert::AreEqual(expected, actualOne);
 			Assert::AreEqual(expected, actualTwo);
 			Assert::AreEqual(expected, actualThree);
@@ -214,17 +215,49 @@ namespace iPlannerParserTest {
 			}
 		}
 
+		TEST_METHOD(removeMultipleWhiteSpaceTest) {
+			string actual = "1 2 \t 3 \t 4 5";
+			string expected = "1 2 3 4 5"; 
+			
+			testParser.removeConsecutiveWhiteSpace(actual);
+			Assert::AreEqual(expected, actual);
+
+		}
+
+		TEST_METHOD(convertToLowerCaseTest) {
+			string actual = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+			string expected = "abcdefghijklmnopqrstuvwxyz123456789";
+
+			testParser.convertToLowerCase(actual);
+			Assert::AreEqual(expected, actual);
+
+		}
+
 		TEST_METHOD(isDigitTest) {
 			string stringOne = "123456789";
 			string stringTwo = "123a456b789c";
 			string stringThree = "123 456 789";
 
-			bool actualOne = testParser.isDigit(stringOne);
-			bool actualTwo = testParser.isDigit(stringTwo);
-			bool actualThree = testParser.isDigit(stringThree);
+			bool actualOne = testParser.areDigits(stringOne);
+			bool actualTwo = testParser.areDigits(stringTwo);
+			bool actualThree = testParser.areDigits(stringThree);
 
 			Assert::IsTrue(actualOne);
 			Assert::IsFalse(actualTwo);
+			Assert::IsFalse(actualThree);
+		}
+
+		TEST_METHOD(isWhiteSpaceTest) {
+			char characterOne = ' ';
+			char characterTwo = '\t';
+			char characterThree = '0';
+
+			bool actualOne = testParser.isWhiteSpace(characterOne);
+			bool actualTwo = testParser.isWhiteSpace(characterTwo);
+			bool actualThree = testParser.isWhiteSpace(characterThree);
+
+			Assert::IsTrue(actualOne);
+			Assert::IsTrue(actualTwo);
 			Assert::IsFalse(actualThree);
 		}
 	};

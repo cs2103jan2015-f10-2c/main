@@ -12,16 +12,19 @@ const string iParser::COMMAND_UNDO = "undo";
 const string iParser::COMMAND_SORT = "sort";
 const string iParser::COMMAND_SEARCH = "search";
 const string iParser::COMMAND_VIEW = "view";
+const string iParser::COMMAND_SAVE = "save";
+const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
 const string iParser::COMMAND_INVALID = "invalid";
 const string iParser::MODIFIER_START = "start";
 const string iParser::MODIFIER_END = "end";
 const string iParser::MODIFIER_DESCRIPTION = "desc";
 //const string iParser::TOKEN_COMMAND = "::";
-//const string iParser::TOKEN_SPACE = " ";
-//const string iParser::TOKEN_OBLIQUE = "/";
 const string iParser::STRING_BLANK = "";
+const char iParser::CHAR_SPACE = ' ';
+const char iParser::CHAR_TAB = '\t';
 const string iParser::MESSAGE_SUCCESS = "success";
+const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
 const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
@@ -40,6 +43,7 @@ list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
 }
 
 string iParser::executeParsing(string userInput) {
+	trimText(userInput);
 	string command = retrieveCommand(userInput);
 	CommandType commandType = determineCommandType(command);
 	string textWithoutCommand = removeCommand(userInput);
@@ -61,9 +65,15 @@ string iParser::executeParsing(string userInput) {
 		break;
 	case VIEW:
 		break;
+	case SAVE:
+		break;
+	case DONE:
+		break;
 	case EXIT:
 		break;
 	case INVALID:
+		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_COMMAND);
+		break;
 	default:
 		showError(MESSAGE_TERMINATE);
 		getchar();
@@ -74,7 +84,6 @@ string iParser::executeParsing(string userInput) {
 }
 
 string iParser::retrieveCommand(string userInput) {
-	trimText(userInput);
 	unsigned int endIndex = userInput.find_first_of(" \t");
 	string command = userInput.substr(INDEX_START, endIndex);
 	return command;
@@ -102,6 +111,12 @@ iParser::CommandType iParser::determineCommandType(string command) {
 	else if (command == COMMAND_VIEW) {
 		return CommandType::VIEW;
 	}
+	else if (command == COMMAND_SAVE) {
+		return CommandType::SAVE;
+	}
+	else if (command == COMMAND_DONE) {
+		return CommandType::DONE;
+	}
 	else if (command == COMMAND_EXIT) {
 		return CommandType::EXIT;
 	}
@@ -126,18 +141,16 @@ string iParser::removeCommand(string userInput) {
 }
 
 string iParser::executeAddParsing(string text) {
-	COMMAND_AND_TEXT information;
-	setInformation(COMMAND_ADD, text);
+	setParseInfo(COMMAND_ADD, text);
 	return MESSAGE_SUCCESS;
 }
 
 string iParser::executeDeleteParsing(string text) {
-	COMMAND_AND_TEXT information;
-	if (isDigit(text)) {
-		setInformation(COMMAND_DELETE_TWO, text);
+	if (areDigits(text)) {
+		setParseInfo(COMMAND_DELETE_TWO, text);
 	}
 	else {
-		setInformation(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
+		setParseInfo(COMMAND_INVALID, MESSAGE_INVALID_INDEX);
 	}
 	return MESSAGE_SUCCESS;
 }
@@ -145,6 +158,7 @@ string iParser::executeDeleteParsing(string text) {
 string iParser::trimText(string& text) {
 	text = trimFront(text);
 	text = trimBack(text);
+	removeConsecutiveWhiteSpace(text);
 	return MESSAGE_SUCCESS;
 }
 
@@ -166,13 +180,33 @@ string iParser::trimBack(string text) {
 	return text.substr(INDEX_START, endIndex);
 }
 
+string iParser::removeConsecutiveWhiteSpace(string& text) {
+	int index;
+	int endIndex = text.length();
+	for (index = INDEX_START; index < endIndex - INDEX_ONE; index++) {
+		if (isWhiteSpace(text[index]) && isWhiteSpace(text[index + INDEX_ONE])) {
+			text.erase(index + INDEX_ONE, INDEX_ONE);
+			index--;
+		}
+	}
+	return MESSAGE_SUCCESS;
+}
 
-bool iParser::isDigit(string text) {
+string iParser::convertToLowerCase(string& text) {
+	int index;
+	int endIndex = text.length();
+	for (index = INDEX_START; index < endIndex - INDEX_ONE; index++) {
+		text[index] = tolower(text[index]);
+	}
+	return MESSAGE_SUCCESS;
+}
+
+bool iParser::areDigits(string text) {
 	bool isValid = true;
 	unsigned int index;
 	unsigned int textSize = text.size();
 	for (index = INDEX_START; isValid && index < textSize; index++) {
-		if (!(text[index] >= '0' && text[index] <= '9')) {
+		if (!isdigit(text[index])) {
 			isValid = false;
 		}
 	}
@@ -180,11 +214,15 @@ bool iParser::isDigit(string text) {
 	return isValid;
 }
 
+bool iParser::isWhiteSpace(char character) {
+	return (character == CHAR_SPACE || character == CHAR_TAB);
+}
+
 list<COMMAND_AND_TEXT> iParser::getParseInfo() {
 	return _parseInfo;
 }
 
-string iParser::setInformation(string command, string text) {
+string iParser::setParseInfo(string command, string text) {
 	COMMAND_AND_TEXT information;
 	information.command = command;
 	information.text = text;

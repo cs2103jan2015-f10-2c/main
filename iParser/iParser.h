@@ -11,6 +11,7 @@ NOTES TO DEVELOPERS
 #include <iostream>
 #include <string>
 #include <list>
+#include <cctype>
 #include <sstream>
 #include <assert.h>
 using namespace std;
@@ -35,6 +36,8 @@ public:
 	static const string COMMAND_SORT;
 	static const string COMMAND_SEARCH;
 	static const string COMMAND_VIEW;
+	static const string COMMAND_SAVE;
+	static const string COMMAND_DONE;
 	static const string COMMAND_EXIT;
 	static const string COMMAND_INVALID;
 
@@ -43,11 +46,12 @@ public:
 	static const string MODIFIER_DESCRIPTION;
 
 	//static const string TOKEN_COMMAND;
-	//static const string TOKEN_SPACE;
-	//static const string TOKEN_OBLIQUE;
 	static const string STRING_BLANK;
+	static const char CHAR_SPACE;
+	static const char CHAR_TAB;
 
 	static const string MESSAGE_SUCCESS;
+	static const string MESSAGE_INVALID_COMMAND;
 	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_TERMINATE;
 
@@ -64,7 +68,7 @@ public:
 	//static const int INDEX_AFTER_TOKEN_COMMAND;
 
 	enum CommandType {
-		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, EXIT, INVALID
+		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
 	};
 
 	// main functions to be executed in public method parse
@@ -80,18 +84,20 @@ public:
 	string executeDeleteParsing(string);
 
 	// string manipulation functions
-	unsigned int findWhiteSpace(string);
 	string trimText(string&);
 	string trimFront(string);
 	string trimBack(string);
+	string removeConsecutiveWhiteSpace(string&);
+	string convertToLowerCase(string&);
 
 	// boolean functions
 	//bool isValidLength(string userInput);
-	bool isDigit(string text);
+	bool areDigits(string text);
+	bool isWhiteSpace(char);
 
 	// setters and getters
 	list<COMMAND_AND_TEXT> getParseInfo();
-	string setInformation(string, string);
+	string setParseInfo(string, string);
 	
 	// assertion
 	void checkString(string);
