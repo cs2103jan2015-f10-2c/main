@@ -131,7 +131,7 @@ namespace DateTimeTest
 	};
 
 	//	Boolean functions tested before classifying them as private functions
-	/*	TEST_CLASS(TEST_IS_WITHIN_RANGE)
+	/* TEST_CLASS(TEST_IS_WITHIN_RANGE)
 		{
 		public:
 
@@ -265,11 +265,7 @@ namespace DateTimeTest
 		Assert::AreEqual(false, outputMinute);
 		}
 
-	}; 
-	*/
-/*
-	TEST_CLASS(TEST_COMPARATORS) {
-
+	}; */
 
 	TEST_CLASS(TEST_COMPARATORS)
 	{
@@ -963,52 +959,6 @@ namespace ScheduleTest
 		}
 	};
 
-	/*
-	TEST_CLASS(TEST_FILTER)
-	{
-	public:
-
-	TEST_METHOD(TestFilterByPriority)
-	{
-	// TODO: Your test code here
-	}
-
-	TEST_METHOD(TestFilterByLabel)
-	{
-	// TODO: Your test code here
-	}
-
-	TEST_METHOD(TestFilterByCompletion)
-	{
-	// TODO: Your test code here
-	}
-
-	TEST_METHOD(TestFilterByDate)
-	{
-	// TODO: Your test code here
-	}
-	};
-
-	TEST_CLASS(TEST_SORT)
-	{
-	public:
-
-	TEST_METHOD(TestSortByPriority)
-	{
-	// TODO: Your test code here
-	}
-
-	TEST_METHOD(TestSortByDate)
-	{
-	// TODO: Your test code here
-	}
-
-	TEST_METHOD(TestSortByLastUpdate)
-	{
-	// TODO: Your test code here
-	}
-	};
-
 	TEST_CLASS(TEST_ITEMS_IN_SCHEDULE)
 	{
 	public:
@@ -1016,38 +966,38 @@ namespace ScheduleTest
 	TEST_METHOD(TestAddItem)
 	{
 	Schedule projectLife;
-	Item item1;
+	Item *item1 = new Item;
 	DateTime dateTime1(2020, 3, 20, 12, 30);
 
-	item1.setItemName("Joon Fai's Marriage");
-	item1.setDescription("Wife: Gantian");
-	item1.setEndTime(dateTime1);
-	item1.setCompletion(false);
-	item1.setItemID(12);
-	item1.setPriority('H');
-	item1.setLabel('P');
+	item1->setItemName("Joon Fai's Marriage");
+	item1->setDescription("Wife: Gantian");
+	item1->setEndTime(dateTime1);
+	item1->setCompletion(false);
+	item1->setItemID(12);
+	item1->setPriority('H');
+	item1->setLabel('P');
 
-	Item item2;
+	Item *item2 = new Item;
 	DateTime dateTime2(2015, 3, 8, 15, 39);
 
-	item2.setItemName("Chon Beng's Date");
-	item2.setDescription("Girlfriend: Multiple");
-	item2.setEndTime(dateTime2);
-	item2.setCompletion(true);
-	item2.setItemID(57);
-	item2.setPriority('M');
-	item2.setLabel('O');
+	item2->setItemName("Chon Beng's Date");
+	item2->setDescription("Girlfriend: Multiple");
+	item2->setEndTime(dateTime2);
+	item2->setCompletion(true);
+	item2->setItemID(57);
+	item2->setPriority('M');
+	item2->setLabel('O');
 
-	Item item3;
+	Item *item3 = new Item;
 	DateTime dateTime3(2015, 4, 1, 14, 0);
 
-	item3.setItemName("Andy's lunch");
-	item3.setDescription("Lunch: Nasi Lemak");
-	item3.setEndTime(dateTime3);
-	item3.setCompletion(false);
-	item3.setItemID(201);
-	item3.setPriority('H');
-	item3.setLabel('M');
+	item3->setItemName("Andy's lunch");
+	item3->setDescription("Lunch: Nasi Lemak");
+	item3->setEndTime(dateTime3);
+	item3->setCompletion(false);
+	item3->setItemID(201);
+	item3->setPriority('H');
+	item3->setLabel('M');
 
 	projectLife.addItem(item1);
 	projectLife.addItem(item2);
@@ -1091,43 +1041,47 @@ namespace ScheduleTest
 	Assert::AreEqual((unsigned int)201, tempItem3.getItemID());
 	Assert::AreEqual('H', tempItem3.getPriority());
 	Assert::AreEqual('M', tempItem3.getLabel());
+
+	delete item1;
+	delete item2;
+	delete item3;
 	}
 
 	TEST_METHOD(TestDeleteItem)
 	{
 	Schedule projectLife;
-	Item item1;
+	Item *item1 = new Item;
 	DateTime dateTime1(2020, 3, 20, 12, 30);
 
-	item1.setItemName("Joon Fai's Marriage");
-	item1.setDescription("Wife: Gantian");
-	item1.setEndTime(dateTime1);
-	item1.setCompletion(false);
-	item1.setItemID(12);
-	item1.setPriority('H');
-	item1.setLabel('P');
+	item1->setItemName("Joon Fai's Marriage");
+	item1->setDescription("Wife: Gantian");
+	item1->setEndTime(dateTime1);
+	item1->setCompletion(false);
+	item1->setItemID(12);
+	item1->setPriority('H');
+	item1->setLabel('P');
 
-	Item item2;
+	Item *item2 = new Item;
 	DateTime dateTime2(2015, 3, 8, 15, 39);
 
-	item2.setItemName("Chon Beng's Date");
-	item2.setDescription("Girlfriend: Multiple");
-	item2.setEndTime(dateTime2);
-	item2.setCompletion(true);
-	item2.setItemID(57);
-	item2.setPriority('M');
-	item2.setLabel('O');
+	item2->setItemName("Chon Beng's Date");
+	item2->setDescription("Girlfriend: Multiple");
+	item2->setEndTime(dateTime2);
+	item2->setCompletion(true);
+	item2->setItemID(57);
+	item2->setPriority('M');
+	item2->setLabel('O');
 
-	Item item3;
+	Item *item3 = new Item;
 	DateTime dateTime3(2015, 4, 1, 14, 0);
 
-	item3.setItemName("Andy's lunch");
-	item3.setDescription("Lunch: Nasi Lemak");
-	item3.setEndTime(dateTime3);
-	item3.setCompletion(false);
-	item3.setItemID(201);
-	item3.setPriority('H');
-	item3.setLabel('M');
+	item3->setItemName("Andy's lunch");
+	item3->setDescription("Lunch: Nasi Lemak");
+	item3->setEndTime(dateTime3);
+	item3->setCompletion(false);
+	item3->setItemID(201);
+	item3->setPriority('H');
+	item3->setLabel('M');
 
 	projectLife.addItem(item1);
 	projectLife.addItem(item2);
@@ -1214,8 +1168,49 @@ namespace ScheduleTest
 	Assert::AreEqual('P', tempItem1.getLabel());
 	}
 	};
-<<<<<<< HEAD
-=======
-	
->>>>>>> e3c21f35d3e33f2442f126f8f2fdc2ed49c4b631
-}*/}
+
+	TEST_CLASS(TEST_FILTER)
+	{
+	public:
+
+		TEST_METHOD(TestFilterByPriority)
+		{
+			// TODO: Your test code here
+		}
+
+		TEST_METHOD(TestFilterByLabel)
+		{
+			// TODO: Your test code here
+		}
+
+		TEST_METHOD(TestFilterByCompletion)
+		{
+			// TODO: Your test code here
+		}
+
+		TEST_METHOD(TestFilterByDate)
+		{
+			// TODO: Your test code here
+		}
+	};
+
+	TEST_CLASS(TEST_SORT)
+	{
+	public:
+
+		TEST_METHOD(TestSortByPriority)
+		{
+			// TODO: Your test code here
+		}
+
+		TEST_METHOD(TestSortByDate)
+		{
+			// TODO: Your test code here
+		}
+
+		TEST_METHOD(TestSortByLastUpdate)
+		{
+			// TODO: Your test code here
+		}
+	};
+}
