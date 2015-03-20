@@ -143,7 +143,7 @@ int Logic::deleteTask(int lineIndexToBeDeleted){
 	catch (const char* e){
 		cout << e << endl;
 	}
-	return 1;
+	return itemIDToBeDeleted;
 }
 
 
