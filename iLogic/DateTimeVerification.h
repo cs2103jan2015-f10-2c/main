@@ -27,22 +27,39 @@ private:
 	int _hour;
 	int _minute;
 
+
+	// LEVEL 1 of SLAP
+	// This group of functions only check for VALIDITY of
+	// INDIVIDUAL year/month/day/hour/minute values.
+	// They do not check whether the values come together
+	// to give a "correct" DateTime object.
+	bool isValidDateTimeValues();
 	bool isValidYearRange();
 	bool isValidMonthRange();
 	bool isValidDayRange();
-
 	bool isValidHourRange();
 	bool isValidMinuteRange();
 
+
+	// LEVEL 2 of SLAP
+	// This group of functions goes on to check if the
+	// individual year/month/day values come together as
+	// a valid date format.
+	// i.e. DD MM YYYY or DD MM -1
+	bool hasYearMonthDay();	
+	bool hasMonthDay();
 	bool hasYear();
 	bool hasMonth();
 	bool hasDay();
+
+	bool hasHourMinute();
 	bool hasHour();
 	bool hasMinute();
 
 public:
 	DateTimeVerification(DateTime dateTimeObject);
 
+	bool hasDate();
 	bool isValidDate();
 	bool isValidTime();
 	bool isValidDateTime();
