@@ -59,9 +59,9 @@ namespace iPlannerUI {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(12, 288);
+			this->textBox1->Location = System::Drawing::Point(14, 266);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(656, 20);
+			this->textBox1->Size = System::Drawing::Size(765, 21);
 			this->textBox1->TabIndex = 0;
 			// 
 			// tableLayoutPanel1
@@ -72,30 +72,30 @@ namespace iPlannerUI {
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
 				90.69401F)));
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				124)));
+				145)));
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				112)));
-			this->tableLayoutPanel1->Location = System::Drawing::Point(12, 32);
+				132)));
+			this->tableLayoutPanel1->Location = System::Drawing::Point(14, 30);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 2;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 14.70588F)));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 85.29412F)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(655, 238);
+			this->tableLayoutPanel1->Size = System::Drawing::Size(764, 220);
 			this->tableLayoutPanel1->TabIndex = 1;
 			// 
 			// textBox2
 			// 
-			this->textBox2->Location = System::Drawing::Point(12, 331);
+			this->textBox2->Location = System::Drawing::Point(14, 306);
 			this->textBox2->Multiline = true;
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(655, 71);
+			this->textBox2->Size = System::Drawing::Size(763, 66);
 			this->textBox2->TabIndex = 2;
 			// 
 			// iPlannerUI
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(7, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(680, 414);
+			this->ClientSize = System::Drawing::Size(803, 412);
 			this->Controls->Add(this->textBox2);
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Controls->Add(this->textBox1);

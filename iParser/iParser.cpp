@@ -168,17 +168,18 @@ string iParser::executeDeleteParsing(string indexToDelete) {
 string iParser::executeEditParsing(string text) {
 	string indexToEdit = retrieveFirstStringToken(text);
 	string textToEdit = removeFirstStringToken(text);
-
-	if (!areDigits(indexToEdit)) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
-	}
-	else if (textToEdit == STRING_BLANK) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_EDIT);
-	}
-	else {
-		setParseInfo(COMMAND_EDIT, indexToEdit);
+	/*
+if (!areDigits(indexToEdit)) {
+setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
+}
+else if (textToEdit == STRING_BLANK) {
+setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_EDIT);
+}
+else {
+*/	cout << "here" << endl;
+	setParseInfo(COMMAND_EDIT, indexToEdit);
 		setParseInfo(MODIFIER_DESCRIPTION, textToEdit);
-	}
+	//}
 
 	return MESSAGE_SUCCESS;
 }

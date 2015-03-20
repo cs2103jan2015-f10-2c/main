@@ -35,6 +35,9 @@ private:
 	static const string COMMAND_DELETE;
 	static const string COMMAND_EDIT;
 	static const string COMMAND_EXIT;
+	static const string MODIFIER_START;
+	static const string MODIFIER_END;
+	static const string MODIFIER_DESCRIPTION;
 	static const int ZERO_INDEX = 0;
 	static const unsigned int DEFAULT_ITEM_ID = 0;
 
@@ -61,14 +64,16 @@ public:
 	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
 
 	COMMAND_AND_TEXT getParseInfo(iParser parser, string input);
+	COMMAND_AND_TEXT getSecondLastParseInfo(iParser parser, string input);
 	string getCommand(COMMAND_AND_TEXT parseInfoToBeProcessed);
 	string getText(COMMAND_AND_TEXT parseInfoToBeProcessed);
 //	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
 	void initiateCommandAction(iParser parser, string input);
 	
+	void duplicateItem(Item *newItem, Item itemToBeDuplicated);
 	unsigned int addTask(string itemInformation);
 	int deleteTask(string lineIndexToBeDeleted);
-	int editTask(string command, Item itemToBeEdited, unsigned int lineIndexToBeEdited);
+	int editTask(string command, string itemInformation, unsigned int lineIndexToBeEdited);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
 	Item getItemFromLineIndex(unsigned int lineIndex);
 	vector<Item> searchTask(string phraseToSearch);
