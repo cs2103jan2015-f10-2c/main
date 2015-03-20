@@ -183,20 +183,6 @@ string iParser::executeDeleteParsing(string indexToDelete) {
 string iParser::executeEditParsing(string text) {
 	string indexToEdit = retrieveFirstStringToken(text);
 	string textToEdit = removeFirstStringToken(text);
-<<<<<<< HEAD
-=======
-
-	if (!areDigits(indexToEdit)) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
-	}
-	else if (textToEdit == STRING_BLANK) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_EDIT);
-	}
-	else {
-		setParseInfo(COMMAND_EDIT, indexToEdit);
-		setParseInfo(MODIFIER_DESCRIPTION, textToEdit);
-	}
->>>>>>> 595707a378aa861a376f32edd241a35a5697da45
 
 	if (!areDigits(indexToEdit)) {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
