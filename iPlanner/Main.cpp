@@ -6,6 +6,7 @@ void main() {
 	Logic testLogic;
 	string userInput;
 
+	cout << "THIS IS NEW" << endl;
 	cout << "command : ";
 	while (getline(cin, userInput)){
 		testLogic.initiateCommandAction(testParser, userInput);

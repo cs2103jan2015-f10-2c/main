@@ -79,18 +79,41 @@ printSchedule();
 return addedItemID;
 }
 */
-unsigned int Logic::addTask(string itemInformation){
+unsigned int Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
-	newItemToBeAdded->setItemName(itemInformation);
+	newItemToBeAdded->setItemName(parseInfoToBeProcessed.begin()->text);
 	newItemToBeAdded->setItemID(_nextItemID);
+	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
 	string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 	addedItemID = _nextItemID;
 	_nextItemID++;
+	_scheduleSize++;
 	printAddTaskSuccessful(addCompleted);
 	printSchedule();
 	return addedItemID;
+}
+
+void Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* itemToBeModified){
+	list<COMMAND_AND_TEXT>::iterator iter;
+	for (iter = ++parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
+		modifyItemParts(iter, itemToBeModified);
+	}
+}
+
+void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified){
+	string modifier = iter->command;
+	if (modifier == MODIFIER_DESCRIPTION){
+		string descriptionToBeAdded = iter->text;
+		itemToBeModified->setDescription(descriptionToBeAdded);
+	}
+	else if (modifier == MODIFIER_START){
+
+	}
+	else if (modifier == MODIFIER_END){
+
+	}
 }
 
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
@@ -103,13 +126,11 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 	}
 }
 
-int Logic::deleteTask(string itemInformation){
-	int lineIndexToBeDeleted = convertToDigit(itemInformation);
-	unsigned int itemIDToBeDeleted;
+//passing line index, not itemID
+int Logic::deleteTask(int lineIndexToBeDeleted){
 	try{
 		if (isValidLineIndex(lineIndexToBeDeleted)){
-			itemIDToBeDeleted = getItemIDFromLineIndex(lineIndexToBeDeleted);
-			string deletedItem = _logicSchedule.deleteItem(itemIDToBeDeleted);
+			string deletedItem = _logicSchedule.deleteItem(lineIndexToBeDeleted);
 			printDeleteTaskSuccessful(lineIndexToBeDeleted);
 			_scheduleSize--;//Delete successful
 			printSchedule();
@@ -117,7 +138,6 @@ int Logic::deleteTask(string itemInformation){
 		else{
 			throw("invalid lineIndex for deleteTask"); //Delete failed
 			printSchedule();
-
 		}
 	}
 	catch (const char* e){
@@ -250,9 +270,9 @@ string Logic::getText(COMMAND_AND_TEXT parseInfoToBeProcessed){
 	return parseInfoToBeProcessed.text;
 }
 
-COMMAND_AND_TEXT Logic::getParseInfo(iParser parser, string input){
+list<COMMAND_AND_TEXT> Logic::getParseInfo(iParser parser, string input){
 	parser.parse(input);
-	return parser.getParseInfo().back();
+	return parser.getParseInfo();
 }
 
 COMMAND_AND_TEXT Logic::getSecondLastParseInfo(iParser parser, string input){
@@ -271,17 +291,17 @@ int Logic::convertToDigit(string text) {
 }
 
 void Logic::initiateCommandAction(iParser parser, string input) {
-	COMMAND_AND_TEXT parseInfoToBeProcessed = getParseInfo(parser, input);
-	string lastCommand = getCommand(parseInfoToBeProcessed);
-	string lastItemInformation = getText(parseInfoToBeProcessed);
-	if (lastCommand == COMMAND_ADD) {
-		addTask(lastItemInformation);
+	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
+	string command = parseInfoToBeProcessed.begin()->command;
+	string itemInformation = parseInfoToBeProcessed.begin()->text;
+	if (command == COMMAND_ADD) {
+		addTask(parseInfoToBeProcessed);
 	}
-	else if (lastCommand == COMMAND_DELETE) {
-		deleteTask(lastItemInformation);
+	else if (command == COMMAND_DELETE) {
+		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
+		deleteTask(lineIndexToBeDeleted);
 	}
-
-	else if (lastCommand == COMMAND_EXIT){
+	else if (command == COMMAND_EXIT){
 		ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
 		writeFile << _directoryToBeSaved << endl;
 		writeFile << _fileNameToBeSaved << endl;
@@ -289,60 +309,23 @@ void Logic::initiateCommandAction(iParser parser, string input) {
 		exit(0);
 	}
 
-	else if (lastCommand == COMMAND_EDIT){
-		unsigned int lineIndexToBeEdited = convertToDigit(lastItemInformation);
-		editTask(lastCommand, lastItemInformation, lineIndexToBeEdited);
+	else if (command == COMMAND_EDIT){
+		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
+		editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	}
 	else {
-		COMMAND_AND_TEXT secondLastParseInfoToBeProcessed = getSecondLastParseInfo(parser, input);
-		string secondLastCommand = secondLastParseInfoToBeProcessed.command;
-		string secondLastItemInformation = secondLastParseInfoToBeProcessed.text;
-		if (secondLastCommand == COMMAND_EDIT){
-			unsigned int lineIndexToBeEdited = convertToDigit(secondLastItemInformation);
-			editTask(lastCommand, lastItemInformation, lineIndexToBeEdited);
-		}
-		else {
-			cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
-		}
+		cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
 	}
 }
-void Logic::duplicateItem(Item *newItem, Item itemToBeDuplicated){
-	newItem->setItemID(itemToBeDuplicated.getItemID());
-	newItem->setItemName(itemToBeDuplicated.getItemName());
-	newItem->setStartTime(itemToBeDuplicated.getStartTime());
-	newItem->setEndTime(itemToBeDuplicated.getEndTime());
-	newItem->setLabel(itemToBeDuplicated.getLabel());
-	newItem->setPriority(itemToBeDuplicated.getPriority());
-	newItem->setDescription(itemToBeDuplicated.getDescription());
-	newItem->setCompletion(itemToBeDuplicated.getCompletion());
-}
 
-int Logic::editTask(string command, string itemInformation, unsigned int lineIndexToBeEdited){
+
+
+int Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
 	Item *editedItemToBeReplaced;
 	editedItemToBeReplaced = new Item;
 	unsigned int itemIDToBeEdited = getItemIDFromLineIndex(lineIndexToBeEdited);
-	duplicateItem(editedItemToBeReplaced, _logicSchedule.retrieveItem(itemIDToBeEdited));
-
-	if (command == MODIFIER_DESCRIPTION){
-		editedItemToBeReplaced->setDescription(itemInformation);
-	}
-	/*else if (command == "priority"){
-		char priorityToBeAssigned = itemToBeEdited.getPriority();
-		assignPriorityToExistingTask(priorityToBeAssigned, lineIndexToBeEdited);
-		}
-		else if (command == "label"){
-		char labelToBeAssigned = itemToBeEdited.getLabel();
-		assignLabelToExistingTask(labelToBeAssigned, lineIndexToBeEdited);
-		}
-		else if (command == "start"){
-		DateTime startTimeToBeAssigned = itemToBeEdited.getStartTime();
-		assignTimingToExistingTask("start", startTimeToBeAssigned, lineIndexToBeEdited);
-		}
-		else if (command == "end" || command == "due"){
-		DateTime endTimeToBeAssigned = itemToBeEdited.getEndTime();
-		assignTimingToExistingTask("end", endTimeToBeAssigned, lineIndexToBeEdited);
-		}
-		*/
+	*editedItemToBeReplaced = _logicSchedule.retrieveItem(itemIDToBeEdited);
+	modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
 	_logicSchedule.replaceItem(editedItemToBeReplaced, itemIDToBeEdited);
 	printSchedule();
 	return 1;
