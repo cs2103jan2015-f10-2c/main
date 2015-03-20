@@ -3,7 +3,7 @@
 #include "Logic.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
+/*
 namespace iLogicTest {
 	TEST_CLASS(AddTaskTest)
 	{
