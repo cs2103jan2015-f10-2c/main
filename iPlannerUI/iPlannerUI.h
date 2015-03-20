@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Logic.h""
+#include "ItemVerification.h"
+#include "DateTimeVerification.h"
+
 namespace iPlannerUI {
 
 	using namespace System;
@@ -34,10 +38,16 @@ namespace iPlannerUI {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::TextBox^  commandInputBox;
+	private: System::Windows::Forms::TableLayoutPanel^  ScheduleListTable;
+	private: System::Windows::Forms::TextBox^  CommandListDisplayBox;
 	protected:
-	private: System::Windows::Forms::TableLayoutPanel^  tableLayoutPanel1;
-	private: System::Windows::Forms::TextBox^  textBox2;
+
+	protected:
+
+
+	private: System::Windows::Forms::TextBox^  commandOutputBox;
+
 
 	private:
 		/// <summary>
@@ -52,53 +62,65 @@ namespace iPlannerUI {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->commandInputBox = (gcnew System::Windows::Forms::TextBox());
+			this->ScheduleListTable = (gcnew System::Windows::Forms::TableLayoutPanel());
+			this->CommandListDisplayBox = (gcnew System::Windows::Forms::TextBox());
+			this->commandOutputBox = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
-			// textBox1
+			// commandInputBox
 			// 
-			this->textBox1->Location = System::Drawing::Point(14, 266);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(765, 21);
-			this->textBox1->TabIndex = 0;
+			this->commandInputBox->Location = System::Drawing::Point(12, 288);
+			this->commandInputBox->Name = L"commandInputBox";
+			this->commandInputBox->Size = System::Drawing::Size(656, 20);
+			this->commandInputBox->TabIndex = 0;
 			// 
-			// tableLayoutPanel1
+			// ScheduleListTable
 			// 
-			this->tableLayoutPanel1->ColumnCount = 4;
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+			this->ScheduleListTable->AutoScroll = true;
+			this->ScheduleListTable->ColumnCount = 5;
+			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
 				9.305994F)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
 				90.69401F)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				145)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				132)));
-			this->tableLayoutPanel1->Location = System::Drawing::Point(14, 30);
-			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
-			this->tableLayoutPanel1->RowCount = 2;
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 14.70588F)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 85.29412F)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(764, 220);
-			this->tableLayoutPanel1->TabIndex = 1;
+			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				101)));
+			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				98)));
+			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				60)));
+			this->ScheduleListTable->Location = System::Drawing::Point(12, 33);
+			this->ScheduleListTable->Name = L"ScheduleListTable";
+			this->ScheduleListTable->RowCount = 2;
+			this->ScheduleListTable->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 14.70588F)));
+			this->ScheduleListTable->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 85.29412F)));
+			this->ScheduleListTable->Size = System::Drawing::Size(655, 238);
+			this->ScheduleListTable->TabIndex = 1;
 			// 
-			// textBox2
+			// CommandListDisplayBox
 			// 
-			this->textBox2->Location = System::Drawing::Point(14, 306);
-			this->textBox2->Multiline = true;
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(763, 66);
-			this->textBox2->TabIndex = 2;
+			this->CommandListDisplayBox->Location = System::Drawing::Point(12, 342);
+			this->CommandListDisplayBox->Multiline = true;
+			this->CommandListDisplayBox->Name = L"CommandListDisplayBox";
+			this->CommandListDisplayBox->Size = System::Drawing::Size(655, 71);
+			this->CommandListDisplayBox->TabIndex = 2;
+			// 
+			// commandOutputBox
+			// 
+			this->commandOutputBox->Location = System::Drawing::Point(12, 314);
+			this->commandOutputBox->Name = L"commandOutputBox";
+			this->commandOutputBox->Size = System::Drawing::Size(409, 20);
+			this->commandOutputBox->TabIndex = 3;
 			// 
 			// iPlannerUI
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(7, 12);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(803, 412);
-			this->Controls->Add(this->textBox2);
-			this->Controls->Add(this->tableLayoutPanel1);
-			this->Controls->Add(this->textBox1);
+			this->ClientSize = System::Drawing::Size(686, 438);
+			this->Controls->Add(this->commandOutputBox);
+			this->Controls->Add(this->CommandListDisplayBox);
+			this->Controls->Add(this->ScheduleListTable);
+			this->Controls->Add(this->commandInputBox);
 			this->Name = L"iPlannerUI";
 			this->Text = L"iPlannerUI";
 			this->ResumeLayout(false);
