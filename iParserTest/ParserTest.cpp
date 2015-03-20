@@ -242,6 +242,21 @@ namespace iPlannerParserTest {
 			Assert::IsTrue(actualTwo);
 			Assert::IsFalse(actualThree);
 		}
+
+		TEST_METHOD(isPrepositionKeywordTest) {
+			string words[10] = { "by", "on", "IN", "from", "BEFORE", "start", "TEST", "add", "DELETE", "exit" };
+
+			for (int i = 0; i < 10; i++) {
+				bool actual = testParser.isPrepositionKeyword(words[i]);
+				if (i < 6) {
+					Assert::IsTrue(actual);
+				}
+				else {
+					Assert::IsFalse(actual);
+				}
+			}
+		}
+
 	#endif
 	};
 }

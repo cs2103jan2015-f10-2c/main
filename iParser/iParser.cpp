@@ -15,13 +15,22 @@ const string iParser::COMMAND_VIEW = "view";
 const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
+
 const string iParser::MODIFIER_START = "start";
 const string iParser::MODIFIER_END = "end";
 const string iParser::MODIFIER_DESCRIPTION = "description";
-//const string iParser::TOKEN_COMMAND = "::";
+
+const string iParser::STRING_PREPOSITION[] = { "by", "on", "in", "from", "before", "start" };
+const string iParser::STRING_DAYS[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
+const string iParser::STRING_DAYS_SHORT_FORM[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
+const string iParser::STRING_MONTHS[] = { "january" , "february", "march", "april", "may", "june",
+										  "july", "august", "september", "october", "november", "december" };
+const string iParser::STRING_MONTHS_SHORT_FORM[] = { "jan", "feb", "mar", "apr", "may", "jun",
+													 "jul", "aug", "sep", "oct", "nov", "dec" };
 const string iParser::STRING_BLANK = "";
 const char iParser::CHAR_SPACE = ' ';
 const char iParser::CHAR_TAB = '\t';
+
 const string iParser::MESSAGE_SUCCESS = "success";
 const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
@@ -29,6 +38,8 @@ const string iParser::MESSAGE_INVALID_ADD = "Invalid text added";
 const string iParser::MESSAGE_INVALID_EDIT = "Invalid edit";
 const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
+
+const int iParser::SIZE_PREPROSITION = 6;
 
 const int iParser::INDEX_INVALID = -1;
 const int iParser::INDEX_ONE = 1;
@@ -292,6 +303,24 @@ bool iParser::areDigits(string text) {
 
 bool iParser::isWhiteSpace(char character) {
 	return (character == CHAR_SPACE || character == CHAR_TAB);
+}
+
+bool iParser::isPrepositionKeyword(string text) {
+	bool isValid = false;
+	int index;
+	convertToLowerCase(text);
+	
+	for (index = INDEX_START; !isValid && index < SIZE_PREPROSITION; index++) {
+		if (text == STRING_PREPOSITION[index]) {
+			isValid = true;
+		}
+	}
+
+	return isValid;
+}
+
+bool isDateTimeKeyword(string) {
+	return true;
 }
 
 list<COMMAND_AND_TEXT> iParser::getParseInfo() {

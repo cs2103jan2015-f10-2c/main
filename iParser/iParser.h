@@ -11,8 +11,9 @@ NOTES TO DEVELOPERS
 #include <iostream>
 #include <string>
 #include <list>
-#include <cctype>
+#include <vector>
 #include <sstream>
+#include <cctype>
 #include <assert.h>
 using namespace std;
 
@@ -44,7 +45,11 @@ public:
 	static const string MODIFIER_END;
 	static const string MODIFIER_DESCRIPTION;
 
-	//static const string TOKEN_COMMAND;
+	static const string STRING_PREPOSITION[];
+	static const string STRING_DAYS[];
+	static const string STRING_DAYS_SHORT_FORM[];
+	static const string STRING_MONTHS[];
+	static const string STRING_MONTHS_SHORT_FORM[];
 	static const string STRING_BLANK;
 	static const char CHAR_SPACE;
 	static const char CHAR_TAB;
@@ -62,12 +67,11 @@ public:
 	//static const int DIGIT_THREE;
 	//static const int DIGIT_FOUR;
 
-	//static const int INDEX_ZERO;
+	static const int SIZE_PREPROSITION;
+
 	static const int INDEX_ONE;
 	static const int INDEX_INVALID;
 	static const int INDEX_START;
-	//static const int INDEX_NEXT;
-	//static const int INDEX_AFTER_TOKEN_COMMAND;
 
 	enum CommandType {
 		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
@@ -83,10 +87,10 @@ public:
 	// commandType functions
 	string executeAddParsing(string); // unit tested
 	string executeDeleteParsing(string); // unit tested
-	string executeEditParsing(string);
-	string executeUndoParsing(string);
-	string executeDoneParsing(string);
-	string executeExitParsing(string);
+	string executeEditParsing(string); // unit tested
+	string executeUndoParsing(string); // unit tested
+	string executeDoneParsing(string); // unit tested
+	string executeExitParsing(string); // unit tested
 
 	// string manipulation functions
 	string trimText(string&); // unit tested
@@ -101,6 +105,8 @@ public:
 	//bool isValidLength(string userInput);
 	bool areDigits(string text); // unit tested
 	bool isWhiteSpace(char); // unit tested
+	bool isPrepositionKeyword(string);
+	bool isDateTimeKeyword(string);
 
 	// setters and getters
 	list<COMMAND_AND_TEXT> getParseInfo();
