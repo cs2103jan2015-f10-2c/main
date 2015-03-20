@@ -34,6 +34,7 @@ private:
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_EDIT;
+	static const string COMMAND_SAVE;
 	static const string COMMAND_EXIT;
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
@@ -64,9 +65,6 @@ public:
 	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
 
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);
-	COMMAND_AND_TEXT getSecondLastParseInfo(iParser parser, string input);
-	string getCommand(COMMAND_AND_TEXT parseInfoToBeProcessed);
-	string getText(COMMAND_AND_TEXT parseInfoToBeProcessed);
 //	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
 	void initiateCommandAction(iParser parser, string input);
 	
@@ -74,7 +72,6 @@ public:
 	int deleteTask(int lineIndexToBeDeleted);
 	int editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
-	Item getItemFromLineIndex(unsigned int lineIndex);
 	vector<Item> searchTask(string phraseToSearch);
 	void modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
 	void modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
