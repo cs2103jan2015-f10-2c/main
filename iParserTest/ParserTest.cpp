@@ -12,7 +12,7 @@ namespace iPlannerParserTest {
 
 	#ifndef TESTPARSER
 	#else
-		TEST_METHOD(retrieveCommandTest) {
+		TEST_METHOD(parserRetrieveCommandTest) {
 			string stringOne = "ADD text";
 			string stringTwo = "del\ttext";
 			string stringThree = "exit\t";
@@ -30,7 +30,7 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedThree, actualThree);
 		}
 
-		TEST_METHOD(executeAddParsingTest) {
+		/*TEST_METHOD(parserExecuteAddParsingTest) {
 			string text = "text";
 			string expectedCommand = "add";
 			string expectedText = "text";
@@ -44,9 +44,9 @@ namespace iPlannerParserTest {
 
 			Assert::AreEqual(expectedCommand, actualCommand);
 			Assert::AreEqual(expectedText, actualText);
-		}
+		}*/
 
-		TEST_METHOD(executeDeleteParsingTest) {
+		TEST_METHOD(parserExecuteDeleteParsingTest) {
 			string text[2] = { "123", "abc" };
 			string expectedCommand[2] = { "delete", "invalid" };
 			string expectedText[2] = { "123", "Invalid index" };
@@ -66,7 +66,7 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		TEST_METHOD(executeEditParsing) {
+		TEST_METHOD(parserExecuteEditParsing) {
 			string text[3] = { "123 text", "CS2013 text", "123" };
 			string expectedCommand[4] = { "edit", "description", "invalid", "invalid" };
 			string expectedText[4] = { "123", "text", "Invalid index", "invalid edit" };
@@ -86,7 +86,7 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		TEST_METHOD(executeUndoParsingTest) {
+		TEST_METHOD(parserExecuteUndoParsingTest) {
 			string text[2] = { "undo", "undo 123" };
 			string expectedCommand[2] = { "undo", "invalid" };
 			string expectedText[2] = { "", "Invalid command" };
@@ -106,7 +106,7 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		TEST_METHOD(executeDoneParsingTest) {
+		TEST_METHOD(parserExecuteDoneParsingTest) {
 			string text[2] = { "123", "abc" };
 			string expectedCommand[2] = { "done", "invalid" };
 			string expectedText[2] = { "123", "Invalid index" };
@@ -126,7 +126,7 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		TEST_METHOD(executeExitParsingTest) {
+		TEST_METHOD(parserExecuteExitParsingTest) {
 			string text[2] = { "exit", "exit 123" };
 			string expectedCommand[2] = { "exit", "invalid" };
 			string expectedText[2] = { "", "Invalid command" };
@@ -146,9 +146,9 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		TEST_METHOD(trimTextTest) {
-			string stringOne = "   add    text   ";
-			string stringTwo = "\t\t del \t text \t\t\t";
+		TEST_METHOD(parserTrimTextTest) {
+			string stringOne = "   add text   ";
+			string stringTwo = "\t\t del text \t\t\t";
 			string stringThree = "  exit\t\t";
 			string expectedOne = "add text";
 			string expectedTwo = "del text";
@@ -167,7 +167,7 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedThree, stringThree);
 		}
 
-		TEST_METHOD(removeFirstStringTokenTest) {
+		TEST_METHOD(parserRemoveFirstStringTokenTest) {
 			string stringOne = "add text";
 			string stringTwo = "del text";
 			string stringThree = "exit";
@@ -185,7 +185,7 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedThree, actualThree);
 		}
 		
-		TEST_METHOD(removeConsecutiveWhiteSpace) {
+		TEST_METHOD(parserRemoveConsecutiveWhiteSpace) {
 			string actual = "1 2 \t 3 \t 4 5";
 			string expected = "1 2 3 4 5"; 
 			
@@ -194,7 +194,7 @@ namespace iPlannerParserTest {
 
 		}
 
-		TEST_METHOD(convertToLowerCaseTest) {
+		TEST_METHOD(parserConvertToLowerCaseTest) {
 			string actual = "ABCDEFGHIJKLM123456789NOPQRSTUVWXYZ";
 			string expected = "abcdefghijklm123456789nopqrstuvwxyz";
 
@@ -202,7 +202,7 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expected, actual);
 		}
 
-		TEST_METHOD(retrieveFirstStringTokenTest) {
+		TEST_METHOD(parserRetrieveFirstStringTokenTest) {
 			string stringOne = "add   text";
 			string stringTwo = "exit";
 			string expectedOne = "add";
@@ -215,7 +215,7 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedTwo, actualTwo);
 		}
 
-		TEST_METHOD(areDigitsTest) {
+		TEST_METHOD(parserAreDigitsTest) {
 			string stringOne = "123456789";
 			string stringTwo = "123a456b789c";
 			string stringThree = "123 456 789";
@@ -229,7 +229,7 @@ namespace iPlannerParserTest {
 			Assert::IsFalse(actualThree);
 		}
 
-		TEST_METHOD(isWhiteSpaceTest) {
+		TEST_METHOD(parserIsWhiteSpaceTest) {
 			char characterOne = ' ';
 			char characterTwo = '\t';
 			char characterThree = '0';
@@ -242,18 +242,119 @@ namespace iPlannerParserTest {
 			Assert::IsTrue(actualTwo);
 			Assert::IsFalse(actualThree);
 		}
+		
+		TEST_METHOD(parserRetrieveCountTest) {
+			string testString = ",one,two,three,four,five,";
+			unsigned int expected = 6;
 
-		TEST_METHOD(isPrepositionKeywordTest) {
-			string words[10] = { "by", "on", "IN", "from", "BEFORE", "start", "TEST", "add", "DELETE", "exit" };
+			unsigned int actual = testParser.retrieveCount(testString, ',');
+			Assert::AreEqual(expected, actual);
+		}
 
-			for (int i = 0; i < 10; i++) {
-				bool actual = testParser.isPrepositionKeyword(words[i]);
-				if (i < 6) {
-					Assert::IsTrue(actual);
-				}
-				else {
-					Assert::IsFalse(actual);
-				}
+		TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
+			vector<string> testVector;
+			string stringOne = "10/11/12";
+			string stringTwo = "10/11";
+			string expectedOne = "10 11 12";
+			string expectedTwo = "10 11 -1";
+			
+			string actualOne = testParser.splitAndSetObliqueDateInformation(stringOne, 2);
+			Assert::AreEqual(expectedOne, actualOne);
+			string actualTwo = testParser.splitAndSetObliqueDateInformation(stringTwo, 1);
+			Assert::AreEqual(expectedTwo, actualTwo);
+		}
+
+		TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
+			string stringOne = "JAN";
+			string stringTwo = "10 nOv 2015";
+			string stringThree = "9 OcT";
+			string stringFour = "10 Novmbr";
+			string stringFive = "MoN";
+			string expectedOne = "-1 1 -1";
+			string expectedTwo = "10 11 2015";
+			string expectedThree = "9 10 -1";
+			string expectedFour = "10 -1 -1";
+			string expectedFive = "monday -1 -1";
+
+			string actualOne = testParser.splitAndSetSpaceDateInformation(stringOne, 0);
+			Assert::AreEqual(expectedOne, actualOne);
+			string actualTwo = testParser.splitAndSetSpaceDateInformation(stringTwo, 2);
+			Assert::AreEqual(expectedTwo, actualTwo);
+			string actualThree = testParser.splitAndSetSpaceDateInformation(stringThree, 1);
+			Assert::AreEqual(expectedThree, actualThree);
+			string actualFour = testParser.splitAndSetSpaceDateInformation(stringFour, 1);
+			Assert::AreEqual(expectedFour, actualFour);
+			string actualFive = testParser.splitAndSetSpaceDateInformation(stringFive, 0);
+			Assert::AreEqual(expectedFive, actualFive);
+		}
+
+		TEST_METHOD(parserIsValidDateStringTest) {
+			string stringOne = "10 11 12";
+			string stringTwo = "10 11 -1";
+			string stringThree = "abc def ghi";
+
+			bool actualOne = testParser.isValidDateString(stringOne);
+			Assert::IsTrue(actualOne);
+			bool actualTwo = testParser.isValidDateString(stringTwo);
+			Assert::IsTrue(actualTwo);
+		}
+
+		TEST_METHOD(parserIsDayTest) {
+			string trueTestStringOne[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
+			string trueTestStringTwo[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
+			string falseTestString[] = { "mondeh", "toosdeh", "weday", "thurs", "frehdeh", "satur", "sundae" };
+
+			for (unsigned int i = 0; i < 7; i++) {
+				unsigned int index = -1;
+				bool actual = testParser.isDay(trueTestStringOne[i], index);
+				Assert::IsTrue(actual);
+				Assert::AreEqual(index, i);
+			}
+
+			for (unsigned int i = 0; i < 7; i++) {
+				unsigned int index = -1;
+				bool actual = testParser.isDay(trueTestStringTwo[i], index);
+				Assert::IsTrue(actual);
+				Assert::AreEqual(index, i);
+			}
+
+			for (unsigned int i = 0; i < 7; i++) {
+				unsigned int index = -1;
+				unsigned int expected = -1;
+				bool actual = testParser.isDay(falseTestString[i], index);
+				Assert::IsFalse(actual);
+				Assert::AreEqual(index, expected);
+			}
+		}
+
+		TEST_METHOD(parserIsMonthTest) {
+			string trueTestStringOne[] = { "January", "february", "March", "april", "May", "june",
+				"July", "august", "September", "october", "November", "december" };
+			string trueTestStringTwo[] = { "JAN", "feb", "MAR", "apr", "MAY", "jun",
+				"JUL", "aug", "SEP", "oct", "NOV", "dec" };
+			string falseTestString[] = { "janr", "febr", "mach", "aprl", "my", "jn",
+				"jool", "augst", "sept", "octbr", "novmbr", "decmbr" };
+
+			for (unsigned int i = 0; i < 12; i++) {
+				unsigned int index = -1;
+				bool actual = testParser.isMonth(trueTestStringOne[i], index);
+				Assert::IsTrue(actual);
+				Assert::AreEqual(index, i);
+			}
+
+			for (unsigned int i = 0; i < 12; i++) {
+				unsigned int index = -1;
+				bool actual = testParser.isMonth(trueTestStringTwo[i], index);
+				Assert::IsTrue(actual);
+				Assert::AreEqual(index, i);
+			}
+
+			for (unsigned int i = 0; i < 12; i++) {
+				unsigned int index = -1;
+				unsigned int expected = -1;
+				bool actual = testParser.isMonth(falseTestString[i], index);
+				Assert::IsFalse(actual);
+				Assert::AreEqual(index, expected);
 			}
 		}
 
