@@ -52,17 +52,17 @@ public:
 	//	Retrieves a copy of an existing item in the schedule
 	//	Pre:	Valid itemID
 	//	Post:	Returns a copy of the existing item
-	Item retrieveItem(unsigned int);
+	Item retrieveItemGivenItemID(unsigned int);
 
-	//	Edits an existing item in the schedule
+	//	Replaces an existing item in the schedule
 	//	Pre:	Valid itemID, valid Item object
 	//	Post:	Given itemID, replaces existing item with updated item
-	string replaceItem(Item*, unsigned int);
+	string replaceItemGivenItemID(Item*, unsigned int);
 
 	//	Deletes an item from the schedule
 	//	Pre:	Valid itemID
 	//	Post:	Deleted item is returned
-	string deleteItem(unsigned int);
+	string deleteItemGivenItemID(unsigned int);
 
 	//	Retrieves the entire schedule
 	//	Pre:	Nil

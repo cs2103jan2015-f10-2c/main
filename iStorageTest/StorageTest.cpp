@@ -265,7 +265,7 @@ namespace DateTimeTest
 		Assert::AreEqual(false, outputMinute);
 		}
 
-	}; */
+		}; */
 
 	TEST_CLASS(TEST_COMPARATORS)
 	{
@@ -963,210 +963,246 @@ namespace ScheduleTest
 	{
 	public:
 
-	TEST_METHOD(TestAddItem)
-	{
-	Schedule projectLife;
-	Item *item1 = new Item;
-	DateTime dateTime1(2020, 3, 20, 12, 30);
+		TEST_METHOD(TestAddItem)
+		{
+			Schedule projectLife;
+			Item *item1 = new Item;
+			DateTime dateTime1(2020, 3, 20, 12, 30);
 
-	item1->setItemName("Joon Fai's Marriage");
-	item1->setDescription("Wife: Gantian");
-	item1->setEndTime(dateTime1);
-	item1->setCompletion(false);
-	item1->setItemID(12);
-	item1->setPriority('H');
-	item1->setLabel('P');
+			item1->setItemName("Joon Fai's Marriage");
+			item1->setDescription("Wife: Gantian");
+			item1->setEndTime(dateTime1);
+			item1->setCompletion(false);
+			item1->setItemID(12);
+			item1->setPriority('H');
+			item1->setLabel('P');
 
-	Item *item2 = new Item;
-	DateTime dateTime2(2015, 3, 8, 15, 39);
+			Item *item2 = new Item;
+			DateTime dateTime2(2015, 3, 8, 15, 39);
 
-	item2->setItemName("Chon Beng's Date");
-	item2->setDescription("Girlfriend: Multiple");
-	item2->setEndTime(dateTime2);
-	item2->setCompletion(true);
-	item2->setItemID(57);
-	item2->setPriority('M');
-	item2->setLabel('O');
+			item2->setItemName("Chon Beng's Date");
+			item2->setDescription("Girlfriend: Multiple");
+			item2->setEndTime(dateTime2);
+			item2->setCompletion(true);
+			item2->setItemID(57);
+			item2->setPriority('M');
+			item2->setLabel('O');
 
-	Item *item3 = new Item;
-	DateTime dateTime3(2015, 4, 1, 14, 0);
+			Item *item3 = new Item;
+			DateTime dateTime3(2015, 4, 1, 14, 0);
 
-	item3->setItemName("Andy's lunch");
-	item3->setDescription("Lunch: Nasi Lemak");
-	item3->setEndTime(dateTime3);
-	item3->setCompletion(false);
-	item3->setItemID(201);
-	item3->setPriority('H');
-	item3->setLabel('M');
+			item3->setItemName("Andy's lunch");
+			item3->setDescription("Lunch: Nasi Lemak");
+			item3->setEndTime(dateTime3);
+			item3->setCompletion(false);
+			item3->setItemID(201);
+			item3->setPriority('H');
+			item3->setLabel('M');
 
-	projectLife.addItem(item1);
-	projectLife.addItem(item2);
-	projectLife.addItem(item3);
+			string tempItem1 = projectLife.addItem(item1);
+			string tempItem2 = projectLife.addItem(item2);
+			string tempItem3 = projectLife.addItem(item3);
 
-	Item tempItem1 = projectLife.retrieveSchedule()[0];
-	Assert::AreEqual((string) "Joon Fai's Marriage", tempItem1.getItemName());
-	Assert::AreEqual((string) "Wife: Gantian", tempItem1.getDescription());
-	Assert::AreEqual(dateTime1.getYear(), tempItem1.getEndTime().getYear());
-	Assert::AreEqual(dateTime1.getMonth(), tempItem1.getEndTime().getMonth());
-	Assert::AreEqual(dateTime1.getDay(), tempItem1.getEndTime().getDay());
-	Assert::AreEqual(dateTime1.getHour(), tempItem1.getEndTime().getHour());
-	Assert::AreEqual(dateTime1.getMinute(), tempItem1.getEndTime().getMinute());
-	Assert::AreEqual(false, tempItem1.getCompletion());
-	Assert::AreEqual((unsigned int)12, tempItem1.getItemID());
-	Assert::AreEqual('H', tempItem1.getPriority());
-	Assert::AreEqual('P', tempItem1.getLabel());
+			Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+			Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
 
-	Item tempItem2 = projectLife.retrieveSchedule()[1];
-	Assert::AreEqual((string) "Chon Beng's Date", tempItem2.getItemName());
-	Assert::AreEqual((string) "Girlfriend: Multiple", tempItem2.getDescription());
-	Assert::AreEqual(dateTime2.getYear(), tempItem2.getEndTime().getYear());
-	Assert::AreEqual(dateTime2.getMonth(), tempItem2.getEndTime().getMonth());
-	Assert::AreEqual(dateTime2.getDay(), tempItem2.getEndTime().getDay());
-	Assert::AreEqual(dateTime2.getHour(), tempItem2.getEndTime().getHour());
-	Assert::AreEqual(dateTime2.getMinute(), tempItem2.getEndTime().getMinute());
-	Assert::AreEqual(true, tempItem2.getCompletion());
-	Assert::AreEqual((unsigned int)57, tempItem2.getItemID());
-	Assert::AreEqual('M', tempItem2.getPriority());
-	Assert::AreEqual('O', tempItem2.getLabel());
+			delete item1;
+			delete item2;
+			delete item3;
+		}
 
-	Item tempItem3 = projectLife.retrieveSchedule()[2];
-	Assert::AreEqual((string) "Andy's lunch", tempItem3.getItemName());
-	Assert::AreEqual((string) "Lunch: Nasi Lemak", tempItem3.getDescription());
-	Assert::AreEqual(dateTime3.getYear(), tempItem3.getEndTime().getYear());
-	Assert::AreEqual(dateTime3.getMonth(), tempItem3.getEndTime().getMonth());
-	Assert::AreEqual(dateTime3.getDay(), tempItem3.getEndTime().getDay());
-	Assert::AreEqual(dateTime3.getHour(), tempItem3.getEndTime().getHour());
-	Assert::AreEqual(dateTime3.getMinute(), tempItem3.getEndTime().getMinute());
-	Assert::AreEqual(false, tempItem3.getCompletion());
-	Assert::AreEqual((unsigned int)201, tempItem3.getItemID());
-	Assert::AreEqual('H', tempItem3.getPriority());
-	Assert::AreEqual('M', tempItem3.getLabel());
+		TEST_METHOD(TestDeleteItem)
+		{
+			Schedule projectLife;
+			Item *item1 = new Item;
+			DateTime dateTime1(2020, 3, 20, 12, 30);
 
-	delete item1;
-	delete item2;
-	delete item3;
-	}
+			item1->setItemName("Joon Fai's Marriage");
+			item1->setDescription("Wife: Gantian");
+			item1->setEndTime(dateTime1);
+			item1->setCompletion(false);
+			item1->setItemID(12);
+			item1->setPriority('H');
+			item1->setLabel('P');
 
-	TEST_METHOD(TestDeleteItem)
-	{
-	Schedule projectLife;
-	Item *item1 = new Item;
-	DateTime dateTime1(2020, 3, 20, 12, 30);
+			Item *item2 = new Item;
+			DateTime dateTime2(2015, 3, 8, 15, 39);
 
-	item1->setItemName("Joon Fai's Marriage");
-	item1->setDescription("Wife: Gantian");
-	item1->setEndTime(dateTime1);
-	item1->setCompletion(false);
-	item1->setItemID(12);
-	item1->setPriority('H');
-	item1->setLabel('P');
+			item2->setItemName("Chon Beng's Date");
+			item2->setDescription("Girlfriend: Multiple");
+			item2->setEndTime(dateTime2);
+			item2->setCompletion(true);
+			item2->setItemID(57);
+			item2->setPriority('M');
+			item2->setLabel('O');
 
-	Item *item2 = new Item;
-	DateTime dateTime2(2015, 3, 8, 15, 39);
+			Item *item3 = new Item;
+			DateTime dateTime3(2015, 4, 1, 14, 0);
 
-	item2->setItemName("Chon Beng's Date");
-	item2->setDescription("Girlfriend: Multiple");
-	item2->setEndTime(dateTime2);
-	item2->setCompletion(true);
-	item2->setItemID(57);
-	item2->setPriority('M');
-	item2->setLabel('O');
+			item3->setItemName("Andy's lunch");
+			item3->setDescription("Lunch: Nasi Lemak");
+			item3->setEndTime(dateTime3);
+			item3->setCompletion(false);
+			item3->setItemID(201);
+			item3->setPriority('H');
+			item3->setLabel('M');
 
-	Item *item3 = new Item;
-	DateTime dateTime3(2015, 4, 1, 14, 0);
+			projectLife.addItem(item1);
+			projectLife.addItem(item2);
+			projectLife.addItem(item3);
 
-	item3->setItemName("Andy's lunch");
-	item3->setDescription("Lunch: Nasi Lemak");
-	item3->setEndTime(dateTime3);
-	item3->setCompletion(false);
-	item3->setItemID(201);
-	item3->setPriority('H');
-	item3->setLabel('M');
+			Item tempItem;
 
-	projectLife.addItem(item1);
-	projectLife.addItem(item2);
-	projectLife.addItem(item3);
+			string tempItem1 = projectLife.deleteItemGivenItemID(12);
+			Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
 
-	Item tempItem1 = projectLife.deleteItem(12);
-	Assert::AreEqual((string) "Joon Fai's Marriage", tempItem1.getItemName());
-	Assert::AreEqual((string) "Wife: Gantian", tempItem1.getDescription());
-	Assert::AreEqual(dateTime1.getYear(), tempItem1.getEndTime().getYear());
-	Assert::AreEqual(dateTime1.getMonth(), tempItem1.getEndTime().getMonth());
-	Assert::AreEqual(dateTime1.getDay(), tempItem1.getEndTime().getDay());
-	Assert::AreEqual(dateTime1.getHour(), tempItem1.getEndTime().getHour());
-	Assert::AreEqual(dateTime1.getMinute(), tempItem1.getEndTime().getMinute());
-	Assert::AreEqual(false, tempItem1.getCompletion());
-	Assert::AreEqual((unsigned int)12, tempItem1.getItemID());
-	Assert::AreEqual('H', tempItem1.getPriority());
-	Assert::AreEqual('P', tempItem1.getLabel());
+			tempItem = projectLife.retrieveSchedule()[0];
+			string tempItem2 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
 
-	Item tempItem2 = projectLife.retrieveSchedule()[0];
-	Assert::AreEqual((string) "Chon Beng's Date", tempItem2.getItemName());
-	Assert::AreEqual((string) "Girlfriend: Multiple", tempItem2.getDescription());
-	Assert::AreEqual(dateTime2.getYear(), tempItem2.getEndTime().getYear());
-	Assert::AreEqual(dateTime2.getMonth(), tempItem2.getEndTime().getMonth());
-	Assert::AreEqual(dateTime2.getDay(), tempItem2.getEndTime().getDay());
-	Assert::AreEqual(dateTime2.getHour(), tempItem2.getEndTime().getHour());
-	Assert::AreEqual(dateTime2.getMinute(), tempItem2.getEndTime().getMinute());
-	Assert::AreEqual(true, tempItem2.getCompletion());
-	Assert::AreEqual((unsigned int)57, tempItem2.getItemID());
-	Assert::AreEqual('M', tempItem2.getPriority());
-	Assert::AreEqual('O', tempItem2.getLabel());
+			tempItem = projectLife.retrieveSchedule()[1];
+			string tempItem3 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
 
-	Item tempItem3 = projectLife.retrieveSchedule()[1];
-	Assert::AreEqual((string) "Andy's lunch", tempItem3.getItemName());
-	Assert::AreEqual((string) "Lunch: Nasi Lemak", tempItem3.getDescription());
-	Assert::AreEqual(dateTime3.getYear(), tempItem3.getEndTime().getYear());
-	Assert::AreEqual(dateTime3.getMonth(), tempItem3.getEndTime().getMonth());
-	Assert::AreEqual(dateTime3.getDay(), tempItem3.getEndTime().getDay());
-	Assert::AreEqual(dateTime3.getHour(), tempItem3.getEndTime().getHour());
-	Assert::AreEqual(dateTime3.getMinute(), tempItem3.getEndTime().getMinute());
-	Assert::AreEqual(false, tempItem3.getCompletion());
-	Assert::AreEqual((unsigned int)201, tempItem3.getItemID());
-	Assert::AreEqual('H', tempItem3.getPriority());
-	Assert::AreEqual('M', tempItem3.getLabel());
+			projectLife.addItem(item1);
 
-	projectLife.addItem(item1);
+			tempItem3 = projectLife.deleteItemGivenItemID(201);
+			Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
 
-	tempItem3 = projectLife.deleteItem(201);
-	Assert::AreEqual((string) "Andy's lunch", tempItem3.getItemName());
-	Assert::AreEqual((string) "Lunch: Nasi Lemak", tempItem3.getDescription());
-	Assert::AreEqual(dateTime3.getYear(), tempItem3.getEndTime().getYear());
-	Assert::AreEqual(dateTime3.getMonth(), tempItem3.getEndTime().getMonth());
-	Assert::AreEqual(dateTime3.getDay(), tempItem3.getEndTime().getDay());
-	Assert::AreEqual(dateTime3.getHour(), tempItem3.getEndTime().getHour());
-	Assert::AreEqual(dateTime3.getMinute(), tempItem3.getEndTime().getMinute());
-	Assert::AreEqual(false, tempItem3.getCompletion());
-	Assert::AreEqual((unsigned int)201, tempItem3.getItemID());
-	Assert::AreEqual('H', tempItem3.getPriority());
-	Assert::AreEqual('M', tempItem3.getLabel());
+			tempItem = projectLife.retrieveSchedule()[0];
+			tempItem2 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
 
-	tempItem2 = projectLife.retrieveSchedule()[0];
-	Assert::AreEqual((string) "Chon Beng's Date", tempItem2.getItemName());
-	Assert::AreEqual((string) "Girlfriend: Multiple", tempItem2.getDescription());
-	Assert::AreEqual(dateTime2.getYear(), tempItem2.getEndTime().getYear());
-	Assert::AreEqual(dateTime2.getMonth(), tempItem2.getEndTime().getMonth());
-	Assert::AreEqual(dateTime2.getDay(), tempItem2.getEndTime().getDay());
-	Assert::AreEqual(dateTime2.getHour(), tempItem2.getEndTime().getHour());
-	Assert::AreEqual(dateTime2.getMinute(), tempItem2.getEndTime().getMinute());
-	Assert::AreEqual(true, tempItem2.getCompletion());
-	Assert::AreEqual((unsigned int)57, tempItem2.getItemID());
-	Assert::AreEqual('M', tempItem2.getPriority());
-	Assert::AreEqual('O', tempItem2.getLabel());
+			tempItem = projectLife.retrieveSchedule()[1];
+			tempItem1 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
 
-	tempItem1 = projectLife.retrieveSchedule()[1];
-	Assert::AreEqual((string) "Joon Fai's Marriage", tempItem1.getItemName());
-	Assert::AreEqual((string) "Wife: Gantian", tempItem1.getDescription());
-	Assert::AreEqual(dateTime1.getYear(), tempItem1.getEndTime().getYear());
-	Assert::AreEqual(dateTime1.getMonth(), tempItem1.getEndTime().getMonth());
-	Assert::AreEqual(dateTime1.getDay(), tempItem1.getEndTime().getDay());
-	Assert::AreEqual(dateTime1.getHour(), tempItem1.getEndTime().getHour());
-	Assert::AreEqual(dateTime1.getMinute(), tempItem1.getEndTime().getMinute());
-	Assert::AreEqual(false, tempItem1.getCompletion());
-	Assert::AreEqual((unsigned int)12, tempItem1.getItemID());
-	Assert::AreEqual('H', tempItem1.getPriority());
-	Assert::AreEqual('P', tempItem1.getLabel());
-	}
+			delete item1;
+			delete item2;
+			delete item3;
+		}
+
+		TEST_METHOD(TestRetrieveItemGivenItemID) {
+			Schedule projectLife;
+			Item *item1 = new Item;
+			DateTime dateTime1(2020, 3, 20, 12, 30);
+
+			item1->setItemName("Joon Fai's Marriage");
+			item1->setDescription("Wife: Gantian");
+			item1->setEndTime(dateTime1);
+			item1->setCompletion(false);
+			item1->setItemID(8888);
+			item1->setPriority('H');
+			item1->setLabel('P');
+
+			Item *item2 = new Item;
+			DateTime dateTime2(2015, 3, 8, 15, 39);
+
+			item2->setItemName("Chon Beng's Date");
+			item2->setDescription("Girlfriend: Multiple");
+			item2->setEndTime(dateTime2);
+			item2->setCompletion(true);
+			item2->setItemID(6969);
+			item2->setPriority('M');
+			item2->setLabel('O');
+
+			Item *item3 = new Item;
+			DateTime dateTime3(2015, 4, 1, 14, 0);
+
+			item3->setItemName("Andy's lunch");
+			item3->setDescription("Lunch: Nasi Lemak");
+			item3->setEndTime(dateTime3);
+			item3->setCompletion(false);
+			item3->setItemID(10101);
+			item3->setPriority('H');
+			item3->setLabel('M');
+
+			projectLife.addItem(item1);
+			projectLife.addItem(item2);
+			projectLife.addItem(item3);
+
+			Item tempItem = projectLife.retrieveItemGivenItemID(8888);
+			string tempItem1 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+
+			tempItem = projectLife.retrieveItemGivenItemID(6969);
+			string tempItem2 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+
+			tempItem = projectLife.retrieveItemGivenItemID(10101);
+			string tempItem3 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
+
+			delete item1;
+			delete item2;
+			delete item3;
+		}
+
+		TEST_METHOD(TestReplaceItemGivenItemID) {
+			Schedule projectLife;
+			Item *item1 = new Item;
+			DateTime dateTime1(2020, 3, 20, 12, 30);
+
+			item1->setItemName("Joon Fai's Marriage");
+			item1->setDescription("Wife: Gantian");
+			item1->setEndTime(dateTime1);
+			item1->setCompletion(false);
+			item1->setItemID(8888);
+			item1->setPriority('H');
+			item1->setLabel('P');
+
+			Item *item2 = new Item;
+			DateTime dateTime2(2015, 3, 8, 15, 39);
+
+			item2->setItemName("Chon Beng's Date");
+			item2->setDescription("Girlfriend: Multiple");
+			item2->setEndTime(dateTime2);
+			item2->setCompletion(true);
+			item2->setItemID(6969);
+			item2->setPriority('M');
+			item2->setLabel('O');
+
+			Item *item3 = new Item;
+			DateTime dateTime3(2015, 4, 1, 14, 0);
+
+			item3->setItemName("Andy's lunch");
+			item3->setDescription("Lunch: Nasi Lemak");
+			item3->setEndTime(dateTime3);
+			item3->setCompletion(false);
+			item3->setItemID(10101);
+			item3->setPriority('H');
+			item3->setLabel('M');
+
+			projectLife.addItem(item1);
+			projectLife.addItem(item2);
+
+			vector<Item> parallelUniverse = projectLife.retrieveSchedule();
+
+			Item tempItem = projectLife.retrieveItemGivenItemID(8888);
+			string tempItem1 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+			Assert::AreEqual(item1->displayItemFullDetails(), parallelUniverse[0].displayItemFullDetails());
+
+			tempItem = projectLife.retrieveItemGivenItemID(6969);
+			string tempItem2 = tempItem.displayItemFullDetails();
+			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+			Assert::AreEqual(item2->displayItemFullDetails(), parallelUniverse[1].displayItemFullDetails());
+
+			string tempItem3 = projectLife.replaceItemGivenItemID(item3, 8888);
+			parallelUniverse = projectLife.retrieveSchedule();
+			Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
+			Assert::AreEqual(item3->displayItemFullDetails(), parallelUniverse[0].displayItemFullDetails());
+			
+			tempItem1 = projectLife.replaceItemGivenItemID(item1, 6969);
+			parallelUniverse = projectLife.retrieveSchedule();
+			Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+			Assert::AreEqual(item1->displayItemFullDetails(), parallelUniverse[1].displayItemFullDetails());
+			
+			delete item1;
+			delete item2;
+			delete item3;
+		}
 	};
 
 	TEST_CLASS(TEST_FILTER)
