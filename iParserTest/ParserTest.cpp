@@ -49,7 +49,7 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserExecuteDeleteParsingTest) {
 			string text[2] = { "123", "abc" };
 			string expectedCommand[2] = { "delete", "invalid" };
-			string expectedText[2] = { "123", "Invalid index" };
+			string expectedText[2] = { "123", "invalid index" };
 
 			testParser.executeDeleteParsing(text[0]);
 			testParser.executeDeleteParsing(text[1]);
@@ -69,7 +69,7 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserExecuteEditParsing) {
 			string text[3] = { "123 text", "CS2013 text", "123" };
 			string expectedCommand[4] = { "edit", "description", "invalid", "invalid" };
-			string expectedText[4] = { "123", "text", "Invalid index", "invalid edit" };
+			string expectedText[4] = { "123", "text", "invalid index", "invalid edit" };
 
 			testParser.executeEditParsing(text[0]);
 			testParser.executeEditParsing(text[1]);
@@ -89,7 +89,7 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserExecuteUndoParsingTest) {
 			string text[2] = { "undo", "undo 123" };
 			string expectedCommand[2] = { "undo", "invalid" };
-			string expectedText[2] = { "", "Invalid command" };
+			string expectedText[2] = { "", "invalid command" };
 
 			testParser.executeUndoParsing(text[0]);
 			testParser.executeUndoParsing(text[1]);
@@ -106,10 +106,30 @@ namespace iPlannerParserTest {
 			}
 		}
 
+		TEST_METHOD(parserExecuteSearchParsingTest) {
+			string text[2] = { "textToSearch", "" };
+			string expectedCommand[2] = { "search", "invalid" };
+			string expectedText[2] = { "textToSearch", "invalid input" };
+
+			testParser.executeSearchParsing(text[0]);
+			testParser.executeSearchParsing(text[1]);
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int index = 0;
+
+			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+
+				Assert::AreEqual(expectedCommand[index], actualCommand);
+				Assert::AreEqual(expectedText[index], actualText);
+			}
+		}
+
 		TEST_METHOD(parserExecuteDoneParsingTest) {
 			string text[2] = { "123", "abc" };
 			string expectedCommand[2] = { "done", "invalid" };
-			string expectedText[2] = { "123", "Invalid index" };
+			string expectedText[2] = { "123", "invalid index" };
 
 			testParser.executeDoneParsing(text[0]);
 			testParser.executeDoneParsing(text[1]);
@@ -129,7 +149,7 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserExecuteExitParsingTest) {
 			string text[2] = { "exit", "exit 123" };
 			string expectedCommand[2] = { "exit", "invalid" };
-			string expectedText[2] = { "", "Invalid command" };
+			string expectedText[2] = { "", "invalid command" };
 
 			testParser.executeExitParsing(text[0]);
 			testParser.executeExitParsing(text[1]);

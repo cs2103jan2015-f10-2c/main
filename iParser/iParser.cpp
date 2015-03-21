@@ -42,12 +42,12 @@ const string iParser::MESSAGE_SUCCESS = "success";
 const string iParser::MESSAGE_FAILURE = "failure";
 const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_INPUT = "invalid input";
-const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
-const string iParser::MESSAGE_INVALID_ADD = "Invalid text added";
-const string iParser::MESSAGE_INVALID_EDIT = "Invalid edit";
-const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
-const string iParser::MESSAGE_INVALID_DATE = "Invalid date input";
-const string iParser::MESSAGE_INVALID_TIME = "Invalid time input";
+const string iParser::MESSAGE_INVALID_COMMAND = "invalid command";
+const string iParser::MESSAGE_INVALID_ADD = "invalid text added";
+const string iParser::MESSAGE_INVALID_EDIT = "invalid edit";
+const string iParser::MESSAGE_INVALID_INDEX = "invalid index";
+const string iParser::MESSAGE_INVALID_DATE = "invalid date input";
+const string iParser::MESSAGE_INVALID_TIME = "invalid time input";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
 const unsigned int iParser::SIZE_DAYS = 7;
@@ -92,6 +92,7 @@ string iParser::executeParsing(string userInput) {
 	case SORT:
 		break;
 	case SEARCH:
+		executeSearchParsing(textWithoutCommand);
 		break;
 	case VIEW:
 		break;
@@ -206,6 +207,17 @@ string iParser::executeUndoParsing(string userInput) {
 	}
 	else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+		return MESSAGE_FAILURE;
+	}
+}
+
+string iParser::executeSearchParsing(string textToSearch) {
+	if (textToSearch != STRING_BLANK) {
+		setParseInfo(COMMAND_SEARCH, textToSearch);
+		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
 		return MESSAGE_FAILURE;
 	}
 }

@@ -105,6 +105,7 @@ public:
 	string executeDeleteParsing(string); // unit tested
 	string executeEditParsing(string); // unit tested
 	string executeUndoParsing(string); // unit tested
+	string executeSearchParsing(string); // unit tested
 	string executeDoneParsing(string); // unit tested
 	string executeExitParsing(string); // unit tested
 
