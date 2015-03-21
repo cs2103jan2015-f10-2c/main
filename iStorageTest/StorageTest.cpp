@@ -957,6 +957,10 @@ namespace ScheduleTest
 				Assert::AreEqual(i, premierLeague.findVectorIndexGivenItemID(1000 + i));
 			}
 		}
+
+		TEST_METHOD(TestFindItemIDGivenDisplayVectorIndex) {
+
+		}
 	};
 
 	TEST_CLASS(TEST_ITEMS_IN_SCHEDULE)
@@ -1012,7 +1016,7 @@ namespace ScheduleTest
 			delete item3;
 		}
 
-		TEST_METHOD(TestDeleteItem)
+		TEST_METHOD(TestDeleteItemGivenItemID)
 		{
 			Schedule projectLife;
 			Item *item1 = new Item;
