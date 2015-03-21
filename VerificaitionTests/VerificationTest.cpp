@@ -263,6 +263,187 @@ namespace VerificaitionTests
 	{
 	public:
 
+		TEST_METHOD(TestIsValidName)
+		{
+			bool isValidName;
+
+			Item item;
+			ItemVerification verify(item, 100);
+			isValidName = verify.isValidName();
+			Assert::AreEqual(false, isValidName);
+
+			Item item2(string("Attend One Direction concert!!"));
+			ItemVerification verify2(item, 100);
+			isValidName = verify2.isValidName();
+			Assert::AreEqual(true, isValidName);
+		}
+
+		TEST_METHOD(TestIsValidStartDateTime)
+		{
+			bool isValidStartDateTime;
+
+			Item item;
+			DateTime startTime1(2014, 03, 10, 17, 00);
+			item.setStartTime(startTime1);
+			ItemVerification verify(item, 100);
+			isValidStartDateTime = verify.isValidStartDateTime();
+			Assert::AreEqual(true, isValidStartDateTime);
+
+			Item item2;
+			DateTime startTime2(2014, 03, 10);
+			item2.setStartTime(startTime2);
+			ItemVerification verify2(item2, 100);
+			isValidStartDateTime = verify2.isValidStartDateTime();
+			Assert::AreEqual(true, isValidStartDateTime);
+
+			Item item3;
+			DateTime startTime3(99999, 03, 10, 17, 00);
+			item.setStartTime(startTime3);
+			ItemVerification verify3(item3, 100);
+			isValidStartDateTime = verify3.isValidStartDateTime();
+			Assert::AreEqual(false, isValidStartDateTime);
+
+			Item item4;
+			DateTime startTime4(2000, 2, 30, 17, 00);
+			item.setStartTime(startTime4);
+			ItemVerification verify4(item4, 100);
+			isValidStartDateTime = verify4.isValidStartDateTime();
+			Assert::AreEqual(false, isValidStartDateTime);
+
+			Item item5;
+			DateTime startTime5(2000, 2, 29, 17, 00);
+			item.setStartTime(startTime5);
+			ItemVerification verify5(item5, 100);
+			isValidStartDateTime = verify5.isValidStartDateTime();
+			Assert::AreEqual(true, isValidStartDateTime);
+		}
+
+		TEST_METHOD(TestIsValidEndDateTime)
+		{
+			bool isValidEndDateTime;
+
+			Item item;
+			DateTime startTime1(2014, 03, 10, 17, 00);
+			item.setStartTime(startTime1);
+			ItemVerification verify(item, 100);
+			isValidEndDateTime = verify.isValidEndDateTime();
+			Assert::AreEqual(true, isValidEndDateTime);
+
+			Item item2;
+			DateTime startTime2(2014, 03, 10);
+			item2.setStartTime(startTime2);
+			ItemVerification verify2(item2, 100);
+			isValidEndDateTime = verify2.isValidEndDateTime();
+			Assert::AreEqual(true, isValidEndDateTime);
+
+			Item item3;
+			DateTime startTime3(99999, 03, 10, 17, 00);
+			item.setStartTime(startTime3);
+			ItemVerification verify3(item3, 100);
+			isValidEndDateTime = verify3.isValidEndDateTime();
+			Assert::AreEqual(false, isValidEndDateTime);
+
+			Item item4;
+			DateTime startTime4(2000, 2, 30, 17, 00);
+			item.setStartTime(startTime4);
+			ItemVerification verify4(item4, 100);
+			isValidEndDateTime = verify4.isValidEndDateTime();
+			Assert::AreEqual(false, isValidEndDateTime);
+
+			Item item5;
+			DateTime startTime5(2000, 2, 29, 17, 00);
+			item.setStartTime(startTime5);
+			ItemVerification verify5(item5, 100);
+			isValidEndDateTime = verify5.isValidEndDateTime();
+			Assert::AreEqual(true, isValidEndDateTime);
+		}
+
+		TEST_METHOD(TestIsValidTimeFrame)
+		{
+			bool isValidTimeFrame;
+
+			DateTime startTime1(2014, 03, 10, 17, 00);
+			DateTime endTime1(2014, 10, 15, 0, 01);
+			Item item1;
+			item1.setStartTime(startTime1);
+			item1.setEndTime(endTime1);
+			ItemVerification verify1(item1, 100);
+			isValidTimeFrame = verify1.isValidTimeFrame();
+			Assert::AreEqual(true, isValidTimeFrame);
+
+			DateTime startTime2(2014, 03, 10, -1, -1);
+			DateTime endTime2(2014, 03, 15, 0, 01);
+			Item item2;
+			item2.setStartTime(startTime2);
+			item2.setEndTime(endTime2);
+			ItemVerification verify2(item2, 100);
+			isValidTimeFrame = verify2.isValidTimeFrame();
+			Assert::AreEqual(true, isValidTimeFrame);
+
+			DateTime startTime3(2014, 03, 10, -1, -1);
+			DateTime endTime3(2014, 03, 10, 10, 30);
+			Item item3;
+			item3.setStartTime(startTime3);
+			item3.setEndTime(endTime3);
+			ItemVerification verify3(item3, 100);
+			isValidTimeFrame = verify3.isValidTimeFrame();
+			Assert::AreEqual(true, isValidTimeFrame);
+
+			DateTime startTime4(2014, 03, 10, 10, 30);
+			DateTime endTime4(2014, 03, 10, -1, -1);
+			Item item4;
+			item4.setStartTime(startTime4);
+			item4.setEndTime(endTime4);
+			ItemVerification verify4(item4, 100);
+			isValidTimeFrame = verify4.isValidTimeFrame();
+			Assert::AreEqual(true, isValidTimeFrame);
+
+			DateTime startTime5(2014, 03, 10, 10, 30);
+			DateTime endTime5(2014, 03, 10, 10, 30);
+			Item item5;
+			item5.setStartTime(startTime5);
+			item5.setEndTime(endTime5);
+			ItemVerification verify5(item5, 100);
+			isValidTimeFrame = verify5.isValidTimeFrame();
+			Assert::AreEqual(false, isValidTimeFrame);
+
+			DateTime startTime6(2014, 03, 15, -1, -1);
+			DateTime endTime6(2014, 03, 10, 10, 30);
+			Item item6;
+			item6.setStartTime(startTime6);
+			item6.setEndTime(endTime6);
+			ItemVerification verify6(item6, 100);
+			isValidTimeFrame = verify6.isValidTimeFrame();
+			Assert::AreEqual(false, isValidTimeFrame);
+
+			DateTime startTime7(2014, 03, 15, 10, 00);
+			DateTime endTime7(2014, 03, 10, 10, 30);
+			Item item7;
+			item7.setStartTime(startTime7);
+			item7.setEndTime(endTime7);
+			ItemVerification verify7(item7, 100);
+			isValidTimeFrame = verify7.isValidTimeFrame();
+			Assert::AreEqual(false, isValidTimeFrame);
+
+			DateTime startTime8(2014, 03, 15, -1, -1);
+			DateTime endTime8(2014, 03, 10, -1, -1);
+			Item item8;
+			item8.setStartTime(startTime8);
+			item8.setEndTime(endTime8);
+			ItemVerification verify8(item8, 100);
+			isValidTimeFrame = verify8.isValidTimeFrame();
+			Assert::AreEqual(false, isValidTimeFrame);
+
+			DateTime startTime9(2014, 03, 15, 10, 00);
+			DateTime endTime9(2014, 03, 10, -1, -1);
+			Item item9;
+			item9.setStartTime(startTime9);
+			item9.setEndTime(endTime9);
+			ItemVerification verify9(item9, 100);
+			isValidTimeFrame = verify9.isValidTimeFrame();
+			Assert::AreEqual(false, isValidTimeFrame);
+		}
+
 		TEST_METHOD(TestIsValidItem)
 		{
 			DateTime startTime(2014,03,10,17,00);
@@ -285,7 +466,7 @@ namespace VerificaitionTests
 			ItemVerification verify2(item, 91822);
 
 			isValid = verify2.isValidItem();
-			Assert::AreEqual(true, isValid);
+			Assert::AreEqual(false, isValid);
 			
 			item.setItemName("");
 			ItemVerification verify3(item, 800000);
