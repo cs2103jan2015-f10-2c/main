@@ -3,7 +3,9 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace VerificaitionTests {
+namespace VerificationTests
+{
+
 	TEST_CLASS(DateTimeVerificationTest) {
 public:
 
