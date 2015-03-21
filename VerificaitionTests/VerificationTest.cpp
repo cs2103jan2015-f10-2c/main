@@ -9,87 +9,251 @@ namespace VerificaitionTests
 	{
 	public:
 		
-		TEST_METHOD(TestIsValidDate)
+		TEST_METHOD(TestIsValidDateTimeValues)
 		{
-			DateTime dateTimeObject;
 			bool isValid;
 
-			dateTimeObject.setYear(2014);
-			dateTimeObject.setMonth(10);
-			dateTimeObject.setDay(10);
+			DateTime dateTimeObject(1992, 11, 18, 00, 00);
 			DateTimeVerification verify(dateTimeObject);
-
-			isValid = verify.isValidDate();
+			isValid = verify.isValidDateTimeValues();
 			Assert::AreEqual(true, isValid);
 
-			dateTimeObject.setYear(10000);
-			dateTimeObject.setMonth(10);
-			dateTimeObject.setDay(10);
+			dateTimeObject.setYear(90000);
 			DateTimeVerification verify2(dateTimeObject);
-
-			isValid = verify2.isValidDate();
+			
+			isValid = verify2.isValidDateTimeValues();
 			Assert::AreEqual(false, isValid);
+		}
 
-			dateTimeObject.setYear(2014);
-			dateTimeObject.setMonth(-2);
-			dateTimeObject.setDay(10);
-			DateTimeVerification verify3(dateTimeObject);
+		TEST_METHOD(TestHasYearMonthDay)
+		{
+			bool hasYMD;
 
-			isValid = verify3.isValidDate();
-			Assert::AreEqual(false, isValid);
+			DateTime dateTimeObject(1992, 11, 18, 00, 00);
+			DateTimeVerification verify(dateTimeObject);
+			hasYMD = verify.hasYearMonthDay();
+			Assert::AreEqual(true, hasYMD);
+
+			DateTime dateTimeObject2(1992, 11, 18, -1, -1);
+			DateTimeVerification verify2(dateTimeObject2);
+			hasYMD = verify2.hasYearMonthDay();
+			Assert::AreEqual(true, hasYMD);
+
+			DateTime dateTimeObject3(-1, 11, 18, 111, -1);
+			DateTimeVerification verify3(dateTimeObject3);
+			hasYMD = verify3.hasYearMonthDay();
+			Assert::AreEqual(false, hasYMD);
+
+			// hasYearMonthDay() does not check for validity
+			// of _hour and _minute
+			DateTime dateTimeObject4(1992, 11, 18, -1, 30);
+			DateTimeVerification verify4(dateTimeObject4);
+			hasYMD = verify4.hasYearMonthDay();
+			Assert::AreEqual(true, hasYMD);
+		}
+
+		TEST_METHOD(TestHasMonthDay)
+		{
+			bool hasMD;
+
+			DateTime dateTimeObject(-1, 11, 18, 00, 00);
+			DateTimeVerification verify(dateTimeObject);
+			hasMD = verify.hasMonthDay();
+			Assert::AreEqual(false, hasMD);
+
+			DateTime dateTimeObject2(-1, 11, 18, -1, -1);
+			DateTimeVerification verify2(dateTimeObject2);
+			hasMD = verify2.hasMonthDay();
+			Assert::AreEqual(true, hasMD);
+
+			DateTime dateTimeObject3(-1, 11, 18, -1, -1);
+			DateTimeVerification verify3(dateTimeObject3);
+			hasMD = verify3.hasMonthDay();
+			Assert::AreEqual(true, hasMD);
+
+			// hasMonthDay() assumes _year is EMPTYFIELD_DATETIME
+			// and does not check _year's validity
+			DateTime dateTimeObject4(23, 11, 18, -1, 30);
+			DateTimeVerification verify4(dateTimeObject4);
+			hasMD = verify4.hasYearMonthDay();
+			Assert::AreEqual(true, hasMD);
+
+			// hasMonthDay() does not check for validity of
+			// _hour and _minute
+			DateTime dateTimeObject5(-1, 30, 18, 30, 30);
+			DateTimeVerification verify5(dateTimeObject5);
+			hasMD = verify5.hasYearMonthDay();
+			Assert::AreEqual(false, hasMD);
+		}
+
+		TEST_METHOD(TestIsActualYearMonthDate)
+		{
+			bool isActualYMD;
+
+			DateTime dateTimeObject(1992, 11, 18);
+			DateTimeVerification verify(dateTimeObject);
+			isActualYMD = verify.isActualYearMonthDayDate();
+			Assert::AreEqual(true, isActualYMD);
+
+			DateTime dateTimeObject2(9999, 11, 18);
+			DateTimeVerification verify2(dateTimeObject2);
+			isActualYMD = verify2.isActualYearMonthDayDate();
+			Assert::AreEqual(true, isActualYMD);
+
+			DateTime dateTimeObject3(1992, 11, 18, -1, -1);
+			DateTimeVerification verify3(dateTimeObject3);
+			isActualYMD = verify3.isActualYearMonthDayDate();
+			Assert::AreEqual(true, isActualYMD);
+
+			// isActualYearMonthDate() does not check for
+			// validity of _hour and _minute
+			DateTime dateTimeObject4(1992, 11, 18, 100, 100);
+			DateTimeVerification verify4(dateTimeObject4);
+			isActualYMD = verify4.isActualYearMonthDayDate();
+			Assert::AreEqual(true, isActualYMD);
+
+			DateTime dateTimeObject5(2015, 2, 30);
+			DateTimeVerification verify5(dateTimeObject5);
+			isActualYMD = verify5.isActualYearMonthDayDate();
+			Assert::AreEqual(false, isActualYMD);
+
+			DateTime dateTimeObject6(2015, 2, 29);
+			DateTimeVerification verify6(dateTimeObject6);
+			isActualYMD = verify6.isActualYearMonthDayDate();
+			Assert::AreEqual(false, isActualYMD);
+
+			DateTime dateTimeObject7(2000, 2, 30);
+			DateTimeVerification verify7(dateTimeObject7);
+			isActualYMD = verify7.isActualYearMonthDayDate();
+			Assert::AreEqual(false, isActualYMD);
+
+			DateTime dateTimeObject8(2000, 2, 29);
+			DateTimeVerification verify8(dateTimeObject8);
+			isActualYMD = verify8.isActualYearMonthDayDate();
+			Assert::AreEqual(true, isActualYMD);
+
+			DateTime dateTimeObject9(2015, 12, 31);
+			DateTimeVerification verify9(dateTimeObject9);
+			isActualYMD = verify9.isActualYearMonthDayDate();
+			Assert::AreEqual(true, isActualYMD);
+
+			DateTime dateTimeObject10(2016, 4, 31);
+			DateTimeVerification verify10(dateTimeObject10);
+			isActualYMD = verify10.isActualYearMonthDayDate();
+			Assert::AreEqual(false, isActualYMD);
+
+			DateTime dateTimeObject11(2016, 4, 30);
+			DateTimeVerification verify11(dateTimeObject11);
+			isActualYMD = verify11.isActualYearMonthDayDate();
+			Assert::AreEqual(true, isActualYMD);
 		}
 		
 		TEST_METHOD(TestIsValidTime)
 		{
 			DateTime dateTimeObject;
-			bool isValid;
+			bool isValidTime;
 
 			dateTimeObject.setHour(16);
 			dateTimeObject.setMinute(10);
 			DateTimeVerification verify(dateTimeObject);
 
-			isValid = verify.isValidTime();
-			Assert::AreEqual(true, isValid);
+			isValidTime = verify.isValidTime();
+			Assert::AreEqual(true, isValidTime);
 
 			dateTimeObject.setHour(00);
 			dateTimeObject.setMinute(00);
 			DateTimeVerification verify2(dateTimeObject);
 
-			isValid = verify2.isValidTime();
-			Assert::AreEqual(true, isValid);
+			isValidTime = verify2.isValidTime();
+			Assert::AreEqual(true, isValidTime);
 
 			dateTimeObject.setHour(25);
 			dateTimeObject.setMinute(10);
 			DateTimeVerification verify3(dateTimeObject);
 
-			isValid = verify3.isValidTime();
-			Assert::AreEqual(false, isValid);
+			isValidTime = verify3.isValidTime();
+			Assert::AreEqual(false, isValidTime);
 		}
 
 		TEST_METHOD(TestIsValidDateTime)
 		{
-			DateTime dateTimeObject;
-			bool isValid;
+			bool isValidDateTime;
 
-			dateTimeObject.setYear(2014);
-			dateTimeObject.setMonth(10);
-			dateTimeObject.setDay(10);
-			dateTimeObject.setHour(17);
-			dateTimeObject.setMinute(00);
+			DateTime dateTimeObject(1992, 11, 18, 10, 00);
 			DateTimeVerification verify(dateTimeObject);
+			isValidDateTime = verify.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
 
-			isValid = verify.isValidDateTime();
-			Assert::AreEqual(true, isValid);
+			DateTime dateTimeObject2(1992, 11, 18, 24, 00);
+			DateTimeVerification verify2(dateTimeObject2);
+			isValidDateTime = verify2.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
 
-			dateTimeObject.setYear(2014);
-			dateTimeObject.setMonth(-9);
-			dateTimeObject.setDay(10);
-			dateTimeObject.setHour(17);
-			dateTimeObject.setMinute(00);
-			DateTimeVerification verify2(dateTimeObject);
+			DateTime dateTimeObject3(1992, 11, 18, -1, -1);
+			DateTimeVerification verify3(dateTimeObject3);
+			isValidDateTime = verify3.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
 
-			isValid = verify2.isValidDateTime();
-			Assert::AreEqual(false, isValid);
+			DateTime dateTimeObject4(1992, 11, 18, 20, -1);
+			DateTimeVerification verify4(dateTimeObject4);
+			isValidDateTime = verify4.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject5(1992, 11, 18, -1, 10);
+			DateTimeVerification verify5(dateTimeObject5);
+			isValidDateTime = verify5.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject6(99999, 11, 18, 10, 00);
+			DateTimeVerification verify6(dateTimeObject6);
+			isValidDateTime = verify6.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject7(-1, 11, 18, 10, 00);
+			DateTimeVerification verify7(dateTimeObject7);
+			isValidDateTime = verify7.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
+
+			DateTime dateTimeObject8(-1, 11, 18, -1, -1);
+			DateTimeVerification verify8(dateTimeObject8);
+			isValidDateTime = verify8.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
+
+			DateTime dateTimeObject7(-1, 11, 18, 35, 00);
+			DateTimeVerification verify7(dateTimeObject7);
+			isValidDateTime = verify7.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject8(1992, 32, 18, 10, 00);
+			DateTimeVerification verify8(dateTimeObject8);
+			isValidDateTime = verify8.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject9(1992, -1, 18, 10, 00);
+			DateTimeVerification verify9(dateTimeObject9);
+			isValidDateTime = verify9.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject10(1992, 11, 40, -1, -1);
+			DateTimeVerification verify10(dateTimeObject10);
+			isValidDateTime = verify10.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject11(2000, 2, 29, 10, 00);
+			DateTimeVerification verify11(dateTimeObject11);
+			isValidDateTime = verify11.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
+
+			DateTime dateTimeObject12(2001, 2, 29, 10, 00);
+			DateTimeVerification verify12(dateTimeObject12);
+			isValidDateTime = verify12.isValidDateTime();
+			Assert::AreEqual(false , isValidDateTime);
+
+			DateTime dateTimeObject13(2000, 2, 29, -1, -1);
+			DateTimeVerification verify13(dateTimeObject13);
+			isValidDateTime = verify13.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
+
 		}
 
 	};
