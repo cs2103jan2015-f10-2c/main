@@ -211,7 +211,14 @@ namespace iPlannerParserTest {
 			
 			testParser.removeConsecutiveWhiteSpace(actual);
 			Assert::AreEqual(expected, actual);
+		}
+		
+		TEST_METHOD(parserRemoveWhiteSpace) {
+			string actual = "1 2 \t 3 \t 4 5";
+			string expected = "12345";
 
+			testParser.removeWhiteSpace(actual);
+			Assert::AreEqual(expected, actual);
 		}
 
 		TEST_METHOD(parserConvertToLowerCaseTest) {
@@ -262,14 +269,6 @@ namespace iPlannerParserTest {
 			Assert::IsTrue(actualTwo);
 			Assert::IsFalse(actualThree);
 		}
-		
-		TEST_METHOD(parserRetrieveCountTest) {
-			string testString = ",one,two,three,four,five,";
-			unsigned int expected = 6;
-
-			unsigned int actual = testParser.retrieveCount(testString, ',');
-			Assert::AreEqual(expected, actual);
-		}
 
 		TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
 			vector<string> testVector;
@@ -306,6 +305,38 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedFour, actualFour);
 			string actualFive = testParser.splitAndSetSpaceDateInformation(stringFive, 0);
 			Assert::AreEqual(expectedFive, actualFive);
+		}
+
+		TEST_METHOD(parserSplitAndSetColonTimeStringTest) {
+			string testStrings[] = { "1011", "910" };
+			string expectedOne[] = { "10 11", "9 10" };
+			string expectedTwo[] = { "22 11", "21 10" };
+
+			for (int i = 0; i < 2; i++) {
+				string testString = testStrings[i];
+				string actualOne = testParser.splitAndSetColonTimeString(testString, "");
+				string actualTwo = testParser.splitAndSetColonTimeString(testString, "pm");
+				string actualThree = testParser.splitAndSetColonTimeString(testString, "am");
+				Assert::AreEqual(expectedOne[i], actualOne);
+				Assert::AreEqual(expectedTwo[i], actualTwo);
+				Assert::AreEqual(expectedOne[i], actualThree);
+			}
+		}
+
+		TEST_METHOD(parserSplitAndSetNoColonTimeStringTest) {
+			string testStrings[] = { "10:11", "9:10" };
+			string expectedOne[] = { "10 11", "9 10" };
+			string expectedTwo[] = { "22 11", "21 10" };
+
+			for (int i = 0; i < 2; i++) {
+				string testString = testStrings[i];
+				string actualOne = testParser.splitAndSetNoColonTimeString(testString, "");
+				string actualTwo = testParser.splitAndSetNoColonTimeString(testString, "pm");
+				string actualThree = testParser.splitAndSetNoColonTimeString(testString, "am");
+				Assert::AreEqual(expectedOne[i], actualOne);
+				Assert::AreEqual(expectedTwo[i], actualTwo);
+				Assert::AreEqual(expectedOne[i], actualThree);
+			}
 		}
 
 		TEST_METHOD(parserIsValidDateTimeStringTest) {
@@ -388,6 +419,42 @@ namespace iPlannerParserTest {
 				Assert::IsFalse(actual);
 				Assert::AreEqual(index, expected);
 			}
+		}
+
+		TEST_METHOD(parserHasTimePeriodAbbreviationTest) {
+			string trueTestStringOne[] = { "1010AM", "1010PM", "1010aM", "1010Pm", "1010am", "1010pm" };
+			string falseTestString[] = { "1010", "1010mp", "1010ma", "1010cs" };
+
+			for (unsigned int i = 0; i < 6; i++) {
+				bool actual = testParser.hasTimePeriodAbbreviation(trueTestStringOne[i]);
+				Assert::IsTrue(actual);
+			}
+
+			for (unsigned int i = 0; i < 4; i++) {
+				bool actual = testParser.hasTimePeriodAbbreviation(falseTestString[i]);
+				Assert::IsFalse(actual);
+			}
+		}
+
+		TEST_METHOD(parserAddTwelveToHoursTest) {
+			string stringOne = "88";
+			string stringTwo = "88abc";
+			string expectedOne = "100";
+			string expectedTwo = "-1";
+
+			string actualOne = testParser.addTwelveToHours(stringOne);
+			string actualTwo = testParser.addTwelveToHours(stringTwo);
+
+			Assert::AreEqual(expectedOne, actualOne);
+			Assert::AreEqual(expectedTwo, actualTwo);
+		}
+
+		TEST_METHOD(parserRetrieveCountTest) {
+			string testString = ",one,two,three,four,five,";
+			unsigned int expected = 6;
+
+			unsigned int actual = testParser.retrieveCount(testString, ',');
+			Assert::AreEqual(expected, actual);
 		}
 
 	#endif
