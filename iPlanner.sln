@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iLogicTest", "iLogicTest\iL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPlannerUI", "iPlannerUI\iPlannerUI.vcxproj", "{7665C93D-BA71-4A8F-B49C-FEF4CF9DA7DC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VerificationTests", "VerificationTests\VerificationTests.vcxproj", "{F1F1BA09-C472-4E47-B2AD-41297FD01DFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -57,6 +59,10 @@ Global
 		{7665C93D-BA71-4A8F-B49C-FEF4CF9DA7DC}.Debug|Win32.Build.0 = Debug|Win32
 		{7665C93D-BA71-4A8F-B49C-FEF4CF9DA7DC}.Release|Win32.ActiveCfg = Release|Win32
 		{7665C93D-BA71-4A8F-B49C-FEF4CF9DA7DC}.Release|Win32.Build.0 = Release|Win32
+		{F1F1BA09-C472-4E47-B2AD-41297FD01DFD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F1F1BA09-C472-4E47-B2AD-41297FD01DFD}.Debug|Win32.Build.0 = Debug|Win32
+		{F1F1BA09-C472-4E47-B2AD-41297FD01DFD}.Release|Win32.ActiveCfg = Release|Win32
+		{F1F1BA09-C472-4E47-B2AD-41297FD01DFD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
