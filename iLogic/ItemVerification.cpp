@@ -1,16 +1,17 @@
 #include "ItemVerification.h"
 
 const string ItemVerification::EMPTY_STRING = "";
-const string ItemVerification::AVAILABLE_PRIORITIES = "HML";
-const string ItemVerification::AVAILABLE_LABELS = "PMO";
-const string ItemVerification::ERROR_EMPTY_STRING = "Error: Empty String Specified.\n";
-const string ItemVerification::ERROR_INVALID_START_DATE = "Error: Invalid Start Date.\n";
-const string ItemVerification::ERROR_INVALID_START_TIME = "Error: Invalid Start Time.\n";
-const string ItemVerification::ERROR_INVALID_END_DATE = "Error: Invalid End Date.\n";
-const string ItemVerification::ERROR_INVALID_END_TIME = "Error: Invalid End Time.\n";
-const string ItemVerification::ERROR_INVALID_ID = "Error: An item has an invalid ID.\n";
-const string ItemVerification::ERROR_INVALID_PRIORITY = "Error: An item has an invalid Priority.\n";
-const string ItemVerification::ERROR_INVALID_LABEL = "Error: An item has an invalid Label.\n";
+const string ItemVerification::AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
+const string ItemVerification::AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
+const string ItemVerification::ERROR_INVALID_NAME = "Error: Invalid Name";
+const string ItemVerification::ERROR_INVALID_NAME = "Error: Invalid Description";
+const string ItemVerification::ERROR_INVALID_START_DATE_TIME = "Error: Invalid Start Date/Time";
+const string ItemVerification::ERROR_INVALID_END_DATE_TIME = "Error: Invalid End Date/TIME";
+const string ItemVerification::ERROR_SAME_START_END_DATE_TIME = "Error: Start Date/Time same as End Date/Time";
+const string ItemVerification::ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME = "Error: Start Date/Time is earlier than End Date/Time";
+const string ItemVerification::ERROR_INVALID_ID = "Error: Invalid ID";
+const string ItemVerification::ERROR_INVALID_PRIORITY = "Error: Invalid Priority";
+const string ItemVerification::ERROR_INVALID_LABEL = "Error: Invalid Label";
 
 ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 	_itemObjectToVerify = itemObject;
@@ -20,42 +21,10 @@ ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
 	if (name == EMPTY_STRING) {
-		cout << ERROR_EMPTY_STRING;
+		_itemVerificationErrors.push_back(ERROR_INVALID_NAME);
 		return false;
 	} else {
 		return true;
-	}
-}
-
-bool ItemVerification::isValidStartDateTime() {
-	DateTime startDateTime = _itemObjectToVerify.getStartTime();
-	DateTimeVerification startDateTimeVerification(startDateTime);
-	if (startDateTimeVerification.isValidDate() && startDateTimeVerification.isValidTime()) {
-		return true;
-	} else {
-		if (!startDateTimeVerification.isValidDate()) {
-			cout << ERROR_INVALID_START_DATE;
-		}
-		if (!startDateTimeVerification.isValidTime()) {
-			cout << ERROR_INVALID_START_TIME;
-		}
-		return false;
-	}
-}
-
-bool ItemVerification::isValidEndDateTime() {
-	DateTime endDateTime = _itemObjectToVerify.getEndTime();
-	DateTimeVerification endDateTimeVerification(endDateTime);
-	if (endDateTimeVerification.isValidDate() && endDateTimeVerification.isValidTime()) {
-		return true;
-	} else {
-		if (!endDateTimeVerification.isValidDate()) {
-			cout << ERROR_INVALID_END_DATE;
-		}
-		if (!endDateTimeVerification.isValidTime()) {
-			cout << ERROR_INVALID_END_TIME;
-		}
-		return false;
 	}
 }
 
@@ -63,12 +32,54 @@ bool ItemVerification::isValidDescription() {
 	return true;
 }
 
-bool ItemVerification::isValidItemID() {
-	unsigned int itemID = _itemObjectToVerify.getItemID();
-	if (itemID < _nextID) {
+bool ItemVerification::isValidStartDateTime() {
+	DateTime startDateTime = _itemObjectToVerify.getStartTime();
+	DateTimeVerification startDateTimeVerification(startDateTime);
+	if (startDateTimeVerification.isValidDateTime()) {
 		return true;
 	} else {
-		cout << ERROR_INVALID_ID;
+		_itemVerificationErrors.push_back(ERROR_INVALID_START_DATE_TIME);
+		return false;
+	}
+}
+
+bool ItemVerification::isValidEndDateTime() {
+	DateTime endDateTime = _itemObjectToVerify.getEndTime();
+	DateTimeVerification endDateTimeVerification(endDateTime);
+	if (endDateTimeVerification.isValidDateTime()) {
+		return true;
+	} else {
+		_itemVerificationErrors.push_back(ERROR_INVALID_END_DATE_TIME);
+		return false;
+	}
+}
+
+bool ItemVerification::isValidTimeFrame() {
+	DateTime startDateTime = _itemObjectToVerify.getStartTime();
+	DateTime endDateTime = _itemObjectToVerify.getEndTime();
+	DateTimeVerification startDateTimeVerification(startDateTime);
+	DateTimeVerification endDateTimeVerification(endDateTime);
+	if (startDateTimeVerification.isValidDateTime() && endDateTimeVerification.isValidDateTime()) {
+		if (startDateTime == endDateTime) {
+			_itemVerificationErrors.push_back(ERROR_SAME_START_END_DATE_TIME);
+			return false;
+		} else if (startDateTime.isBefore(endDateTime)) {
+			_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		return false;
+	}
+}
+
+bool ItemVerification::isValidID() {
+	unsigned int itemID = _itemObjectToVerify.getItemID();
+	if (itemID <= _nextID) {
+		return true;
+	} else {
+		_itemVerificationErrors.push_back(ERROR_INVALID_ID);
 		return false;
 	}
 }
@@ -79,10 +90,10 @@ bool ItemVerification::isValidPriority() {
 	unsigned int priorityFound;
 	priorityString.push_back(priorityChar);
 	priorityFound = priorityString.find_first_of(AVAILABLE_PRIORITIES);
-	if (priorityFound != string::npos || priorityChar == 'E') {
+	if (priorityFound != string::npos) {
 		return true;
 	} else {
-		cout << ERROR_INVALID_PRIORITY;
+		_itemVerificationErrors.push_back(ERROR_INVALID_PRIORITY);
 		return false;
 	}
 }
@@ -93,18 +104,32 @@ bool ItemVerification::isValidLabel() {
 	unsigned int labelFound;
 	labelString.push_back(labelChar);
 	labelFound = labelString.find_first_of(AVAILABLE_LABELS);
-	if (labelFound != string::npos || labelChar =='E') {
+	if (labelFound != string::npos) {
 		return true;
-	}
-	else {
-		cout << ERROR_INVALID_LABEL;
+	} else {
+		_itemVerificationErrors.push_back(ERROR_INVALID_LABEL);
 		return false;
 	}
 }
 
 bool ItemVerification::isValidItem() {
-	if (isValidName() && isValidStartDateTime() && isValidEndDateTime() && isValidDescription() &&
-		/*isValidItemID() &&*/ isValidPriority() && isValidLabel())  {
+	bool hasValidName = isValidName();
+	bool hasValidDescription = isValidDescription();
+	bool hasValidStartDateTime = isValidStartDateTime();
+	bool hasValidEndDateTime = isValidEndDateTime();
+	bool hasValidTimeFrame = isValidTimeFrame();
+	bool hasValidID = isValidID();
+	bool hasValidPriority = isValidPriority();
+	bool hasValidLabel = isValidLabel();
+
+	if (hasValidName &&
+		hasValidDescription &&
+		hasValidStartDateTime &&
+		hasValidEndDateTime &&
+		hasValidTimeFrame &&
+		hasValidID &&
+		hasValidPriority &&
+		hasValidLabel) {
 		return true;
 	} else {
 		return false;

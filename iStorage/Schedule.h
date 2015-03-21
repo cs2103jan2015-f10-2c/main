@@ -15,13 +15,20 @@ class Schedule
 {
 private:
 	vector <Item> _schedule;
-	vector <Item> _filteredSchedule;
+	vector <Item> _displaySchedule;
 //	History _scheduleHistory;
 
 	//	Checks if an itemID matches the itemID of an item in a given vector cell
 	//	Pre:	Valid itemID, valid vectorIndex
 	//	Post:	Returns true if the itemID matches; false otherwise
 	bool isMatchingItemID(unsigned int, unsigned int);
+
+	//	Retrieves schedule vector index given itemID
+	//	Pre:	Valid itemID
+	//	Post:	Schedule vector index is returned
+	unsigned int findVectorIndexGivenItemID(unsigned int);
+
+	unsigned int findItemIDGivenDisplayVectorIndex(unsigned int);
 
 public:
 	//	Constructor
@@ -39,11 +46,6 @@ public:
 	//	Post:	Returns the number of items within _schedule
 	unsigned int getSizeOfSchedule();
 
-	//	Retrieves vector index given itemID
-	//	Pre:	Valid itemID
-	//	Post:	Vector index is returned
-	unsigned int findVectorIndexGivenItemID(unsigned int);
-
 	//	Adds an item to the schedule
 	//	Pre:	Valid Item object
 	//	Post:	Item is added to the schedule; full details of the item is returned (string)
@@ -51,23 +53,28 @@ public:
 
 	//	Retrieves a copy of an existing item in the schedule
 	//	Pre:	Valid itemID
-	//	Post:	Returns a copy of the existing item
-	Item retrieveItem(unsigned int);
+	//	Post:	Given itemID, a copy of the existing item is returned
+	Item retrieveItemGivenItemID(unsigned int);
 
-	//	Edits an existing item in the schedule
+	//	Replaces an existing item in the schedule
 	//	Pre:	Valid itemID, valid Item object
 	//	Post:	Given itemID, replaces existing item with updated item
-	string replaceItem(Item*, unsigned int);
+	string replaceItemGivenItemID(Item*, unsigned int);
 
 	//	Deletes an item from the schedule
 	//	Pre:	Valid itemID
-	//	Post:	Deleted item is returned
-	string deleteItem(unsigned int);
+	//	Post:	Given itemID, item is deleted and returned
+	string deleteItemGivenItemID(unsigned int);
 
 	//	Retrieves the entire schedule
 	//	Pre:	Nil
 	//	Post:	Constant reference to vector of Item is returned.
 	const vector <Item>& retrieveSchedule();
+
+
+
+
+
 	/*
 	//	Sorts the schedule by attribute (date - if any, item name, priority, completion status)
 	//	Pre:	Valid date, if any - YYYY MM DD HH:MM or YYYY MM DD
