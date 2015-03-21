@@ -52,11 +52,14 @@ const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to
 
 const unsigned int iParser::SIZE_DAYS = 7;
 const unsigned int iParser::SIZE_MONTHS = 12;
+const unsigned int iParser::SIZE_DATETIME_WHITESPACE = 4;
 
 const unsigned int iParser::INDEX_ZERO = 0;
 const unsigned int iParser::INDEX_ONE = 1;
 const unsigned int iParser::INDEX_TWO = 2;
 const unsigned int iParser::INDEX_THREE = 3;
+const unsigned int iParser::INDEX_FOUR = 4;
+const unsigned int iParser::INDEX_FIVE = 5;
 const unsigned int iParser::INDEX_START = 0;
 const unsigned int iParser::INDEX_INVALID = -1;
 
@@ -359,7 +362,7 @@ string iParser::splitAndSetObliqueDateInformation(string date, unsigned int numb
 	
 	endIndex = date.find_first_of("/");
 	day = date.substr(startIndex, endIndex - startIndex);
-	startIndex = endIndex + INDEX_ONE;
+	startIndex = ++endIndex;
 	
 	if (numberOfObliques == 1) {
 		month = date.substr(startIndex);
@@ -367,7 +370,7 @@ string iParser::splitAndSetObliqueDateInformation(string date, unsigned int numb
 	else if (numberOfObliques == 2) {
 		endIndex = date.find_first_of("/", startIndex);
 		month = date.substr(startIndex, endIndex - startIndex);
-		startIndex = endIndex + INDEX_ONE;
+		startIndex = ++endIndex;
 		year = date.substr(startIndex);
 	}
 
@@ -378,15 +381,12 @@ string iParser::splitAndSetObliqueDateInformation(string date, unsigned int numb
 
 string iParser::splitAndSetSpaceDateInformation(string date, unsigned int numberOfSpaces) {
 	assert(numberOfSpaces >= 0 && numberOfSpaces <= 2);
-	ostringstream output;
 	string day = STRING_NEGATIVE_ONE;
 	string month = STRING_NEGATIVE_ONE;
 	string year = STRING_NEGATIVE_ONE;
-	unsigned int startIndex = INDEX_START;
-	unsigned int endIndex = INDEX_START;
 	unsigned int keywordIndex = INDEX_INVALID;
 
-	if (numberOfSpaces == 0) {
+	if (numberOfSpaces == INDEX_ZERO) {
 		bool hasDay = false;
 		if (isDay(date, keywordIndex)) {
 			day = STRING_DAYS[keywordIndex];
@@ -400,28 +400,32 @@ string iParser::splitAndSetSpaceDateInformation(string date, unsigned int number
 		}
 	}
 	else {
+		unsigned int startIndex = INDEX_START;
+		unsigned int endIndex = INDEX_START;
+
 		string tempMonth;
 		endIndex = date.find_first_of(" ");
 		day = date.substr(startIndex, endIndex - startIndex);
-		startIndex = endIndex + INDEX_ONE;
+		startIndex = ++endIndex;
 
-		if (numberOfSpaces == 1) {
+		if (numberOfSpaces == INDEX_ONE) {
 			tempMonth = date.substr(startIndex);
 			if (isMonth(tempMonth, keywordIndex)) {
 				month = STRING_MONTHS_IN_NUMBER[keywordIndex];
 			}
 		}
-		else if (numberOfSpaces == 2) {
+		else if (numberOfSpaces == INDEX_TWO) {
 			endIndex = date.find_first_of(" ", startIndex);
 			tempMonth = date.substr(startIndex, endIndex - startIndex);
 			if (isMonth(tempMonth, keywordIndex)) {
 				month = STRING_MONTHS_IN_NUMBER[keywordIndex];
 			}
-			startIndex = endIndex + INDEX_ONE;
+			startIndex = ++endIndex;
 			year = date.substr(startIndex);
 		}
 	}
 
+	ostringstream output;
 	output << day << CHAR_SPACE << month << CHAR_SPACE << year;
 
 	return output.str();
@@ -460,7 +464,7 @@ bool iParser::isValidDate(string text, string& dateToBeSet) {
 }
 
 bool iParser::isValidTime(string text, string& textToBeSet) {
-
+	unsigned;
 	return true;
 }
 
@@ -471,6 +475,19 @@ bool iParser::isDay(string day, unsigned int& indexToSet) {
 	for (index = INDEX_START; index < SIZE_DAYS; index++) {
 		if (day == STRING_DAYS[index] || day == STRING_DAYS_SHORT_FORM[index]) {
 			indexToSet = index;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool iParser::isDay(string day) {
+	assert(day != STRING_BLANK && day[INDEX_ZERO] != NULL);
+	
+	unsigned int index;
+	convertToLowerCase(day);
+	for (index = INDEX_START; index < SIZE_DAYS; index++) {
+		if (day == STRING_DAYS[index] || day == STRING_DAYS_SHORT_FORM[index]) {
 			return true;
 		}
 	}
@@ -490,25 +507,37 @@ bool iParser::isMonth(string month, unsigned int& indexToSet) {
 	return false;
 }
 
-bool iParser::isValidDateString(string dateString) {
-	assert(dateString != STRING_BLANK && dateString[INDEX_ZERO] != NULL);
+bool iParser::isValidDateTimeString(string dateTimeString) {
+	assert(dateTimeString != STRING_BLANK && dateTimeString[INDEX_ZERO] != NULL);
+	unsigned whiteSpaceCount = retrieveCount(dateTimeString, CHAR_SPACE);
+	if (whiteSpaceCount != SIZE_DATETIME_WHITESPACE) {
+		return false;
+	}
+
 	bool isValid = true;
-	unsigned whiteSpaceCount = INDEX_ZERO;
+	unsigned int endIndex = dateTimeString.find_first_of(" ");
+	string day = dateTimeString.substr(INDEX_START, endIndex);
+
+	if (!isDay(day)) {
+		unsigned int index;
+		for (index = INDEX_START; isValid && index < dateTimeString.size(); index++) {
+			if (dateTimeString[index] != CHAR_SPACE &&
+				dateTimeString[index] != CHAR_HYPHEN &&
+				!isdigit(dateTimeString[index])) {
+				isValid = false;
+			}
+		}
+	}
+
 	unsigned int index;
-
-	for (index = INDEX_START; isValid && index < dateString.size(); index++) {
-		if (dateString[index] == CHAR_SPACE) {
-			whiteSpaceCount++;
-		}
-		if (!isdigit(dateString[index]) && dateString[index] != CHAR_HYPHEN && dateString[index] != CHAR_SPACE) {
-			isValid = false;
+	for (index = endIndex; isValid && index < dateTimeString.size(); index++) {
+		if (dateTimeString[index] != CHAR_SPACE && 
+			dateTimeString[index] != CHAR_HYPHEN &&
+			!isdigit(dateTimeString[index])) {
+				isValid = false;
 		}
 	}
-
-	if (whiteSpaceCount != INDEX_TWO) {
-		isValid = false;
-	}
-
+	
 	return isValid;
 }	
 

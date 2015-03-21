@@ -308,15 +308,21 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedFive, actualFive);
 		}
 
-		TEST_METHOD(parserIsValidDateStringTest) {
-			string stringOne = "10 11 12";
-			string stringTwo = "10 11 -1";
-			string stringThree = "abc def ghi";
+		TEST_METHOD(parserIsValidDateTimeStringTest) {
+			string trueTestString[] = { "10 11 12 13 14", "10 11 12 -1 -1", "10 11 -1 -1 -1",
+				"-1 11 -1 -1 -1", "monday -1 -1 -1 -1", "tuesday -1 -1 23 59",
+				"wednesday -1 -1 -1 -1", "thursday -1 -1 23 59", "friday -1 -1 -1 -1",
+				"saturday -1 -1 23 59", "sunday -1 -1 -1 -1" };
+			string falseTestString = "a b c d e";
 
-			bool actualOne = testParser.isValidDateString(stringOne);
-			Assert::IsTrue(actualOne);
-			bool actualTwo = testParser.isValidDateString(stringTwo);
-			Assert::IsTrue(actualTwo);
+			for (int i = 0; i < 11; i++) {
+				string testString = trueTestString[i];
+				bool actual = testParser.isValidDateTimeString(testString);
+				Assert::IsTrue(actual);
+			}
+
+			bool actual = testParser.isValidDateTimeString(falseTestString);
+			Assert::IsFalse(actual);
 		}
 
 		TEST_METHOD(parserIsDayTest) {
@@ -326,23 +332,29 @@ namespace iPlannerParserTest {
 
 			for (unsigned int i = 0; i < 7; i++) {
 				unsigned int index = -1;
-				bool actual = testParser.isDay(trueTestStringOne[i], index);
-				Assert::IsTrue(actual);
+				bool actualOne = testParser.isDay(trueTestStringOne[i], index);
+				bool actualTwo = testParser.isDay(trueTestStringOne[i]);
+				Assert::IsTrue(actualOne);
+				Assert::IsTrue(actualTwo);
 				Assert::AreEqual(index, i);
 			}
 
 			for (unsigned int i = 0; i < 7; i++) {
 				unsigned int index = -1;
-				bool actual = testParser.isDay(trueTestStringTwo[i], index);
-				Assert::IsTrue(actual);
+				bool actualOne = testParser.isDay(trueTestStringTwo[i], index);
+				bool actualTwo = testParser.isDay(trueTestStringTwo[i]);
+				Assert::IsTrue(actualOne);
+				Assert::IsTrue(actualTwo);
 				Assert::AreEqual(index, i);
 			}
 
 			for (unsigned int i = 0; i < 7; i++) {
 				unsigned int index = -1;
 				unsigned int expected = -1;
-				bool actual = testParser.isDay(falseTestString[i], index);
-				Assert::IsFalse(actual);
+				bool actualOne = testParser.isDay(falseTestString[i], index);
+				bool actualTwo = testParser.isDay(falseTestString[i]);
+				Assert::IsFalse(actualOne);
+				Assert::IsFalse(actualTwo);
 				Assert::AreEqual(index, expected);
 			}
 		}

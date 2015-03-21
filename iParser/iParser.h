@@ -79,13 +79,16 @@ public:
 	//static const int DIGIT_THREE;
 	//static const int DIGIT_FOUR;
 
-	static const unsigned int iParser::SIZE_DAYS;
-	static const unsigned int iParser::SIZE_MONTHS;
+	static const unsigned int SIZE_DAYS;
+	static const unsigned int SIZE_MONTHS;
+	static const unsigned int SIZE_DATETIME_WHITESPACE;
 
 	static const unsigned int INDEX_ZERO;
 	static const unsigned int INDEX_ONE;
 	static const unsigned int INDEX_TWO;
 	static const unsigned int INDEX_THREE;
+	static const unsigned int INDEX_FOUR;
+	static const unsigned int INDEX_FIVE;
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
 
@@ -125,8 +128,9 @@ public:
 	bool isValidTime(string, string&);
 	string splitAndSetObliqueDateInformation(string, unsigned int);
 	string splitAndSetSpaceDateInformation(string, unsigned int);
-	bool isValidDateString(string); //unit tested
+	bool isValidDateTimeString(string); //unit tested
 	bool isDay(string, unsigned int&); //unit tested
+	bool isDay(string);
 	bool isMonth(string, unsigned int&); //unit tested
 
 	// counters
