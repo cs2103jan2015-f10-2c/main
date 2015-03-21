@@ -11,8 +11,9 @@ NOTES TO DEVELOPERS
 #include <iostream>
 #include <string>
 #include <list>
-#include <cctype>
+#include <vector>
 #include <sstream>
+#include <cctype>
 #include <assert.h>
 using namespace std;
 
@@ -44,17 +45,33 @@ public:
 	static const string MODIFIER_END;
 	static const string MODIFIER_DESCRIPTION;
 
-	//static const string TOKEN_COMMAND;
+	static const string STRING_DESCRIPTION;
+	static const string STRING_DESCRIPTION_SHORT_FORM;
+	static const string STRING_DATE;
+	static const string STRING_DAYS[];
+	static const string STRING_DAYS_SHORT_FORM[];
+	static const string STRING_MONTHS[];
+	static const string STRING_MONTHS_SHORT_FORM[];
+	static const string STRING_MONTHS_IN_NUMBER[];
 	static const string STRING_BLANK;
+	static const string STRING_NEGATIVE_ONE;
+
 	static const char CHAR_SPACE;
 	static const char CHAR_TAB;
+	static const char CHAR_COMMA;
+	static const char CHAR_OBLIQUE;
+	static const char CHAR_HYPHEN;
 
 	static const string MESSAGE_SUCCESS;
+	static const string MESSAGE_FAILURE;
 	static const string MESSAGE_INVALID;
+	static const string MESSAGE_INVALID_INPUT;
 	static const string MESSAGE_INVALID_COMMAND;
 	static const string MESSAGE_INVALID_ADD;
 	static const string MESSAGE_INVALID_EDIT;
 	static const string MESSAGE_INVALID_INDEX;
+	static const string MESSAGE_INVALID_DATE;
+	static const string MESSAGE_INVALID_TIME;
 	static const string MESSAGE_TERMINATE;
 
 	//static const int LENGTH_VALID;
@@ -62,12 +79,15 @@ public:
 	//static const int DIGIT_THREE;
 	//static const int DIGIT_FOUR;
 
-	//static const int INDEX_ZERO;
-	static const int INDEX_ONE;
-	static const int INDEX_INVALID;
-	static const int INDEX_START;
-	//static const int INDEX_NEXT;
-	//static const int INDEX_AFTER_TOKEN_COMMAND;
+	static const unsigned int iParser::SIZE_DAYS;
+	static const unsigned int iParser::SIZE_MONTHS;
+
+	static const unsigned int INDEX_ZERO;
+	static const unsigned int INDEX_ONE;
+	static const unsigned int INDEX_TWO;
+	static const unsigned int INDEX_THREE;
+	static const unsigned int INDEX_START;
+	static const unsigned int INDEX_INVALID;
 
 	enum CommandType {
 		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
@@ -81,33 +101,40 @@ public:
 	CommandType determineCommandType(string);
 
 	// commandType functions
-	string executeAddParsing(string); // unit tested
+	string executeAddParsing(string);
 	string executeDeleteParsing(string); // unit tested
-	string executeEditParsing(string);
-	string executeUndoParsing(string);
-	string executeDoneParsing(string);
-	string executeExitParsing(string);
+	string executeEditParsing(string); // unit tested
+	string executeUndoParsing(string); // unit tested
+	string executeDoneParsing(string); // unit tested
+	string executeExitParsing(string); // unit tested
 
 	// string manipulation functions
 	string trimText(string&); // unit tested
 	string trimFront(string); // unit tested
 	string trimBack(string); // unit tested
 	string removeFirstStringToken(string);  // unit tested
+	string retrieveFirstStringToken(string); // unit tested
 	string removeConsecutiveWhiteSpace(string&); // unit tested
 	string convertToLowerCase(string&); // unit tested
-	string retrieveFirstStringToken(string); // unit tested
-
-	// boolean functions
-	//bool isValidLength(string userInput);
-	bool areDigits(string text); // unit tested
+	bool areDigits(string); // unit tested
 	bool isWhiteSpace(char); // unit tested
+
+	// date time functions
+	bool isValidDate(string, string&);
+	bool isValidTime(string, string&);
+	string splitAndSetObliqueDateInformation(string, unsigned int);
+	string splitAndSetSpaceDateInformation(string, unsigned int);
+	bool isValidDateString(string); //unit tested
+	bool isDay(string, unsigned int&); //unit tested
+	bool isMonth(string, unsigned int&); //unit tested
+
+	// counters
+	unsigned int retrieveCount(string, char); // unit tested
 
 	// setters and getters
 	list<COMMAND_AND_TEXT> getParseInfo();
 	string setParseInfo(string, string = "");
-	
-	// assertion
-	void checkString(string);
+	string clearParseInfo();
 
 	// misc functions
 	void showError(string text);
