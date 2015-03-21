@@ -171,7 +171,7 @@ string iParser::executeAddParsing(string text) {
 }
 
 string iParser::executeDeleteParsing(string indexToDelete) {
-	if (areDigits(indexToDelete) && indexToDelete != STRING_BLANK) {
+	if (indexToDelete != STRING_BLANK && areDigits(indexToDelete)) {
 		setParseInfo(COMMAND_DELETE_TWO, indexToDelete);
 		return MESSAGE_SUCCESS;
 	}
@@ -185,18 +185,14 @@ string iParser::executeEditParsing(string text) {
 	string indexToEdit = retrieveFirstStringToken(text);
 	string textToEdit = removeFirstStringToken(text);
 
-	if (!areDigits(indexToEdit)) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
-		return MESSAGE_FAILURE;
-	}
-	else if (textToEdit == STRING_BLANK) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_EDIT);
-		return MESSAGE_FAILURE;
-	}
-	else {
+	if (textToEdit != STRING_BLANK && areDigits(indexToEdit)) {
 		setParseInfo(COMMAND_EDIT, indexToEdit);
 		setParseInfo(MODIFIER_DESCRIPTION, textToEdit);
 		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
+		return MESSAGE_FAILURE;
 	}
 }
 
@@ -223,7 +219,7 @@ string iParser::executeSearchParsing(string textToSearch) {
 }
 
 string iParser::executeDoneParsing(string indexToMarkAsDone) {
-	if (areDigits(indexToMarkAsDone)) {
+	if (indexToMarkAsDone != STRING_BLANK && areDigits(indexToMarkAsDone)) {
 		setParseInfo(COMMAND_DONE, indexToMarkAsDone);
 		return MESSAGE_SUCCESS;
 	}
