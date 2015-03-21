@@ -60,14 +60,27 @@ bool ItemVerification::isValidTimeFrame() {
 	DateTimeVerification startDateTimeVerification(startDateTime);
 	DateTimeVerification endDateTimeVerification(endDateTime);
 	if (startDateTimeVerification.isValidDateTime() && endDateTimeVerification.isValidDateTime()) {
-		if (startDateTime == endDateTime) {
-			_itemVerificationErrors.push_back(ERROR_SAME_START_END_DATE_TIME);
-			return false;
-		} else if (startDateTime.isBefore(endDateTime)) {
-			_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
-			return false;
+		if (startDateTimeVerification.hasHourMinute() && endDateTimeVerification.hasHourMinute()) {
+			if (startDateTime == endDateTime) {
+				_itemVerificationErrors.push_back(ERROR_SAME_START_END_DATE_TIME);
+				return false;
+			} else if (startDateTime.isAfter(endDateTime)) {
+				_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
+				return false;
+			} else {
+				return true;
+			}
 		} else {
-			return true;
+			if (endDateTime.getYear() > startDateTime.getYear()) {
+				return true;
+			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() > startDateTime.getMonth()) {
+				return true;
+			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() == startDateTime.getMonth() && endDateTime.getDay() > startDateTime.getDay()) {
+				return true;
+			} else {
+				_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
+				return false;
+			}
 		}
 	} else {
 		return false;

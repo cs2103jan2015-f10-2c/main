@@ -32,7 +32,9 @@ public:
 	bool isValidItem();
 	list<string> getItemVerificationErrors();
 	
-	// PULLED TO PUBLIC FOR TESTING
+	//////////////////////////////////
+	// PULLED TO PUBLIC FOR TESTING //
+	//////////////////////////////////
 	bool isValidName();
 	bool isValidDescription();
 	bool isValidStartDateTime();
