@@ -67,6 +67,17 @@ unsigned int Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	newItemToBeAdded = new Item;
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
+
+	/*	Try this code for item verification! --JF ////////////
+	ItemVerification verifier(*newItemToBeAdded,_nextItemID);
+	if (verifier.isValidItem()) {
+		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
+		addedItemID = _nextItemID;
+		increaseItemIDAndScheduleSize();
+		printAddTaskSuccessful(addCompleted);
+	}
+	*////////////////////////////////////////////////////////
+
 	//if (isValidItemInLogic(*newItemToBeAdded)) {
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 		addedItemID = _nextItemID;
