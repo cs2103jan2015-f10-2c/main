@@ -75,7 +75,7 @@ bool ItemVerification::isValidTimeFrame() {
 				return true;
 			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() > startDateTime.getMonth()) {
 				return true;
-			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() == startDateTime.getMonth() && endDateTime.getDay() > startDateTime.getDay()) {
+			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() == startDateTime.getMonth() && endDateTime.getDay() >= startDateTime.getDay()) {
 				return true;
 			} else {
 				_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
