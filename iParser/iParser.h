@@ -15,6 +15,7 @@ NOTES TO DEVELOPERS
 #include <sstream>
 #include <cctype>
 #include <assert.h>
+#include <exception>
 using namespace std;
 
 #ifndef IPARSER_H_
@@ -23,6 +24,11 @@ using namespace std;
 struct COMMAND_AND_TEXT {
 	string command;
 	string text;
+};
+
+struct START_AND_END {
+	string start;
+	string end;
 };
 
 class iParser {
@@ -53,6 +59,7 @@ public:
 	static const string STRING_MONTHS[];
 	static const string STRING_MONTHS_SHORT_FORM[];
 	static const string STRING_MONTHS_IN_NUMBER[];
+	static const string STRING_TO;
 	static const string STRING_AM;
 	static const string STRING_PM;
 	static const string STRING_BLANK;
@@ -82,6 +89,7 @@ public:
 	//static const int DIGIT_THREE;
 	//static const int DIGIT_FOUR;
 
+	static const unsigned int MAX_NUMBER_OF_COMMAS;
 	static const unsigned int SIZE_DAYS;
 	static const unsigned int SIZE_MONTHS;
 	static const unsigned int SIZE_DATETIME_WHITESPACE;
@@ -110,6 +118,7 @@ public:
 	string executeExitParsing(string); // unit tested
 
 	// string manipulation functions
+	vector<string> tokeniseText(const string);
 	string trimText(string&); // unit tested
 	string trimFront(string); // unit tested
 	string trimBack(string); // unit tested
@@ -123,19 +132,21 @@ public:
 	bool isWhiteSpace(const char); // unit tested
 
 	// date time functions
-	bool isValidDate(string, string&);
-	bool isValidTime(string, string&);
+	bool hasStartEnd(string, unsigned int&, unsigned int&);
+	START_AND_END splitStartEnd(const string, const unsigned int, const unsigned int);
+	bool isValidDate(string, string&); // unit tested
+	bool isValidTime(string, string&); // unit tested
 	string splitAndSetObliqueDateInformation(string, const unsigned int); // unit tested
 	string splitAndSetSpaceDateInformation(string, const unsigned int); // unit tested
-	string splitAndSetTimeString(string, const string);
-	string splitAndSetColonTimeString(string, const string);
+	string splitAndSetTimeString(string, const string); // unit tested
+	string splitAndSetColonTimeString(string, const string); // unit tested
 	string splitAndSetNoColonTimeString(string, const string); // unit tested
 	bool isValidDateTimeString(const string); //unit tested
 	bool isDay(string, unsigned int&); //unit tested
 	bool isDay(string); // unit tested
 	bool isMonth(string, unsigned int&); //unit tested
-	bool hasTimePeriodAbbreviation(string); // unit tested
-	string addTwelveToHours(string); // unit tested
+	bool hasTimePeriodAbbreviation(const string); // unit tested
+	string addTwelveToHours(const string); // unit tested
 
 	// counters
 	unsigned int retrieveCount(string, const char); // unit tested

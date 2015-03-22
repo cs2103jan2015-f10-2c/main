@@ -73,12 +73,9 @@ const vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
 }
 
-const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
-
-}
-
-
-
+//const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
+//
+//}
 
 /*
 //	Filters the schedule by Priority
