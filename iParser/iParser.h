@@ -25,6 +25,11 @@ struct COMMAND_AND_TEXT {
 	string text;
 };
 
+struct START_AND_END {
+	string start;
+	string end;
+};
+
 class iParser {
 public:
 	list<COMMAND_AND_TEXT> _parseInfo;
@@ -53,6 +58,11 @@ public:
 	static const string STRING_MONTHS[];
 	static const string STRING_MONTHS_SHORT_FORM[];
 	static const string STRING_MONTHS_IN_NUMBER[];
+	static const string STRING_TO;
+	static const string STRING_AM;
+	static const string STRING_PM;
+	static const string STRING_DATE_INITIALISE;
+	static const string STRING_TIME_INITIALISE;
 	static const string STRING_BLANK;
 	static const string STRING_NEGATIVE_ONE;
 
@@ -61,6 +71,7 @@ public:
 	static const char CHAR_COMMA;
 	static const char CHAR_OBLIQUE;
 	static const char CHAR_HYPHEN;
+	static const char CHAR_COLON;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_FAILURE;
@@ -70,8 +81,7 @@ public:
 	static const string MESSAGE_INVALID_ADD;
 	static const string MESSAGE_INVALID_EDIT;
 	static const string MESSAGE_INVALID_INDEX;
-	static const string MESSAGE_INVALID_DATE;
-	static const string MESSAGE_INVALID_TIME;
+	static const string MESSAGE_INVALID_DATE_TIME;
 	static const string MESSAGE_TERMINATE;
 
 	//static const int LENGTH_VALID;
@@ -79,15 +89,16 @@ public:
 	//static const int DIGIT_THREE;
 	//static const int DIGIT_FOUR;
 
-	static const unsigned int iParser::SIZE_DAYS;
-	static const unsigned int iParser::SIZE_MONTHS;
+	static const unsigned int MAX_NUMBER_OF_COMMAS;
+	static const unsigned int MIN_SIZE_WITH_ABBREVIATION;
+	static const unsigned int SIZE_DAYS;
+	static const unsigned int SIZE_MONTHS;
+	static const unsigned int SIZE_DATETIME_WHITESPACE;
 
-	static const unsigned int INDEX_ZERO;
-	static const unsigned int INDEX_ONE;
-	static const unsigned int INDEX_TWO;
-	static const unsigned int INDEX_THREE;
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
+	static const unsigned int TYPE_DATE;
+	static const unsigned int TYPE_TIME;
 
 	enum CommandType {
 		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
@@ -101,90 +112,59 @@ public:
 	CommandType determineCommandType(string);
 
 	// commandType functions
-	string executeAddParsing(string);
+	string executeAddParsing(string); // unit tested
 	string executeDeleteParsing(string); // unit tested
-	string executeEditParsing(string); // unit tested
+	string executeEditParsing(string); // unit tested // to be improved
 	string executeUndoParsing(string); // unit tested
+	string executeSearchParsing(string); // unit tested
 	string executeDoneParsing(string); // unit tested
 	string executeExitParsing(string); // unit tested
 
+	string checkAndSetTokenisedInformation(vector<string>&);
+
 	// string manipulation functions
+	vector<string> tokeniseText(const string); // unit tested
 	string trimText(string&); // unit tested
 	string trimFront(string); // unit tested
 	string trimBack(string); // unit tested
 	string removeFirstStringToken(string);  // unit tested
 	string retrieveFirstStringToken(string); // unit tested
 	string removeConsecutiveWhiteSpace(string&); // unit tested
+	string removeWhiteSpace(string&); // unit tested
+	string removeCharacter(string&, const char); // unit tested
 	string convertToLowerCase(string&); // unit tested
-	bool areDigits(string); // unit tested
-	bool isWhiteSpace(char); // unit tested
+	bool areDigits(const string); // unit tested
+	bool isWhiteSpace(const char); // unit tested
 
 	// date time functions
-	bool isValidDate(string, string&);
-	bool isValidTime(string, string&);
-	string splitAndSetObliqueDateInformation(string, unsigned int);
-	string splitAndSetSpaceDateInformation(string, unsigned int);
-	bool isValidDateString(string); //unit tested
+	bool hasStartEnd(string, unsigned int&, unsigned int&); // unit tested
+	START_AND_END splitStartEnd(const string, const unsigned int, const unsigned int, unsigned int&); // unit tested
+	bool isValidDate(string, string&); // unit tested
+	bool isValidTime(string, string&); // unit tested
+	string splitAndSetObliqueDateInformation(string, const unsigned int); // unit tested
+	string splitAndSetSpaceDateInformation(string, const unsigned int); // unit tested
+	string splitAndSetTimeString(string, const string); // unit tested
+	string splitAndSetColonTimeString(string, const string); // unit tested
+	string splitAndSetNoColonTimeString(string, const string); // unit tested
+	bool isValidDateTimeString(const string); //unit tested
 	bool isDay(string, unsigned int&); //unit tested
+	bool isDay(string); // unit tested
 	bool isMonth(string, unsigned int&); //unit tested
+	bool hasTimePeriodAbbreviation(const string); // unit tested
+	string addTwelveToHours(const string); // unit tested
 
 	// counters
-	unsigned int retrieveCount(string, char); // unit tested
+	unsigned int retrieveCount(string, const char); // unit tested
 
 	// setters and getters
 	list<COMMAND_AND_TEXT> getParseInfo();
 	string setParseInfo(string, string = "");
 	string clearParseInfo();
+	void showParseInfo();
 
 	// misc functions
 	void showError(string text);
 
-	/*
-	// main functions to be executed in public method parse 
-	string splitInput(string userInput);
-	string setInformation();
-
-	// input retrieval and categorisation
-	string setInputs(string individualInputs);
-	string retrieveCommand(string userInput);
-	string retrieveText(string userInput);
-	CommandType determineCommandType(string command);
-
-	// commandType functions
-	string setAddItemName(string text, Item& item);
-	string setDeleteIndex(string text, Item& item);
-	string setEditIndex(string text, Item& item);
-	string setStartDateTime(string text, Item& item);
-	string setEndDateTime(string text, Item& item);
-	string setDescription(string text, Item& item);
-	string setExit(string text);
-
-	// helper functions assisting commandType functions
-	string addIndex(string text);
-	string splitAndSetDateTime(string text, Item& item, string command);
-	int retrieveYear(string text);
-	int retrieveMonth(string text);
-	int retrieveDay(string text);
-	int retrieveHour(string text);
-	int retrieveMinute(string text);
-	string setEditString(string text);
-
-	// string manipulation functions
-	int findIndex(string userInput, string stringToFind, int startIndex = INDEX_ZERO);
-	string retrieveSubstring(string userInput, int startIndex, int endIndex = INDEX_INVALID);
-	string trimText(string& text);
-	string trimFront(string text);
-	string trimBack(string text);
-	int convertToDigit(string text);
-
-	// boolean functions
-	bool isValidLength(string userInput);
-	bool isDigit(string text);
-
-	// Misc functions
-	string displayInputs();
-	string displayParseInfo();	
-	*/
 public:
 	iParser();
 	~iParser();

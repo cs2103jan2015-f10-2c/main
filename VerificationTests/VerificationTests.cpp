@@ -438,7 +438,6 @@ namespace VerificationTests
 			ItemVerification verify9(item9, 100);
 			isValidTimeFrame = verify9.isValidTimeFrame();
 			Assert::AreEqual(false, isValidTimeFrame);
-			/**/
 		}
 
 		TEST_METHOD(TestIsValidItem)
