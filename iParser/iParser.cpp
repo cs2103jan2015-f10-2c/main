@@ -30,6 +30,11 @@ const string iParser::STRING_MONTHS[] = { "january" , "february", "march", "apri
 const string iParser::STRING_MONTHS_SHORT_FORM[] = { "jan", "feb", "mar", "apr", "may", "jun",
 													 "jul", "aug", "sep", "oct", "nov", "dec" };
 const string iParser::STRING_MONTHS_IN_NUMBER[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
+const string iParser::STRING_TO = "to";
+const string iParser::STRING_AM = "am";
+const string iParser::STRING_PM = "pm";
+const string iParser::STRING_DATE_INITIALISE = "-1 -1 -1";
+const string iParser::STRING_TIME_INITIALISE = "-1 -1";
 const string iParser::STRING_BLANK = "";
 const string iParser::STRING_NEGATIVE_ONE = "-1";
 const char iParser::CHAR_SPACE = ' ';
@@ -37,39 +42,42 @@ const char iParser::CHAR_TAB = '\t';
 const char iParser::CHAR_COMMA = ',';
 const char iParser::CHAR_OBLIQUE = '/';
 const char iParser::CHAR_HYPHEN = '-';
+const char iParser::CHAR_COLON = ':';
 
 const string iParser::MESSAGE_SUCCESS = "success";
 const string iParser::MESSAGE_FAILURE = "failure";
 const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_INPUT = "invalid input";
-const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
-const string iParser::MESSAGE_INVALID_ADD = "Invalid text added";
-const string iParser::MESSAGE_INVALID_EDIT = "Invalid edit";
-const string iParser::MESSAGE_INVALID_INDEX = "Invalid index";
-const string iParser::MESSAGE_INVALID_DATE = "Invalid date input";
-const string iParser::MESSAGE_INVALID_TIME = "Invalid time input";
+const string iParser::MESSAGE_INVALID_COMMAND = "invalid command";
+const string iParser::MESSAGE_INVALID_ADD = "invalid text added";
+const string iParser::MESSAGE_INVALID_EDIT = "invalid edit";
+const string iParser::MESSAGE_INVALID_INDEX = "invalid index";
+const string iParser::MESSAGE_INVALID_DATE_TIME = "invalid date and time";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
+const unsigned int iParser::MAX_NUMBER_OF_COMMAS = 4;
+const unsigned int iParser::MIN_SIZE_WITH_ABBREVIATION = 3;
 const unsigned int iParser::SIZE_DAYS = 7;
 const unsigned int iParser::SIZE_MONTHS = 12;
+const unsigned int iParser::SIZE_DATETIME_WHITESPACE = 4;
 
-const unsigned int iParser::INDEX_ZERO = 0;
-const unsigned int iParser::INDEX_ONE = 1;
-const unsigned int iParser::INDEX_TWO = 2;
-const unsigned int iParser::INDEX_THREE = 3;
 const unsigned int iParser::INDEX_START = 0;
 const unsigned int iParser::INDEX_INVALID = -1;
+const unsigned int iParser::TYPE_DATE = 1;
+const unsigned int iParser::TYPE_TIME = 2;
 
 iParser::iParser() {}
 
 iParser::~iParser() {}
 
 list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
+	assert(userInput[0] != NULL);
 	executeParsing(userInput);
 	return _parseInfo;
 }
 
 string iParser::executeParsing(string userInput) {
+	assert(userInput[0] != NULL);
 	trimText(userInput);
 	removeConsecutiveWhiteSpace(userInput);
 	string command = retrieveCommand(userInput);
@@ -92,6 +100,7 @@ string iParser::executeParsing(string userInput) {
 	case SORT:
 		break;
 	case SEARCH:
+		executeSearchParsing(textWithoutCommand);
 		break;
 	case VIEW:
 		break;
@@ -163,14 +172,29 @@ string iParser::executeAddParsing(string text) {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
 		return MESSAGE_FAILURE;
 	}
-
-	int numberOfCommas = retrieveCount(text, CHAR_COMMA);
+	
+	unsigned int numberOfCommas = retrieveCount(text, CHAR_COMMA);
+	if (numberOfCommas >= 0 && numberOfCommas <= MAX_NUMBER_OF_COMMAS) {
+		vector<string> tokenisedInformation = tokeniseText(text);
+		try {
+			checkAndSetTokenisedInformation(tokenisedInformation);
+		}
+		catch (string& exceptionMessage) {
+			clearParseInfo();
+			setParseInfo(MESSAGE_INVALID, exceptionMessage);
+			return MESSAGE_FAILURE;
+		}
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
 
 	return MESSAGE_SUCCESS;
 }
 
 string iParser::executeDeleteParsing(string indexToDelete) {
-	if (areDigits(indexToDelete) && indexToDelete != STRING_BLANK) {
+	if (indexToDelete != STRING_BLANK && areDigits(indexToDelete)) {
 		setParseInfo(COMMAND_DELETE_TWO, indexToDelete);
 		return MESSAGE_SUCCESS;
 	}
@@ -184,18 +208,14 @@ string iParser::executeEditParsing(string text) {
 	string indexToEdit = retrieveFirstStringToken(text);
 	string textToEdit = removeFirstStringToken(text);
 
-	if (!areDigits(indexToEdit)) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
-		return MESSAGE_FAILURE;
-	}
-	else if (textToEdit == STRING_BLANK) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_EDIT);
-		return MESSAGE_FAILURE;
-	}
-	else {
+	if (textToEdit != STRING_BLANK && areDigits(indexToEdit)) {
 		setParseInfo(COMMAND_EDIT, indexToEdit);
 		setParseInfo(MODIFIER_DESCRIPTION, textToEdit);
 		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
+		return MESSAGE_FAILURE;
 	}
 }
 
@@ -210,8 +230,19 @@ string iParser::executeUndoParsing(string userInput) {
 	}
 }
 
+string iParser::executeSearchParsing(string textToSearch) {
+	if (textToSearch != STRING_BLANK) {
+		setParseInfo(COMMAND_SEARCH, textToSearch);
+		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+}
+
 string iParser::executeDoneParsing(string indexToMarkAsDone) {
-	if (areDigits(indexToMarkAsDone)) {
+	if (indexToMarkAsDone != STRING_BLANK && areDigits(indexToMarkAsDone)) {
 		setParseInfo(COMMAND_DONE, indexToMarkAsDone);
 		return MESSAGE_SUCCESS;
 	}
@@ -232,6 +263,110 @@ string iParser::executeExitParsing(string userInput) {
 	}	
 }
 
+// remember to SLAP this ==============================================================
+string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInformation) {
+	if (tokenisedInformation.size() < 1 || tokenisedInformation[INDEX_START] == STRING_BLANK) {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	string description = tokenisedInformation[INDEX_START];
+	setParseInfo(COMMAND_ADD, description);
+
+	string startDate = STRING_DATE_INITIALISE;
+	string endDate = STRING_DATE_INITIALISE;
+	string startTime = STRING_TIME_INITIALISE;
+	string endTime = STRING_TIME_INITIALISE;
+	bool hasStartEndDate = false;
+	bool hasStartEndTime = false;
+	bool hasDate = false;
+	bool hasTime = false;
+	//bool hasLabel = false;
+	//bool hasPriority = false;
+	unsigned int index;
+
+	for (index = INDEX_START+1; index < tokenisedInformation.size(); index++) {
+		unsigned int seperatorPosition = INDEX_INVALID;
+		unsigned int seperatorSize = INDEX_INVALID;
+		string tokenisedString = tokenisedInformation[index];
+
+		if (!hasStartEndDate && !hasStartEndTime && hasStartEnd(tokenisedString, seperatorPosition, seperatorSize)) {
+			unsigned int type = INDEX_INVALID;
+			
+			START_AND_END information = splitStartEnd(tokenisedString, seperatorPosition, seperatorSize, type);
+			if (type == TYPE_DATE) {
+				hasStartEndDate = true;
+				hasDate = true;
+				startDate = information.start;
+				endDate = information.end;
+			}
+			else if (type == TYPE_TIME) {
+				hasStartEndTime = true;
+				hasTime = true;
+				startTime = information.start;
+				endTime = information.end;
+			}
+		}
+		else {
+			if (!hasDate && isValidDate(tokenisedString, startDate)) {
+				hasDate = true;
+			}
+			else if (!hasTime && isValidTime(tokenisedString, startTime)) {
+				hasTime = true;
+			}
+			else {
+				throw MESSAGE_INVALID_INPUT;
+			}
+		}
+	}
+
+	if (hasStartEndDate && !hasStartEndTime) {
+		ostringstream startDateString;
+		ostringstream endDateString;
+
+		startDateString << startDate << CHAR_SPACE << startTime;
+		endDateString << endDate << CHAR_SPACE << endTime;
+		setParseInfo(MODIFIER_START, startDateString.str());
+		setParseInfo(MODIFIER_END, endDateString.str());
+	}
+	else if (hasDate && hasStartEndTime) {
+		ostringstream startDateString;
+		ostringstream endDateString;
+
+		startDateString << startDate << CHAR_SPACE << startTime;
+		endDateString << startDate << CHAR_SPACE << endTime;
+		setParseInfo(MODIFIER_START, startDateString.str());
+		setParseInfo(MODIFIER_END, endDateString.str());
+	}
+	else if ((hasDate && hasTime) || (hasDate && !hasTime)) {
+		ostringstream startDateString;
+
+		startDateString << startDate << CHAR_SPACE << startTime;
+		setParseInfo(MODIFIER_START, startDateString.str());
+	}
+	else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+// remember to SLAP this ==============================================================
+
+vector<string> iParser::tokeniseText(const string text) {
+	vector<string> tokenisedInformation;
+	unsigned int startIndex = INDEX_START;
+	unsigned int endIndex = INDEX_START;
+
+	while (endIndex != INDEX_INVALID) {
+		endIndex = text.find_first_of(",", startIndex);
+		string tokenisedString = text.substr(startIndex, endIndex - startIndex);
+		trimText(tokenisedString);
+		tokenisedInformation.push_back(tokenisedString);
+		startIndex = endIndex + 1;
+	}
+
+	return tokenisedInformation;
+}
+
 string iParser::trimText(string& text) {
 	text = trimFront(text);
 	text = trimBack(text);
@@ -250,7 +385,7 @@ string iParser::trimFront(string text) {
 string iParser::trimBack(string text) {
 	unsigned int endIndex = text.length();
 
-	while (endIndex > INDEX_START && (text[endIndex - INDEX_ONE] == ' ' || text[endIndex - INDEX_ONE] == '\t')) {
+	while (endIndex > INDEX_START && (text[endIndex - 1] == ' ' || text[endIndex - 1] == '\t')) {
 		endIndex--;
 	}
 
@@ -281,9 +416,39 @@ string iParser::removeConsecutiveWhiteSpace(string& text) {
 	unsigned int index;
 	unsigned int endIndex = text.length();
 
-	for (index = INDEX_START; index < endIndex - INDEX_ONE; index++) {
-		if (isWhiteSpace(text[index]) && isWhiteSpace(text[index + INDEX_ONE])) {
-			text.erase(index + INDEX_ONE, INDEX_ONE);
+	for (index = INDEX_START; index < endIndex - 1; index++) {
+		if (isWhiteSpace(text[index]) && isWhiteSpace(text[index + 1])) {
+			text.erase(index + 1, 1);
+			index--;
+		}
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::removeWhiteSpace(string& text) {
+	assert(text != STRING_BLANK);
+	unsigned int index;
+	unsigned int endIndex = text.length();
+
+	for (index = INDEX_START; index < endIndex; index++) {
+		if (isWhiteSpace(text[index])) {
+			text.erase(index, 1);
+			index--;
+		}
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::removeCharacter(string& text, const char character) {
+	assert(text != STRING_BLANK);
+	unsigned int index;
+	unsigned int endIndex = text.length();
+
+	for (index = INDEX_START; index < endIndex; index++) {
+		if (text[index] == character) {
+			text.erase(index, 1);
 			index--;
 		}
 	}
@@ -302,7 +467,8 @@ string iParser::convertToLowerCase(string& text) {
 	return MESSAGE_SUCCESS;
 }
 
-bool iParser::areDigits(string text) {
+bool iParser::areDigits(const string text) {
+	assert(text != STRING_BLANK);
 	bool isValid = true;
 	unsigned int index;
 
@@ -315,67 +481,155 @@ bool iParser::areDigits(string text) {
 	return isValid;
 }
 
-bool iParser::isWhiteSpace(char character) {
+bool iParser::isWhiteSpace(const char character) {
 	return (character == CHAR_SPACE || character == CHAR_TAB);
 }
 
-//string iParser::checkTokensAndSetParseInfo(const vector<string>& tokens) {
-//	bool isValid = true;
-//	
-//	if (tokens.size() == 0) {
-//		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
-//		isValid = false;
-//	}
-//
-//	unsigned int index;
-//	bool hasDate = false;
-//	bool hasTime = false;
-//	for (index = INDEX_START; isValid && index < tokens.size(); index++) {
-//		if (tokens[index] == STRING_BLANK) {
-//			setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
-//			isValid = false;
-//		}
-//	}
-//
-//	return MESSAGE_SUCCESS;
-//}
+bool iParser::hasStartEnd(string text, unsigned int& seperatorPosition, unsigned int& seperatorSize) {
+	assert(text != STRING_BLANK);
+	seperatorPosition = text.find(STRING_TO);
+	if (seperatorPosition != INDEX_INVALID) {
+		seperatorSize = STRING_TO.size();
+		return true;
+	}
 
-string iParser::splitAndSetObliqueDateInformation(string date, unsigned int numberOfObliques) {
+	seperatorPosition = text.find(CHAR_HYPHEN);
+	if (seperatorPosition != INDEX_INVALID) {
+		seperatorSize = 1;
+		return true;
+	}
+
+	return false;
+}
+
+START_AND_END iParser::splitStartEnd(const string text, const unsigned int seperatorPosition, const unsigned int seperatorSize, unsigned int& type) {
+	assert(text != STRING_BLANK);
+	string start = text.substr(INDEX_START, seperatorPosition);
+	string end = text.substr(seperatorPosition + seperatorSize);
+	trimText(start);
+	trimText(end);
+	START_AND_END information;
+	string startInformation = STRING_BLANK;
+	string endInformation = STRING_BLANK;
+	
+	if (isValidDate(start, startInformation) && isValidDate(end, endInformation)) {
+		type = TYPE_DATE;
+	}
+	else if (isValidTime(start, startInformation) && isValidTime(end, endInformation)) {
+		type = TYPE_TIME;
+	}
+	else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	information.start = startInformation;
+	information.end = endInformation;
+
+	return information;
+}
+
+bool iParser::isValidDate(string dateString, string& dateToBeSet) {
+	if (dateString == STRING_BLANK) {
+		return false;
+	}
+
+	try {
+		const unsigned int numberOfObliques = retrieveCount(dateString, CHAR_OBLIQUE);
+		if (numberOfObliques > 2 && numberOfObliques < 0) {
+			return false;
+		}
+		else if (numberOfObliques > 0) {
+			dateToBeSet = splitAndSetObliqueDateInformation(dateString, numberOfObliques);
+		}
+		else {
+			unsigned int numberOfSpaces = retrieveCount(dateString, CHAR_SPACE);
+			if (numberOfSpaces > 2 && numberOfSpaces < 0) {
+				return false;
+			}
+			else {
+				dateToBeSet = splitAndSetSpaceDateInformation(dateString, numberOfSpaces);
+			}
+		}
+	}
+	catch (exception& e) {
+		return false;
+	}
+
+	return true;
+}
+
+bool iParser::isValidTime(string timeString, string& timeToBeSet) {
+	if (timeString == STRING_BLANK) {
+		return false;
+	}
+	
+	removeWhiteSpace(timeString);
+
+	string abbreviation = STRING_BLANK;
+	if (hasTimePeriodAbbreviation(timeString)) {
+		unsigned int startIndex = INDEX_START;
+		unsigned int endIndex = timeString.size() - 2;
+
+		abbreviation = timeString.substr(endIndex);
+		timeString = timeString.substr(startIndex, endIndex);
+		convertToLowerCase(abbreviation);
+	}
+	
+	try{
+		timeToBeSet = splitAndSetTimeString(timeString, abbreviation);
+	}
+	catch (exception& e) {
+		return false;
+	}
+
+	return true;
+}
+
+string iParser::splitAndSetObliqueDateInformation(string date, const unsigned int numberOfObliques) {
+	assert(date != STRING_BLANK);
 	assert(numberOfObliques > 0 && numberOfObliques <= 2);
-	ostringstream output;
 	string day = STRING_NEGATIVE_ONE;
 	string month = STRING_NEGATIVE_ONE;
 	string year = STRING_NEGATIVE_ONE;
 	unsigned int startIndex = INDEX_START;
 	unsigned int endIndex = INDEX_START;
-	
+
 	endIndex = date.find_first_of("/");
 	day = date.substr(startIndex, endIndex - startIndex);
-	startIndex = endIndex + INDEX_ONE;
-	
+	if (!areDigits(day)) {
+		throw exception("invalid day");
+	}
+	startIndex = ++endIndex;
+
 	if (numberOfObliques == 1) {
 		month = date.substr(startIndex);
 	}
 	else if (numberOfObliques == 2) {
 		endIndex = date.find_first_of("/", startIndex);
 		month = date.substr(startIndex, endIndex - startIndex);
-		startIndex = endIndex + INDEX_ONE;
+		startIndex = ++endIndex;
 		year = date.substr(startIndex);
+		if (!areDigits(year)) {
+			throw exception("invalid year");
+		}
 	}
 
+	if (!areDigits(month)) {
+		throw exception("invalid month");
+	}
+
+	ostringstream output;
 	output << day << CHAR_SPACE << month << CHAR_SPACE << year;
 
 	return output.str();
 }
 
-string iParser::splitAndSetSpaceDateInformation(string date, unsigned int numberOfSpaces) {
+string iParser::splitAndSetSpaceDateInformation(string date, const unsigned int numberOfSpaces) {
+	assert(date != STRING_BLANK);
 	assert(numberOfSpaces >= 0 && numberOfSpaces <= 2);
-	ostringstream output;
 	string day = STRING_NEGATIVE_ONE;
 	string month = STRING_NEGATIVE_ONE;
 	string year = STRING_NEGATIVE_ONE;
-	unsigned int startIndex = INDEX_START;
-	unsigned int endIndex = INDEX_START;
 	unsigned int keywordIndex = INDEX_INVALID;
 
 	if (numberOfSpaces == 0) {
@@ -384,23 +638,35 @@ string iParser::splitAndSetSpaceDateInformation(string date, unsigned int number
 			day = STRING_DAYS[keywordIndex];
 			hasDay = true;
 		}
-		
+
 		if (!hasDay) {
 			if (isMonth(date, keywordIndex)) {
 				month = STRING_MONTHS_IN_NUMBER[keywordIndex];
 			}
+			else {
+				throw exception("invalid keyword");
+			}
 		}
 	}
 	else {
+		unsigned int startIndex = INDEX_START;
+		unsigned int endIndex = INDEX_START;
+
 		string tempMonth;
 		endIndex = date.find_first_of(" ");
 		day = date.substr(startIndex, endIndex - startIndex);
-		startIndex = endIndex + INDEX_ONE;
+		if (!areDigits(day)) {
+			throw exception("invalid day");
+		}
+		startIndex = ++endIndex;
 
 		if (numberOfSpaces == 1) {
 			tempMonth = date.substr(startIndex);
 			if (isMonth(tempMonth, keywordIndex)) {
 				month = STRING_MONTHS_IN_NUMBER[keywordIndex];
+			}
+			else {
+				throw exception("invalid month");
 			}
 		}
 		else if (numberOfSpaces == 2) {
@@ -409,54 +675,144 @@ string iParser::splitAndSetSpaceDateInformation(string date, unsigned int number
 			if (isMonth(tempMonth, keywordIndex)) {
 				month = STRING_MONTHS_IN_NUMBER[keywordIndex];
 			}
-			startIndex = endIndex + INDEX_ONE;
+			else {
+				throw exception("invalid month");
+			}
+			startIndex = ++endIndex;
 			year = date.substr(startIndex);
+			if (!areDigits(year)) {
+				throw exception("invalid year");
+			}
 		}
 	}
 
+	ostringstream output;
 	output << day << CHAR_SPACE << month << CHAR_SPACE << year;
 
 	return output.str();
 }
 
-unsigned int iParser::retrieveCount(string text, char character) {
-	unsigned int count = INDEX_START;
-	unsigned int index;
-	
-	for (index = INDEX_START; index < text.size(); index++) {
-		if (text[index] == character) {
-			count++;
-		}
+string iParser::splitAndSetTimeString(string timeString, const string abbreviation) {
+	assert(timeString != STRING_BLANK);
+	const unsigned int numberOfColons = retrieveCount(timeString, CHAR_COLON);
+	string output;
+
+	if (numberOfColons == 0) {
+		output = splitAndSetNoColonTimeString(timeString, abbreviation);
 	}
-
-	return count;
-}
-
-bool iParser::isValidDate(string text, string& dateToBeSet) {
-	unsigned int numberOfObliques = retrieveCount(text, CHAR_OBLIQUE);
-
-	if (numberOfObliques > INDEX_TWO && numberOfObliques < INDEX_ZERO) {
-		return false;
-	}
-	else if (numberOfObliques > INDEX_ZERO) {
-		dateToBeSet = splitAndSetObliqueDateInformation(text, numberOfObliques);
+	else if (numberOfColons == 1) {
+		output = splitAndSetColonTimeString(timeString, abbreviation);
 	}
 	else {
-		unsigned int numberOfSpaces = retrieveCount(text, CHAR_SPACE);
-		if (numberOfSpaces > INDEX_TWO && numberOfSpaces < INDEX_ZERO) {
-			dateToBeSet = splitAndSetSpaceDateInformation(text, numberOfSpaces);
+		throw exception("invalid time");
+	}
+	
+	return output;
+}
+
+string iParser::splitAndSetColonTimeString(string timeString, const string abbreviation) {
+	assert(timeString != STRING_BLANK);
+	string hour = STRING_NEGATIVE_ONE;
+	string minute = STRING_NEGATIVE_ONE;
+	unsigned int startIndex = INDEX_START;
+	unsigned int endIndex = INDEX_START;
+
+	endIndex = timeString.find_first_of(":");
+	hour = timeString.substr(startIndex, endIndex - startIndex);
+	startIndex = endIndex + 1;
+	minute = timeString.substr(startIndex);
+
+	if (abbreviation == STRING_PM) {
+		hour = addTwelveToHours(hour);
+	}
+
+	if (!areDigits(hour) || !areDigits(minute)) {
+		throw exception("invalid time");
+	}
+
+	ostringstream output;
+	output << hour << CHAR_SPACE << minute;
+
+	return output.str();
+}
+
+string iParser::splitAndSetNoColonTimeString(string timeString, const string abbreviation) {
+	assert(timeString != STRING_BLANK);
+	string hour = STRING_NEGATIVE_ONE;
+	string minute = STRING_NEGATIVE_ONE;
+	unsigned int numberOfDigits = timeString.length();
+	bool hasAbbreviation = !abbreviation.empty();
+
+	if (numberOfDigits == 1 || numberOfDigits == 2) {
+		hour = timeString;
+	}
+	else if (numberOfDigits == 3) {
+		hour = timeString.substr(INDEX_START, 1);
+		minute = timeString.substr(1);
+		if (!areDigits(minute)) {
+			throw exception("invalid minute");
+		}
+	}
+	else if (numberOfDigits == 4) {
+		hour = timeString.substr(INDEX_START, 2);
+		minute = timeString.substr(2);
+		if (!areDigits(minute)) {
+			throw exception("invalid minute");
 		}
 	}
 
-	return true;
+	if (hasAbbreviation) {
+		if (abbreviation == STRING_PM) {
+			hour = addTwelveToHours(hour);
+		}
+	}
+
+	if (!areDigits(hour)) {
+		throw exception("invalid hour");
+	}
+
+	ostringstream output;
+	output << hour << CHAR_SPACE << minute;
+
+	return output.str();
 }
 
-bool iParser::isValidTime(string text, string& textToBeSet) {
+bool iParser::isValidDateTimeString(const string dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
+	unsigned whiteSpaceCount = retrieveCount(dateTimeString, CHAR_SPACE);
+	if (whiteSpaceCount != SIZE_DATETIME_WHITESPACE) {
+		return false;
+	}
 
-	return true;
+	bool isValid = true;
+	unsigned int endIndex = dateTimeString.find_first_of(" ");
+	string day = dateTimeString.substr(INDEX_START, endIndex);
+
+	if (!isDay(day)) {
+		unsigned int index;
+		for (index = INDEX_START; isValid && index < dateTimeString.size(); index++) {
+			if (dateTimeString[index] != CHAR_SPACE &&
+				dateTimeString[index] != CHAR_HYPHEN &&
+				!isdigit(dateTimeString[index])) {
+				isValid = false;
+			}
+		}
+	}
+
+	unsigned int index;
+	for (index = endIndex; isValid && index < dateTimeString.size(); index++) {
+		if (dateTimeString[index] != CHAR_SPACE &&
+			dateTimeString[index] != CHAR_HYPHEN &&
+			!isdigit(dateTimeString[index])) {
+			isValid = false;
+		}
+	}
+
+	return isValid;
 }
 
 bool iParser::isDay(string day, unsigned int& indexToSet) {
+	assert(day != STRING_BLANK);
 	assert(indexToSet == INDEX_INVALID);
 	unsigned int index;
 	convertToLowerCase(day);
@@ -469,7 +825,21 @@ bool iParser::isDay(string day, unsigned int& indexToSet) {
 	return false;
 }
 
+bool iParser::isDay(string day) {
+	assert(day != STRING_BLANK);
+	
+	unsigned int index;
+	convertToLowerCase(day);
+	for (index = INDEX_START; index < SIZE_DAYS; index++) {
+		if (day == STRING_DAYS[index] || day == STRING_DAYS_SHORT_FORM[index]) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool iParser::isMonth(string month, unsigned int& indexToSet) {
+	assert(month != STRING_BLANK);
 	assert(indexToSet == INDEX_INVALID);
 	unsigned int index;
 	convertToLowerCase(month);
@@ -482,33 +852,61 @@ bool iParser::isMonth(string month, unsigned int& indexToSet) {
 	return false;
 }
 
-bool iParser::isValidDateString(string dateString) {
-	assert(dateString != STRING_BLANK && dateString[INDEX_ZERO] != NULL);
-	bool isValid = true;
-	unsigned whiteSpaceCount = INDEX_ZERO;
+bool iParser::hasTimePeriodAbbreviation(const string timeString) {
+	assert(timeString != STRING_BLANK);
+	if (timeString.size() < MIN_SIZE_WITH_ABBREVIATION) {
+		return false;
+	}
+
+	unsigned int secondLastCharacterIndex = timeString.size() - 2;
+	string abbreviation = timeString.substr(secondLastCharacterIndex);
+	
+	convertToLowerCase(abbreviation);
+
+	if (abbreviation == STRING_AM || abbreviation == STRING_PM) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+string iParser::addTwelveToHours(const string hour) {
+	assert(hour != STRING_BLANK);
+	ostringstream output;
+
+	if (areDigits(hour)) {
+		int hourInInt = stoi(hour);
+		hourInInt += 12;
+		output << hourInInt;
+	}
+	else {
+		output << STRING_NEGATIVE_ONE;
+	}
+
+	return output.str();
+}
+
+unsigned int iParser::retrieveCount(string text, const char character) {
+	assert(text != STRING_BLANK);
+	unsigned int count = INDEX_START;
 	unsigned int index;
 
-	for (index = INDEX_START; isValid && index < dateString.size(); index++) {
-		if (dateString[index] == CHAR_SPACE) {
-			whiteSpaceCount++;
-		}
-		if (!isdigit(dateString[index]) && dateString[index] != CHAR_HYPHEN && dateString[index] != CHAR_SPACE) {
-			isValid = false;
+	for (index = INDEX_START; index < text.size(); index++) {
+		if (text[index] == character) {
+			count++;
 		}
 	}
 
-	if (whiteSpaceCount != INDEX_TWO) {
-		isValid = false;
-	}
-
-	return isValid;
-}	
+	return count;
+}
 
 list<COMMAND_AND_TEXT> iParser::getParseInfo() {
 	return _parseInfo;
 }
 
 string iParser::setParseInfo(string command, string text) {
+	assert(command != STRING_BLANK);
 	COMMAND_AND_TEXT information;
 	information.command = command;
 	information.text = text;
@@ -521,420 +919,15 @@ string iParser::clearParseInfo() {
 	return MESSAGE_SUCCESS;
 }
 
+void iParser::showParseInfo() {
+	list<COMMAND_AND_TEXT>::iterator iter;
+	int i = INDEX_START;
+
+	for (iter = _parseInfo.begin(); iter != _parseInfo.end(); i++, iter++) {
+		cout << "Line " << i << ": " << "\"" << iter->command << "\"" << "\"" << iter->text << "\"" << endl;
+	}
+}
+
 void iParser::showError(string text) {
 	cout << text;
 }
-
-/*
-// splits inputs to fragments seperated by "::"
-string iParser::splitInput(string userInput) {
-if (!isValidLength(userInput)) {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-int start = INDEX_ZERO;
-int end = INDEX_ZERO;
-while (end != INDEX_INVALID) {
-string individualInput;
-start = findIndex(userInput, TOKEN_COMMAND, end);
-end = findIndex(userInput, TOKEN_COMMAND, start + INDEX_AFTER_TOKEN_COMMAND);//
-if (start != INDEX_INVALID) {
-individualInput = retrieveSubstring(userInput, start, end);
-setInputs(individualInput);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-}
-
-return MESSAGE_SUCCESS;
-}
-
-
-string iParser::setInformation() {
-if (!_parseInfo.hasValidInput()) {
-return MESSAGE_INVALID;
-}
-
-list<string>::iterator iter;
-Item tempItem;
-
-for (iter = _inputs.begin(); _parseInfo.hasValidInput() && iter != _inputs.end(); iter++) {
-CommandType commandType;
-string userInput;
-string command;
-string text;
-
-userInput = *iter;
-command = retrieveCommand(userInput);
-commandType = determineCommandType(command);
-text = retrieveText(userInput);
-
-switch (commandType) {
-case ADD:
-setAddItemName(text, tempItem);
-break;
-case DELETE:
-setDeleteIndex(text, tempItem);
-break;
-case EDIT:
-setEditIndex(text, tempItem);
-break;
-case START:
-setStartDateTime(text, tempItem);
-break;
-case END:
-setEndDateTime(text, tempItem);
-break;
-case DESCRIPTION:
-setDescription(text, tempItem);
-break;
-case EXIT:
-setExit(text);
-break;
-case INVALID:
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-default:
-showError(MESSAGE_TERMINATE);
-getchar();
-exit(EXIT_FAILURE);
-}
-_parseInfo.setItem(tempItem);
-}
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::setInputs(string individualInputs) {
-_inputs.push_back(individualInputs);
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::retrieveCommand(string userInput) {
-string command;
-int start = INDEX_AFTER_TOKEN_COMMAND;
-int end = INDEX_ZERO;
-
-end = findIndex(userInput, TOKEN_SPACE, start);
-command = retrieveSubstring(userInput, start, end);
-
-return command;
-}
-
-string iParser::retrieveText(string userInput) {
-string text;
-int start;
-
-start = findIndex(userInput, TOKEN_SPACE);
-if (start != INDEX_INVALID) {
-text = retrieveSubstring(userInput, start);
-trimText(text);
-}
-else {
-return TOKEN_BLANK;
-}
-
-return text;
-}
-
-string iParser::setAddItemName(string text, Item& item) {
-if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand()) {
-_parseInfo.setMainCommand(COMMAND_ADD);
-item.setItemName(text);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::setDeleteIndex(string text, Item& item) {
-if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
-_parseInfo.setMainCommand(COMMAND_DELETE);
-addIndex(text);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::setEditIndex(string text, Item& item) {
-if (text != TOKEN_BLANK && !_parseInfo.hasMainCommand() && isDigit(text)) {
-_parseInfo.setMainCommand(COMMAND_EDIT);
-addIndex(text);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::setStartDateTime(string text, Item& item) {
-if (text != TOKEN_BLANK) {
-splitAndSetDateTime(text, item, COMMAND_START);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-return MESSAGE_SUCCESS;
-
-}
-
-string iParser::setEndDateTime(string text, Item& item) {
-if (text != TOKEN_BLANK) {
-splitAndSetDateTime(text, item, COMMAND_END);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-return MESSAGE_SUCCESS;
-
-}
-
-string iParser::setDescription(string text, Item& item) {
-if (text != TOKEN_BLANK) {
-item.setDescription(text);
-_parseInfo.setEditString(COMMAND_DESCRIPTION);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::setExit(string text) {
-if (text == TOKEN_BLANK && !_parseInfo.hasMainCommand()) {
-_parseInfo.setMainCommand(COMMAND_EXIT);
-}
-else {
-_parseInfo.setIsNotValidInput();
-return MESSAGE_INVALID;
-}
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::addIndex(string text) {
-int index;
-index = convertToDigit(text);
-_parseInfo.setIndex(index);
-
-return MESSAGE_SUCCESS;
-}
-
-// returns index where stringToFind is found
-int iParser::findIndex(string userInput, string stringToFind, int startIndex) {
-int returnIndex;
-
-returnIndex = userInput.find(stringToFind, startIndex);
-
-return returnIndex;
-}
-
-string iParser::trimText(string& text) {
-text = trimFront(text);
-text = trimBack(text);
-
-return MESSAGE_SUCCESS;
-}
-
-string iParser::trimFront(string text) {
-unsigned int startIndex = INDEX_ZERO;
-
-while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
-startIndex++;
-}
-
-return text.substr(startIndex);
-}
-
-string iParser::trimBack(string text) {
-int endIndex = text.length();
-
-while (endIndex > INDEX_ZERO && (text[endIndex-INDEX_ONE] == ' ' || text[endIndex-INDEX_ONE] == '\t')) {
-endIndex--;
-}
-
-return text.substr(INDEX_ZERO, endIndex);
-}
-
-int iParser::convertToDigit(string text) {
-int digit;
-istringstream convert(text);
-convert >> digit;
-
-return digit;
-}
-
-// assume DateTime to be DD/MM/YY_HHMM
-string iParser::splitAndSetDateTime(string text, Item& item, string command) {
-int year = retrieveYear(text);
-int month = retrieveMonth(text);
-int day = retrieveDay(text);
-int hour = retrieveHour(text);
-int minute = retrieveMinute(text);
-
-DateTime dateTime(year, month, day, hour, minute);
-if (command == COMMAND_START) {
-item.setStartTime(dateTime);
-_parseInfo.setEditString(COMMAND_START);
-}
-else if (command == COMMAND_END) {
-item.setEndTime(dateTime);
-_parseInfo.setEditString(COMMAND_END);
-}
-
-return MESSAGE_SUCCESS;
-}
-
-int iParser::retrieveYear(string text) {
-int year;
-string stringToConvert;
-int start;
-
-start = findIndex(text, TOKEN_OBLIQUE);
-start = findIndex(text, TOKEN_OBLIQUE, ++start);
-stringToConvert = retrieveSubstring(text, ++start);
-istringstream convert(stringToConvert);
-convert >> year;
-
-return year;
-}
-
-int iParser::retrieveMonth(string text) {
-int month;
-string stringToConvert;
-int start;
-
-start = findIndex(text, TOKEN_OBLIQUE);
-stringToConvert = retrieveSubstring(text, ++start);
-istringstream convert(stringToConvert);
-convert >> month;
-
-return month;
-}
-
-int iParser::retrieveDay(string text) {
-int day;
-string stringToConvert;
-int start = INDEX_ZERO;
-
-stringToConvert = retrieveSubstring(text, start);
-istringstream convert(stringToConvert);
-convert >> day;
-
-return day;
-}
-
-int iParser::retrieveHour(string text) {
-int hour;
-string stringToConvert;
-int start;
-
-start = findIndex(text, TOKEN_SPACE);
-stringToConvert = retrieveSubstring(text, ++start);
-trimText(stringToConvert);
-if (stringToConvert.size() == DIGIT_THREE) {
-stringToConvert = stringToConvert[INDEX_ZERO];
-}
-else {
-stringToConvert = retrieveSubstring(stringToConvert, INDEX_ZERO, DIGIT_OF_TIME);
-}
-istringstream convert(stringToConvert);
-convert >> hour;
-
-return hour;
-}
-
-int iParser::retrieveMinute(string text) {
-int minute;
-string stringToConvert;
-int start;
-
-start = findIndex(text, TOKEN_SPACE);
-stringToConvert = retrieveSubstring(text, ++start);
-trimText(stringToConvert);
-if (stringToConvert.size() == DIGIT_THREE) {
-stringToConvert = retrieveSubstring(stringToConvert, INDEX_ONE);
-}
-else {
-stringToConvert = retrieveSubstring(stringToConvert, DIGIT_OF_TIME);
-}
-istringstream convert(stringToConvert);
-convert >> minute;
-
-return minute;
-}
-
-string iParser::setEditString(string text) {
-if (_parseInfo.hasMainCommand()) {
-if (_parseInfo.getMainCommand() == COMMAND_EDIT) {
-_parseInfo.setEditString(text);
-return MESSAGE_SUCCESS;
-}
-}
-
-return MESSAGE_INVALID;
-}
-
-bool iParser::isValidLength(string userInput) {
-return userInput.length() >= LENGTH_VALID;
-}
-
-bool iParser::isDigit(string text) {
-bool isValid = true;
-int index;
-int textSize = text.size();
-
-for (index = INDEX_ZERO; isValid && index < textSize; index++) {
-if (!(text[index] >= '0' && text[index] <= '9')) {
-isValid = false;
-}
-}
-
-return isValid;
-}
-
-string iParser::displayInputs() {
-list<string>::iterator iter;
-ostringstream output;
-int index = INDEX_ONE;
-
-for (iter = _inputs.begin(); iter != _inputs.end(); index++, iter++) {
-output << "Line " << index << ": " << *iter << endl;
-}
-
-return output.str();
-}
-
-string iParser::displayParseInfo() {
-ostringstream output;
-
-output << "Valid input: " << boolalpha << _parseInfo.hasValidInput() << endl
-<< "Main Command: " << _parseInfo.getMainCommand() << endl
-<< "Edit String: " << _parseInfo.getEditString() << endl
-<< "Index: " << _parseInfo.getIndex() << endl
-<< _parseInfo.getItem().displayItemForUser();
-
-return output.str();
-}
-
-
-*/
