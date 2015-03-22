@@ -77,7 +77,6 @@ namespace iPlannerUI {
 			this->commandInputBox->Name = L"commandInputBox";
 			this->commandInputBox->Size = System::Drawing::Size(656, 20);
 			this->commandInputBox->TabIndex = 0;
-			this->commandInputBox->TextChanged += gcnew System::EventHandler(this, &iPlannerUI::commandInputBox_TextChanged);
 			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
 			// 
 			// outputBox
@@ -86,9 +85,9 @@ namespace iPlannerUI {
 			this->outputBox->Multiline = true;
 			this->outputBox->Name = L"outputBox";
 			this->outputBox->ReadOnly = true;
+			this->outputBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->outputBox->Size = System::Drawing::Size(656, 251);
 			this->outputBox->TabIndex = 2;
-			this->outputBox->TextChanged += gcnew System::EventHandler(this, &iPlannerUI::outputBox_TextChanged);
 			// 
 			// commandOutcomeBox
 			// 
@@ -128,6 +127,7 @@ namespace iPlannerUI {
 				 while (getline(cin, userInput)){
 					 if (e->KeyCode == Keys::Enter) {
 						 testLogic.initiateCommandAction(testParser, userInput);
+						 outputBox->Show = testLogic.printSchedule();
 						 cout << "Enter the command";
 					 }
 	}

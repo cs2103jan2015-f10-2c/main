@@ -78,6 +78,12 @@ const vector<Item>& Schedule::retrieveSchedule() {
 //}
 
 /*
+const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
+
+}
+*/
+
+/*
 //	Filters the schedule by Priority
 const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char priority){
 	_filteredSchedule.clear();

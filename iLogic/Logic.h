@@ -69,6 +69,8 @@ public:
 	void initiateCommandAction(iParser parser, string input);
 	
 	unsigned int addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
+	void setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
+	void increaseItemIDAndScheduleSize();
 	int deleteTask(int lineIndexToBeDeleted);
 	int editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
 	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);

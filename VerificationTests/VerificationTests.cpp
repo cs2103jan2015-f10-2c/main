@@ -2,10 +2,12 @@
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+/*
+namespace VerificaitionTests
+{		
 
 namespace VerificationTests
 {
-
 	TEST_CLASS(DateTimeVerificationTest)
 	{
 	public:
@@ -475,4 +477,6 @@ namespace VerificationTests
 		}
 
 	};
+<<<<<<< HEAD:VerificaitionTests/VerificationTest.cpp
 }
+*/
