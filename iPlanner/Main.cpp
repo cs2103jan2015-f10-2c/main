@@ -5,13 +5,23 @@ void main() {
 	iParser testParser;
 	Logic testLogic;
 	string userInput;
-
-	cout << "THIS IS NEW" << endl;
-	cout << "command : ";
-	while (getline(cin, userInput)){
-		testLogic.initiateCommandAction(testParser, userInput);
-		cout << "command : ";
-	}
+	list<COMMAND_AND_TEXT> parseInfo;
+	COMMAND_AND_TEXT commandAndText;
+	commandAndText.command = "add";
+	commandAndText.text = "Youngbin";
+	parseInfo.push_back(commandAndText);
+	commandAndText.command = "description";
+	commandAndText.text = "HAHA";
+	parseInfo.push_back(commandAndText);
+	
+	//getline(cin, userInput);
+	//parseInfo = testParser.parse(userInput);
+	
+	testLogic.addTask(parseInfo);
+	//while (getline(cin, userInput)){
+	//	testLogic.initiateCommandAction(testParser, userInput);
+	//	cout << "command : ";
+//	}
 	
 
 	/*string input;

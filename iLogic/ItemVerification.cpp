@@ -4,7 +4,7 @@ const string ItemVerification::EMPTY_STRING = "";
 const string ItemVerification::AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
 const string ItemVerification::AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
 const string ItemVerification::ERROR_INVALID_NAME = "Error: Invalid Name";
-const string ItemVerification::ERROR_INVALID_NAME = "Error: Invalid Description";
+const string ItemVerification::ERROR_INVALID_DESCRIPTION = "Error: Invalid Description";
 const string ItemVerification::ERROR_INVALID_START_DATE_TIME = "Error: Invalid Start Date/Time";
 const string ItemVerification::ERROR_INVALID_END_DATE_TIME = "Error: Invalid End Date/TIME";
 const string ItemVerification::ERROR_SAME_START_END_DATE_TIME = "Error: Start Date/Time same as End Date/Time";
@@ -60,14 +60,27 @@ bool ItemVerification::isValidTimeFrame() {
 	DateTimeVerification startDateTimeVerification(startDateTime);
 	DateTimeVerification endDateTimeVerification(endDateTime);
 	if (startDateTimeVerification.isValidDateTime() && endDateTimeVerification.isValidDateTime()) {
-		if (startDateTime == endDateTime) {
-			_itemVerificationErrors.push_back(ERROR_SAME_START_END_DATE_TIME);
-			return false;
-		} else if (startDateTime.isBefore(endDateTime)) {
-			_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
-			return false;
+		if (startDateTimeVerification.hasHourMinute() && endDateTimeVerification.hasHourMinute()) {
+			if (startDateTime == endDateTime) {
+				_itemVerificationErrors.push_back(ERROR_SAME_START_END_DATE_TIME);
+				return false;
+			} else if (startDateTime.isAfter(endDateTime)) {
+				_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
+				return false;
+			} else {
+				return true;
+			}
 		} else {
-			return true;
+			if (endDateTime.getYear() > startDateTime.getYear()) {
+				return true;
+			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() > startDateTime.getMonth()) {
+				return true;
+			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() == startDateTime.getMonth() && endDateTime.getDay() > startDateTime.getDay()) {
+				return true;
+			} else {
+				_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME);
+				return false;
+			}
 		}
 	} else {
 		return false;
