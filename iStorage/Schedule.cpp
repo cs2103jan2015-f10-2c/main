@@ -9,16 +9,7 @@ Schedule::Schedule() {}
 //	Destructor
 Schedule::~Schedule() {}
 
-//	Retrieves the entire schedule
-const vector<Item>& Schedule::retrieveSchedule() {
-	return _schedule;
-}
-
-//	Retrieves the size of the schedule
-unsigned int Schedule::getSizeOfSchedule() {
-	return _schedule.size();
-}
-
+//	Checks if an itemID matches the itemID of an item in a given vector cell
 bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
 	if (_schedule[vectorIndex].getItemID() == itemID) {
 		return true;
@@ -26,7 +17,7 @@ bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
 	return false;
 }
 
-//	Retrieves vector index given itemID
+//	Retrieves schedule vector index given itemID
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = 0;
 
@@ -37,6 +28,16 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	return vectorIndex;
 }
 
+unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int vectorIndex){
+	unsigned int itemID = 0;
+	return _displaySchedule[vectorIndex].getItemID();
+}
+
+//	Retrieves the size of the schedule
+unsigned int Schedule::getSizeOfSchedule() {
+	return _schedule.size();
+}
+
 //	Adds the item to the schedule, returns full details of the item (string)
 string Schedule::addItem(Item* item) {
 	_schedule.push_back(*item);
@@ -44,13 +45,13 @@ string Schedule::addItem(Item* item) {
 }
 
 //	Retrieves a copy of the item
-Item Schedule::retrieveItem(unsigned int itemID){
+Item Schedule::retrieveItemGivenItemID(unsigned int itemID){
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
 	return _schedule[vectorIndex];
 }
 
-//	Edits an existing item in the schedule, returns full details of the item (string)
-string Schedule::replaceItem(Item* replacementItem, unsigned int itemID) {
+//	Replaces an existing item in the schedule, returns full details of the item (string)
+string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int itemID) {
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
 //	Item previousItem = _schedule[vectorIndex];
 
@@ -59,13 +60,25 @@ string Schedule::replaceItem(Item* replacementItem, unsigned int itemID) {
 }
 
 //	Deletes an item from the schedule, returns full details of the item (string)
-string Schedule::deleteItem(unsigned int itemID) {
+string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 	unsigned int index = findVectorIndexGivenItemID(itemID);
 	Item itemToBeDeleted = _schedule[index];
 	
 	_schedule.erase(_schedule.begin() + index);
 	return itemToBeDeleted.displayItemFullDetails();
 }
+
+//	Retrieves the entire schedule
+const vector<Item>& Schedule::retrieveSchedule() {
+	return _schedule;
+}
+
+const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
+
+}
+
+
+
 
 /*
 //	Filters the schedule by Priority

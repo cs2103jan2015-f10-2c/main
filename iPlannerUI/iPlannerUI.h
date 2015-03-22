@@ -39,14 +39,18 @@ namespace iPlannerUI {
 			}
 		}
 	private: System::Windows::Forms::TextBox^  commandInputBox;
-	private: System::Windows::Forms::TableLayoutPanel^  ScheduleListTable;
-	private: System::Windows::Forms::TextBox^  CommandListDisplayBox;
-	protected:
+	private: System::Windows::Forms::TextBox^  outputBox;
+	private: System::Windows::Forms::TextBox^  commandOutcomeBox;
+
+
+
 
 	protected:
 
+	protected:
 
-	private: System::Windows::Forms::TextBox^  commandOutputBox;
+
+
 
 
 	private:
@@ -63,9 +67,8 @@ namespace iPlannerUI {
 		void InitializeComponent(void)
 		{
 			this->commandInputBox = (gcnew System::Windows::Forms::TextBox());
-			this->ScheduleListTable = (gcnew System::Windows::Forms::TableLayoutPanel());
-			this->CommandListDisplayBox = (gcnew System::Windows::Forms::TextBox());
-			this->commandOutputBox = (gcnew System::Windows::Forms::TextBox());
+			this->outputBox = (gcnew System::Windows::Forms::TextBox());
+			this->commandOutcomeBox = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// commandInputBox
@@ -74,52 +77,33 @@ namespace iPlannerUI {
 			this->commandInputBox->Name = L"commandInputBox";
 			this->commandInputBox->Size = System::Drawing::Size(656, 20);
 			this->commandInputBox->TabIndex = 0;
+			this->commandInputBox->TextChanged += gcnew System::EventHandler(this, &iPlannerUI::commandInputBox_TextChanged);
+			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
 			// 
-			// ScheduleListTable
+			// outputBox
 			// 
-			this->ScheduleListTable->AutoScroll = true;
-			this->ScheduleListTable->ColumnCount = 5;
-			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-				9.305994F)));
-			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-				90.69401F)));
-			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				101)));
-			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				98)));
-			this->ScheduleListTable->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				60)));
-			this->ScheduleListTable->Location = System::Drawing::Point(12, 33);
-			this->ScheduleListTable->Name = L"ScheduleListTable";
-			this->ScheduleListTable->RowCount = 2;
-			this->ScheduleListTable->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 14.70588F)));
-			this->ScheduleListTable->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 85.29412F)));
-			this->ScheduleListTable->Size = System::Drawing::Size(655, 238);
-			this->ScheduleListTable->TabIndex = 1;
+			this->outputBox->Location = System::Drawing::Point(12, 22);
+			this->outputBox->Multiline = true;
+			this->outputBox->Name = L"outputBox";
+			this->outputBox->ReadOnly = true;
+			this->outputBox->Size = System::Drawing::Size(656, 251);
+			this->outputBox->TabIndex = 2;
+			this->outputBox->TextChanged += gcnew System::EventHandler(this, &iPlannerUI::outputBox_TextChanged);
 			// 
-			// CommandListDisplayBox
+			// commandOutcomeBox
 			// 
-			this->CommandListDisplayBox->Location = System::Drawing::Point(12, 342);
-			this->CommandListDisplayBox->Multiline = true;
-			this->CommandListDisplayBox->Name = L"CommandListDisplayBox";
-			this->CommandListDisplayBox->Size = System::Drawing::Size(655, 71);
-			this->CommandListDisplayBox->TabIndex = 2;
-			// 
-			// commandOutputBox
-			// 
-			this->commandOutputBox->Location = System::Drawing::Point(12, 314);
-			this->commandOutputBox->Name = L"commandOutputBox";
-			this->commandOutputBox->Size = System::Drawing::Size(409, 20);
-			this->commandOutputBox->TabIndex = 3;
+			this->commandOutcomeBox->Location = System::Drawing::Point(12, 314);
+			this->commandOutcomeBox->Name = L"commandOutcomeBox";
+			this->commandOutcomeBox->Size = System::Drawing::Size(409, 20);
+			this->commandOutcomeBox->TabIndex = 3;
 			// 
 			// iPlannerUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(686, 438);
-			this->Controls->Add(this->commandOutputBox);
-			this->Controls->Add(this->CommandListDisplayBox);
-			this->Controls->Add(this->ScheduleListTable);
+			this->Controls->Add(this->commandOutcomeBox);
+			this->Controls->Add(this->outputBox);
 			this->Controls->Add(this->commandInputBox);
 			this->Name = L"iPlannerUI";
 			this->Text = L"iPlannerUI";
@@ -128,5 +112,24 @@ namespace iPlannerUI {
 
 		}
 #pragma endregion
+	
+
+	
+	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+				 iParser testParser;
+				 Logic testLogic;
+				 string userInput;
+
+				 //const string COMMAND_NEW = "Enter the command";
+				 //cout << "THIS IS NEW" << endl;
+				 //cout << "command : ";
+
+				 commandOutcomeBox->Text = "Enter the command";
+				 while (getline(cin, userInput)){
+					 if (e->KeyCode == Keys::Enter) {
+						 testLogic.initiateCommandAction(testParser, userInput);
+						 cout << "Enter the command";
+					 }
+	}
 	};
 }
