@@ -234,9 +234,9 @@ bool DateTimeVerification::isValidDateTime() {
 		if (hasYearMonthDay() && isActualYearMonthDayDate() && isValidTime()) {
 			return true;
 		}
-		else if (hasMonthDay() && isValidTime()) {
-			return true;
-		}
+//		else if (hasMonthDay() && isValidTime()) {
+//			return true;
+//		}
 		else {
 			return false;
 		}

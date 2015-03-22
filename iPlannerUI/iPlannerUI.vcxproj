@@ -93,9 +93,6 @@
     <ProjectReference Include="..\iStorage\iStorage.vcxproj">
       <Project>{46c693bb-9cef-4d7c-b8ab-6489af895d25}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\VerificaitionTests\VerificaitionTests.vcxproj">
-      <Project>{3234f365-bcd4-42db-9335-a8b23be020e8}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

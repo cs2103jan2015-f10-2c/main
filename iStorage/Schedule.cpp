@@ -72,11 +72,11 @@ string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 const vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
 }
-
+/*
 const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
 
 }
-
+*/
 
 
 

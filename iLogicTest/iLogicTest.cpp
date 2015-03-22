@@ -3,7 +3,7 @@
 #include "Logic.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-/*
+
 namespace iLogicTest {
 	TEST_CLASS(AddTaskTest)
 	{
@@ -13,13 +13,57 @@ namespace iLogicTest {
 		{
 			Logic testLogic;
 			string testItemName;
-			unsigned int addedItemId = testLogic.addTask(testItemName);
-			vector<Item> retrievedSchedule = testLogic.getSchedule();
-			unsigned int IdFromSchedule = retrievedSchedule[0].getItemID();
-			Assert::AreEqual(addedItemId, IdFromSchedule);
+			COMMAND_AND_TEXT testCommandAndText;
+			list<COMMAND_AND_TEXT> testParseInfo;
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "Young Bin";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			
+			vector<Item>retrievedShedule = testLogic.getSchedule();
+
+			string expectedItemName1 = "Young Bin";
+			unsigned int expectedItemID1 = 1;
+
+			string actualItemName1 = retrievedShedule[0].getItemName();
+			unsigned int actualItemID1 = retrievedShedule[0].getItemID();
+			
+			Assert::AreEqual(expectedItemName1,actualItemName1);
+			Assert::AreEqual(expectedItemID1, actualItemID1);
 		}
 
 		TEST_METHOD(AddTaskTest2)
+		{
+			Logic testLogic;
+			string testItemName;
+			COMMAND_AND_TEXT testCommandAndText;
+			list<COMMAND_AND_TEXT> testParseInfo;
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "Young Bin";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "description";
+			testCommandAndText.text = "HAHA";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+
+			vector<Item>retrievedShedule = testLogic.getSchedule();
+
+			string expectedItemName1 = "Young Bin";
+			unsigned int expectedItemID1 = 1;
+			string expectedDescription1 = "HAHA";
+
+			string actualItemName1 = retrievedShedule[0].getItemName();
+			unsigned int actualItemID1 = retrievedShedule[0].getItemID();
+			string actualDescription1 = retrievedShedule[0].getDescription();
+
+			Assert::AreEqual(expectedItemName1, actualItemName1);
+			Assert::AreEqual(expectedItemID1, actualItemID1);
+			Assert::AreEqual(expectedDescription1, actualDescription1);
+		}
+
+/*		TEST_METHOD(AddTaskTest2)
 		{
 			Logic testLogic;
 			Schedule testSchedule;
@@ -35,9 +79,10 @@ namespace iLogicTest {
 			Assert::AreEqual(IdFromSchedule, addedItemId);
 			Assert::AreEqual(IdFromSchedule2, addedItemId2);
 		}
-
+		*/
 	};
-
+}
+	/*
 	TEST_CLASS(DeleteTaskTest)
 	{
 	public:

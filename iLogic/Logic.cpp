@@ -59,44 +59,26 @@ void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
 	sprintf_s(buffer, DELETE_TASK_SUCCESSFUL.c_str(), lineNumberToBeDeleted);
 	cout << buffer << endl;
 }
-/*
-unsigned int Logic::addTask(Item itemToBeAdded){
-unsigned int addedItemID = DEFAULT_ITEM_ID;
-try{
-if (isValidItemInLogic(itemToBeAdded)) {
-itemToBeAdded.setItemID(_nextItemID);
-_nextItemID++;
-_scheduleSize++;
-addedItemID = _logicSchedule.addItem(itemToBeAdded);
-}
-else{
-throw ("invalid input for addTask");
-}
-}
-catch (const char* e){
-cout << e << endl;
-}
-printSchedule();
-return addedItemID;
-}
-*/
+
 unsigned int Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
 	
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
+	cout << "NAME :" << newItemToBeAdded->getItemName() << endl;
+	cout << "ID : " << newItemToBeAdded->getItemID() << endl;
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
-	if (isValidItemInLogic(*newItemToBeAdded)) {
+	//if (isValidItemInLogic(*newItemToBeAdded)) {
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 		addedItemID = _nextItemID;
 		increaseItemIDAndScheduleSize();
 		printAddTaskSuccessful(addCompleted);
-	}
-
+	//}
 	printSchedule();
 	return addedItemID;
 }
+
 void Logic::increaseItemIDAndScheduleSize(){
 	_nextItemID++;
 	_scheduleSize++;
@@ -286,7 +268,7 @@ int Logic::convertToDigit(string text) {
 
 	return digit;
 }
-
+/*
 void Logic::initiateCommandAction(iParser parser, string input) {
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
 	string command = parseInfoToBeProcessed.begin()->command;
@@ -314,7 +296,7 @@ void Logic::initiateCommandAction(iParser parser, string input) {
 		cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
 	}
 }
-
+*/
 /*
 
 int Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
