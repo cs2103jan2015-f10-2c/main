@@ -66,8 +66,6 @@ unsigned int Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
-	cout << "NAME :" << newItemToBeAdded->getItemName() << endl;
-	cout << "ID : " << newItemToBeAdded->getItemID() << endl;
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
 	//if (isValidItemInLogic(*newItemToBeAdded)) {
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
