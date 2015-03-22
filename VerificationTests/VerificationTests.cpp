@@ -2,13 +2,16 @@
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
+/*
 namespace VerificaitionTests
 {		
+
+namespace VerificationTests
+{
 	TEST_CLASS(DateTimeVerificationTest)
 	{
 	public:
-		
+
 		TEST_METHOD(TestIsValidDateTimeValues)
 		{
 			bool isValid;
@@ -20,7 +23,7 @@ namespace VerificaitionTests
 
 			dateTimeObject.setYear(90000);
 			DateTimeVerification verify2(dateTimeObject);
-			
+
 			isValid = verify2.isValidDateTimeValues();
 			Assert::AreEqual(false, isValid);
 		}
@@ -147,7 +150,7 @@ namespace VerificaitionTests
 			isActualYMD = verify11.isActualYearMonthDayDate();
 			Assert::AreEqual(true, isActualYMD);
 		}
-		
+
 		TEST_METHOD(TestIsValidTime)
 		{
 			DateTime dateTimeObject;
@@ -219,16 +222,6 @@ namespace VerificaitionTests
 			isValidDateTime = verify8.isValidDateTime();
 			Assert::AreEqual(true, isValidDateTime);
 
-			DateTime dateTimeObject7(-1, 11, 18, 35, 00);
-			DateTimeVerification verify7(dateTimeObject7);
-			isValidDateTime = verify7.isValidDateTime();
-			Assert::AreEqual(false, isValidDateTime);
-
-			DateTime dateTimeObject8(1992, 32, 18, 10, 00);
-			DateTimeVerification verify8(dateTimeObject8);
-			isValidDateTime = verify8.isValidDateTime();
-			Assert::AreEqual(false, isValidDateTime);
-
 			DateTime dateTimeObject9(1992, -1, 18, 10, 00);
 			DateTimeVerification verify9(dateTimeObject9);
 			isValidDateTime = verify9.isValidDateTime();
@@ -247,7 +240,7 @@ namespace VerificaitionTests
 			DateTime dateTimeObject12(2001, 2, 29, 10, 00);
 			DateTimeVerification verify12(dateTimeObject12);
 			isValidDateTime = verify12.isValidDateTime();
-			Assert::AreEqual(false , isValidDateTime);
+			Assert::AreEqual(false, isValidDateTime);
 
 			DateTime dateTimeObject13(2000, 2, 29, -1, -1);
 			DateTimeVerification verify13(dateTimeObject13);
@@ -446,8 +439,8 @@ namespace VerificaitionTests
 
 		TEST_METHOD(TestIsValidItem)
 		{
-			DateTime startTime(2014,03,10,17,00);
-			DateTime endTime(2014,10,15,0,01);
+			DateTime startTime(2014, 03, 10, 17, 00);
+			DateTime endTime(2014, 10, 15, 0, 01);
 			Item item;
 			bool isValid;
 
@@ -462,26 +455,31 @@ namespace VerificaitionTests
 
 			isValid = verify.isValidItem();
 			Assert::AreEqual(true, isValid);
-			
+
 			ItemVerification verify2(item, 91822);
 
 			isValid = verify2.isValidItem();
 			Assert::AreEqual(false, isValid);
-			
+
 			item.setItemName("");
 			ItemVerification verify3(item, 800000);
 
 			isValid = verify3.isValidItem();
 			Assert::AreEqual(false, isValid);
-			
+
 			item.setItemName("Hunt wild dogs in the prairie.");
 			item.setPriority('t');
 			ItemVerification verify4(item, 800000);
 
 			isValid = verify4.isValidItem();
 			Assert::AreEqual(false, isValid);
-			
+
 		}
 
 	};
+<<<<<<< HEAD:VerificaitionTests/VerificationTest.cpp
 }
+*/
+=======
+}
+>>>>>>> 4472b232564590c6748764e1b9323424bac1175c:VerificationTests/VerificationTests.cpp
