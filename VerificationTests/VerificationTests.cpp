@@ -248,6 +248,16 @@ namespace VerificationTests
 			DateTimeVerification verify13(dateTimeObject13);
 			isValidDateTime = verify13.isValidDateTime();
 			Assert::AreEqual(true, isValidDateTime);
+
+			DateTime dateTimeObject14(-1, -1, 29, -1, -1);
+			DateTimeVerification verify14(dateTimeObject14);
+			isValidDateTime = verify14.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
+
+			DateTime dateTimeObject15(-1, -1, -1, -1, -1);
+			DateTimeVerification verify15(dateTimeObject15);
+			isValidDateTime = verify15.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
 		}
 
 	};
@@ -477,6 +487,15 @@ namespace VerificationTests
 			isValid = verify4.isValidItem();
 			Assert::AreEqual(false, isValid);
 
+			DateTime startTime1(-1, -1, -1, -1, -1);
+			DateTime endTime1(2015, 02, 14, -1, -1);
+			Item item2(string("Hello Boss"));
+			item2.setStartTime(startTime1);
+			item2.setEndTime(endTime1);
+			item2.setItemID(1001);
+			ItemVerification verify5(item2,1002);
+			isValid = verify5.isValidItem();
+			Assert::AreEqual(true, isValid);
 		}
 
 	};
