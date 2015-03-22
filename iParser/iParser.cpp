@@ -174,12 +174,13 @@ string iParser::executeAddParsing(string text) {
 	}
 	
 	unsigned int numberOfCommas = retrieveCount(text, CHAR_COMMA);
-	if (numberOfCommas > 0 && numberOfCommas <= MAX_NUMBER_OF_COMMAS) {
+	if (numberOfCommas >= 0 && numberOfCommas <= MAX_NUMBER_OF_COMMAS) {
 		vector<string> tokenisedInformation = tokeniseText(text);
 		try {
 			checkAndSetTokenisedInformation(tokenisedInformation);
 		}
 		catch (string& exceptionMessage) {
+			clearParseInfo();
 			setParseInfo(MESSAGE_INVALID, exceptionMessage);
 			return MESSAGE_FAILURE;
 		}
