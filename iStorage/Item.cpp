@@ -252,9 +252,9 @@ string Item::displayItemForUser() {
 	}
 
 	try{
-		if (hasValidItemStartTime()) {
+		//if (hasValidItemStartTime()) {
 			displayOutput << "Start Time:\t" << _startTime.displayDateTime() << endl;
-		}
+		//}
 
 		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
 			throw "Printing of of field in Start Time that does not exist!";

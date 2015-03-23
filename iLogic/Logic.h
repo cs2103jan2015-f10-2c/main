@@ -34,6 +34,11 @@ private:
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_EDIT;
+	static const string COMMAND_UNDO;
+	static const string COMMAND_SORT;
+	static const string COMMAND_SEARCH;
+	static const string COMMAND_VIEW;
+	static const string COMMAND_DONE;
 	static const string COMMAND_SAVE;
 	static const string COMMAND_EXIT;
 	static const string MODIFIER_START;
@@ -56,6 +61,7 @@ private:
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
 
+
 public:
 	Logic();
 	~Logic();
@@ -63,6 +69,7 @@ public:
 	void printItem(string itemToBePrinted);
 	void printAddTaskSuccessful(string itemInformationToBePrinted);
 	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
+	void printInvalidInput();
 
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);
 //	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
@@ -73,10 +80,11 @@ public:
 	void increaseItemIDAndScheduleSize();
 	int deleteTask(int lineIndexToBeDeleted);
 	int editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
-	unsigned int getItemIDFromLineIndex(unsigned int lineIndex);
 	vector<Item> searchTask(string phraseToSearch);
 	void modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
 	void modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
+	DateTime interpreteDateTime(string infoToBeInterpreted);
+	DateTime createDateTime(int DD, int MM, int YYYY, int hh, int mm);
 	
 	Item assignDescription(Item item, string descriptionToBeAdded);
 	Item assignDescriptionToNewTask(Item item, string descriptionToBeAdded);
@@ -113,6 +121,9 @@ public:
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	
+	enum CommandType {
+		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
+	};
 };
 
 #endif
