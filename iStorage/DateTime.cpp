@@ -289,17 +289,17 @@ string DateTime::displayTime() {
 string DateTime::displayDateTime() {
 	ostringstream displayOutput;
 
-	//if (isValidDate(_year, _month, _day)) {
+	if (isValidDate(_year, _month, _day)) {
 		displayOutput << displayDate();
 
-	//	if (isValidTime(_hour, _minute)) {
+		if (isValidTime(_hour, _minute)) {
 			displayOutput << DISPLAY_SEPARATOR_DATETIME;
 			displayOutput << displayTime();
-//		}
-//	}
-//	else if (isValidTime(_hour,_minute)) {
+		}
+	}
+	else if (isValidTime(_hour,_minute)) {
 		displayOutput << displayTime();
-//	}
+	}
 
 	return displayOutput.str();
 }

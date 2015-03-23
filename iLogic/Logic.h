@@ -44,6 +44,8 @@ private:
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
 	static const string MODIFIER_DESCRIPTION;
+	static const string MODIFIER_LABEL;
+	static const string MODIFIER_PRIORITY;
 	static const int ZERO_INDEX = 0;
 	static const unsigned int DEFAULT_ITEM_ID = 0;
 
