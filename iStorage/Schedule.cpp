@@ -28,6 +28,7 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	return vectorIndex;
 }
 
+//	Retrieves item ID given display vector index
 unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int displayVectorIndex){
 	return _displaySchedule[displayVectorIndex].getItemID();
 }
@@ -77,7 +78,7 @@ string Schedule::replaceItemGivenDisplayVectorIndex(Item* replacementItem, unsig
 string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 	unsigned int index = findVectorIndexGivenItemID(itemID);
 	Item itemToBeDeleted = _schedule[index];
-	
+
 	_schedule.erase(_schedule.begin() + index);
 	return itemToBeDeleted.displayItemFullDetails();
 }
@@ -93,6 +94,81 @@ const vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
 }
 
+//	Retrieves the entire display schedule
+const vector<Item>& Schedule::retrieveDisplaySchedule() {
+	return _displaySchedule;
+}
+
+//	Checks if an item is earlier than another
+bool Schedule::isEarlierThan(Item leftItem, Item rightItem){
+	string leftDateTime = "";
+	string rightDateTime = "";
+
+	if (leftItem.displayStartTime() != "") {
+		leftDateTime = leftItem.displayStartTime();
+	}
+	else if (leftItem.displayEndTime() != "") {
+		leftDateTime = leftItem.displayEndTime();
+	}
+
+	if (rightItem.displayStartTime() != "") {
+		rightDateTime = rightItem.displayStartTime();
+	}
+	else if (rightItem.displayEndTime() != "") {
+		rightDateTime = rightItem.displayEndTime();
+	}
+
+	return (leftDateTime < rightDateTime);
+}
+
+//	Sorts the display schedule by date, returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
+	sort(_displaySchedule.begin(), _displaySchedule.end(), isEarlierThan);
+	return retrieveDisplaySchedule();
+}
+
+// Convert entire string to lowercase
+string Schedule::lowerAllCase(const string& uncovertedString) {
+	string workingStringCopy = uncovertedString;
+
+	transform(workingStringCopy.begin(), workingStringCopy.end(), workingStringCopy.begin(), tolower);
+
+	return workingStringCopy;
+}
+
+//	Checks if an item's name is alphabetically smaller than another's
+bool Schedule::isAlphabeticallySmallerThan(Item leftItem, Item rightItem) {
+	string leftItemName = lowerAllCase(leftItem.getItemName());
+	string rightItemName = lowerAllCase(rightItem.getItemName());
+
+	return (leftItemName < rightItemName);
+}
+
+//	Sorts the display schedule by item name, returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
+	sort(_displaySchedule.begin(), _displaySchedule.end(), isAlphabeticallySmallerThan);
+	return retrieveDisplaySchedule();
+}
+
+//	Sorts the display schedule by priority, returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByPriority() {
+
+}
+
+//	Sorts the display schedule by completion status (completed first), returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
+
+}
+
+//	Sorts the display schedule by last update (latest first), returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
+
+}
+
+
+
+
+
 //const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
 //
 //}
@@ -106,41 +182,41 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
 /*
 //	Filters the schedule by Priority
 const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char priority){
-	_filteredSchedule.clear();
-	
-	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-		if (priority = _schedule[index].getPriority()) {
-			_filteredSchedule.push_back(_schedule[index]);
-		}
-	}
+_filteredSchedule.clear();
 
-	return _filteredSchedule;
+for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
+if (priority = _schedule[index].getPriority()) {
+_filteredSchedule.push_back(_schedule[index]);
+}
+}
+
+return _filteredSchedule;
 }
 
 //	Filters the schedule by Label
 const vector<Item>& Schedule::retrieveScheduleFilteredByLabel(char label){
-	_filteredSchedule.clear();
+_filteredSchedule.clear();
 
-	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-		if (label = _schedule[index].getLabel()) {
-			_filteredSchedule.push_back(_schedule[index]);
-		}
-	}
+for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
+if (label = _schedule[index].getLabel()) {
+_filteredSchedule.push_back(_schedule[index]);
+}
+}
 
-	return _filteredSchedule;
+return _filteredSchedule;
 }
 
 //	Filters the schedule by Completion
 const vector<Item>& Schedule::retrieveScheduleFilteredByCompletion(bool isCompleted){
-	_filteredSchedule.clear();
+_filteredSchedule.clear();
 
-	for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-		if (isCompleted = _schedule[index].getCompletion()) {
-			_filteredSchedule.push_back(_schedule[index]);
-		}
-	}
+for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
+if (isCompleted = _schedule[index].getCompletion()) {
+_filteredSchedule.push_back(_schedule[index]);
+}
+}
 
-	return _filteredSchedule;
+return _filteredSchedule;
 }
 
 
@@ -155,13 +231,13 @@ const vector<Item>& Schedule::retrieveScheduleFilteredByCompletion(bool isComple
 
 
 vector <Item>& Schedule::sortScheduleByDate() {
-	sort(_schedule.begin(), _schedule.end()/*, compare item dates*//*);
-	return _schedule;
+sort(_schedule.begin(), _schedule.end()/*, compare item dates*//*);
+return _schedule;
 }
 
 vector <Item>& Schedule::sortScheduleByLastUpdate() {
-	sort(_schedule.begin(), _schedule.end()/*, compare item update datetime*//*);
-	return _schedule;
+sort(_schedule.begin(), _schedule.end()/*, compare item update datetime*//*);
+return _schedule;
 }
 
 */
