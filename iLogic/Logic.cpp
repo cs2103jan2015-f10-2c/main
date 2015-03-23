@@ -6,6 +6,11 @@ const string Logic::MESSAGE_INVALID_INPUT = "invalid input";
 const string Logic::COMMAND_ADD = "add";
 const string Logic::COMMAND_DELETE = "delete";
 const string Logic::COMMAND_EDIT = "edit";
+const string Logic::COMMAND_UNDO = "undo";
+const string Logic::COMMAND_SORT = "sort";
+const string Logic::COMMAND_SEARCH = "search";
+const string Logic::COMMAND_VIEW = "view";
+const string Logic::COMMAND_DONE = "done";
 const string Logic::COMMAND_SAVE = "save";
 const string Logic::COMMAND_EXIT = "exit";
 const string Logic::MODIFIER_START = "start";
@@ -60,21 +65,28 @@ void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
 	cout << buffer << endl;
 }
 
+void Logic::printInvalidInput(){
+	cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
+}
+
 unsigned int Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
-	
+
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
-
 	//	Try this code for item verification! --JF ////////////
-	ItemVerification verifier(*newItemToBeAdded,_nextItemID);
-	if (verifier.isValidItem()) {
+	//ItemVerification verifier(*newItemToBeAdded,_nextItemID);
+//	if (verifier.isValidItem()) {
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 		addedItemID = _nextItemID;
 		increaseItemIDAndScheduleSize();
 		printAddTaskSuccessful(addCompleted);
+	//}
+
+	printSchedule();
+	return addedItemID;
 	}
 	/////////////////////////////////////////////////////////
 
@@ -85,8 +97,7 @@ unsigned int Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		printAddTaskSuccessful(addCompleted);
 	//}
 	printSchedule(); */
-	return addedItemID; 
-}
+	
 
 void Logic::increaseItemIDAndScheduleSize(){
 	_nextItemID++;
@@ -111,11 +122,19 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 		itemToBeModified->setDescription(descriptionToBeAdded);
 	}
 	else if (modifier == MODIFIER_START){
-
+		itemToBeModified->setStartTime(interpreteDateTime(iter->text));
 	}
 	else if (modifier == MODIFIER_END){
-
+		itemToBeModified->setEndTime(interpreteDateTime(iter->text));
 	}
+}
+
+DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
+	istringstream inputTime(infoToBeInterpreted);
+	int DD, MM, YYYY, hh, mm;
+	inputTime >> DD >> MM >> YYYY >> hh >> mm;
+	DateTime interpretedDateTime(DD, MM, YYYY, hh, mm);
+	return interpretedDateTime;
 }
 
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
@@ -147,12 +166,8 @@ int Logic::deleteTask(int lineIndexToBeDeleted){
 	}
 	return lineIndexToBeDeleted;
 }
-
 */
-unsigned int Logic::getItemIDFromLineIndex(unsigned int lineIndex){
-	unsigned int id = getSchedule()[lineIndex - 1].getItemID();
-	return id;
-}
+
 
 
 
@@ -277,17 +292,19 @@ int Logic::convertToDigit(string text) {
 
 	return digit;
 }
-/*
+
 void Logic::initiateCommandAction(iParser parser, string input) {
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
+	cout << "command : " << command << endl;
+	cout << "itemInfo : " << itemInformation << endl;
 	if (command == COMMAND_ADD) {
 		addTask(parseInfoToBeProcessed);
 	}
 	else if (command == COMMAND_DELETE) {
 		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
-		deleteTask(lineIndexToBeDeleted);
+	//	deleteTask(lineIndexToBeDeleted);
 	}
 	else if (command == COMMAND_EXIT){
 		saveDirectoryToTextFile();
@@ -295,61 +312,72 @@ void Logic::initiateCommandAction(iParser parser, string input) {
 	}
 	else if (command == COMMAND_EDIT){
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
-		editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
+	//	editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
+	}
+	else if (command == COMMAND_UNDO){
+
+	}
+	else if (command == COMMAND_SORT){
+
+	}
+	else if (command == COMMAND_SEARCH){
+
+	}
+	else if (command == COMMAND_VIEW){
+
 	}
 	else if (command == COMMAND_SAVE){
 		string directoryToBeChanged = itemInformation;
 		changeSavingDirectory(directoryToBeChanged);
 	}
 	else {
-		cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
+		printInvalidInput();
 	}
 }
-*/
-/*
 
+
+/*
 int Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
 	Item *editedItemToBeReplaced;
 	editedItemToBeReplaced = new Item;
-	unsigned int itemIDToBeEdited = getItemIDFromLineIndex(lineIndexToBeEdited);
-	*editedItemToBeReplaced = _logicSchedule.retrieveItem(itemIDToBeEdited);
+	*editedItemToBeReplaced = _logicSchedule.retrieveItem(lineIndexToBeEdited);
 	modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
 	_logicSchedule.replaceItem(editedItemToBeReplaced, itemIDToBeEdited);
 	printSchedule();
 	return 1;
 }
-*/
 
+*/
 /*
 
 vector<Item> Logic::searchTask(string phraseToSearch){
-	vector<Item> searchedItems;
-	Item foundItem;
-	unsigned int lineIndex;
-	unsigned int scheduleSize = getScheduleSize();
-	for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
-		if (isFound(lineIndex, phraseToSearch)){
-			foundItem = getItemFromLineIndex(lineIndex);
-			searchedItems.push_back(foundItem);
-		}
-	}
-	return searchedItems;
+vector<Item> searchedItems;
+Item foundItem;
+unsigned int lineIndex;
+unsigned int scheduleSize = getScheduleSize();
+for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
+if (isFound(lineIndex, phraseToSearch)){
+foundItem = getItemFromLineIndex(lineIndex);
+searchedItems.push_back(foundItem);
+}
+}
+return searchedItems;
 }
 
 bool Logic::isFound(int lineIndex, string& phraseToSearch){
-	Item itemFromLogicSchedule;
-	itemFromLogicSchedule = getItemFromLineIndex(lineIndex);
-	unsigned int phraseFoundFromItemName;
-	unsigned int phraseFoundFromItemDescription;
-	phraseFoundFromItemName = itemFromLogicSchedule.getItemName().find(phraseToSearch);
-	if (phraseFoundFromItemName != string::npos) {
-		return true;
-	}
-	phraseFoundFromItemDescription = itemFromLogicSchedule.getDescription().find(phraseToSearch);
-	if (phraseFoundFromItemDescription != string::npos) {
-		return true;
-	}
-	return false;
+Item itemFromLogicSchedule;
+itemFromLogicSchedule = getItemFromLineIndex(lineIndex);
+unsigned int phraseFoundFromItemName;
+unsigned int phraseFoundFromItemDescription;
+phraseFoundFromItemName = itemFromLogicSchedule.getItemName().find(phraseToSearch);
+if (phraseFoundFromItemName != string::npos) {
+return true;
+}
+phraseFoundFromItemDescription = itemFromLogicSchedule.getDescription().find(phraseToSearch);
+if (phraseFoundFromItemDescription != string::npos) {
+return true;
+}
+return false;
 }
 */
 
@@ -416,71 +444,71 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 }
 /*
 int Logic::readDataFromFile() {
-	ifstream readFile(getDirectoryAndFileName());
-	for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
-		//while (!readFile.eof()){
-		string itemName;
-		string description;
-		string junk;
-		char priority;
-		char label;
-		int DD;
-		int MM;
-		int YYYY;
-		int hh;
-		int mm;
-		getline(readFile, itemName);
-		readFile >> YYYY;
-		readFile >> MM;
-		readFile >> DD;
-		readFile >> hh;
-		readFile >> mm;
-		DateTime startTime(YYYY, MM, DD, hh, mm);
-		readFile >> YYYY;
-		readFile >> MM;
-		readFile >> DD;
-		readFile >> hh;
-		readFile >> mm;
-		DateTime EndTime(YYYY, MM, DD, hh, mm);
-		getline(readFile, junk);
-		getline(readFile, description);
-		readFile >> priority;
-		readFile >> label;
-		getline(readFile, junk);
-		Item item;
-		item.setItemName(itemName);
-		item.setStartTime(startTime);
-		item.setEndTime(EndTime);
-		item.setDescription(description);
-		item.setPriority(priority);
-		item.setLabel(label);
-		_logicSchedule.addItem(item);
-	}
-	cout << "Schedule received" << endl;
-	printSchedule();
-	return 1;
+ifstream readFile(getDirectoryAndFileName());
+for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
+//while (!readFile.eof()){
+string itemName;
+string description;
+string junk;
+char priority;
+char label;
+int DD;
+int MM;
+int YYYY;
+int hh;
+int mm;
+getline(readFile, itemName);
+readFile >> YYYY;
+readFile >> MM;
+readFile >> DD;
+readFile >> hh;
+readFile >> mm;
+DateTime startTime(YYYY, MM, DD, hh, mm);
+readFile >> YYYY;
+readFile >> MM;
+readFile >> DD;
+readFile >> hh;
+readFile >> mm;
+DateTime EndTime(YYYY, MM, DD, hh, mm);
+getline(readFile, junk);
+getline(readFile, description);
+readFile >> priority;
+readFile >> label;
+getline(readFile, junk);
+Item item;
+item.setItemName(itemName);
+item.setStartTime(startTime);
+item.setEndTime(EndTime);
+item.setDescription(description);
+item.setPriority(priority);
+item.setLabel(label);
+_logicSchedule.addItem(item);
+}
+cout << "Schedule received" << endl;
+printSchedule();
+return 1;
 }
 
 int Logic::writeDataOntoFile(){
-	ofstream writeFile(getDirectoryAndFileName());
-	for (unsigned int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getItemName() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getYear() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMonth() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getDay() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getHour() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMinute() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getYear() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMonth() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getDay() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getHour() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMinute() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getDescription() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getPriority() << endl;
-		writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getLabel() << endl;
-	}
-	saveDirectoryToTextFile();
-	return 1;
+ofstream writeFile(getDirectoryAndFileName());
+for (unsigned int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getItemName() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getYear() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMonth() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getDay() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getHour() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMinute() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getYear() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMonth() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getDay() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getHour() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMinute() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getDescription() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getPriority() << endl;
+writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getLabel() << endl;
+}
+saveDirectoryToTextFile();
+return 1;
 }
 */
 
