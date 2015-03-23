@@ -180,6 +180,7 @@ string iParser::executeAddParsing(string text) {
 			checkAndSetTokenisedInformation(tokenisedInformation);
 		}
 		catch (string& exceptionMessage) {
+			clearParseInfo();
 			setParseInfo(MESSAGE_INVALID, exceptionMessage);
 			return MESSAGE_FAILURE;
 		}

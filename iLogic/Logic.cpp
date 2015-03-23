@@ -77,16 +77,36 @@ unsigned int Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
 
+<<<<<<< HEAD
 	//ItemVerification verifier(*newItemToBeAdded,_nextItemID);
 //	if (verifier.isValidItem()) {
+=======
+	//	Try this code for item verification! --JF ////////////
+	ItemVerification verifier(*newItemToBeAdded,_nextItemID);
+	if (verifier.isValidItem()) {
+>>>>>>> 006dcac9d91ef238d5a02c297fee89432745ca08
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 		addedItemID = _nextItemID;
 		increaseItemIDAndScheduleSize();
 		printAddTaskSuccessful(addCompleted);
+<<<<<<< HEAD
 //	}
 
 	printSchedule();
 	return addedItemID;
+=======
+	}
+	/////////////////////////////////////////////////////////
+
+	/*if (isValidItemInLogic(*newItemToBeAdded)) {
+		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
+		addedItemID = _nextItemID;
+		increaseItemIDAndScheduleSize();
+		printAddTaskSuccessful(addCompleted);
+	//}
+	printSchedule(); */
+	return addedItemID; 
+>>>>>>> 006dcac9d91ef238d5a02c297fee89432745ca08
 }
 
 void Logic::increaseItemIDAndScheduleSize(){

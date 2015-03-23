@@ -16,8 +16,9 @@ namespace iPlannerUI {
 	/// <summary>
 	/// Summary for iPlannerUI
 	/// </summary>
-	public ref class iPlannerUI : public System::Windows::Forms::Form
-	{
+	public ref class iPlannerUI : public System::Windows::Forms::Form {
+	private:
+		Logic* testLogic;
 	public:
 		iPlannerUI(void)
 		{
@@ -25,6 +26,7 @@ namespace iPlannerUI {
 			//
 			//TODO: Add the constructor code here
 			//
+			testLogic = new Logic();
 		}
 
 	protected:
@@ -36,6 +38,7 @@ namespace iPlannerUI {
 			if (components)
 			{
 				delete components;
+				delete testLogic;
 			}
 		}
 	private: System::Windows::Forms::TextBox^  commandInputBox;
@@ -127,9 +130,10 @@ namespace iPlannerUI {
 				 while (getline(cin, userInput)){
 					 if (e->KeyCode == Keys::Enter) {
 						 testLogic.initiateCommandAction(testParser, userInput);
-						 outputBox->Show = testLogic.printSchedule();
-						 cout << "Enter the command";
+						// outputBox->Show = testLogic.printSchedule();
+						 commandOutcomeBox->Text = "Enter the command";
 					 }
+				 }
 	}
 	};
 }

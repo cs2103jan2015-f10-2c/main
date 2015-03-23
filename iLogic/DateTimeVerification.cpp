@@ -233,6 +233,8 @@ bool DateTimeVerification::isValidDateTime() {
 	if (isValidDateTimeValues()) {
 		if (hasYearMonthDay() && isActualYearMonthDayDate() && isValidTime()) {
 			return true;
+		} else if (!hasYear() && !hasMonth() && !hasDay() && !hasHour() && !hasMinute()) {
+			return true;
 		}
 //		else if (hasMonthDay() && isValidTime()) {
 //			return true;
