@@ -216,7 +216,7 @@ bool DateTimeVerification::isValidTime(){
 	if (hasHour() && hasMinute()) {
 		return true;
 	}
-	else if (_hour == EMPTYFIELD_DATETIME && _minute == EMPTYFIELD_DATETIME) {
+	else if (!hasHour() && !hasMinute()) {
 		return true;
 	}
 	else {
