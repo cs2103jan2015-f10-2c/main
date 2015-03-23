@@ -23,11 +23,14 @@ private:
 	//	Post:	Returns true if the itemID matches; false otherwise
 	bool isMatchingItemID(unsigned int, unsigned int);
 
-	//	Retrieves schedule vector index given itemID
+	//	Retrieves schedule vector index given item ID
 	//	Pre:	Valid itemID
 	//	Post:	Schedule vector index is returned
 	unsigned int findVectorIndexGivenItemID(unsigned int);
 
+	//	Retrieves item ID given display vector index
+	//	Pre:	Display vector is not sorted by the other components
+	//	Post:	Returns item ID of the item selected
 	unsigned int findItemIDGivenDisplayVectorIndex(unsigned int);
 
 public:
@@ -46,25 +49,46 @@ public:
 	//	Post:	Returns the number of items within _schedule
 	unsigned int getSizeOfSchedule();
 
+	//	Retrieves the size of the display schedule
+	//	Pre:	Nil
+	//	Post:	Returns the number of items within _displaySchedule
+	unsigned int getSizeOfDisplaySchedule();
+
 	//	Adds an item to the schedule
 	//	Pre:	Valid Item object
-	//	Post:	Item is added to the schedule; full details of the item is returned (string)
+	//	Post:	Item is added to the schedule
+	//			Full details of the item is returned (string)
 	string addItem(Item*);
 
-	//	Retrieves a copy of an existing item in the schedule
+	//	Retrieves a copy of an existing item in the schedule given Item ID
 	//	Pre:	Valid itemID
 	//	Post:	Given itemID, a copy of the existing item is returned
 	Item retrieveItemGivenItemID(unsigned int);
 
-	//	Replaces an existing item in the schedule
+	//	Retrieves a copy of an existing item in the schedule given the item's display vector index
+	//	Pre:	Valid display vector index (display vector not modified before displaying to user)
+	//	Post:	Given display vector index, a copy of the existing item is returned
+	Item retrieveItemGivenDisplayVectorIndex(unsigned int);
+
+	//	Replaces an existing item in the schedule given Item ID
 	//	Pre:	Valid itemID, valid Item object
 	//	Post:	Given itemID, replaces existing item with updated item
 	string replaceItemGivenItemID(Item*, unsigned int);
 
-	//	Deletes an item from the schedule
+	//	Replaces an existing item in the schedule given the item's display vector index
+	//	Pre:	Valid display vector index (display vector not modified before displaying to user)
+	//	Post:	Given display vector index, replaces existing item with updated item
+	string replaceItemGivenDisplayVectorIndex(Item*, unsigned int);
+	
+	//	Deletes an item from the schedule given Item ID
 	//	Pre:	Valid itemID
-	//	Post:	Given itemID, item is deleted and returned
+	//	Post:	Given itemID, item is deleted and details are returned
 	string deleteItemGivenItemID(unsigned int);
+	
+	//	Deletes an item from the schedule given item's display vector index
+	//	Pre:	Valid display vector index (display vector not modified before displaying to user)
+	//	Post:	Given display vector index, item is deleted and details are returned
+	string deleteItemGivenDisplayVectorIndex(unsigned int);
 
 	//	Retrieves the entire schedule
 	//	Pre:	Nil

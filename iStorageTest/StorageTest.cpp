@@ -939,6 +939,10 @@ namespace ScheduleTest
 			delete marriage;
 			Assert::AreEqual((unsigned int)2, YoungbinLifeEvents.getSizeOfSchedule());
 		}
+
+		TEST_METHOD(TestGetDisplayScheduleSize){
+
+		}
 	};
 
 	TEST_CLASS(TEST_CONVERSION)
