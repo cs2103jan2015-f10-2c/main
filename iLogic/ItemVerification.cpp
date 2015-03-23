@@ -126,6 +126,9 @@ bool ItemVerification::isValidLabel() {
 }
 
 bool ItemVerification::isValidItem() {
+
+	_itemVerificationErrors.clear();
+	
 	bool hasValidName = isValidName();
 	bool hasValidDescription = isValidDescription();
 	bool hasValidStartDateTime = isValidStartDateTime();
@@ -147,4 +150,8 @@ bool ItemVerification::isValidItem() {
 	} else {
 		return false;
 	}
+}
+
+list<string> ItemVerification::getItemVerificationErrors() {
+	return _itemVerificationErrors;
 }

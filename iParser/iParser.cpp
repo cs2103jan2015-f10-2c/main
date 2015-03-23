@@ -272,6 +272,10 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 	string description = tokenisedInformation[INDEX_START];
 	setParseInfo(COMMAND_ADD, description);
 
+	if (tokenisedInformation.size() == 1) {
+		return MESSAGE_SUCCESS;
+	}
+
 	string startDate = STRING_DATE_INITIALISE;
 	string endDate = STRING_DATE_INITIALISE;
 	string startTime = STRING_TIME_INITIALISE;
