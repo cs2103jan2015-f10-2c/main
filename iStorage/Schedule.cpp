@@ -145,24 +145,24 @@ bool Schedule::isAlphabeticallySmallerThan(Item leftItem, Item rightItem) {
 }
 
 //	Sorts the display schedule by item name, returns constant reference to sorted display schedule
-const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
+const vector<Item>& Schedule::retrieveDisplayScheduleByItemName() {
 	sort(_displaySchedule.begin(), _displaySchedule.end(), isAlphabeticallySmallerThan);
 	return retrieveDisplaySchedule();
 }
 
 //	Sorts the display schedule by priority, returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByPriority() {
-
+	return retrieveDisplaySchedule();
 }
 
 //	Sorts the display schedule by completion status (completed first), returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
-
+	return retrieveDisplaySchedule();
 }
 
 //	Sorts the display schedule by last update (latest first), returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
-
+	return retrieveDisplaySchedule();
 }
 
 
