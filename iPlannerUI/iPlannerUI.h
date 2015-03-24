@@ -128,9 +128,9 @@ namespace iPlannerUI {
 
 		}
 #pragma endregion
-	
 
-	
+
+
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 iParser testParser;
 				 Logic testLogic;
@@ -141,47 +141,62 @@ namespace iPlannerUI {
 				 //cout << "THIS IS NEW" << endl;
 				 //cout << "command : ";
 				 testLogic.readDataFromFile();
-				 for
+
 				 commandOutcomeBox->Text = "Enter the command";
 				 while (getline(cin, userInput)){
 					 if (e->KeyCode == Keys::Enter) {
 						 testLogic.initiateCommandAction(testParser, userInput);
-						 /*
+
+						 string s = "";
+
 						 vector<Item>::iterator iterItem;
 						 for (iterItem = testLogic.getSchedule().begin(); iterItem != testLogic.getSchedule().end(); ++iterItem) {
-							 int x = iterItem->getItemID();
-							 string s =
-								 outputBox->Text = x.str();
-							 outputBox->Text = iterItem->getItemName().ToString();
+							 //int x = iterItem->getItemID();
+
+							 System::String^ IDString = iterItem->getItemID().ToString();
+							 String^ nameString = gcnew String(iterItem->getItemName().c_str());
+
+							 System::String^ startTimeString = iterItem->getStartTime().getHour().ToString() + ":" + iterItem->getStartTime().getMinute().ToString();
+							 System::String^ startDateString = iterItem->getStartTime().getDay().ToString() + "/" + iterItem->getStartTime().getMonth().ToString() + "/" + iterItem->getStartTime().getYear().ToString();
+
+							 System::String^ endTimeString = iterItem->getEndTime().getHour().ToString() + ":" + iterItem->getEndTime().getMinute().ToString();
+							 System::String^ endDateString = iterItem->getEndTime().getDay().ToString() + "/" + iterItem->getEndTime().getMonth().ToString() + "/" + iterItem->getEndTime().getYear().ToString();
+
+							 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
+
+							 // String^ labelString = gcnew String(iterItem->getLabel().c_str());
+							 string charString1(1, iterItem->getPriority());
+							 String^ priorityString = gcnew String(charString1.c_str());
+
+							 string charString2(1, iterItem->getLabel());
+							 String^ labelString = gcnew String(charString2.c_str());
+
+							 string charString3(1, iterItem->getCompletion());
+							 String^ completionString = gcnew String(charString3.c_str());
+
+
+							 outputBox->Text = IDString + " " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
+							 outputBox->Text = "\t" + startTimeString + " " + startDateString + "\r\n";
+							 outputBox->Text = "\t" + endTimeString + " " + endDateString + "\r\n";
+						 
+							 /*
+							 string x = Convert.ToString(iterItem->getItemID());
+							 s = s + Convert(iterItem->getItemID().ToString());  // +" " + iterItem->getItemName() + "\t\t" + iterItem->getLabel() + " " + iterItem->getPriority() + " " + iterItem->getCompletion() + "\n";
+							 s = s + iterItem->getItemName();
+							 //s += "\tStart time " + iterItem->getStartTime();
+							 outputBox->Text = s;
+
+							 /* outputBox->Text = iterItem->getItemName().ToString();
 							 outputBox->Text = iterItem->getStartTime().getHour();
 							 outputBox->Text = iterItem->getEndTime();
 							 outputBox->Text = iterItem->getDescription();
 							 outputBox->Text = iterItem->getPriority();
 							 outputBox->Text = iterItem->getLabel();
 							 outputBox->Text = iterItem->getCompletion();
-						 }*/
-						 /*
-						 for (unsigned int lineNumber = 0; lineNumber < testLogic.getScheduleSize(); lineNumber++){
-							 string s;
-							 s = itoa(testLogic.getSchedule()[lineNumber].getItemID());
-							 outputBox->Text = to_string(testLogic.getSchedule()[lineNumber].getItemName());
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getYear() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMonth() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getDay() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getHour() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getStartTime().getMinute() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getYear() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMonth() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getDay() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getHour() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getEndTime().getMinute() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getDescription() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getPriority() << endl;
-							 writeFile << _logicSchedule.retrieveSchedule()[lineNumber].getLabel() << endl;
-							*/ 
-
-						 //outputBox->Text = testLogic.getSchedule();
-						 commandOutcomeBox->Text = "Enter the command";
+							 }*/
+							 							 
+							 commandOutcomeBox->Text = "Enter the command";
+						 }
 					 }
 				 }
 	}
