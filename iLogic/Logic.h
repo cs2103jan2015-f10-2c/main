@@ -28,6 +28,7 @@ private:
 	unsigned int _scheduleSize;
 	string _directoryToBeSaved;
 	string _fileNameToBeSaved;
+	string _currentSorting;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
@@ -47,6 +48,14 @@ private:
 	static const string MODIFIER_DESCRIPTION;
 	static const string MODIFIER_LABEL;
 	static const string MODIFIER_PRIORITY;
+	static const string MODIFIER_COMPLETION;
+	static const string SORT_NAME;
+	static const string SORT_DATE;
+	static const string SORT_PRIORITY;
+	static const string SORT_COMPLETION;
+	static const string SORT_LAST_UPDATE;
+
+
 	static const int ZERO_INDEX = 0;
 	static const unsigned int DEFAULT_ITEM_ID = 0;
 
@@ -60,9 +69,22 @@ private:
 
 	static const string TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME;
 	static const string DEFAULT_FILENAME;
+	static const string DEFAULT_SORTING;
 
-	static const string MESSAGE_SUCCESSFUL;
-	static const string MESSAGE_FAILED;
+	static const string MESSAGE_SUCCESSFUL_ADD;
+	static const string MESSAGE_SUCCESSFUL_DELETE;
+	static const string MESSAGE_SUCCESSFUL_EDIT;
+	static const string MESSAGE_SUCCESSFUL_SORT;
+	static const string MESSAGE_SUCCESSFUL_VIEW;
+	static const string MESSAGE_SUCCESSFUL_UNDO;
+
+	static const string MESSAGE_FAILED_ADD;
+	static const string MESSAGE_FAILED_DELETE;
+	static const string MESSAGE_FAILED_EDIT;
+	static const string MESSAGE_FAILED_VIEW;
+	static const string MESSAGE_FAILED_UNDO;
+	static const string MESSAGE_FAILED_SORT;
+
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
 
@@ -70,55 +92,119 @@ private:
 public:
 	Logic();
 	~Logic();
-	void printSchedule();
-	void printItem(string itemToBePrinted);
+
+
+	//Prints various messages necessary to show to user
+	//Print Schedule displays all the items that are added and fit user's request
+	void printSchedule(vector<Item> retrievedDisplaySchedule);
+	void printItem(Item itemToBePrinted);
 	void printAddTaskSuccessful(string itemInformationToBePrinted);
 	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
 	void printInvalidInput();
 
+
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);
-	//	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
+	
+	
+	//takes in a parser to interpret the user input and initiate the action according to the command
+	//specified by the user
+	//Pre : takes in a parser, and a whole line of user input
+	//Post : returns a message whether each command was executed successfully
 	string initiateCommandAction(iParser parser, string input);
 
+
+	//add new Item in the Schedule, add task sets ItemID, which is a fixed number assigned to each Item
+	//for identification purpose
 	//Pre: takes in the parse info given by the parser and execute addTask
 	//post:returns Success or Failure message
 	string addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
 	void setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
-	void increaseItemIDAndScheduleSize();
+	
 
+	//ItemID starts from 1, everytime when addTask is called, nextItemID increases by 1
+	//Pre: None
+	//Post : returns nextItemID
+	unsigned int increaseItemIDAndScheduleSize();
+
+
+	//Delete Item from the schedule, given a valid line index to be deleted is provided
 	//Pre: takes in the parse info given by the parser and execute deleteTask
 	//post:returns Success or Failure message
-	string deleteTask(int lineIndexToBeDeleted);
+	string deleteTask(unsigned int lineIndexToBeDeleted);
 
-	//Pre: takes in the parse info given by the parser and execute deleteTask
-	//post:returns Success or Failure message
+
+	//modify the item, if valid line index and parse info are passed.
+	//Pre: takes in the lineIndex and the parse info given by the parser and execute editTask
+	//post: returns Success or Failure message
 	string editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
-	vector<Item> searchTask(string phraseToSearch);
+	
+
+	//sort display schedule according to _currentSort method;
+	//sorting can be done by - last update, name, priority, date, completion
+	//Pre: none
+	//Post: returns the string of _currentSort
+	string sortTask();
+
+
+	//modifies an item, specified by the parse info
+	//Pre: takes in an item to be modified, and a parse info list to execute the modification
+	//Post : None
 	void modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
 	void modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
+	
+
+	//Parser returns a whole string of dateTime data
+	//interpreteDateTime switches the stringed input into 5 integers
+	//and createDateTime create a DateTime object based on the 5 integers given
+	//Pre : takes in a string, usually the text part of the COMMAND_AND_TEXT parsed by the parser
+	//Post : returns a dateTime object created
 	DateTime interpreteDateTime(string infoToBeInterpreted);
 	DateTime createDateTime(int DD, int MM, int YYYY, int hh, int mm);
+	
+
+	//Initiate the update on the display schedule in storage
+	//and get or print the display schedule
+	//Pre : none
+	//Post : returns display schedule
+	vector<Item> resetAndGetDisplaySchedule();
+	vector<Item> resetAndPrintSchedule();
 
 
+	//retrieves _schedule of the schedule
+	//Pre : none
+	//Post : returns schedule and size of the schedule
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
 
-	//void assignSaveFolder();
+	
+	//changes current Sorting method. display schedule will be sorted according to the current sorting method
+	//everytime a command is executed.
+	//Pre : takes in a string that consists of sorting method to be changed
+	//post : returns current sorting method
+	string changeCurrentSorting(string itemInformation);
+	
+	
+	//changes directory of the saving text file
+	//Pre : 
 	string changeSavingDirectory(string directoryToBeSaved);
 	string changeSavingFileName(string FileNameToBeSaved);
 	void assignDirectorySpecifiedByUser(string directoryToBeSaved, string directoryToMake, int truncateDirectory);
-	void Logic::assignDefaultDirectory(string directoryToBeSaved, string directoryToMake);
+	void assignDefaultDirectory(string directoryToBeSaved, string directoryToMake);
 	string getDirectoryAndFileName();
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
+	
+
 	//store saving directory and file name in order to 
 	//retrieve directory and filename when the program is rebooted
 	int readDataFromFile();
 	int writeDataOntoFile();
 
+
 	// with much love,
 	// Chon Beng
 	int convertToDigit(string text);
+
 
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);

@@ -17,12 +17,33 @@ const string Logic::COMMAND_EXIT = "exit";
 const string Logic::MODIFIER_START = "start";
 const string Logic::MODIFIER_END = "end";
 const string Logic::MODIFIER_DESCRIPTION = "description";
+const string Logic::MODIFIER_LABEL = "label";
+const string Logic::MODIFIER_PRIORITY = "priority";
+const string Logic::MODIFIER_COMPLETION = "completion";
+const string Logic::SORT_NAME = "name";
+const string Logic::SORT_DATE = "date";
+const string Logic::SORT_PRIORITY = "priority";
+const string Logic::SORT_COMPLETION = "completion";
+const string Logic::SORT_LAST_UPDATE = "update";
+
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "directory.txt";
 const string Logic::DEFAULT_FILENAME = "save.txt";
+const string Logic::DEFAULT_SORTING = "update";
 
-const string Logic::MESSAGE_SUCCESSFUL = "success";
-const string Logic::MESSAGE_FAILED = "fail";
+const string Logic::MESSAGE_SUCCESSFUL_ADD = "successful_add";
+const string Logic::MESSAGE_SUCCESSFUL_DELETE = "successful_delete";
+const string Logic::MESSAGE_SUCCESSFUL_EDIT = "successful_edit";
+const string Logic::MESSAGE_SUCCESSFUL_SORT = "successful_sort";
+const string Logic::MESSAGE_SUCCESSFUL_VIEW = "successful_view";
+const string Logic::MESSAGE_SUCCESSFUL_UNDO = "successful_undo";
+
+const string Logic::MESSAGE_FAILED_ADD = "failed_add";
+const string Logic::MESSAGE_FAILED_DELETE = "failed_delete";
+const string Logic::MESSAGE_FAILED_EDIT = "failed_edit";
+const string Logic::MESSAGE_FAILED_VIEW = "failed_view";
+const string Logic::MESSAGE_FAILED_UNDO = "failed_undo";
+const string Logic::MESSAGE_FAILED_SORT = "failed_sort";
 
 char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
@@ -38,40 +59,49 @@ Logic::Logic() {
 	//if saving directory is an empty string, the directory is set to default
 	_fileNameToBeSaved = DEFAULT_FILENAME;
 	//default file name is save.txt
+	_currentSorting = DEFAULT_SORTING;
+	//default sorting is by last update
 }
+
 
 Logic::~Logic() {}
 
-void Logic::printSchedule(){
+
+void Logic::printSchedule(vector<Item> retrievedDisplaySchedule){
 	cout << endl;
 	cout << "SCHEDULE" << endl;
 	cout << "--------" << endl;
-	for (unsigned int lineNumber = 0; lineNumber < getScheduleSize(); lineNumber++){
+	for (unsigned int lineNumber = 0; lineNumber < retrievedDisplaySchedule.size(); lineNumber++){
 		cout << lineNumber + 1 << ". " << endl;
-		printItem(getSchedule()[lineNumber].displayItemForUser());
+		printItem(retrievedDisplaySchedule[lineNumber]);
 		cout << endl;
 	}
 	cout << endl;
 }
 
-void Logic::printItem(string itemToBePrinted){
-	cout << itemToBePrinted;
+
+void Logic::printItem(Item itemToBePrinted){
+	cout << itemToBePrinted.displayItemForUser();
 	return;
 }
+
 
 void Logic::printAddTaskSuccessful(string itemInformationToBePrinted){
 	sprintf_s(buffer, ADD_TASK_SUCCESSFUL.c_str(), itemInformationToBePrinted);
 	cout << buffer << endl;
 }
 
+
 void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
 	sprintf_s(buffer, DELETE_TASK_SUCCESSFUL.c_str(), lineNumberToBeDeleted);
 	cout << buffer << endl;
 }
 
+
 void Logic::printInvalidInput(){
 	cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
 }
+
 
 string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
@@ -80,29 +110,51 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	newItemToBeAdded = new Item;
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
+	cout << "ItemID : " << newItemToBeAdded->getItemID() << endl;
 	ItemVerification verifier(*newItemToBeAdded, _nextItemID);
 	if (verifier.isValidItem()) {
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 		addedItemID = _nextItemID;
 		increaseItemIDAndScheduleSize();
+		resetAndPrintSchedule();
 		printAddTaskSuccessful(addCompleted);
-		printSchedule();
-		return MESSAGE_SUCCESSFUL;
+
+		return MESSAGE_SUCCESSFUL_ADD;
 	}
 	else{
-		printSchedule();
-		return MESSAGE_FAILED;
+		resetAndPrintSchedule();
+		return MESSAGE_FAILED_ADD;
 	}
 }
 
-void Logic::increaseItemIDAndScheduleSize(){
+
+vector<Item> Logic::resetAndPrintSchedule(){
+	vector<Item> retrievedDisplaySchedule = resetAndGetDisplaySchedule();
+	printSchedule(retrievedDisplaySchedule);
+	return retrievedDisplaySchedule;
+}
+
+
+vector<Item> Logic::resetAndGetDisplaySchedule(){
+	_logicSchedule.resetDisplaySchedule();
+	vector<Item>retrievedDisplaySchedule = _logicSchedule.retrieveDisplaySchedule();
+	return retrievedDisplaySchedule;
+}
+
+
+unsigned int Logic::increaseItemIDAndScheduleSize(){
 	_nextItemID++;
 	_scheduleSize++;
+	return _nextItemID;
 }
+
+
+
 void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	newItem->setItemName(parseInfoToBeProcessed.begin()->text);
 	newItem->setItemID(_nextItemID);
 }
+
 
 void Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* itemToBeModified){
 	list<COMMAND_AND_TEXT>::iterator iter;
@@ -110,6 +162,7 @@ void Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* item
 		modifyItemParts(iter, itemToBeModified);
 	}
 }
+
 
 void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified){
 	string modifier = iter->command;
@@ -123,7 +176,16 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 	else if (modifier == MODIFIER_END){
 		itemToBeModified->setEndTime(interpreteDateTime(iter->text));
 	}
+	else if (modifier == MODIFIER_LABEL){
+		char labelToBeModified = iter->text[0];
+		itemToBeModified->setLabel(labelToBeModified);
+	}
+	else if (modifier == MODIFIER_PRIORITY){
+		char priorityToBeModified = iter->text[0];
+		itemToBeModified->setLabel(priorityToBeModified);
+	}
 }
+
 
 DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	istringstream inputTime(infoToBeInterpreted);
@@ -132,6 +194,7 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
 }
+
 
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
 	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
@@ -143,28 +206,29 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 	}
 }
 
-//passing line index, not itemID
-string Logic::deleteTask(int lineIndexToBeDeleted){
 
+//passing line index, not itemID
+string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	try{
 		if (isValidLineIndex(lineIndexToBeDeleted)){
 			cout << "lineIndex : " << lineIndexToBeDeleted << endl;
 			string deletedItem = _logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 			printDeleteTaskSuccessful(lineIndexToBeDeleted);
 			_scheduleSize--;//Delete successful
-			printSchedule();
-			return MESSAGE_SUCCESSFUL;
+			resetAndPrintSchedule();
+			return MESSAGE_SUCCESSFUL_DELETE;
 		}
 		else{
 			throw(MESSAGE_INVALID_INPUT_FOR_DELETE); //Delete failed
-			printSchedule();
+			resetAndPrintSchedule();
 		}
 	}
 	catch (const char* e){
 		cout << e << endl;
 	}
-	return MESSAGE_FAILED;
+	return MESSAGE_FAILED_DELETE;
 }
+
 
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
@@ -176,18 +240,22 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	}
 }
 
+
 vector<Item> Logic::getSchedule(){
 	return _logicSchedule.retrieveSchedule();
 }
+
 
 unsigned int Logic::getScheduleSize(){
 	return _logicSchedule.getSizeOfSchedule();
 }
 
+
 list<COMMAND_AND_TEXT> Logic::getParseInfo(iParser parser, string input){
 	parser.parse(input);
 	return parser.getParseInfo();
 }
+
 
 int Logic::convertToDigit(string text) {
 	int digit;
@@ -195,6 +263,7 @@ int Logic::convertToDigit(string text) {
 	convert >> digit;
 	return digit;
 }
+
 
 string Logic::initiateCommandAction(iParser parser, string input) {
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
@@ -210,19 +279,16 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
 		returnMessage = deleteTask(lineIndexToBeDeleted);
 	}
-	else if (command == COMMAND_EXIT){
-		saveDirectoryToTextFile();
-		exit(0);
-	}
+
 	else if (command == COMMAND_EDIT){
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
-		//	returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
+		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	}
 	else if (command == COMMAND_UNDO){
 
 	}
 	else if (command == COMMAND_SORT){
-
+		changeCurrentSorting(itemInformation);
 	}
 	else if (command == COMMAND_SEARCH){
 
@@ -231,28 +297,67 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 
 	}
 	else if (command == COMMAND_SAVE){
-		string directoryToBeChanged = itemInformation;
-		changeSavingDirectory(directoryToBeChanged);
+		changeSavingDirectory(itemInformation);
+	}
+	else if (command == COMMAND_EXIT){
+		saveDirectoryToTextFile();
+		exit(0);
 	}
 	else {
 		printInvalidInput();
 	}
+	sortTask();
 	return returnMessage;
 }
 
 
-/*
-string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
-Item *editedItemToBeReplaced;
-editedItemToBeReplaced = new Item;
-*editedItemToBeReplaced = _logicSchedule.retrieveItem(lineIndexToBeEdited);
-modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
-_logicSchedule.replaceItem(editedItemToBeReplaced, itemIDToBeEdited);
-printSchedule();
-return MESSAGE_SUCCESSFUL;
+string Logic::changeCurrentSorting(string itemInformation){
+	_currentSorting = itemInformation;
+	return _currentSorting;
 }
 
-*/
+string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
+	Item *editedItemToBeReplaced;
+	editedItemToBeReplaced = new Item;
+	*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
+	modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
+	unsigned int itemIDforVerification = editedItemToBeReplaced->getItemID();
+	ItemVerification verifier(*editedItemToBeReplaced, itemIDforVerification);
+	if (verifier.isValidItem()){
+		_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
+		resetAndPrintSchedule();
+		return MESSAGE_SUCCESSFUL_EDIT;
+	}
+	else{
+		return MESSAGE_FAILED_EDIT;
+	}
+}
+
+string Logic::sortTask(){
+	vector<Item> sortedDisplaySchedule;
+	resetAndGetDisplaySchedule();
+	if (_currentSorting == SORT_NAME){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
+	}
+	else if (_currentSorting == SORT_PRIORITY){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
+	}
+	else if (_currentSorting == SORT_COMPLETION){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
+	}
+	else if (_currentSorting == SORT_DATE){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
+	}
+	//	else if (_currentSorting == SORT_LAST_UPDATE){
+	//		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
+	//	}
+	else{
+		return MESSAGE_FAILED_SORT;
+	}
+	printSchedule(sortedDisplaySchedule);
+	return MESSAGE_SUCCESSFUL_SORT;
+}
+
 /*
 
 vector<Item> Logic::searchTask(string phraseToSearch){
