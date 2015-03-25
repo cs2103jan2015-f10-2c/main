@@ -31,6 +31,7 @@ private:
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
+	static const string MESSAGE_INVALID_INPUT_FOR_DELETE;
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_EDIT;
@@ -60,6 +61,8 @@ private:
 	static const string TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME;
 	static const string DEFAULT_FILENAME;
 
+	static const string MESSAGE_SUCCESSFUL;
+	static const string MESSAGE_FAILED;
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
 
@@ -74,39 +77,37 @@ public:
 	void printInvalidInput();
 
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);
-//	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
-	void initiateCommandAction(iParser parser, string input);
-	
-	unsigned int addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
+	//	unsigned int processedLineIndex(ParseInfo parseInfoToBeProcessed);
+	string initiateCommandAction(iParser parser, string input);
+
+	//Pre: takes in the parse info given by the parser and execute addTask
+	//post:returns Success or Failure message
+	string addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
 	void setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
 	void increaseItemIDAndScheduleSize();
-	int deleteTask(int lineIndexToBeDeleted);
-	int editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
+
+	//Pre: takes in the parse info given by the parser and execute deleteTask
+	//post:returns Success or Failure message
+	string deleteTask(int lineIndexToBeDeleted);
+
+	//Pre: takes in the parse info given by the parser and execute deleteTask
+	//post:returns Success or Failure message
+	string editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
 	vector<Item> searchTask(string phraseToSearch);
 	void modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
 	void modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
 	DateTime interpreteDateTime(string infoToBeInterpreted);
 	DateTime createDateTime(int DD, int MM, int YYYY, int hh, int mm);
-	
-	Item assignDescription(Item item, string descriptionToBeAdded);
-	Item assignDescriptionToNewTask(Item item, string descriptionToBeAdded);
-	Item assignDescriptionToExistingTask(string descriptionToBeAdded, unsigned int lineIndex);
-	Item assignTiming(Item item, string timingType, DateTime datetime);
-	Item assignTimingToNewTask(string timingType, DateTime datetime);
-	Item assignTimingToExistingTask(string timingType, DateTime datetime, unsigned int lineIndex);
-	Item assignPriority(Item item, char priorityType);
-	Item assignPriorityToNewTask(char priorityType);
-	Item assignPriorityToExistingTask(char priorityType, unsigned int lineIndex);
-	Item assignLabel(Item item, char labelType);
-	Item assignLabelToNewTask(char labelType);
-	Item assignLabelToExistingTask(char labelType, unsigned int lineIndex);
-	
+
+
 	vector<Item> getSchedule();
 	unsigned int getScheduleSize();
 
 	//void assignSaveFolder();
 	string changeSavingDirectory(string directoryToBeSaved);
 	string changeSavingFileName(string FileNameToBeSaved);
+	void assignDirectorySpecifiedByUser(string directoryToBeSaved, string directoryToMake, int truncateDirectory);
+	void Logic::assignDefaultDirectory(string directoryToBeSaved, string directoryToMake);
 	string getDirectoryAndFileName();
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
@@ -122,10 +123,7 @@ public:
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
-	
-	enum CommandType {
-		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
-	};
+
 };
 
 #endif
