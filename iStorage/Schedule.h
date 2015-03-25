@@ -26,10 +26,14 @@ private:
 	//	Checks how an item compares with another according to the item's attribute
 	//			isEarlierThan uses start time, if any, else uses end time, if any
 	//			isAlphabeticallySmallerThan uses the items' item name, regardless of case
+	//			isLowerPriorityThan uses the item's priority - L, M, H
+	//			isLessCompleteThan uses the item's completion status (completed vs incomplete)
 	//	Pre:	Valid Item objects
 	//	Post:	Returns if the left Item is earlier than the right one; false otherwise
 	static bool isEarlierThan(Item, Item);
 	static bool isAlphabeticallySmallerThan(Item, Item);
+	static bool isLowerPriorityThan(Item, Item);
+	static bool isLessCompleteThan(Item, Item);
 
 	//	Convert entire string to lowercase
 	//	Pre:	Valid string
@@ -62,6 +66,11 @@ public:
 	//	Pre:	Display vector is not sorted by the other components
 	//	Post:	Returns item ID of the item selected
 	unsigned int findItemIDGivenDisplayVectorIndex(unsigned int);
+
+	//	Resets the display schedule to the schedule
+	//	Pre:	Nil.
+	//	Post:	Display schedule is a duplicate of schedule; size of display schedule is returned
+	unsigned int resetDisplaySchedule();
 
 	//	Adds an item to the schedule
 	//	Pre:	Valid Item object

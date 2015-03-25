@@ -43,6 +43,12 @@ unsigned int Schedule::getSizeOfDisplaySchedule(){
 	return _displaySchedule.size();
 }
 
+//	Resets the display schedule to the schedule
+unsigned int Schedule::resetDisplaySchedule() {
+	_displaySchedule = _schedule;
+	return getSizeOfDisplaySchedule();
+}
+
 //	Adds the item to the schedule, returns full details of the item (string)
 string Schedule::addItem(Item* item) {
 	_schedule.push_back(*item);
@@ -150,36 +156,67 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByItemName() {
 	return retrieveDisplaySchedule();
 }
 
+//	Checks if an item is of lower priority than another
+bool Schedule::isLowerPriorityThan(Item leftItem, Item rightItem) {
+	char leftItemPriority = leftItem.getPriority();
+	char rightItemPriority = rightItem.getPriority();
+
+	if (leftItemPriority = 'H') {
+		leftItemPriority = '1';
+	}
+	else if (leftItemPriority = 'M') {
+		leftItemPriority = '2';
+	}
+	else if (leftItemPriority = 'L') {
+		leftItemPriority = '3';
+	}
+	else {
+		leftItemPriority = '4';
+	}
+
+	if (rightItemPriority = 'H') {
+		rightItemPriority = '1';
+	}
+	else if (rightItemPriority = 'M') {
+		rightItemPriority = '2';
+	}
+	else if (rightItemPriority = 'L') {
+		rightItemPriority = '3';
+	}
+	else {
+		rightItemPriority = '4';
+	}
+
+	return (leftItemPriority < rightItemPriority);
+}
+
 //	Sorts the display schedule by priority, returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByPriority() {
+	sort(_displaySchedule.begin(), _displaySchedule.end(), isLowerPriorityThan);
 	return retrieveDisplaySchedule();
+}
+
+//	Checks if an item is less completed than another (completed vs incomplete)
+bool Schedule::isLessCompleteThan(Item leftItem, Item rightItem) {
+	return (leftItem.getCompletion() < rightItem.getCompletion());
 }
 
 //	Sorts the display schedule by completion status (completed first), returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
+	sort(_displaySchedule.begin(), _displaySchedule.end(), isLessCompleteThan);
 	return retrieveDisplaySchedule();
 }
 
+
+
+
+/*
 //	Sorts the display schedule by last update (latest first), returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
-	return retrieveDisplaySchedule();
+return retrieveDisplaySchedule();
 }
 
 
-
-
-
-//const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
-//
-//}
-
-/*
-const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
-
-}
-*/
-
-/*
 //	Filters the schedule by Priority
 const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char priority){
 _filteredSchedule.clear();
@@ -218,26 +255,4 @@ _filteredSchedule.push_back(_schedule[index]);
 
 return _filteredSchedule;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-vector <Item>& Schedule::sortScheduleByDate() {
-sort(_schedule.begin(), _schedule.end()/*, compare item dates*//*);
-return _schedule;
-}
-
-vector <Item>& Schedule::sortScheduleByLastUpdate() {
-sort(_schedule.begin(), _schedule.end()/*, compare item update datetime*//*);
-return _schedule;
-}
-
 */
