@@ -211,6 +211,7 @@ string iParser::executeEditParsing(string text) {
 	if (textToEdit != STRING_BLANK && areDigits(indexToEdit)) {
 		setParseInfo(COMMAND_EDIT, indexToEdit);
 		setParseInfo(MODIFIER_DESCRIPTION, textToEdit);
+
 		return MESSAGE_SUCCESS;
 	}
 	else {
