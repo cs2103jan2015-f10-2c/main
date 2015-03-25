@@ -31,6 +31,7 @@ private:
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
+	static const string MESSAGE_INVALID_INPUT_FOR_DELETE;
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_EDIT;

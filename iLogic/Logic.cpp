@@ -3,6 +3,7 @@
 
 const string Logic::MESSAGE_SUCCESS = "execution success";
 const string Logic::MESSAGE_INVALID_INPUT = "invalid input";
+const string Logic::MESSAGE_INVALID_INPUT_FOR_DELETE = "invalid input for delete task";
 const string Logic::COMMAND_ADD = "add";
 const string Logic::COMMAND_DELETE = "delete";
 const string Logic::COMMAND_EDIT = "edit";
@@ -79,22 +80,20 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	newItemToBeAdded = new Item;
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
-	//	Try this code for item verification! --JF ////////////
-	//ItemVerification verifier(*newItemToBeAdded,_nextItemID);
-//	if (verifier.isValidItem()) {
+	ItemVerification verifier(*newItemToBeAdded, _nextItemID);
+	if (verifier.isValidItem()) {
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 		addedItemID = _nextItemID;
 		increaseItemIDAndScheduleSize();
 		printAddTaskSuccessful(addCompleted);
 		printSchedule();
 		return MESSAGE_SUCCESSFUL;
-	//}
-//else{
-//	printSchedule();
-//	return MESSAGE_FAILED;
-//}
+	}
+	else{
+		printSchedule();
+		return MESSAGE_FAILED;
+	}
 }
-	
 
 void Logic::increaseItemIDAndScheduleSize(){
 	_nextItemID++;
@@ -128,8 +127,8 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 
 DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	istringstream inputTime(infoToBeInterpreted);
-	int DD, MM, YYYY, hh, mm;
-	inputTime >> DD >> MM >> YYYY >> hh >> mm;
+	int YYYY, MM, DD, hh, mm;
+	inputTime >> YYYY >> MM >> DD >> hh >> mm;
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
 }
@@ -143,19 +142,21 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 		return false;
 	}
 }
-/*
+
 //passing line index, not itemID
 string Logic::deleteTask(int lineIndexToBeDeleted){
+
 	try{
 		if (isValidLineIndex(lineIndexToBeDeleted)){
-			string deletedItem = _logicSchedule.deleteItem(lineIndexToBeDeleted);
+			cout << "lineIndex : " << lineIndexToBeDeleted << endl;
+			string deletedItem = _logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 			printDeleteTaskSuccessful(lineIndexToBeDeleted);
 			_scheduleSize--;//Delete successful
 			printSchedule();
 			return MESSAGE_SUCCESSFUL;
 		}
 		else{
-			throw("invalid lineIndex for deleteTask"); //Delete failed
+			throw(MESSAGE_INVALID_INPUT_FOR_DELETE); //Delete failed
 			printSchedule();
 		}
 	}
@@ -164,7 +165,7 @@ string Logic::deleteTask(int lineIndexToBeDeleted){
 	}
 	return MESSAGE_FAILED;
 }
-*/
+
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	if (getScheduleSize() >= lineIndexToBeChecked){
@@ -207,7 +208,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	}
 	else if (command == COMMAND_DELETE) {
 		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
-	//	returnMessage = deleteTask(lineIndexToBeDeleted);
+		returnMessage = deleteTask(lineIndexToBeDeleted);
 	}
 	else if (command == COMMAND_EXIT){
 		saveDirectoryToTextFile();
@@ -215,7 +216,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	}
 	else if (command == COMMAND_EDIT){
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
-	//	returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
+		//	returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	}
 	else if (command == COMMAND_UNDO){
 
@@ -242,13 +243,13 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 
 /*
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
-	Item *editedItemToBeReplaced;
-	editedItemToBeReplaced = new Item;
-	*editedItemToBeReplaced = _logicSchedule.retrieveItem(lineIndexToBeEdited);
-	modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
-	_logicSchedule.replaceItem(editedItemToBeReplaced, itemIDToBeEdited);
-	printSchedule();
-	return MESSAGE_SUCCESSFUL;
+Item *editedItemToBeReplaced;
+editedItemToBeReplaced = new Item;
+*editedItemToBeReplaced = _logicSchedule.retrieveItem(lineIndexToBeEdited);
+modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
+_logicSchedule.replaceItem(editedItemToBeReplaced, itemIDToBeEdited);
+printSchedule();
+return MESSAGE_SUCCESSFUL;
 }
 
 */
