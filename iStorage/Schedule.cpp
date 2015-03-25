@@ -30,7 +30,7 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 
 //	Retrieves item ID given display vector index
 unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int displayVectorIndex){
-	return _displaySchedule[displayVectorIndex].getItemID();
+	return _displaySchedule[displayVectorIndex-1].getItemID();
 }
 
 //	Retrieves the size of the schedule
