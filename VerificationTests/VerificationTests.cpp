@@ -487,15 +487,46 @@ namespace VerificationTests
 			isValid = verify4.isValidItem();
 			Assert::AreEqual(false, isValid);
 
-			DateTime startTime1(-1, -1, -1, -1, -1);
-			DateTime endTime1(2015, 02, 14, -1, -1);
+			DateTime startTime2(-1, -1, -1, -1, -1);
+			DateTime endTime2(2015, 02, 14, -1, -1);
 			Item item2(string("Hello Boss"));
-			item2.setStartTime(startTime1);
-			item2.setEndTime(endTime1);
+			item2.setStartTime(startTime2);
+			item2.setEndTime(endTime2);
 			item2.setItemID(1001);
 			ItemVerification verify5(item2,1002);
 			isValid = verify5.isValidItem();
 			Assert::AreEqual(true, isValid);
+
+			DateTime startTime3(-1, -1, -1, -1, -1);
+			DateTime endTime3(-1, -1, -1, -1, -1);
+			Item item3(string("Hello Boss"));
+			item3.setStartTime(startTime3);
+			item3.setEndTime(endTime3);
+			item3.setItemID(1001);
+			ItemVerification verify6(item3, 1002);
+			isValid = verify6.isValidItem();
+			Assert::AreEqual(true, isValid);
+
+			DateTime startTime4(-1, -1, -1, -1, -1);
+			DateTime endTime4(-1, -1, -1, -1, -1);
+			Item item4;
+			item4.setStartTime(startTime4);
+			item4.setEndTime(endTime4);
+			item4.setItemID(1001);
+			ItemVerification verify7(item4, 1002);
+			isValid = verify7.isValidItem();
+			Assert::AreEqual(false, isValid);
+
+			DateTime startTime5(2014, 8, 11, -1, -1);
+			DateTime endTime5(2014, 6, 12, 13, 14);
+			Item item5("Dogface bones");
+			item5.setStartTime(startTime5);
+			item5.setEndTime(endTime5);
+			item5.setItemID(20);
+			item5.setPriority('L');
+			ItemVerification verify8(item5, 20);
+			isValid = verify8.isValidItem();
+			Assert::AreEqual(false, isValid);
 		}
 
 	};
