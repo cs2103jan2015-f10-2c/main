@@ -22,7 +22,7 @@ private:
 	static const string ERROR_INVALID_START_DATE_TIME;
 	static const string ERROR_INVALID_END_DATE_TIME;
 	static const string ERROR_SAME_START_END_DATE_TIME;
-	static const string ERROR_START_DATE_TIME_EARLIER_THAN_END_DATE_TIME;
+	static const string ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME;
 	static const string ERROR_INVALID_ID;
 	static const string ERROR_INVALID_PRIORITY;
 	static const string ERROR_INVALID_LABEL;
