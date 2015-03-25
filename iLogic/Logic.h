@@ -166,6 +166,8 @@ public:
 	//and get or print the display schedule
 	//Pre : none
 	//Post : returns display schedule
+	vector<Item> resetDisplaySchedule();
+	vector<Item> getDisplaySchedule();
 	vector<Item> resetAndGetDisplaySchedule();
 	vector<Item> resetAndPrintSchedule();
 
@@ -210,6 +212,10 @@ public:
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 
+	//sets current sorting for unit testing purpose
+	//Pre : takes in a string to set to current sorting
+	//Post : returns current sorting
+	string setCurrentSorting(string currentSorting);
 };
 
 #endif

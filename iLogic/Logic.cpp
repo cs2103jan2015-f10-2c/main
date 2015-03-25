@@ -128,6 +128,16 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 }
 
 
+vector<Item> Logic::resetDisplaySchedule(){
+	_logicSchedule.resetDisplaySchedule();
+	return getDisplaySchedule();
+}
+
+
+vector<Item> Logic::getDisplaySchedule(){
+	return _logicSchedule.retrieveDisplaySchedule();
+}
+
 vector<Item> Logic::resetAndPrintSchedule(){
 	vector<Item> retrievedDisplaySchedule = resetAndGetDisplaySchedule();
 	printSchedule(retrievedDisplaySchedule);
@@ -529,3 +539,8 @@ return 1;
 }
 */
 
+
+string Logic::setCurrentSorting(string currentSorting){
+	_currentSorting = currentSorting;
+	return _currentSorting;
+}
