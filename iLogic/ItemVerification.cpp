@@ -152,7 +152,7 @@ bool ItemVerification::isValidItem() {
 		return true;
 	} else {
 		return false;
-	}
+	} 
 }
 
 list<string> ItemVerification::getItemVerificationErrors() {
