@@ -190,7 +190,7 @@ namespace iPlannerParserTest {
 
 				testParser.checkAndSetTokenisedInformation(testVector);				
 				
-				list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			/*	list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 				list<COMMAND_AND_TEXT>::iterator iter;
 				int k = 0;
 				for (iter = testList.begin(); iter != testList.end(); k++, iter++) {
@@ -198,7 +198,7 @@ namespace iPlannerParserTest {
 					string actualText = iter->text;
 					Assert::AreEqual(expectedCommand[k], actualCommand);
 					Assert::AreEqual(expectedText[i][k], actualText);
-				}
+				}*/
 				
 				testParser.clearParseInfo();
 			}		
@@ -363,7 +363,7 @@ namespace iPlannerParserTest {
 
 				if (testParser.hasStartEnd(testString, index, size)) {
 					unsigned int type = -1;
-					unsigned int expectedType = 1;
+					unsigned int expectedType = 2;
 
 					START_AND_END actual = testParser.splitStartEnd(testString, index, size, type );
 					unsigned int actualType = type;
@@ -380,7 +380,7 @@ namespace iPlannerParserTest {
 
 				if (testParser.hasStartEnd(testString, index, size)) {
 					unsigned int type = -1;
-					unsigned int expectedType = 2;
+					unsigned int expectedType = 3;
 
 					START_AND_END actual = testParser.splitStartEnd(testString, index, size, type);
 					unsigned int actualType = type;

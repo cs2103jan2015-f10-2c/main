@@ -63,8 +63,9 @@ const unsigned int iParser::SIZE_DATETIME_WHITESPACE = 4;
 
 const unsigned int iParser::INDEX_START = 0;
 const unsigned int iParser::INDEX_INVALID = -1;
-const unsigned int iParser::TYPE_DATE = 1;
-const unsigned int iParser::TYPE_TIME = 2;
+const unsigned int iParser::TYPE_START_END_DATE_AND_TIME = 1;
+const unsigned int iParser::TYPE_START_END_DATE = 2;
+const unsigned int iParser::TYPE_START_END_TIME = 3;
 
 iParser::iParser() {}
 
@@ -276,14 +277,14 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		return MESSAGE_SUCCESS;
 	}
 
+	
 	string startDate = STRING_DATE_INITIALISE;
 	string endDate = STRING_DATE_INITIALISE;
 	string startTime = STRING_TIME_INITIALISE;
 	string endTime = STRING_TIME_INITIALISE;
-	bool hasStartEndDate = false;
-	bool hasStartEndTime = false;
 	bool hasDate = false;
 	bool hasTime = false;
+	unsigned int dateTimeType = INDEX_INVALID;
 	//bool hasLabel = false;
 	//bool hasPriority = false;
 	unsigned int index;
@@ -293,21 +294,21 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		unsigned int seperatorSize = INDEX_INVALID;
 		string tokenisedString = tokenisedInformation[index];
 
-		if (!hasStartEndDate && !hasStartEndTime && hasStartEnd(tokenisedString, seperatorPosition, seperatorSize)) {
-			unsigned int type = INDEX_INVALID;
-			
-			START_AND_END information = splitStartEnd(tokenisedString, seperatorPosition, seperatorSize, type);
-			if (type == TYPE_DATE) {
-				hasStartEndDate = true;
-				hasDate = true;
-				startDate = information.start;
-				endDate = information.end;
-			}
-			else if (type == TYPE_TIME) {
-				hasStartEndTime = true;
-				hasTime = true;
-				startTime = information.start;
-				endTime = information.end;
+		if ((!hasDate || !hasTime) && dateTimeType == INDEX_INVALID) {
+			if (hasStartEnd(tokenisedString, seperatorPosition, seperatorSize)) {
+				START_AND_END information;
+				information = splitStartEnd(tokenisedString, seperatorPosition, seperatorSize, dateTimeType);
+
+				if (dateTimeType == TYPE_START_END_DATE_AND_TIME || dateTimeType == TYPE_START_END_DATE) {
+					startDate = information.start;
+					endDate = information.end;
+					hasDate = true;
+				}
+				else if (dateTimeType == TYPE_START_END_DATE_AND_TIME || dateTimeType == TYPE_START_END_TIME) {
+					startTime = information.start;
+					endTime = information.end;
+					hasTime = true;
+				}
 			}
 		}
 		else {
@@ -317,38 +318,27 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 			else if (!hasTime && isValidTime(tokenisedString, startTime)) {
 				hasTime = true;
 			}
-			else {
-				throw MESSAGE_INVALID_INPUT;
-			}
 		}
 	}
-
-	if (hasStartEndDate && !hasStartEndTime) {
-		ostringstream startDateString;
-		ostringstream endDateString;
-
-		startDateString << startDate << CHAR_SPACE << startTime;
-		endDateString << endDate << CHAR_SPACE << endTime;
-		setParseInfo(MODIFIER_START, startDateString.str());
-		setParseInfo(MODIFIER_END, endDateString.str());
+	
+	string startInformation;
+	string endInformation;
+	if (dateTimeType != INDEX_INVALID) {
+		startInformation = startDate + CHAR_SPACE + startTime;
+		endInformation = endDate + CHAR_SPACE + endTime;
+		setParseInfo(MODIFIER_START, startInformation);
+		setParseInfo(MODIFIER_END, endInformation);
 	}
-	else if (hasDate && hasStartEndTime) {
-		ostringstream startDateString;
-		ostringstream endDateString;
-
-		startDateString << startDate << CHAR_SPACE << startTime;
-		endDateString << startDate << CHAR_SPACE << endTime;
-		setParseInfo(MODIFIER_START, startDateString.str());
-		setParseInfo(MODIFIER_END, endDateString.str());
+	else if (hasDate && !hasTime) {
+		startInformation = startDate + CHAR_SPACE + startTime;
+		setParseInfo(MODIFIER_START, startInformation);
 	}
-	else if ((hasDate && hasTime) || (hasDate && !hasTime)) {
-		ostringstream startDateString;
-
-		startDateString << startDate << CHAR_SPACE << startTime;
-		setParseInfo(MODIFIER_START, startDateString.str());
+	else if (hasTime && !hasDate) {
+		endInformation = endDate + CHAR_SPACE + endTime;
+		setParseInfo(MODIFIER_END, endInformation);
 	}
 	else {
-		throw MESSAGE_INVALID_INPUT;
+		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
 	return MESSAGE_SUCCESS;
@@ -506,21 +496,71 @@ bool iParser::hasStartEnd(string text, unsigned int& seperatorPosition, unsigned
 	return false;
 }
 
+// remember to SLAP this ==============================================================
 START_AND_END iParser::splitStartEnd(const string text, const unsigned int seperatorPosition, const unsigned int seperatorSize, unsigned int& type) {
 	assert(text != STRING_BLANK);
-	string start = text.substr(INDEX_START, seperatorPosition);
-	string end = text.substr(seperatorPosition + seperatorSize);
-	trimText(start);
-	trimText(end);
 	START_AND_END information;
 	string startInformation = STRING_BLANK;
 	string endInformation = STRING_BLANK;
+	string startDate = STRING_BLANK;
+	string startTime = STRING_BLANK;
+	string endDate = STRING_BLANK;
+	string endTime = STRING_BLANK;
+	bool hasStartEndDateAndTime = false;
+
+	string start = text.substr(INDEX_START, seperatorPosition);
+	string end = text.substr(seperatorPosition + seperatorSize);
+	unsigned int numberOfCommasInStart = retrieveCount(start, CHAR_COMMA);
+	unsigned int numberOfCommasInEnd = retrieveCount(start, CHAR_COMMA);
+
+	if (numberOfCommasInStart > 1 || numberOfCommasInEnd > 1) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	if (numberOfCommasInStart == 1) {
+		unsigned int startIndex = INDEX_START;
+		unsigned int endIndex = start.find_first_of(",");
+		startDate = start.substr(startIndex, endIndex);
+		startIndex = endIndex + 1;
+		startTime = start.substr(startIndex);
+		
+		string startDateInformation;
+		string startTimeInformation;
+		if (isValidDate(startDate, startDateInformation) && isValidTime(startTime, startTimeInformation)) {
+			start = startDateInformation + CHAR_SPACE + startTimeInformation;
+			hasStartEndDateAndTime = true;
+		}
+		else {
+			throw MESSAGE_INVALID_DATE_TIME;
+		}
+	}
+		
+	if (numberOfCommasInEnd == 1) {
+		unsigned int startIndex = INDEX_START;
+		unsigned int endIndex = end.find_first_of(",");
+		endDate = end.substr(startIndex, endIndex);
+		startIndex = endIndex + 1;
+		endTime = end.substr(startIndex);
+		
+		string endDateInformation;
+		string endTimeInformation;
+		if (isValidDate(endDate, endDateInformation) && isValidTime(endTime, endTimeInformation)) {
+			start = endDateInformation + CHAR_SPACE + endTimeInformation;
+			hasStartEndDateAndTime = true;
+		}
+		else {
+			throw MESSAGE_INVALID_DATE_TIME;
+		}
+	}
 	
-	if (isValidDate(start, startInformation) && isValidDate(end, endInformation)) {
-		type = TYPE_DATE;
+	if (hasStartEndDateAndTime) {
+		type = TYPE_START_END_DATE_AND_TIME;
+	}
+	else if (isValidDate(start, startInformation) && isValidDate(end, endInformation)) {
+		type = TYPE_START_END_DATE;
 	}
 	else if (isValidTime(start, startInformation) && isValidTime(end, endInformation)) {
-		type = TYPE_TIME;
+		type = TYPE_START_END_TIME;
 	}
 	else {
 		throw MESSAGE_INVALID_DATE_TIME;
@@ -531,11 +571,14 @@ START_AND_END iParser::splitStartEnd(const string text, const unsigned int seper
 
 	return information;
 }
+// remember to SLAP this ==============================================================
 
 bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 	if (dateString == STRING_BLANK) {
 		return false;
 	}
+
+	trimText(dateString);
 
 	try {
 		const unsigned int numberOfObliques = retrieveCount(dateString, CHAR_OBLIQUE);

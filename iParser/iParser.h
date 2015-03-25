@@ -97,8 +97,9 @@ public:
 
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
-	static const unsigned int TYPE_DATE;
-	static const unsigned int TYPE_TIME;
+	static const unsigned int TYPE_START_END_DATE_AND_TIME;
+	static const unsigned int TYPE_START_END_DATE;
+	static const unsigned int TYPE_START_END_TIME;
 
 	enum CommandType {
 		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
