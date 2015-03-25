@@ -159,11 +159,12 @@ namespace iPlannerUI {
 					 //const string COMMAND_NEW = "Enter the command";
 					 //cout << "THIS IS NEW" << endl;
 					 //cout << "command : ";
-				 userInput = commandInputBox->Text;
+				
+				 while (1){
+					 userInput = commandInputBox->Text;
 
-				 string stdUserInput;
-				 MarshalString(userInput, stdUserInput);
-				 while (stdUserInput.compare("exit") != 0){
+					 string stdUserInput;
+					 MarshalString(userInput, stdUserInput);
 					 if (e->KeyCode == Keys::Enter) {
 					 string outcome = testLogic.initiateCommandAction(testParser, stdUserInput);
 

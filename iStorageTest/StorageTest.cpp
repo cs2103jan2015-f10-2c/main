@@ -1020,6 +1020,59 @@ namespace ScheduleTest
 			delete item3;
 		}
 
+		TEST_METHOD(TestAddItem2)
+		{
+			Schedule projectLife;
+			Item *item1 = new Item;
+			DateTime dateTime1(2015, 3, 20, 12, 30);
+			DateTime dateTime2(2015, 4, 20, 12, 30);
+
+			item1->setItemName("CS Project");
+			item1->setDescription("V0.1");
+			item1->setStartTime(dateTime1);
+			item1->setEndTime(dateTime2);
+			item1->setCompletion(true);
+			item1->setItemID(12);
+			item1->setPriority('L');
+			item1->setLabel('O');
+
+			Item *item2 = new Item;
+			DateTime dateTime3(2015, 4, 27, 12, 30);
+
+			item2->setItemName("CS Project");
+			item2->setDescription("V0.2");
+			item2->setStartTime(dateTime1);
+			item2->setEndTime(dateTime3);
+			item2->setCompletion(false);
+			item2->setItemID(21);
+			item2->setPriority('H');
+			item2->setLabel('O');
+
+			Item *item3 = new Item;
+			DateTime dateTime4(2015, 4, 1, 14, 0);
+
+			item3->setItemName("CS Project");
+			item3->setDescription("V0.3");
+			item3->setEndTime(dateTime4);
+			item3->setCompletion(false);
+			item3->setItemID(201);
+			item3->setPriority('M');
+			item3->setLabel('P');
+
+			string tempItem1 = projectLife.addItem(item1);
+			string tempItem2 = projectLife.addItem(item2);
+			string tempItem3 = projectLife.addItem(item3);
+			
+			Assert::AreNotEqual(item1->getItemID(), item2->getItemID());
+			Assert::AreNotEqual(item1->getItemID(), item3->getItemID());
+			Assert::AreNotEqual(item2->getItemID(), item3->getItemID());
+			
+			delete item1;
+			delete item2;
+			delete item3;
+
+		}
+
 		TEST_METHOD(TestDeleteItemGivenItemID)
 		{
 			Schedule projectLife;
