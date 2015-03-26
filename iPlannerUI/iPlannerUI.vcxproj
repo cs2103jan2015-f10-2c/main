@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\VerificaitionTests;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iStorageTest;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iStorage;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iPlanner;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iParserTest;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iParser;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iLogicTest;C:\Users\SKR\Documents\SEMESTER VI\CS2103\main\iLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\iPlanner\iStorage;..\iPlanner\iParser;..\iPlanner\iLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

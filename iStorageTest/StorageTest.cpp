@@ -1020,7 +1020,7 @@ namespace ScheduleTest
 			delete item3;
 		}
 
-<<<<<<< HEAD
+
 		TEST_METHOD(TestAddItem2)
 		{
 			Schedule projectLife;
@@ -1074,8 +1074,6 @@ namespace ScheduleTest
 
 		}
 
-=======
->>>>>>> 0507064b7ed4179dbf89b5831a78c78773637c26
 		TEST_METHOD(TestDeleteItemGivenItemID)
 		{
 			Schedule projectLife;
@@ -1311,11 +1309,13 @@ namespace ScheduleTest
 			projectLife.addItem(item2);
 			projectLife.addItem(item3);
 
+			projectLife.resetDisplaySchedule();
+			projectLife.retrieveDisplaySchedule();
+
 			unsigned int index = projectLife.findVectorIndexGivenItemID(item1->getItemID());
-			//Item tempItem = projectLife.retrieveItemGivenDisplayVectorIndex(index);
 			Item tempItem = projectLife.retrieveItemGivenDisplayVectorIndex(item1->getItemID());
 			string tempItem1 = tempItem.displayItemFullDetails();
-			Assert::AreEqual(tempItem1, tempItem1);
+			Assert::AreEqual(tempItem1, item1->displayItemFullDetails());
 			
 			index = projectLife.findVectorIndexGivenItemID(item2->getItemID());
 			tempItem = projectLife.retrieveItemGivenDisplayVectorIndex(unsigned (1));
@@ -1374,8 +1374,10 @@ namespace ScheduleTest
 			projectLife.addItem(item2);
 			projectLife.addItem(item3);
 
-			vector<Item> tempItemVector = projectLife.retrieveSchedule();
+			projectLife.resetDisplaySchedule();
 
+			vector<Item> tempItemVector = projectLife.retrieveDisplaySchedule();
+			
 			unsigned int index = projectLife.findVectorIndexGivenItemID(item3->getItemID());
 					
 			Item tempItem = projectLife.retrieveItemGivenItemID(item3->getItemID());
@@ -1388,7 +1390,7 @@ namespace ScheduleTest
 			string tempItem2 = tempItem.displayItemFullDetails();
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItemVector[1].displayItemFullDetails());
-			// Problem with replaceItemGivenDisplayVectorIndex
+			
 			string tempItem3 = projectLife.replaceItemGivenDisplayVectorIndex(item1, index);
 			tempItemVector = projectLife.retrieveSchedule();
 			Assert::AreEqual(item1->displayItemFullDetails(), tempItem3);
@@ -1397,7 +1399,7 @@ namespace ScheduleTest
 			tempItem1 = projectLife.replaceItemGivenDisplayVectorIndex(item2, index2);
 			tempItemVector = projectLife.retrieveSchedule();
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItem1);
-			Assert::AreEqual(item2->displayItemFullDetails(), tempItemVector[1].displayItemFullDetails());
+			Assert::AreEqual(item2->displayItemFullDetails(), tempItemVector[0].displayItemFullDetails());
 			
 			delete item1;
 			delete item2;
@@ -1447,16 +1449,18 @@ namespace ScheduleTest
 			projectLife.addItem(item2);
 			projectLife.addItem(item3);
 
+			projectLife.resetDisplaySchedule();
+			
 			string tempItem = item3->displayItemFullDetails();
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(201));
-         	Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item3->getItemID()));
+        	Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item3->getItemID()));
 		    Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(2));
-
+			
 			tempItem = item2->displayItemFullDetails();
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(21));
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item2->getItemID()));
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(1));
-
+			
 			tempItem = item1->displayItemFullDetails();
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(12));
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item1->getItemID()));

@@ -42,12 +42,15 @@ private:
 	int _hour;
 	int _minute;
 
-	/////////////////////////////
-	//REMOVE THIS AFTER TESTING//
-	////////////////////////////
+	////////////////////////////////////////
+	//CHANGE BACK TO PRIVATE AFTER TESTING//
+	////////////////////////////////////////
 public:
 
-	// LEVEL 1 of SLAP
+	////////////////////////////
+	////// LEVEL 1 of SLAP /////
+	////////////////////////////
+
 	// This group of functions only check for VALIDITY of
 	// INDIVIDUAL year/month/day/hour/minute values.
 	// They do not check whether the values come together
@@ -60,7 +63,10 @@ public:
 	bool isValidMinuteRange();
 
 
-	// LEVEL 2 of SLAP
+	////////////////////////////
+	////// LEVEL 2 of SLAP /////
+	////////////////////////////
+
 	// This group of functions goes on to check if the
 	// individual year/month/day values come together as
 	// a valid date format.
@@ -71,17 +77,36 @@ public:
 	bool hasMonth();
 	bool hasDay();
 
+	// This group of functions goes on to check if the
+	// individual year/month/day values come together as
+	// a valid time format.
+	// i.e. HH MM or -1 -1
 	bool hasHourMinute();
 	bool hasHour();
 	bool hasMinute();
-
-	bool isActualYearMonthDayDate();
 	bool isValidTime();
+
+	// Checks if the date (YYYY MM DD) is an actual
+	// Gregorian calendar date
+	//	Pre: Date is in YYYY MM DD format. Date that is in
+	//	-1 MM DD format will not be processed by thos method.
+	bool isActualYearMonthDayDate();
+
+
 
 public:
 
+	// Constructor
 	DateTimeVerification(DateTime dateTimeObject);
 
+
+	// Does comprehensive checks to the given DateTme object
+	// to determine if it satisfies a valid iPlanner calendar
+	// format and is an actual calendar date. Valid formats are: 
+	//		YYYY DD MM HH MM
+	//		YYYY DD MM -1 -1
+	//		-1	 DD MM HH MM
+	//		-1	 DD MM -1 -1
 	bool isValidDateTime();
 
 };

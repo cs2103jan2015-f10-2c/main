@@ -76,12 +76,14 @@ private:
 	static const string MESSAGE_SUCCESSFUL_EDIT;
 	static const string MESSAGE_SUCCESSFUL_SORT;
 	static const string MESSAGE_SUCCESSFUL_VIEW;
+	static const string MESSAGE_SUCCESSFUL_SAVE;
 	static const string MESSAGE_SUCCESSFUL_UNDO;
 
 	static const string MESSAGE_FAILED_ADD;
 	static const string MESSAGE_FAILED_DELETE;
 	static const string MESSAGE_FAILED_EDIT;
 	static const string MESSAGE_FAILED_VIEW;
+	static const string MESSAGE_FAILED_SAVE;
 	static const string MESSAGE_FAILED_UNDO;
 	static const string MESSAGE_FAILED_SORT;
 
@@ -176,7 +178,7 @@ public:
 	//Pre : none
 	//Post : returns size of the schedule
 	unsigned int getScheduleSize();
-
+	vector<Item> getSchedule();
 	
 	//changes current Sorting method. display schedule will be sorted according to the current sorting method
 	//everytime a command is executed.
@@ -189,8 +191,9 @@ public:
 	//Pre : 
 	string changeSavingDirectory(string directoryToBeSaved);
 	string changeSavingFileName(string FileNameToBeSaved);
-	void assignDirectorySpecifiedByUser(string directoryToBeSaved, string directoryToMake, int truncateDirectory);
-	void assignDefaultDirectory(string directoryToBeSaved, string directoryToMake);
+	string assignOneFolderToMake(int truncatePosition, string userInputDirectory);
+	string assignLastFolderToMake(string userInputDirectory, string directoryToMake);
+	string truncateUserInputDirectory(int truncatePosition, string userInputDirectory);
 	string getDirectoryAndFileName();
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
@@ -211,11 +214,16 @@ public:
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
+	list<string> getErrorList(ItemVerification verifier);
+	list<string> printErrorList(ItemVerification verifier);
+
 
 	//sets current sorting for unit testing purpose
 	//Pre : takes in a string to set to current sorting
 	//Post : returns current sorting
 	string setCurrentSorting(string currentSorting);
+
+	void thingsToDoAfterEveryExecution();
 };
 
 #endif
