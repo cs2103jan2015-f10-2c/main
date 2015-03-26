@@ -129,7 +129,7 @@ bool Schedule::isEarlierThan(Item leftItem, Item rightItem){
 
 //	Sorts the display schedule by date, returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
-	sort(_displaySchedule.begin(), _displaySchedule.end(), isEarlierThan);
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isEarlierThan);
 	return retrieveDisplaySchedule();
 }
 
@@ -152,7 +152,7 @@ bool Schedule::isAlphabeticallySmallerThan(Item leftItem, Item rightItem) {
 
 //	Sorts the display schedule by item name, returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByItemName() {
-	sort(_displaySchedule.begin(), _displaySchedule.end(), isAlphabeticallySmallerThan);
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isAlphabeticallySmallerThan);
 	return retrieveDisplaySchedule();
 }
 
@@ -192,7 +192,7 @@ bool Schedule::isLowerPriorityThan(Item leftItem, Item rightItem) {
 
 //	Sorts the display schedule by priority, returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByPriority() {
-	sort(_displaySchedule.begin(), _displaySchedule.end(), isLowerPriorityThan);
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isLowerPriorityThan);
 	return retrieveDisplaySchedule();
 }
 
@@ -203,7 +203,7 @@ bool Schedule::isLessCompleteThan(Item leftItem, Item rightItem) {
 
 //	Sorts the display schedule by completion status (completed first), returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
-	sort(_displaySchedule.begin(), _displaySchedule.end(), isLessCompleteThan);
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isLessCompleteThan);
 	return retrieveDisplaySchedule();
 }
 

@@ -1020,6 +1020,7 @@ namespace ScheduleTest
 			delete item3;
 		}
 
+<<<<<<< HEAD
 		TEST_METHOD(TestAddItem2)
 		{
 			Schedule projectLife;
@@ -1073,6 +1074,8 @@ namespace ScheduleTest
 
 		}
 
+=======
+>>>>>>> 0507064b7ed4179dbf89b5831a78c78773637c26
 		TEST_METHOD(TestDeleteItemGivenItemID)
 		{
 			Schedule projectLife;

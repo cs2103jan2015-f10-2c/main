@@ -124,7 +124,7 @@ public:
 	//ItemID starts from 1, everytime when addTask is called, nextItemID increases by 1
 	//Pre: None
 	//Post : returns nextItemID
-	unsigned int increaseItemIDAndScheduleSize();
+	unsigned int increaseItemID();
 
 
 	//Delete Item from the schedule, given a valid line index to be deleted is provided
@@ -172,10 +172,9 @@ public:
 	vector<Item> resetAndPrintSchedule();
 
 
-	//retrieves _schedule of the schedule
+	//retrieves display schedule size
 	//Pre : none
-	//Post : returns schedule and size of the schedule
-	vector<Item> getSchedule();
+	//Post : returns size of the schedule
 	unsigned int getScheduleSize();
 
 	
@@ -195,6 +194,7 @@ public:
 	string getDirectoryAndFileName();
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
+	void printChangeSavingDirectorySuccessful();
 	
 
 	//store saving directory and file name in order to 
