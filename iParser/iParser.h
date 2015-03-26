@@ -154,7 +154,7 @@ public:
 	bool isWhiteSpace(const char); // unit tested
 
 	// date time functions
-	string setDateTime(string, const string);
+	string setDateTime(string, const string); // unit tested
 	string splitDateTime(string, const string); // unit tested
 	bool hasStartEnd(string, unsigned int&, unsigned int&); // unit tested
 	START_AND_END splitAndSetStartEnd(const string, const unsigned int, const unsigned int, unsigned int&); // unit tested

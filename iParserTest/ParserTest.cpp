@@ -67,22 +67,20 @@ namespace iPlannerParserTest {
 		}
 
 		TEST_METHOD(parserExecuteEditParsing) {
-			string text[3] = { "123 text", "CS2013 text", "123" };
-			string expectedCommand[4] = { "edit", "item", "invalid", "invalid" };
-			string expectedText[4] = { "123", "text", "invalid index", "invalid edit" };
+			string testInput = "23 -date 10 Nov 2012, 6:30PM";
+			string expectedCommand[] = { "edit", "start" };
+			string expectedText[] = { "23", "10 11 2012 18 30" };
 
-			testParser.executeEditParsing(text[0]);
-			testParser.executeEditParsing(text[1]);
+			testParser.executeEditParsing(testInput);
+
 			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 			list<COMMAND_AND_TEXT>::iterator iter;
-			int index = 0;
-
-			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+			int i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
 				string actualCommand = iter->command;
 				string actualText = iter->text;
-
-				Assert::AreEqual(expectedCommand[index], actualCommand);
-				Assert::AreEqual(expectedText[index], actualText);
+				Assert::AreEqual(expectedCommand[i], actualCommand);
+				Assert::AreEqual(expectedText[i], actualText);
 			}
 		}
 

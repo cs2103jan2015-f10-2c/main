@@ -26,13 +26,13 @@ const string iParser::COMMAND_PRIORITY = "priority";
 const string iParser::MODIFIER_DATE = "date";
 const string iParser::MODIFIER_DUE = "due";
 
-const string iParser::STRING_ITEM = "-item ";
-const string iParser::STRING_DATE = "-date ";
-const string iParser::STRING_DUE = "-due ";
-const string iParser::STRING_DESCRIPTION = "-description ";
-const string iParser::STRING_DESC = "-desc ";
-const string iParser::STRING_LABEL = "-label ";
-const string iParser::STRING_PRIORITY = "-priority ";
+const string iParser::STRING_ITEM = "-item";
+const string iParser::STRING_DATE = "-date";
+const string iParser::STRING_DUE = "-due";
+const string iParser::STRING_DESCRIPTION = "-description";
+const string iParser::STRING_DESC = "-desc";
+const string iParser::STRING_LABEL = "-label";
+const string iParser::STRING_PRIORITY = "-priority";
 
 const string iParser::STRING_DAYS[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
 const string iParser::STRING_DAYS_SHORT_FORM[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
@@ -214,7 +214,11 @@ string iParser::executeAddParsing(string text) {
 	
 	vector<string> tokenisedInformation = tokeniseText(text);
 	try {
-		checkAndSetTokenisedInformation(tokenisedInformation);
+		string itemName = tokenisedInformation[INDEX_START];
+		setParseInfo(COMMAND_ADD, itemName);
+		if (tokenisedInformation.size() > 1) {
+			checkAndSetTokenisedInformation(tokenisedInformation);
+		}
 	}
 	catch (string& exceptionMessage) {
 		clearParseInfo();
@@ -237,18 +241,29 @@ string iParser::executeDeleteParsing(string indexToDelete) {
 }
 
 string iParser::executeEditParsing(string text) {
-	string indexToEdit = retrieveFirstStringToken(text);
-	string textToEdit = removeFirstStringToken(text);
-
-	if (textToEdit != STRING_BLANK && areDigits(indexToEdit)) {
-		setParseInfo(COMMAND_EDIT, indexToEdit);
-		setParseInfo(COMMAND_ITEM, textToEdit);
-		return MESSAGE_SUCCESS;
-	}
-	else {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INDEX);
+	if (text == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
 		return MESSAGE_FAILURE;
 	}
+
+	vector<string> tokenisedInformation = tokeniseText(text);
+	try {
+		string indexToEdit = tokenisedInformation[INDEX_START];
+		if (!areDigits(indexToEdit)) {
+			throw MESSAGE_INVALID_INDEX;
+		}
+		setParseInfo(COMMAND_EDIT, indexToEdit);
+		if (tokenisedInformation.size() > 1) {
+			checkAndSetTokenisedInformation(tokenisedInformation);
+		}
+	}
+	catch (string& exceptionMessage) {
+		clearParseInfo();
+		setParseInfo(MESSAGE_INVALID, exceptionMessage);
+		return MESSAGE_FAILURE;
+	}
+
+	return MESSAGE_SUCCESS;
 }
 
 string iParser::executeUndoParsing(string userInput) {
@@ -334,25 +349,19 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		throw MESSAGE_INVALID_INPUT;
 	}
 
-	string itemName = tokenisedInformation[INDEX_START];
-	setParseInfo(COMMAND_ADD, itemName);
-
-	if (tokenisedInformation.size() == 1) {
-		return MESSAGE_SUCCESS;
-	}
-
 	for (unsigned int index = 1; index < tokenisedInformation.size(); index++) {
 		string singleInformation = tokenisedInformation[index];
 		string modifier = retrieveCommandOrModifier(singleInformation);
 		ModifierType modifierType = determineModifierType(modifier);
 		string textWithoutCommand = removeFirstStringToken(singleInformation);
-		
+
 		switch (modifierType) {
 		case ITEMNAME:
 			setParseInfo(COMMAND_ITEM, textWithoutCommand);
 			break;
 		case DATE:
 			executeDateTimeParsing(textWithoutCommand, MODIFIER_DATE);
+			break;
 		case DUE:
 			executeDateTimeParsing(textWithoutCommand, MODIFIER_DUE);
 			break;
@@ -388,6 +397,7 @@ string iParser::executeDateTimeParsing(string dateTimeString, const string modif
 	return MESSAGE_SUCCESS;
 }
 
+// SLAP ===============================================================================================================
 vector<string> iParser::tokeniseText(const string text) {
 	vector<string> tokenisedInformation;
 	unsigned int startIndexForText = INDEX_START;
@@ -406,7 +416,8 @@ vector<string> iParser::tokeniseText(const string text) {
 			startIndexForText = endIndexForText + 1;
 		}
 		else {
-			string tokenisedModifier = text.substr(startIndexForModifier, endIndexForModifier - startIndexForModifier + 1);
+			string tokenisedModifier = text.substr(startIndexForModifier, endIndexForModifier - startIndexForModifier);
+			convertToLowerCase(tokenisedModifier);
 
 			if (tokenisedModifier == STRING_ITEM || tokenisedModifier == STRING_DATE || tokenisedModifier == STRING_DESC ||
 				tokenisedModifier == STRING_DESCRIPTION || tokenisedModifier == STRING_DUE ||
@@ -425,7 +436,6 @@ vector<string> iParser::tokeniseText(const string text) {
 
 	return tokenisedInformation;
 }
-// remember to SLAP this ==============================================================
 
 string iParser::trimText(string& text) {
 	text = trimFront(text);
@@ -622,7 +632,7 @@ string iParser::splitDateTime(string dateTimeString, const string commandType) {
 	return MESSAGE_SUCCESS;
 }
 
-// remember to SLAP this ==============================================================
+// SLAP ===============================================================================================================
 START_AND_END iParser::splitAndSetStartEnd(const string text, const unsigned int seperatorPosition, const unsigned int seperatorSize, unsigned int& type) {
 	assert(text != STRING_BLANK);
 	START_AND_END information;
@@ -697,7 +707,6 @@ START_AND_END iParser::splitAndSetStartEnd(const string text, const unsigned int
 
 	return information;
 }
-// remember to SLAP this ==============================================================
 
 bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 	if (dateString == STRING_BLANK) {
