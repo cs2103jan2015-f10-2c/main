@@ -1,3 +1,7 @@
+//	GUI
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+//	Coder:	Shri Kishen Rajendran A0105180W
+
 #pragma once
 
 #include "Logic.h"
@@ -88,7 +92,6 @@ namespace iPlannerUI {
 			this->commandInputBox->Name = L"commandInputBox";
 			this->commandInputBox->Size = System::Drawing::Size(656, 20);
 			this->commandInputBox->TabIndex = 0;
-//			this->commandInputBox->TextChanged += gcnew System::EventHandler(this, &iPlannerUI::commandInputBox_TextChanged);
 			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
 			// 
 			// outputBox
@@ -133,6 +136,7 @@ namespace iPlannerUI {
 			this->MaximizeBox = false;
 			this->Name = L"iPlannerUI";
 			this->Text = L"iPlannerUI";
+			this->Load += gcnew System::EventHandler(this, &iPlannerUI::iPlannerUI_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -147,34 +151,21 @@ namespace iPlannerUI {
 
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 iParser testParser;
-				 Logic testLogic;
 				 String^ userInput;
 				 Item iterItem;
-				 commandOutcomeLabel->Text = "Enter the command";
-				 //while (getline(cin, userInput)){
-				 //if (e->KeyCode == Keys::Enter) {
-					 //commandInputBox_TextChanged(sender, e);
-					 //iPlannerUI::commandInputBox_KeyDown(sender, e);
 
-					 //const string COMMAND_NEW = "Enter the command";
-					 //cout << "THIS IS NEW" << endl;
-					 //cout << "command : ";
-				
-				 while (1){
-					 userInput = commandInputBox->Text;
+				 userInput = commandInputBox->Text;
+				 string stdUserInput;
+				 MarshalString(userInput, stdUserInput);
+				 if (e->KeyCode == Keys::Enter) {
+					 string outcome = testLogic->initiateCommandAction(testParser, stdUserInput);
 
-					 string stdUserInput;
-					 MarshalString(userInput, stdUserInput);
-					 if (e->KeyCode == Keys::Enter) {
-					 string outcome = testLogic.initiateCommandAction(testParser, stdUserInput);
-
-						 //vector<Item>::iterator iterItem;
-						 //for (iterItem = testLogic.getSchedule().begin(); iterItem != testLogic.getSchedule().end(); ++iterItem) {
-					 for (int i = 0; i < testLogic.getScheduleSize(); i++) {
-						 iterItem = testLogic.getSchedule()[i];
+					 String^ output = "\t\t\tSCHEDULE \r\n";
+					 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
+						 iterItem = testLogic->getSchedule()[i];
 						 System::String^ IDString = iterItem.getItemID().ToString();
 						 String^ nameString = gcnew String(iterItem.getItemName().c_str());
-						
+
 						 System::String^ startTimeString = iterItem.getStartTime().getHour().ToString() + ":" + iterItem.getStartTime().getMinute().ToString();
 						 System::String^ startDateString = iterItem.getStartTime().getDay().ToString() + "/" + iterItem.getStartTime().getMonth().ToString() + "/" + iterItem.getStartTime().getYear().ToString();
 
@@ -192,70 +183,23 @@ namespace iPlannerUI {
 						 string charString3(1, iterItem.getCompletion());
 						 String^ completionString = gcnew String(charString3.c_str());
 
-
-						 outputBox->Text = IDString + " " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
-						 outputBox->Text = "\t" + startTimeString + " " + startDateString + "\r\n";
-						 outputBox->Text = "\t" + endTimeString + " " + endDateString + "\r\n";
-
-						 String^ outcomeString = gcnew String(outcome.c_str());
-							 
-						 commandOutcomeLabel->Text = outcomeString;
-
-						 }
-
+						 output += IDString + " " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
+						 output += "\t" + startTimeString + " " + startDateString + "\r\n";
+						 output += "\t" + endTimeString + " " + endDateString + "\r\n";
 					 }
 
+					 String^ outcomeString = gcnew String(outcome.c_str());
+					 commandOutcomeLabel->Text = outcomeString;
+					 	 
+					 outputBox->Text = output;
+					 commandInputBox->Clear();
+				 }
+
+	}
 
 
-
-					 /*	private: System::Void commandInputBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-
-									  iParser testParser;
-									  Logic testLogic;
-									  String^ userInput;
-									  vector <Item> tempItem;
-									  //const string COMMAND_NEW = "Enter the command";
-									  //cout << "THIS IS NEW" << endl;
-									  //cout << "command : ";
-									  userInput = commandInputBox->Text;
-									  commandOutcomeLabel->Text = "Enter the command";
-									  string stdUserInput;
-									  MarshalString(userInput, stdUserInput);
-									  while (stdUserInput.compare("exit") != 0){
-									  //if (e->KeyCode == Keys::Enter) {
-									  testLogic.initiateCommandAction(testParser, stdUserInput);
-
-									  vector<Item>::iterator iterItem;
-									  for (iterItem = testLogic.getSchedule().begin(); iterItem != testLogic.getSchedule().end(); ++iterItem) {
-									  System::String^ IDString = iterItem->getItemID().ToString();
-									  String^ nameString = gcnew String(iterItem->getItemName().c_str());
-
-									  System::String^ startTimeString = iterItem->getStartTime().getHour().ToString() + ":" + iterItem->getStartTime().getMinute().ToString();
-									  System::String^ startDateString = iterItem->getStartTime().getDay().ToString() + "/" + iterItem->getStartTime().getMonth().ToString() + "/" + iterItem->getStartTime().getYear().ToString();
-
-									  System::String^ endTimeString = iterItem->getEndTime().getHour().ToString() + ":" + iterItem->getEndTime().getMinute().ToString();
-									  System::String^ endDateString = iterItem->getEndTime().getDay().ToString() + "/" + iterItem->getEndTime().getMonth().ToString() + "/" + iterItem->getEndTime().getYear().ToString();
-
-									  String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
-
-									  string charString1(1, iterItem->getPriority());
-									  String^ priorityString = gcnew String(charString1.c_str());
-
-									  string charString2(1, iterItem->getLabel());
-									  String^ labelString = gcnew String(charString2.c_str());
-
-									  string charString3(1, iterItem->getCompletion());
-									  String^ completionString = gcnew String(charString3.c_str());
-
-
-									  outputBox->Text = IDString + " " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
-									  outputBox->Text = "\t" + startTimeString + " " + startDateString + "\r\n";
-									  outputBox->Text = "\t" + endTimeString + " " + endDateString + "\r\n";
-
-									  //commandOutcomeBox->Text = "Enter the command";
-									  }
-									  }*/
-				 };
-	}//;
+	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
+				 commandOutcomeLabel->Text = "Enter the command";
+	}
 	};
 }
