@@ -216,7 +216,8 @@ namespace iLogicTest {
 			testCommandAndText.command = "end";
 			testCommandAndText.text = "1222 12 12 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
-			testLogic.addTask(testParseInfo);
+			string actualAddMessage = testLogic.addTask(testParseInfo);
+			string expectedAddMessage = "successful_add";
 
 			vector<Item>retrievedShedule = testLogic.getDisplaySchedule();
 
@@ -247,6 +248,7 @@ namespace iLogicTest {
 			int actualEndHour = retrievedShedule[0].getEndTime().getHour();
 			int actualEndMinute = retrievedShedule[0].getEndTime().getMinute();
 
+			Assert::AreEqual(expectedAddMessage, actualAddMessage);
 			Assert::AreEqual(expectedItemName1, actualItemName1);
 			Assert::AreEqual(expectedItemID1, actualItemID1);
 			Assert::AreEqual(expectedEndYear, actualEndYear);
