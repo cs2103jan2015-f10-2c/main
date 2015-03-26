@@ -70,7 +70,7 @@ bool Item::hasValidItemPriority(){
 		return true;
 	}
 
-	assert(_priority != 'L' && _priority != 'M' &&_priority != 'H');
+	assert(_priority != 'L' && _priority != 'M' && _priority != 'H');
 	return false;
 }
 
@@ -80,7 +80,7 @@ bool Item::hasValidItemLabel(){
 		return true;
 	}
 
-	assert(_priority != 'P' && _priority != 'O' &&_priority != 'M');
+	assert(_priority != 'P' && _priority != 'O' && _priority != 'M');
 	return false;
 }
 
