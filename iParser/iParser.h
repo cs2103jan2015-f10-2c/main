@@ -54,9 +54,16 @@ public:
 	static const string MODIFIER_DATE;
 	static const string MODIFIER_DUE;
 	static const string MODIFIER_DESCRIPTION;
-	static const string MODIFIER_DESC;
 	static const string MODIFIER_LABEL;
 	static const string MODIFIER_PRIORITY;
+
+	static const string STRING_ITEM;
+	static const string STRING_DATE;
+	static const string STRING_DUE;
+	static const string STRING_DESCRIPTION;
+	static const string STRING_DESC;
+	static const string STRING_LABEL;
+	static const string STRING_PRIORITY;
 
 	static const string STRING_DAYS[];
 	static const string STRING_DAYS_SHORT_FORM[];
@@ -123,7 +130,9 @@ public:
 	string executeDeleteParsing(string); // unit tested
 	string executeEditParsing(string); // unit tested // to be improved
 	string executeUndoParsing(string); // unit tested
+	string executeSortParsing(string);
 	string executeSearchParsing(string); // unit tested
+	string executeViewParsing(string);
 	string executeSaveParsing(string);
 	string executeDoneParsing(string); // unit tested
 	string executeExitParsing(string); // unit tested

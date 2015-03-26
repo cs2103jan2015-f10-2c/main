@@ -16,17 +16,24 @@ const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
 
-const string iParser::MODIFIER_ITEM = "-item ";
-const string iParser::MODIFIER_DATE = "-date ";
-const string iParser::MODIFIER_DUE = "-due ";
-const string iParser::MODIFIER_DESCRIPTION = "-description ";
-const string iParser::MODIFIER_DESC = "-desc ";
-const string iParser::MODIFIER_LABEL = "-label ";
-const string iParser::MODIFIER_PRIORITY = "-priority ";
+const string iParser::MODIFIER_ITEM = "item";
+const string iParser::MODIFIER_DATE = "date";
+const string iParser::MODIFIER_DUE = "due";
+const string iParser::MODIFIER_DESCRIPTION = "description";
+const string iParser::MODIFIER_LABEL = "label";
+const string iParser::MODIFIER_PRIORITY = "priority";
 
 const string iParser::COMMAND_START = "start";
 const string iParser::COMMAND_END = "end";
 const string iParser::COMMAND_DESCRIPTION = "description";
+
+const string iParser::STRING_ITEM = "-item ";
+const string iParser::STRING_DATE = "-date ";
+const string iParser::STRING_DUE = "-due ";
+const string iParser::STRING_DESCRIPTION = "-description ";
+const string iParser::STRING_DESC = "-desc ";
+const string iParser::STRING_LABEL = "-label ";
+const string iParser::STRING_PRIORITY = "-priority ";
 
 const string iParser::STRING_DAYS[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
 const string iParser::STRING_DAYS_SHORT_FORM[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
@@ -105,11 +112,13 @@ string iParser::executeParsing(string userInput) {
 		executeUndoParsing(userInput);
 		break;
 	case SORT:
+		executeSortParsing(textWithoutCommand);
 		break;
 	case SEARCH:
 		executeSearchParsing(textWithoutCommand);
 		break;
 	case VIEW:
+		executeViewParsing(textWithoutCommand);
 		break;
 	case SAVE:
 		executeSaveParsing(textWithoutCommand);
@@ -176,22 +185,22 @@ iParser::CommandType iParser::determineCommandType(string command) {
 }
 
 iParser::ModifierType iParser::determineModifierType(string modifier) {
-	if (modifier == MODIFIER_ITEM) {
+	if (modifier == STRING_ITEM) {
 		return ModifierType::ITEMNAME;
 	}
-	else if (modifier == MODIFIER_DATE) {
+	else if (modifier == STRING_DATE) {
 		return ModifierType::DATE;
 	}
-	else if (modifier == MODIFIER_DUE) {
+	else if (modifier == STRING_DUE) {
 		return ModifierType::DUE;
 	}
-	else if (modifier == MODIFIER_DESCRIPTION || modifier == MODIFIER_DESC) {
+	else if (modifier == STRING_DESCRIPTION || modifier == STRING_DESC) {
 		return ModifierType::DESCRIPTION;
 	}
-	else if (modifier == MODIFIER_LABEL) {
+	else if (modifier == STRING_LABEL) {
 		return ModifierType::LABEL;
 	}
-	else if (modifier == MODIFIER_PRIORITY) {
+	else if (modifier == STRING_PRIORITY) {
 		return ModifierType::PRIORITY;
 	}
 }
@@ -252,9 +261,31 @@ string iParser::executeUndoParsing(string userInput) {
 	}
 }
 
+string iParser::executeSortParsing(string attributeToSort) {
+	if (attributeToSort != STRING_BLANK) {
+		setParseInfo(COMMAND_SORT, attributeToSort);
+		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+}
+
 string iParser::executeSearchParsing(string textToSearch) {
 	if (textToSearch != STRING_BLANK) {
 		setParseInfo(COMMAND_SEARCH, textToSearch);
+		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+}
+
+string iParser::executeViewParsing(string attributeToView) {
+	if (attributeToView != STRING_BLANK) {
+		setParseInfo(COMMAND_VIEW, attributeToView);
 		return MESSAGE_SUCCESS;
 	}
 	else {
@@ -339,9 +370,9 @@ vector<string> iParser::tokeniseText(const string text) {
 		else {
 			string tokenisedModifier = text.substr(startIndexForModifier, endIndexForModifier - startIndexForModifier + 1);
 
-			if (tokenisedModifier == MODIFIER_DATE || tokenisedModifier == MODIFIER_DESC ||
-				tokenisedModifier == MODIFIER_DESCRIPTION || tokenisedModifier == MODIFIER_DUE ||
-				tokenisedModifier == MODIFIER_LABEL || tokenisedModifier == MODIFIER_PRIORITY) {
+			if (tokenisedModifier == MODIFIER_ITEM || tokenisedModifier == STRING_DATE || tokenisedModifier == STRING_DESC ||
+				tokenisedModifier == STRING_DESCRIPTION || tokenisedModifier == STRING_DUE ||
+				tokenisedModifier == STRING_LABEL || tokenisedModifier == STRING_PRIORITY) {
 				endIndexForText = startIndexForModifier;
 				string tokenisedString = text.substr(startIndexForText, endIndexForText - startIndexForText);
 				trimText(tokenisedString);
