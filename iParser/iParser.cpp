@@ -16,6 +16,7 @@ const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
 
+const string iParser::MODIFIER_ITEM = "-item ";
 const string iParser::MODIFIER_DATE = "-date ";
 const string iParser::MODIFIER_DUE = "-due ";
 const string iParser::MODIFIER_DESCRIPTION = "-description ";
@@ -86,7 +87,7 @@ string iParser::executeParsing(string userInput) {
 	assert(userInput[0] != NULL);
 	trimText(userInput);
 	removeConsecutiveWhiteSpace(userInput);
-	string command = retrieveCommand(userInput);
+	string command = retrieveCommandOrModifier(userInput);
 	CommandType commandType = determineCommandType(command);
 	string textWithoutCommand = removeFirstStringToken(userInput);
 
@@ -131,7 +132,7 @@ string iParser::executeParsing(string userInput) {
 	return MESSAGE_SUCCESS;
 }
 
-string iParser::retrieveCommand(string userInput) {
+string iParser::retrieveCommandOrModifier(string userInput) {
 	unsigned int endIndex = userInput.find_first_of(" \t");
 	string command = userInput.substr(INDEX_START, endIndex);
 	convertToLowerCase(command);
@@ -171,6 +172,27 @@ iParser::CommandType iParser::determineCommandType(string command) {
 	}
 	else {
 		return CommandType::INVALID;
+	}
+}
+
+iParser::ModifierType iParser::determineModifierType(string modifier) {
+	if (modifier == MODIFIER_ITEM) {
+		return ModifierType::ITEMNAME;
+	}
+	else if (modifier == MODIFIER_DATE) {
+		return ModifierType::DATE;
+	}
+	else if (modifier == MODIFIER_DUE) {
+		return ModifierType::DUE;
+	}
+	else if (modifier == MODIFIER_DESCRIPTION || modifier == MODIFIER_DESC) {
+		return ModifierType::DESCRIPTION;
+	}
+	else if (modifier == MODIFIER_LABEL) {
+		return ModifierType::LABEL;
+	}
+	else if (modifier == MODIFIER_PRIORITY) {
+		return ModifierType::PRIORITY;
 	}
 }
 
@@ -287,82 +309,15 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		return MESSAGE_SUCCESS;
 	}
 
-	string startDate = STRING_DATE_INITIALISE;
-	string endDate = STRING_DATE_INITIALISE;
-	string startTime = STRING_TIME_INITIALISE;
-	string endTime = STRING_TIME_INITIALISE;
-	bool hasDate = false;
-	bool hasTime = false;
-	unsigned int dateTimeType = INDEX_INVALID;
-	//bool hasLabel = false;
-	//bool hasPriority = false;
-	unsigned int index;
-
-	for (index = INDEX_START + 1; index < tokenisedInformation.size(); index++) {
-		unsigned int seperatorPosition = INDEX_INVALID;
-		unsigned int seperatorSize = INDEX_INVALID;
-		string tokenisedString = tokenisedInformation[index];
-
-		if (dateTimeType == INDEX_INVALID && hasStartEnd(tokenisedString, seperatorPosition, seperatorSize)) {
-			START_AND_END information;
-			information = splitStartEnd(tokenisedString, seperatorPosition, seperatorSize, dateTimeType);
-
-			if (dateTimeType == TYPE_START_END_DATE_AND_TIME) {
-				setParseInfo(COMMAND_START, information.start);
-				setParseInfo(COMMAND_END, information.end);
-				hasDate = true;
-				hasTime = true;
-			}
-			if (dateTimeType == TYPE_START_END_DATE) {
-				startDate = information.start;
-				endDate = information.end;
-				hasDate = true;
-			}
-			else if (dateTimeType == TYPE_START_END_TIME) {
-				startTime = information.start;
-				endTime = information.end;
-				hasTime = true;
-			}
-		}
-		else {
-			if (!hasDate && isValidDate(tokenisedString, startDate)) {
-				hasDate = true;
-			}
-			else if (!hasTime && isValidTime(tokenisedString, startTime)) {
-				hasTime = true;
-			}
-			else {
-				throw MESSAGE_INVALID_INPUT;
-			}
-		}
-	}
-
-	string startInformation;
-	string endInformation;
-	if (dateTimeType == TYPE_START_END_DATE) {
-		startInformation = startDate + CHAR_SPACE + startTime;
-		endInformation = endDate + CHAR_SPACE + endTime;
-		setParseInfo(COMMAND_START, startInformation);
-		setParseInfo(COMMAND_END, endInformation);
-	}
-	else if (dateTimeType == TYPE_START_END_TIME) {
-		endDate = startDate;
-		startInformation = startDate + CHAR_SPACE + startTime;
-		endInformation = endDate + CHAR_SPACE + endTime;
-		setParseInfo(COMMAND_START, startInformation);
-		setParseInfo(COMMAND_END, endInformation);
-	}
-	else if (hasDate) {
-		startInformation = startDate + CHAR_SPACE + startTime;
-		setParseInfo(COMMAND_START, startInformation);
-	}
-	else {
-		throw MESSAGE_INVALID_DATE_TIME;
+	for (unsigned int index = 1; index < tokenisedInformation.size(); index++) {
+		string singleInformation = tokenisedInformation[index];
+		string modifier = retrieveCommandOrModifier(singleInformation);
+		ModifierType modifierType = determineModifierType(modifier);
+		string textWithoutCommand = removeFirstStringToken(singleInformation);
 	}
 
 	return MESSAGE_SUCCESS;
 }
-// remember to SLAP this ==============================================================
 
 vector<string> iParser::tokeniseText(const string text) {
 	vector<string> tokenisedInformation;
@@ -401,6 +356,7 @@ vector<string> iParser::tokeniseText(const string text) {
 
 	return tokenisedInformation;
 }
+// remember to SLAP this ==============================================================
 
 string iParser::trimText(string& text) {
 	text = trimFront(text);

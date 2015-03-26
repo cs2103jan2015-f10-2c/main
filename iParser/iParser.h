@@ -50,6 +50,7 @@ public:
 	static const string COMMAND_END;
 	static const string COMMAND_DESCRIPTION;
 
+	static const string MODIFIER_ITEM;
 	static const string MODIFIER_DATE;
 	static const string MODIFIER_DUE;
 	static const string MODIFIER_DESCRIPTION;
@@ -105,12 +106,17 @@ public:
 		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
 	};
 
+	enum ModifierType {
+		ITEMNAME, DATE, DUE, DESCRIPTION, LABEL, PRIORITY
+	};
+
 	// main functions to be executed in public method parse
 	string executeParsing(string);
 
 	// helper functions to main functions
-	string retrieveCommand(string); // unit tested
+	string retrieveCommandOrModifier(string); // unit tested
 	CommandType determineCommandType(string);
+	ModifierType determineModifierType(string);
 
 	// commandType functions
 	string executeAddParsing(string); // unit tested
