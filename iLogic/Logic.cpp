@@ -192,7 +192,7 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 	}
 	else if (modifier == MODIFIER_PRIORITY){
 		char priorityToBeModified = iter->text[0];
-		itemToBeModified->setLabel(priorityToBeModified);
+		itemToBeModified->setPriority(priorityToBeModified);
 	}
 }
 
