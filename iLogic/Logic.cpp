@@ -414,6 +414,8 @@ string Logic::changeSavingDirectory(string directoryToBeSaved){
 		_mkdir(directoryToMake.c_str());
 	}
 	_directoryToBeSaved = directoryToMake;
+
+	
 	saveDirectoryToTextFile();
 	return directoryToMake;
 }
@@ -426,6 +428,10 @@ void Logic::assignDefaultDirectory(string directoryToBeSaved, string directoryTo
 	directoryToMake = directoryToMake + directoryToBeSaved;
 	directoryToBeSaved = "";
 	return;
+}
+
+void Logic::printChangeSavingDirectorySuccessful(){
+
 }
 void Logic::saveDirectoryToTextFile(){
 	ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
@@ -504,6 +510,7 @@ int Logic::readDataFromFile() {
 		readFile >> label;
 		getline(readFile, junk);
 		Item *item;
+		item = new Item;
 		item->setItemName(itemName);
 		item->setStartTime(startTime);
 		item->setEndTime(EndTime);

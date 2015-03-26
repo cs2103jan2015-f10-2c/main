@@ -194,6 +194,7 @@ public:
 	string getDirectoryAndFileName();
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
+	void printChangeSavingDirectorySuccessful();
 	
 
 	//store saving directory and file name in order to 

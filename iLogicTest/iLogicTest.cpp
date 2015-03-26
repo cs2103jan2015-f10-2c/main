@@ -21,7 +21,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 
-			vector<Item>retrievedShedule = testLogic.getSchedule();
+			vector<Item>retrievedShedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "Young Bin";
 			unsigned int expectedItemID1 = 1;
@@ -48,7 +48,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 
-			vector<Item>retrievedShedule = testLogic.getSchedule();
+			vector<Item>retrievedShedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "Young Bin";
 			unsigned int expectedItemID1 = 1;
@@ -78,7 +78,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 
-			vector<Item>retrievedShedule = testLogic.getSchedule();
+			vector<Item>retrievedShedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "Young Bin";
 			unsigned int expectedItemID1 = 1;
@@ -120,7 +120,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 
-			vector<Item>retrievedShedule = testLogic.getSchedule();
+			vector<Item>retrievedShedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "Young Bin";
 			unsigned int expectedItemID1 = 1;
@@ -166,7 +166,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 
-			vector<Item>retrievedShedule = testLogic.getSchedule();
+			vector<Item>retrievedShedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "Young Bin";
 			unsigned int expectedItemID1 = 1;
@@ -353,6 +353,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
@@ -361,6 +362,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "1222 12 12 12 12";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
@@ -369,6 +371,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "1333 11 11 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
@@ -377,6 +380,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "1344 11 11 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST4";
@@ -385,6 +389,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "UNITTESTING";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 
 
@@ -418,7 +423,7 @@ namespace iLogicTest {
 	TEST_CLASS(ChangingSaveDirectoryTest)
 	{
 	public:
-
+		/*
 		TEST_METHOD(savingDirectoryTest1)
 		{
 			string testDirectory = "c:/Hello/Haha";
@@ -427,7 +432,7 @@ namespace iLogicTest {
 			string expectedSavingDirectory = "c:/Hello/Haha/save.txt";
 			string actualSavingDirectory = 
 		}
-
+		*/
 
 
 	};
