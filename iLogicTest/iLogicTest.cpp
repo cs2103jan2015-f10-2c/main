@@ -271,7 +271,7 @@ namespace iLogicTest {
 	{
 	public:
 
-		TEST_METHOD(SortTaskTest1)
+		TEST_METHOD(SortTaskByName)
 		{
 			Logic testLogic;
 			string testItemName;
@@ -300,15 +300,15 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 
 			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST2";
+			testCommandAndText.text = "TEST3";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "end";
-			testCommandAndText.text = "1333 11 11 -1 -1";
+			testCommandAndText.text = "1344 11 11 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 
 			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST3";
+			testCommandAndText.text = "TEST4";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "description";
 			testCommandAndText.text = "UNITTESTING";
@@ -342,7 +342,93 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedItemName5, actualItemName5);
 		}
 
-	
+		TEST_METHOD(SortTaskByDate)
+		{
+			Logic testLogic;
+			string testItemName;
+			COMMAND_AND_TEXT testCommandAndText;
+			list<COMMAND_AND_TEXT> testParseInfo;
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "Young Bin";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "start";
+			testCommandAndText.text = "1222 12 12 12 12";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST2";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "end";
+			testCommandAndText.text = "1333 11 11 -1 -1";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST3";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "start";
+			testCommandAndText.text = "1344 11 11 -1 -1";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST4";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "description";
+			testCommandAndText.text = "UNITTESTING";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+
+
+
+
+			testLogic.resetDisplaySchedule();
+			testLogic.setCurrentSorting("date");
+			testLogic.sortTask();
+			vector<Item> retrievedSchedule = testLogic.getDisplaySchedule();
+
+			string expectedItemName1 = "TEST";
+			string expectedItemName2 = "TEST2";
+			string expectedItemName3 = "TEST3";
+			string expectedItemName4 = "TEST4";
+			string expectedItemName5 = "Young Bin";
+
+			string actualItemName1 = retrievedSchedule[0].getItemName();
+			string actualItemName2 = retrievedSchedule[1].getItemName();
+			string actualItemName3 = retrievedSchedule[2].getItemName();
+			string actualItemName4 = retrievedSchedule[3].getItemName();
+			string actualItemName5 = retrievedSchedule[4].getItemName();
+
+			Assert::AreEqual(expectedItemName1, actualItemName1);
+			Assert::AreEqual(expectedItemName2, actualItemName2);
+			Assert::AreEqual(expectedItemName3, actualItemName3);
+			Assert::AreEqual(expectedItemName4, actualItemName4);
+			Assert::AreEqual(expectedItemName5, actualItemName5);
+		}
+
+	};
+
+	TEST_CLASS(ChangingSaveDirectoryTest)
+	{
+	public:
+
+		TEST_METHOD(savingDirectoryTest1)
+		{
+			string testDirectory = "c:/Hello/Haha";
+			string testSaveFile = "save.txt";
+
+			string expectedSavingDirectory = "c:/Hello/Haha/save.txt";
+			string actualSavingDirectory = 
+		}
+
+
 
 	};
 
