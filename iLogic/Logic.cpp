@@ -227,9 +227,8 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 }
 
 
-//passing line index, not itemID
 string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
-	try{
+	//try{
 		if (isValidLineIndex(lineIndexToBeDeleted)){
 			cout << "lineIndex : " << lineIndexToBeDeleted << endl;
 			string deletedItem = _logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
@@ -239,13 +238,13 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 			return MESSAGE_SUCCESSFUL_DELETE;
 		}
 		else{
-			throw(MESSAGE_INVALID_INPUT_FOR_DELETE); //Delete failed
+		//	throw(MESSAGE_INVALID_INPUT_FOR_DELETE); //Delete failed
 			resetAndPrintSchedule();
 		}
-	}
-	catch (const char* e){
-		cout << e << endl;
-	}
+	//}
+	//catch (const char* e){
+	//	cout << e << endl;
+	//}
 	return MESSAGE_FAILED_DELETE;
 }
 
