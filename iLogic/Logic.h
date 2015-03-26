@@ -178,7 +178,7 @@ public:
 	//Pre : none
 	//Post : returns size of the schedule
 	unsigned int getScheduleSize();
-
+	vector<Item> getSchedule();
 	
 	//changes current Sorting method. display schedule will be sorted according to the current sorting method
 	//everytime a command is executed.
@@ -222,6 +222,8 @@ public:
 	//Pre : takes in a string to set to current sorting
 	//Post : returns current sorting
 	string setCurrentSorting(string currentSorting);
+
+	void thingsToDoAfterEveryExecution();
 };
 
 #endif

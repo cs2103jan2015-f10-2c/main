@@ -332,12 +332,13 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 		printInvalidInput();
 		returnMessage = MESSAGE_INVALID_INPUT;
 	}
-	getScheduleSize();
-	sortTask();
-	writeDataOntoFile();
+	thingsToDoAfterEveryExecution();
 	return returnMessage;
 }
-
+void Logic::thingsToDoAfterEveryExecution(){
+	sortTask();
+	writeDataOntoFile();
+}
 
 string Logic::changeCurrentSorting(string itemInformation){
 	_currentSorting = itemInformation;
@@ -481,6 +482,7 @@ string Logic::retrieveDirectoryFromTextFile(){
 	readFile >> _scheduleSize;
 	readFile >> _currentSorting;
 	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
+
 	if (_directoryToBeSaved == ""){
 		if (_fileNameToBeSaved == ""){
 			_fileNameToBeSaved == DEFAULT_FILENAME;
@@ -504,6 +506,7 @@ int Logic::readDataFromFile() {
 
 		string itemName;
 		string description;
+		string itemID;
 		string junk;
 		char priority;
 		char label;
@@ -513,6 +516,7 @@ int Logic::readDataFromFile() {
 		int hh;
 		int mm;
 		getline(readFile, itemName);
+		getline(readFile, itemID);
 		readFile >> YYYY;
 		readFile >> MM;
 		readFile >> DD;
@@ -540,7 +544,7 @@ int Logic::readDataFromFile() {
 		item->setLabel(label);
 		_logicSchedule.addItem(item);
 	}
-	cout << "Schedule received" << endl;
+	cout << "Schedule retrieived" << endl;
 	resetAndPrintSchedule();
 	return 1;
 }
@@ -548,16 +552,32 @@ int Logic::readDataFromFile() {
 
 int Logic::writeDataOntoFile(){
 	ofstream writeFile(getDirectoryAndFileName());
+	vector<Item> retrievedSchedule = getSchedule();
 	for (unsigned int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
-		Item itemToStore = _logicSchedule.retrieveSchedule()[lineNumber];
-		writeFile << itemToStore.displayItemForUser();
-		writeFile << itemToStore.displayItemFullDetails();
+		Item itemToStore = retrievedSchedule[lineNumber];
+		writeFile << itemToStore.getItemName() << endl;
+		writeFile << itemToStore.getItemID() << endl;
+		writeFile << itemToStore.getStartTime().getYear() << endl;
+		writeFile << itemToStore.getStartTime().getMonth() << endl;
+		writeFile << itemToStore.getStartTime().getDay() << endl;
+		writeFile << itemToStore.getStartTime().getHour() << endl;
+		writeFile << itemToStore.getStartTime().getMinute() << endl;
+		writeFile << itemToStore.getEndTime().getYear() << endl;
+		writeFile << itemToStore.getEndTime().getMonth() << endl;
+		writeFile << itemToStore.getEndTime().getDay() << endl;
+		writeFile << itemToStore.getEndTime().getHour() << endl;
+		writeFile << itemToStore.getEndTime().getMinute() << endl;
+		writeFile << itemToStore.getDescription() << endl;
+		writeFile << itemToStore.getPriority() << endl;
+		writeFile << itemToStore.getLabel() << endl;
 	}
 	saveDirectoryToTextFile();
 	return 1;
 }
 
-
+vector<Item> Logic::getSchedule(){
+	return _logicSchedule.retrieveSchedule();
+}
 
 string Logic::setCurrentSorting(string currentSorting){
 	_currentSorting = currentSorting;
