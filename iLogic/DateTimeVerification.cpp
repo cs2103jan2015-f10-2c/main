@@ -187,6 +187,19 @@ bool DateTimeVerification::hasMinute() {
 	}
 }
 
+
+bool DateTimeVerification::isValidTime(){
+	if (hasHour() && hasMinute()) {
+		return true;
+	}
+	else if (!hasHour() && !hasMinute()) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 bool DateTimeVerification::isActualYearMonthDayDate() {
 	if ((_day == DAY_31) && (_month == MONTH_FEB || _month == MONTH_APR || _month == MONTH_JUN || _month == MONTH_SEP || _month == MONTH_NOV)) {
 		return false;
@@ -211,18 +224,6 @@ bool DateTimeVerification::isActualYearMonthDayDate() {
 	}
 }
 
-
-bool DateTimeVerification::isValidTime(){
-	if (hasHour() && hasMinute()) {
-		return true;
-	}
-	else if (!hasHour() && !hasMinute()) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
 
 ////					   ////
 ////PUBLIC FUNCTIONS BELOW ////

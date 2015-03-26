@@ -27,14 +27,11 @@ private:
 	static const string ERROR_INVALID_PRIORITY;
 	static const string ERROR_INVALID_LABEL;
 
+	////////////////////////////////////////
+	//CHANGE BACK TO PRIVATE AFTER TESTING//
+	////////////////////////////////////////
 public:
-	ItemVerification(Item itemObject, unsigned int nextItemID);
-	bool isValidItem();
-	list<string> getItemVerificationErrors();
-	
-	//////////////////////////////////
-	// PULLED TO PUBLIC FOR TESTING //
-	//////////////////////////////////
+
 	bool isValidName();
 	bool isValidDescription();
 	bool isValidStartDateTime();
@@ -43,6 +40,18 @@ public:
 	bool isValidID();
 	bool isValidPriority();
 	bool isValidLabel();
+
+public:
+	ItemVerification(Item itemObject, unsigned int nextItemID);
+
+	// Does comprehensive checks to the given Item object to 
+	// determine if it can be considered a valid Item according
+	// to iPlanner standards.
+	bool isValidItem();
+
+	// Allows retrieval of a list of errors with the given
+	// Item object.
+	list<string> getItemVerificationErrors();
 
 };
 
