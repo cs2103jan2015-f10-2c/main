@@ -46,13 +46,17 @@ public:
 	static const string COMMAND_DONE;
 	static const string COMMAND_EXIT;
 
-	static const string MODIFIER_START;
-	static const string MODIFIER_END;
-	static const string MODIFIER_DESCRIPTION;
+	static const string COMMAND_START;
+	static const string COMMAND_END;
+	static const string COMMAND_DESCRIPTION;
 
-	static const string STRING_DESCRIPTION;
-	static const string STRING_DESCRIPTION_SHORT_FORM;
-	static const string STRING_DATE;
+	static const string MODIFIER_DATE;
+	static const string MODIFIER_DUE;
+	static const string MODIFIER_DESCRIPTION;
+	static const string MODIFIER_DESC;
+	static const string MODIFIER_LABEL;
+	static const string MODIFIER_PRIORITY;
+
 	static const string STRING_DAYS[];
 	static const string STRING_DAYS_SHORT_FORM[];
 	static const string STRING_MONTHS[];
@@ -82,12 +86,8 @@ public:
 	static const string MESSAGE_INVALID_EDIT;
 	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_INVALID_DATE_TIME;
+	static const string MESSAGE_INVALID_DIRECTORY;
 	static const string MESSAGE_TERMINATE;
-
-	//static const int LENGTH_VALID;
-	//static const int DIGIT_OF_TIME;
-	//static const int DIGIT_THREE;
-	//static const int DIGIT_FOUR;
 
 	static const unsigned int MAX_NUMBER_OF_COMMAS;
 	static const unsigned int MIN_SIZE_WITH_ABBREVIATION;
@@ -118,6 +118,7 @@ public:
 	string executeEditParsing(string); // unit tested // to be improved
 	string executeUndoParsing(string); // unit tested
 	string executeSearchParsing(string); // unit tested
+	string executeSaveParsing(string);
 	string executeDoneParsing(string); // unit tested
 	string executeExitParsing(string); // unit tested
 

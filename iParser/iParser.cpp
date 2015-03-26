@@ -16,13 +16,17 @@ const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
 
-const string iParser::MODIFIER_START = "start";
-const string iParser::MODIFIER_END = "end";
-const string iParser::MODIFIER_DESCRIPTION = "description";
+const string iParser::MODIFIER_DATE = "-date ";
+const string iParser::MODIFIER_DUE = "-due ";
+const string iParser::MODIFIER_DESCRIPTION = "-description ";
+const string iParser::MODIFIER_DESC = "-desc ";
+const string iParser::MODIFIER_LABEL = "-label ";
+const string iParser::MODIFIER_PRIORITY = "-priority ";
 
-const string iParser::STRING_DESCRIPTION = "description";
-const string iParser::STRING_DESCRIPTION_SHORT_FORM = "desc";
-const string iParser::STRING_DATE = "date";
+const string iParser::COMMAND_START = "start";
+const string iParser::COMMAND_END = "end";
+const string iParser::COMMAND_DESCRIPTION = "description";
+
 const string iParser::STRING_DAYS[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
 const string iParser::STRING_DAYS_SHORT_FORM[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
 const string iParser::STRING_MONTHS[] = { "january" , "february", "march", "april", "may", "june",
@@ -53,6 +57,7 @@ const string iParser::MESSAGE_INVALID_ADD = "invalid text added";
 const string iParser::MESSAGE_INVALID_EDIT = "invalid edit";
 const string iParser::MESSAGE_INVALID_INDEX = "invalid index";
 const string iParser::MESSAGE_INVALID_DATE_TIME = "invalid date and time";
+const string iParser::MESSAGE_INVALID_DIRECTORY = "invalid directory";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
 const unsigned int iParser::MAX_NUMBER_OF_COMMAS = 4;
@@ -106,6 +111,7 @@ string iParser::executeParsing(string userInput) {
 	case VIEW:
 		break;
 	case SAVE:
+		executeSaveParsing(textWithoutCommand);
 		break;
 	case DONE:
 		executeDoneParsing(textWithoutCommand);
@@ -174,20 +180,13 @@ string iParser::executeAddParsing(string text) {
 		return MESSAGE_FAILURE;
 	}
 	
-	unsigned int numberOfCommas = retrieveCount(text, CHAR_COMMA);
-	if (numberOfCommas >= 0 && numberOfCommas <= MAX_NUMBER_OF_COMMAS) {
-		vector<string> tokenisedInformation = tokeniseText(text);
-		try {
-			checkAndSetTokenisedInformation(tokenisedInformation);
-		}
-		catch (string& exceptionMessage) {
-			clearParseInfo();
-			setParseInfo(MESSAGE_INVALID, exceptionMessage);
-			return MESSAGE_FAILURE;
-		}
+	vector<string> tokenisedInformation = tokeniseText(text);
+	try {
+		checkAndSetTokenisedInformation(tokenisedInformation);
 	}
-	else {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+	catch (string& exceptionMessage) {
+		clearParseInfo();
+		setParseInfo(MESSAGE_INVALID, exceptionMessage);
 		return MESSAGE_FAILURE;
 	}
 
@@ -211,7 +210,7 @@ string iParser::executeEditParsing(string text) {
 
 	if (textToEdit != STRING_BLANK && areDigits(indexToEdit)) {
 		setParseInfo(COMMAND_EDIT, indexToEdit);
-		setParseInfo(MODIFIER_DESCRIPTION, textToEdit);
+		setParseInfo(COMMAND_DESCRIPTION, textToEdit);
 		return MESSAGE_SUCCESS;
 	}
 	else {
@@ -238,6 +237,17 @@ string iParser::executeSearchParsing(string textToSearch) {
 	}
 	else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+}
+
+string iParser::executeSaveParsing(string saveDirectory) {
+	if (saveDirectory != STRING_BLANK) {
+		setParseInfo(COMMAND_SAVE, saveDirectory);
+		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_DIRECTORY);
 		return MESSAGE_FAILURE;
 	}
 }
@@ -277,7 +287,6 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		return MESSAGE_SUCCESS;
 	}
 
-	
 	string startDate = STRING_DATE_INITIALISE;
 	string endDate = STRING_DATE_INITIALISE;
 	string startTime = STRING_TIME_INITIALISE;
@@ -289,26 +298,30 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 	//bool hasPriority = false;
 	unsigned int index;
 
-	for (index = INDEX_START+1; index < tokenisedInformation.size(); index++) {
+	for (index = INDEX_START + 1; index < tokenisedInformation.size(); index++) {
 		unsigned int seperatorPosition = INDEX_INVALID;
 		unsigned int seperatorSize = INDEX_INVALID;
 		string tokenisedString = tokenisedInformation[index];
 
-		if ((!hasDate || !hasTime) && dateTimeType == INDEX_INVALID) {
-			if (hasStartEnd(tokenisedString, seperatorPosition, seperatorSize)) {
-				START_AND_END information;
-				information = splitStartEnd(tokenisedString, seperatorPosition, seperatorSize, dateTimeType);
+		if (dateTimeType == INDEX_INVALID && hasStartEnd(tokenisedString, seperatorPosition, seperatorSize)) {
+			START_AND_END information;
+			information = splitStartEnd(tokenisedString, seperatorPosition, seperatorSize, dateTimeType);
 
-				if (dateTimeType == TYPE_START_END_DATE_AND_TIME || dateTimeType == TYPE_START_END_DATE) {
-					startDate = information.start;
-					endDate = information.end;
-					hasDate = true;
-				}
-				else if (dateTimeType == TYPE_START_END_DATE_AND_TIME || dateTimeType == TYPE_START_END_TIME) {
-					startTime = information.start;
-					endTime = information.end;
-					hasTime = true;
-				}
+			if (dateTimeType == TYPE_START_END_DATE_AND_TIME) {
+				setParseInfo(COMMAND_START, information.start);
+				setParseInfo(COMMAND_END, information.end);
+				hasDate = true;
+				hasTime = true;
+			}
+			if (dateTimeType == TYPE_START_END_DATE) {
+				startDate = information.start;
+				endDate = information.end;
+				hasDate = true;
+			}
+			else if (dateTimeType == TYPE_START_END_TIME) {
+				startTime = information.start;
+				endTime = information.end;
+				hasTime = true;
 			}
 		}
 		else {
@@ -318,24 +331,30 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 			else if (!hasTime && isValidTime(tokenisedString, startTime)) {
 				hasTime = true;
 			}
+			else {
+				throw MESSAGE_INVALID_INPUT;
+			}
 		}
 	}
-	
+
 	string startInformation;
 	string endInformation;
-	if (dateTimeType != INDEX_INVALID) {
+	if (dateTimeType == TYPE_START_END_DATE) {
 		startInformation = startDate + CHAR_SPACE + startTime;
 		endInformation = endDate + CHAR_SPACE + endTime;
-		setParseInfo(MODIFIER_START, startInformation);
-		setParseInfo(MODIFIER_END, endInformation);
+		setParseInfo(COMMAND_START, startInformation);
+		setParseInfo(COMMAND_END, endInformation);
 	}
-	else if (hasDate && !hasTime) {
+	else if (dateTimeType == TYPE_START_END_TIME) {
+		endDate = startDate;
 		startInformation = startDate + CHAR_SPACE + startTime;
-		setParseInfo(MODIFIER_START, startInformation);
-	}
-	else if (hasTime && !hasDate) {
 		endInformation = endDate + CHAR_SPACE + endTime;
-		setParseInfo(MODIFIER_END, endInformation);
+		setParseInfo(COMMAND_START, startInformation);
+		setParseInfo(COMMAND_END, endInformation);
+	}
+	else if (hasDate) {
+		startInformation = startDate + CHAR_SPACE + startTime;
+		setParseInfo(COMMAND_START, startInformation);
 	}
 	else {
 		throw MESSAGE_INVALID_DATE_TIME;
@@ -347,15 +366,37 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 
 vector<string> iParser::tokeniseText(const string text) {
 	vector<string> tokenisedInformation;
-	unsigned int startIndex = INDEX_START;
-	unsigned int endIndex = INDEX_START;
+	unsigned int startIndexForText = INDEX_START;
+	unsigned int endIndexForText = INDEX_START;
+	unsigned int startIndexForModifier = INDEX_START;
+	unsigned int endIndexForModifier = INDEX_START;
+	
+	while (startIndexForModifier != INDEX_INVALID) {
+		startIndexForModifier = text.find_first_of("-", endIndexForModifier);
+		endIndexForModifier = text.find_first_of(" ", startIndexForModifier);
 
-	while (endIndex != INDEX_INVALID) {
-		endIndex = text.find_first_of(",", startIndex);
-		string tokenisedString = text.substr(startIndex, endIndex - startIndex);
-		trimText(tokenisedString);
-		tokenisedInformation.push_back(tokenisedString);
-		startIndex = endIndex + 1;
+		if (startIndexForModifier == INDEX_INVALID) {
+			string tokenisedString = text.substr(startIndexForText);
+			trimText(tokenisedString);
+			tokenisedInformation.push_back(tokenisedString);
+			startIndexForText = endIndexForText + 1;
+		}
+		else {
+			string tokenisedModifier = text.substr(startIndexForModifier, endIndexForModifier - startIndexForModifier + 1);
+
+			if (tokenisedModifier == MODIFIER_DATE || tokenisedModifier == MODIFIER_DESC ||
+				tokenisedModifier == MODIFIER_DESCRIPTION || tokenisedModifier == MODIFIER_DUE ||
+				tokenisedModifier == MODIFIER_LABEL || tokenisedModifier == MODIFIER_PRIORITY) {
+				endIndexForText = startIndexForModifier;
+				string tokenisedString = text.substr(startIndexForText, endIndexForText - startIndexForText);
+				trimText(tokenisedString);
+				tokenisedInformation.push_back(tokenisedString);
+				startIndexForText = endIndexForText;
+			}
+			else {
+				startIndexForModifier = endIndexForModifier;
+			}
+		}
 	}
 
 	return tokenisedInformation;

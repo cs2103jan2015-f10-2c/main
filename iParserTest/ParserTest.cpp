@@ -126,6 +126,26 @@ namespace iPlannerParserTest {
 			}
 		}
 
+		TEST_METHOD(parserExecuteSaveParsingTest) {
+			string text[2] = { "C:\\Users\\Ng Chon Beng\\Documents\\Visual Studio 2013\\Projects", "" };
+			string expectedCommand[2] = { "save", "invalid" };
+			string expectedText[2] = { "C:\\Users\\Ng Chon Beng\\Documents\\Visual Studio 2013\\Projects", "invalid directory" };
+
+			testParser.executeSaveParsing(text[0]);
+			testParser.executeSaveParsing(text[1]);
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int index = 0;
+
+			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+
+				Assert::AreEqual(expectedCommand[index], actualCommand);
+				Assert::AreEqual(expectedText[index], actualText);
+			}
+		}
+
 		TEST_METHOD(parserExecuteDoneParsingTest) {
 			string text[2] = { "123", "abc" };
 			string expectedCommand[2] = { "done", "invalid" };
@@ -167,7 +187,6 @@ namespace iPlannerParserTest {
 		}
 
 		TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
-			
 			string testInput[][3] = { { "Do CS2103", "1 Mar 2015 to 31 Apr 2015", "" },
 			{ "Do LSM1301", "31 Mar", "10pm-11pm" } };
 			string expectedCommand[] = { "add", "start", "end" };
@@ -190,7 +209,7 @@ namespace iPlannerParserTest {
 
 				testParser.checkAndSetTokenisedInformation(testVector);				
 				
-			/*	list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+				list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 				list<COMMAND_AND_TEXT>::iterator iter;
 				int k = 0;
 				for (iter = testList.begin(); iter != testList.end(); k++, iter++) {
@@ -198,7 +217,7 @@ namespace iPlannerParserTest {
 					string actualText = iter->text;
 					Assert::AreEqual(expectedCommand[k], actualCommand);
 					Assert::AreEqual(expectedText[i][k], actualText);
-				}*/
+				}
 				
 				testParser.clearParseInfo();
 			}		
@@ -206,8 +225,8 @@ namespace iPlannerParserTest {
 
 		TEST_METHOD(parserTokeniseTextTest) {
 			vector<string> testVector;
-			string testInput = "Jack, and, Jill, went, up, the, hill";
-			string expected[] = { "Jack", "and", "Jill", "went", "up", "the", "hill" };
+			string testInput = "test -date test -due test -desc test -label test -priority test";
+			string expected[] = { "test", "-date test", "-due test", "-desc test", "-label test", "-priority test" };
 
 			testVector = testParser.tokeniseText(testInput);
 
@@ -348,13 +367,15 @@ namespace iPlannerParserTest {
 		}
 
 		TEST_METHOD(parserSplitStartEndTest) {
+			string testDateTime = "10/11/2012 9pm to 12/11/2012 10pm";
 			string testDates[] = { "10/11/2012 to 12/11/2012", "10 November 2012 - 12 November 2012" };
 			string testTimes[] = { "9pm to 11pm", "9-11", "10:00 to 11:00", "10:30 - 11:30" };
+			string expectedStartDateTime = "10 11 2012 21 -1";
+			string expectedEndDateTime = "12 11 2012 22 -1";
 			string expectedStartDate = "10 11 2012";
 			string expectedEndDate = "12 11 2012";
 			string expectedStartTime[] { "21 -1", "9 -1", "10 00", "10 30" };
 			string expectedEndTime[] { "23 -1", "11 -1", "11 00", "11 30" };
-
 
 			for (int i = 0; i < 2; i++) {
 				string testString = testDates[i];
@@ -390,6 +411,18 @@ namespace iPlannerParserTest {
 				}
 			}
 
+			unsigned int index = -1;
+			unsigned int size = 0;
+			if (testParser.hasStartEnd(testDateTime, index, size)) {
+				unsigned int type = -1;
+				unsigned int expectedType = 1;
+
+				START_AND_END actual = testParser.splitStartEnd(testDateTime, index, size, type);
+				unsigned int actualType = type;
+				Assert::AreEqual(expectedStartDateTime, actual.start);
+				Assert::AreEqual(expectedEndDateTime, actual.end);
+				Assert::AreEqual(expectedType, actualType);
+			}
 		}
 
 		TEST_METHOD(parserIsValidDateTest) {
