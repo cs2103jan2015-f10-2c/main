@@ -81,6 +81,7 @@ public:
 	static const string MESSAGE_INVALID_ADD;
 	static const string MESSAGE_INVALID_EDIT;
 	static const string MESSAGE_INVALID_INDEX;
+	static const string MESSAGE_INVALID_SAVE;
 	static const string MESSAGE_INVALID_DATE_TIME;
 	static const string MESSAGE_TERMINATE;
 
@@ -117,6 +118,7 @@ public:
 	string executeEditParsing(string); // unit tested // to be improved
 	string executeUndoParsing(string); // unit tested
 	string executeSearchParsing(string); // unit tested
+	string executeSaveParsing(string);
 	string executeDoneParsing(string); // unit tested
 	string executeExitParsing(string); // unit tested
 
