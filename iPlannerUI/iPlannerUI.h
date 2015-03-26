@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "Logic.h"
-#include "Item.h"
-#include "ItemVerification.h"
-#include "DateTimeVerification.h"
+#include "..\iLogic\Logic.h"
+#include "..\iStorage\Item.h"
+#include "..\iLogic\ItemVerification.h"
+#include "..\iLogic\DateTimeVerification.h"
 #include <vector>
 #include <msclr\marshal_cppstd.h>
 using namespace std;
