@@ -53,6 +53,9 @@ public:
 	static const string COMMAND_LABEL;
 	static const string COMMAND_PRIORITY;
 
+	static const string MODIFIER_DATE;
+	static const string MODIFIER_DUE;
+
 	static const string STRING_ITEM;
 	static const string STRING_DATE;
 	static const string STRING_DUE;
@@ -134,8 +137,7 @@ public:
 	string executeExitParsing(string); // unit tested
 
 	string checkAndSetTokenisedInformation(vector<string>&);
-	string executeDateParsing(string);
-	string executeDueParsing(string);
+	string executeDateTimeParsing(string, const string);
 
 	// string manipulation functions
 	vector<string> tokeniseText(const string); // unit tested
@@ -152,8 +154,8 @@ public:
 	bool isWhiteSpace(const char); // unit tested
 
 	// date time functions
-	string setDateTime(string);
-	string splitDateTime(string); // unit tested
+	string setDateTime(string, const string);
+	string splitDateTime(string, const string); // unit tested
 	bool hasStartEnd(string, unsigned int&, unsigned int&); // unit tested
 	START_AND_END splitAndSetStartEnd(const string, const unsigned int, const unsigned int, unsigned int&); // unit tested
 	bool isValidDate(string, string&); // unit tested
