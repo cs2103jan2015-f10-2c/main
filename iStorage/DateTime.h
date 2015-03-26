@@ -24,6 +24,7 @@ private:
 	static const int MIN_MINUTE;
 	static const int MAX_MINUTE;
 	static const int EMPTYFIELD_DATETIME;
+	static const int INDICATOR_FAILEDSETATTEMPT;
 	static const char DISPLAY_SEPARATOR_DATE;
 	static const char DISPLAY_SEPARATOR_TIME;
 	static const char DISPLAY_SEPARATOR_DATETIME;

@@ -31,28 +31,22 @@ void main() {
 	Logic testLogic;
 	string userInput;
 	list<COMMAND_AND_TEXT> parseInfo;
+
+	testLogic.retrieveDirectoryFromTextFile();
+	testLogic.readDataFromFile();
+
 	cout << "command : ";
 	while (getline(cin, userInput)){
 		cout << userInput << endl;
 	testLogic.initiateCommandAction(testParser, userInput);
 		cout << "command : ";
+<<<<<<< HEAD
 	}*/
 	
+=======
+	}
+>>>>>>> 253e611a4bfe293cdc56ba412bb5ac8c071a9a6a
 
-	/*string input;
-	Logic testLogic;
-	string directory;
-	string filename;
-
-	testLogic.retrieveDirectoryFromTextFile();
-	testLogic.readDataFromFile();
-	
-	cout << "Command: ";
-	while (getline(cin, input)) {
-		testLogic.initiateCommandAction(input);
-		cout << "Command : ";
-		testLogic.writeDataOntoFile();
-	}*/
 	
 	return;
 }

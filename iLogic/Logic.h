@@ -1,6 +1,6 @@
 //	Logic
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
-//	Coder:	Yu Young Bin A0116229J & Shri Kishen Rajendran A0105180W
+//	Coder:	Yu Young Bin A0116229J
 
 #pragma once
 
@@ -76,12 +76,14 @@ private:
 	static const string MESSAGE_SUCCESSFUL_EDIT;
 	static const string MESSAGE_SUCCESSFUL_SORT;
 	static const string MESSAGE_SUCCESSFUL_VIEW;
+	static const string MESSAGE_SUCCESSFUL_SAVE;
 	static const string MESSAGE_SUCCESSFUL_UNDO;
 
 	static const string MESSAGE_FAILED_ADD;
 	static const string MESSAGE_FAILED_DELETE;
 	static const string MESSAGE_FAILED_EDIT;
 	static const string MESSAGE_FAILED_VIEW;
+	static const string MESSAGE_FAILED_SAVE;
 	static const string MESSAGE_FAILED_UNDO;
 	static const string MESSAGE_FAILED_SORT;
 
@@ -124,7 +126,7 @@ public:
 	//ItemID starts from 1, everytime when addTask is called, nextItemID increases by 1
 	//Pre: None
 	//Post : returns nextItemID
-	unsigned int increaseItemIDAndScheduleSize();
+	unsigned int increaseItemID();
 
 
 	//Delete Item from the schedule, given a valid line index to be deleted is provided
@@ -172,12 +174,11 @@ public:
 	vector<Item> resetAndPrintSchedule();
 
 
-	//retrieves _schedule of the schedule
+	//retrieves display schedule size
 	//Pre : none
-	//Post : returns schedule and size of the schedule
-	vector<Item> getSchedule();
+	//Post : returns size of the schedule
 	unsigned int getScheduleSize();
-
+	vector<Item> getSchedule();
 	
 	//changes current Sorting method. display schedule will be sorted according to the current sorting method
 	//everytime a command is executed.
@@ -190,11 +191,13 @@ public:
 	//Pre : 
 	string changeSavingDirectory(string directoryToBeSaved);
 	string changeSavingFileName(string FileNameToBeSaved);
-	void assignDirectorySpecifiedByUser(string directoryToBeSaved, string directoryToMake, int truncateDirectory);
-	void assignDefaultDirectory(string directoryToBeSaved, string directoryToMake);
+	string assignOneFolderToMake(int truncatePosition, string userInputDirectory);
+	string assignLastFolderToMake(string userInputDirectory, string directoryToMake);
+	string truncateUserInputDirectory(int truncatePosition, string userInputDirectory);
 	string getDirectoryAndFileName();
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
+	void printChangeSavingDirectorySuccessful();
 	
 
 	//store saving directory and file name in order to 
@@ -211,11 +214,16 @@ public:
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
+	list<string> getErrorList(ItemVerification verifier);
+	list<string> printErrorList(ItemVerification verifier);
+
 
 	//sets current sorting for unit testing purpose
 	//Pre : takes in a string to set to current sorting
 	//Post : returns current sorting
 	string setCurrentSorting(string currentSorting);
+
+	void thingsToDoAfterEveryExecution();
 };
 
 #endif

@@ -123,16 +123,19 @@ namespace VerificationTests
 			isActualYMD = verify6.isActualYearMonthDayDate();
 			Assert::AreEqual(false, isActualYMD);
 
+			// Boundary Test - 30/2/2000 does not exist
 			DateTime dateTimeObject7(2000, 2, 30);
 			DateTimeVerification verify7(dateTimeObject7);
 			isActualYMD = verify7.isActualYearMonthDayDate();
 			Assert::AreEqual(false, isActualYMD);
 
+			// Boundary Test - 29/2/2000 exists
 			DateTime dateTimeObject8(2000, 2, 29);
 			DateTimeVerification verify8(dateTimeObject8);
 			isActualYMD = verify8.isActualYearMonthDayDate();
 			Assert::AreEqual(true, isActualYMD);
 
+			// Boundary Test - 31/12/2015 exists
 			DateTime dateTimeObject9(2015, 12, 31);
 			DateTimeVerification verify9(dateTimeObject9);
 			isActualYMD = verify9.isActualYearMonthDayDate();
@@ -528,6 +531,44 @@ namespace VerificationTests
 			isValid = verify8.isValidItem();
 			Assert::AreEqual(false, isValid);
 		}
+
+		TEST_METHOD(TestGetItemVerificationErrors)
+		{
+			int numberOfErrors =  0;
+			list<string> errorList;
+
+			Item item1(string("Engin Run 1999"));
+			item1.setPriority('X');	//ERROR
+			item1.setLabel('X');	//ERROR
+			item1.setStartTime(1999, 2, 29);	//ERROR
+			ItemVerification verify1(item1, 100);
+			verify1.isValidItem();
+			errorList = verify1.getItemVerificationErrors();
+			numberOfErrors = errorList.size();
+			Assert::AreEqual(3, numberOfErrors);
+
+			Item item2(string(""));	//ERROR
+			item2.setPriority('H');
+			item2.setLabel('E');
+			item2.setStartTime(2000, 2, 29);
+			item2.setEndTime(2000, 2, 20);	// ERROR invalid time frame
+			ItemVerification verify2(item2, 100);
+			verify2.isValidItem();
+			errorList = verify2.getItemVerificationErrors();
+			numberOfErrors = errorList.size();
+			Assert::AreEqual(2, numberOfErrors);
+
+			Item item3(string("ISE FYP submission deadline"));
+			item3.setPriority('H');
+			item3.setLabel('O');
+			item3.setEndTime(2001, 11, 31);	//ERROR
+			ItemVerification verify3(item3, 100);
+			verify3.isValidItem();
+			errorList = verify3.getItemVerificationErrors();
+			numberOfErrors = errorList.size();
+			Assert::AreEqual(1, numberOfErrors);
+		}
+
 
 	};
 
