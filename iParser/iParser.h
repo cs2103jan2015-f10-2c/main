@@ -46,16 +46,12 @@ public:
 	static const string COMMAND_DONE;
 	static const string COMMAND_EXIT;
 
+	static const string COMMAND_ITEM;
 	static const string COMMAND_START;
 	static const string COMMAND_END;
 	static const string COMMAND_DESCRIPTION;
-
-	static const string MODIFIER_ITEM;
-	static const string MODIFIER_DATE;
-	static const string MODIFIER_DUE;
-	static const string MODIFIER_DESCRIPTION;
-	static const string MODIFIER_LABEL;
-	static const string MODIFIER_PRIORITY;
+	static const string COMMAND_LABEL;
+	static const string COMMAND_PRIORITY;
 
 	static const string STRING_ITEM;
 	static const string STRING_DATE;
@@ -110,11 +106,11 @@ public:
 	static const unsigned int TYPE_START_END_TIME;
 
 	enum CommandType {
-		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID
+		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID_COMMAND
 	};
 
 	enum ModifierType {
-		ITEMNAME, DATE, DUE, DESCRIPTION, LABEL, PRIORITY
+		ITEMNAME, DATE, DUE, DESCRIPTION, LABEL, PRIORITY, INVALID_MODIFIER
 	};
 
 	// main functions to be executed in public method parse
@@ -138,6 +134,8 @@ public:
 	string executeExitParsing(string); // unit tested
 
 	string checkAndSetTokenisedInformation(vector<string>&);
+	string executeDateParsing(string);
+	string executeDueParsing(string);
 
 	// string manipulation functions
 	vector<string> tokeniseText(const string); // unit tested
@@ -154,8 +152,10 @@ public:
 	bool isWhiteSpace(const char); // unit tested
 
 	// date time functions
+	string setDateTime(string);
+	string splitDateTime(string); // unit tested
 	bool hasStartEnd(string, unsigned int&, unsigned int&); // unit tested
-	START_AND_END splitStartEnd(const string, const unsigned int, const unsigned int, unsigned int&); // unit tested
+	START_AND_END splitAndSetStartEnd(const string, const unsigned int, const unsigned int, unsigned int&); // unit tested
 	bool isValidDate(string, string&); // unit tested
 	bool isValidTime(string, string&); // unit tested
 	string splitAndSetObliqueDateInformation(string, const unsigned int); // unit tested
@@ -163,7 +163,6 @@ public:
 	string splitAndSetTimeString(string, const string); // unit tested
 	string splitAndSetColonTimeString(string, const string); // unit tested
 	string splitAndSetNoColonTimeString(string, const string); // unit tested
-	bool isValidDateTimeString(const string); //unit tested
 	bool isDay(string, unsigned int&); //unit tested
 	bool isDay(string); // unit tested
 	bool isMonth(string, unsigned int&); //unit tested
