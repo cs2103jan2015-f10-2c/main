@@ -2,9 +2,9 @@
 #include "..\iParser\iParser.h"
 
 void main() {
-	iParser testParser;
 
-	string testInput[][3] = { { "Do CS2103", "1 Mar 2015 to 31 Apr 2015", "" },
+
+	/*string testInput[][3] = { { "Do CS2103", "1 Mar 2015 to 31 Apr 2015", "" },
 	{ "Do LSM1301", "31 Mar", "10pm-11pm" } };
 	string expectedCommand[] = { "add", "start", "end" };
 	string expectedText[][3] = { { "Do CS2103", "1 3 2015 -1 -1", "31 4 2015 -1 -1" },
@@ -25,9 +25,9 @@ void main() {
 		}
 		testParser.checkAndSetTokenisedInformation(testVector);
 		testParser.clearParseInfo();
-	}
+	}*/
 	
-	/*iParser testParser;
+	iParser testParser;
 	Logic testLogic;
 	string userInput;
 	list<COMMAND_AND_TEXT> parseInfo;
@@ -37,15 +37,13 @@ void main() {
 
 	cout << "command : ";
 	while (getline(cin, userInput)){
-		cout << userInput << endl;
 	testLogic.initiateCommandAction(testParser, userInput);
 		cout << "command : ";
-<<<<<<< HEAD
-	}*/
 	
-=======
+	
+
 	}
->>>>>>> 253e611a4bfe293cdc56ba412bb5ac8c071a9a6a
+
 
 	
 	return;

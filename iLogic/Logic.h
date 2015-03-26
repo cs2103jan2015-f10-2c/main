@@ -210,7 +210,7 @@ public:
 	// Chon Beng
 	int convertToDigit(string text);
 
-
+	bool isValidSortingMethod(string itemInformation);
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);

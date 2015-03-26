@@ -120,7 +120,6 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		increaseItemID();
 		resetAndPrintSchedule();
 		printAddTaskSuccessful(addCompleted);
-
 		return MESSAGE_SUCCESSFUL_ADD;
 	}
 	else{
@@ -207,6 +206,16 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 }
 
 
+bool Logic::isValidSortingMethod(string itemInformation){
+	if (itemInformation == SORT_NAME || itemInformation == SORT_COMPLETION || itemInformation == SORT_DATE ||
+		itemInformation == SORT_LAST_UPDATE || itemInformation == SORT_PRIORITY){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 bool Logic::isValidItemInLogic(Item itemToBeChecked){
 	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
@@ -288,13 +297,12 @@ int Logic::convertToDigit(string text) {
 }
 
 
+
 string Logic::initiateCommandAction(iParser parser, string input) {
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
-	cout << "command : " << command << endl;
-	cout << "itemInfo : " << itemInformation << endl;
 	if (command == COMMAND_ADD) {
 		returnMessage = addTask(parseInfoToBeProcessed);
 	}
@@ -311,8 +319,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 
 	}
 	else if (command == COMMAND_SORT){
-		changeCurrentSorting(itemInformation);
-		returnMessage = MESSAGE_SUCCESSFUL_SORT;
+		returnMessage = changeCurrentSorting(itemInformation);
 	}
 	else if (command == COMMAND_SEARCH){
 
@@ -335,15 +342,22 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	thingsToDoAfterEveryExecution();
 	return returnMessage;
 }
-void Logic::thingsToDoAfterEveryExecution(){
-	sortTask();
-	writeDataOntoFile();
-}
+
+
+
 
 string Logic::changeCurrentSorting(string itemInformation){
-	_currentSorting = itemInformation;
-	return _currentSorting;
+	if (isValidSortingMethod(itemInformation)){
+		_currentSorting = itemInformation;
+		return MESSAGE_SUCCESSFUL_SORT;
+	}
+	else {
+		printInvalidInput();
+		return MESSAGE_FAILED_SORT;
+	}
 }
+
+
 
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
 	Item *editedItemToBeReplaced;
@@ -361,6 +375,7 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 		return MESSAGE_FAILED_EDIT;
 	}
 }
+
 
 string Logic::sortTask(){
 	vector<Item> sortedDisplaySchedule = resetAndGetDisplaySchedule();
@@ -419,6 +434,7 @@ return false;
 }
 */
 
+
 string Logic::changeSavingDirectory(string userInputDirectory){
 	string directoryToMake = "";
 	int truncatePosition;
@@ -441,20 +457,27 @@ string Logic::changeSavingDirectory(string userInputDirectory){
 	return directoryToMake;
 }
 
+
 string Logic::assignOneFolderToMake(int truncatePosition, string userInputDirectory){
 	return userInputDirectory.substr(0, truncatePosition + 1);
 }
 
+
 string Logic::assignLastFolderToMake(string userInputDirectory, string directoryToMake){
 	return  directoryToMake + userInputDirectory;
 }
+
+
 string Logic::truncateUserInputDirectory(int truncatePosition, string userInputDirectory){
 	return userInputDirectory.substr(truncatePosition + 1);
 }
 
+
 void Logic::printChangeSavingDirectorySuccessful(){
 	cout << "saving directory has been changed to   " << _directoryToBeSaved << endl;
 }
+
+
 void Logic::saveDirectoryToTextFile(){
 	ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
 	writeFile << _directoryToBeSaved << endl;
@@ -582,4 +605,10 @@ vector<Item> Logic::getSchedule(){
 string Logic::setCurrentSorting(string currentSorting){
 	_currentSorting = currentSorting;
 	return _currentSorting;
+}
+
+
+void Logic::thingsToDoAfterEveryExecution(){
+	sortTask();
+	writeDataOntoFile();
 }
