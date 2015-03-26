@@ -159,33 +159,134 @@ namespace iPlannerUI {
 				 MarshalString(userInput, stdUserInput);
 				 if (e->KeyCode == Keys::Enter) {
 					 string outcome = testLogic->initiateCommandAction(testParser, stdUserInput);
-
-					 String^ output = "\t\t\tSCHEDULE \r\n";
+					 string outcometask;
+					 String^ output = "\t\t\t\t\tSCHEDULE \r\n";
 					 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
 						 iterItem = testLogic->getDisplaySchedule()[i];
-						 System::String^ IDString = iterItem.getItemID().ToString();
+						 String^ IDString = iterItem.getItemID().ToString();
 						 String^ nameString = gcnew String(iterItem.getItemName().c_str());
+						 
+						 String^ UIHour;
+						 String^ UIMinute;
+						 String^ UIDay;
+						 String^ UIMonth;
+						 String^ UIYear;
+						 
+						 if (iterItem.getStartTime().getHour() == -1){
+							 UIHour = gcnew String("");
+						 }
+						 else {
+							 UIHour = iterItem.getStartTime().getHour().ToString() + ":";
+						 }
+						 if (iterItem.getStartTime().getMinute() == -1) {
+							 UIMinute = gcnew String("");
+						 }
+						 else {
+							 UIMinute = iterItem.getStartTime().getMinute().ToString() + " ";
+						 }
+						 if (iterItem.getStartTime().getDay() == -1) {
+							 UIDay = gcnew String("");
+						 }
+						 else {
+							 UIDay = iterItem.getStartTime().getDay().ToString() + "/";
+						 }
+						 if (iterItem.getStartTime().getMonth() == -1) {
+							 UIMonth = gcnew String("");
+						 }
+						 else {
+							 UIMonth = iterItem.getStartTime().getMonth().ToString() + "/";
+						 }
+						 if (iterItem.getStartTime().getYear() == -1) {
+							 UIYear = gcnew String("");
+						 }
+						 else {
+							 UIYear = iterItem.getStartTime().getYear().ToString() + " ";
+						 }
+						 String^ startTimeString = UIHour + UIMinute;
+						 String^ startDateString = UIDay + UIMonth + UIYear;
 
-						 System::String^ startTimeString = iterItem.getStartTime().getHour().ToString() + ":" + iterItem.getStartTime().getMinute().ToString();
-						 System::String^ startDateString = iterItem.getStartTime().getDay().ToString() + "/" + iterItem.getStartTime().getMonth().ToString() + "/" + iterItem.getStartTime().getYear().ToString();
-
-						 System::String^ endTimeString = iterItem.getEndTime().getHour().ToString() + ":" + iterItem.getEndTime().getMinute().ToString();
-						 System::String^ endDateString = iterItem.getEndTime().getDay().ToString() + "/" + iterItem.getEndTime().getMonth().ToString() + "/" + iterItem.getEndTime().getYear().ToString();
-
+						 if (iterItem.getEndTime().getHour() == -1) {
+							 UIHour = gcnew String("");
+						 }
+						 else {
+							 UIHour = iterItem.getEndTime().getHour().ToString() + ":";
+						 }
+						 if (iterItem.getEndTime().getMinute() == -1) {
+							 UIMinute = gcnew String("");
+						 }
+						 else {
+							 UIMinute = iterItem.getEndTime().getMinute().ToString() + " ";
+						 }
+						 if (iterItem.getEndTime().getDay() == -1) {
+							 UIDay = gcnew String("");
+						 }
+						 else {
+							 UIDay = iterItem.getEndTime().getDay().ToString() + "/";
+						 }
+						 if (iterItem.getEndTime().getMonth() == -1) {
+							 UIMonth = gcnew String("");
+						 }
+						 else {
+							 UIMonth = iterItem.getEndTime().getMonth().ToString() + "/";
+						 }
+						 if (iterItem.getEndTime().getYear() == -1) {
+							 UIYear = gcnew String("");
+						 }
+						 else {
+							 UIYear = iterItem.getEndTime().getYear().ToString() + " ";
+						 }
+						 String^ endTimeString = UIHour + UIMinute;
+						 String^ endDateString = UIDay + UIMonth + UIYear;
+						 						
 						 String^ descriptionString = gcnew String(iterItem.getDescription().c_str());
-
-						 string charString1(1, iterItem.getPriority());
-						 String^ priorityString = gcnew String(charString1.c_str());
-
-						 string charString2(1, iterItem.getLabel());
-						 String^ labelString = gcnew String(charString2.c_str());
+						 String^ priorityString;
+						 if (iterItem.getPriority() == 'E') {
+							 priorityString = gcnew String("");
+						 }
+						 else {
+							 string charString1(1, iterItem.getPriority());
+							 priorityString = gcnew String(charString1.c_str());
+						 }
+						 
+						 String^ labelString;
+						 if (iterItem.getLabel() == 'E') {
+							 labelString = gcnew String("");
+						 }
+						 else {
+							 string charString1(1, iterItem.getPriority());
+							 labelString = gcnew String(charString1.c_str());
+						 }
 
 						 string charString3(1, iterItem.getCompletion());
 						 String^ completionString = gcnew String(charString3.c_str());
 
-						 output += IDString + " " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
-						 output += "\t" + startTimeString + " " + startDateString + "\r\n";
-						 output += "\t" + endTimeString + " " + endDateString + "\r\n";
+						 output += IDString + ". " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
+						 if (startDateString != "" && startTimeString != "") {
+							 output += "\tStart" + startTimeString + " " + startDateString + "\r\n";
+						 }
+						 else if (startDateString == "" && startTimeString != "") {
+							 output += "\tStart" + startTimeString + "\r\n";
+						 }
+						 else if (startDateString != "" && startTimeString == "") {
+							 output += "\tStart :" + startDateString + "\r\n";
+						 }
+						 else {
+							 output += "\r\n";
+						 }
+
+						 if (endDateString != "" && endTimeString != "") {
+							 output += "\tEnd" + endTimeString + " " + endDateString + "\r\n";
+						 }
+						 else if (endDateString == "" && endTimeString != "") {
+							 output += "\tEnd" + endTimeString + "\r\n";
+						 }
+						 else if (endDateString != "" && endTimeString == "") {
+							 output += "\tEnd :" + endDateString + "\r\n";
+						 }
+						 else {
+							 output += "\r\n";
+						 }
+						 
 					 }
 
 					 String^ outcomeString = gcnew String(outcome.c_str());

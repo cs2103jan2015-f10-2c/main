@@ -1450,21 +1450,21 @@ namespace ScheduleTest
 			projectLife.addItem(item3);
 
 			projectLife.resetDisplaySchedule();
-			projectLife.retrieveDisplaySchedule();
+			
 			string tempItem = item3->displayItemFullDetails();
-//			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(201));
+			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(201));
         	Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item3->getItemID()));
-//		    Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(2));
+		    Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(2));
 			
 			tempItem = item2->displayItemFullDetails();
-//			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(21));
+			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(21));
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item2->getItemID()));
-//			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(1));
+			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(1));
 			
 			tempItem = item1->displayItemFullDetails();
-//			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(12));
+			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(12));
 			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item1->getItemID()));
-//			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(0));
+			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(0));
 			
 			delete item1;
 			delete item2;
