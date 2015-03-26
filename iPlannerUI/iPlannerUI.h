@@ -162,7 +162,7 @@ namespace iPlannerUI {
 
 					 String^ output = "\t\t\tSCHEDULE \r\n";
 					 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
-						 iterItem = testLogic->getSchedule()[i];
+						 iterItem = testLogic->getDisplaySchedule()[i];
 						 System::String^ IDString = iterItem.getItemID().ToString();
 						 String^ nameString = gcnew String(iterItem.getItemName().c_str());
 
