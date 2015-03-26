@@ -14,6 +14,7 @@ const int DateTime::MAX_HOUR = 23;
 const int DateTime::MIN_MINUTE = 0;
 const int DateTime::MAX_MINUTE = 59;
 const int DateTime::EMPTYFIELD_DATETIME = -1;
+const int DateTime::INDICATOR_FAILEDSETATTEMPT = -2;
 const char DateTime::DISPLAY_SEPARATOR_DATE = ' ';
 const char DateTime::DISPLAY_SEPARATOR_TIME = ':';
 const char DateTime::DISPLAY_SEPARATOR_DATETIME = ' ';
@@ -53,7 +54,10 @@ DateTime::~DateTime() { }
 int DateTime::setYear(int year) {
 	if (isValidYearRange(year)) {
 		_year = year;
-	}	
+	}
+	else {
+		_year = INDICATOR_FAILEDSETATTEMPT;
+	}
 	return _year;
 }
 
@@ -61,6 +65,9 @@ int DateTime::setYear(int year) {
 int DateTime::setMonth(int month) {
 	if (isValidMonthRange(month)) {
 		_month = month;
+	}
+	else {
+		_month = INDICATOR_FAILEDSETATTEMPT;
 	}
 	return _month;
 }
@@ -70,6 +77,9 @@ int DateTime::setDay(int day) {
 	if (isValidDayRange(day)) {
 		_day = day;
 	}
+	else {
+		_day = INDICATOR_FAILEDSETATTEMPT;
+	}
 	return _day;
 }
 
@@ -78,6 +88,9 @@ int DateTime::setHour(int hour) {
 	if (isValidHourRange(hour)) {
 		_hour = hour;
 	}
+	else {
+		_hour = INDICATOR_FAILEDSETATTEMPT;
+	}
 	return _hour;
 }
 
@@ -85,6 +98,9 @@ int DateTime::setHour(int hour) {
 int DateTime::setMinute(int minute) {
 	if (isValidMinuteRange(minute)) {
 		_minute = minute;
+	}
+	else {
+		_minute = INDICATOR_FAILEDSETATTEMPT;
 	}
 	return _minute;
 }
