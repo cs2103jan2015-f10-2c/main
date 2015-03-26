@@ -12,7 +12,7 @@ namespace iPlannerParserTest {
 
 	#ifndef TESTPARSER
 	#else
-		TEST_METHOD(parserRetrieveCommandTest) {
+		TEST_METHOD(parserRetrieveCommandOrModifierTest) {
 			string stringOne = "ADD text";
 			string stringTwo = "del\ttext";
 			string stringThree = "exit\t";
@@ -20,13 +20,13 @@ namespace iPlannerParserTest {
 			string expectedTwo = "del";
 			string expectedThree = "exit";
 
-			string actualOne = testParser.retrieveCommand(stringOne);
+			string actualOne = testParser.retrieveCommandOrModifier(stringOne);
 			Assert::AreEqual(expectedOne, actualOne);
 
-			string actualTwo = testParser.retrieveCommand(stringTwo);
+			string actualTwo = testParser.retrieveCommandOrModifier(stringTwo);
 			Assert::AreEqual(expectedTwo, actualTwo);
 
-			string actualThree = testParser.retrieveCommand(stringThree);
+			string actualThree = testParser.retrieveCommandOrModifier(stringThree);
 			Assert::AreEqual(expectedThree, actualThree);
 		}
 
@@ -68,7 +68,7 @@ namespace iPlannerParserTest {
 
 		TEST_METHOD(parserExecuteEditParsing) {
 			string text[3] = { "123 text", "CS2013 text", "123" };
-			string expectedCommand[4] = { "edit", "description", "invalid", "invalid" };
+			string expectedCommand[4] = { "edit", "item", "invalid", "invalid" };
 			string expectedText[4] = { "123", "text", "invalid index", "invalid edit" };
 
 			testParser.executeEditParsing(text[0]);
@@ -126,6 +126,26 @@ namespace iPlannerParserTest {
 			}
 		}
 
+		TEST_METHOD(parserExecuteSaveParsingTest) {
+			string text[2] = { "C:\\Users\\Ng Chon Beng\\Documents\\Visual Studio 2013\\Projects", "" };
+			string expectedCommand[2] = { "save", "invalid" };
+			string expectedText[2] = { "C:\\Users\\Ng Chon Beng\\Documents\\Visual Studio 2013\\Projects", "invalid save directory" };
+
+			testParser.executeSaveParsing(text[0]);
+			testParser.executeSaveParsing(text[1]);
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int index = 0;
+
+			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+
+				Assert::AreEqual(expectedCommand[index], actualCommand);
+				Assert::AreEqual(expectedText[index], actualText);
+			}
+		}
+
 		TEST_METHOD(parserExecuteDoneParsingTest) {
 			string text[2] = { "123", "abc" };
 			string expectedCommand[2] = { "done", "invalid" };
@@ -166,8 +186,7 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
-			
+		/*TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
 			string testInput[][3] = { { "Do CS2103", "1 Mar 2015 to 31 Apr 2015", "" },
 			{ "Do LSM1301", "31 Mar", "10pm-11pm" } };
 			string expectedCommand[] = { "add", "start", "end" };
@@ -202,12 +221,12 @@ namespace iPlannerParserTest {
 				
 				testParser.clearParseInfo();
 			}		
-		}
+		}*/
 
 		TEST_METHOD(parserTokeniseTextTest) {
 			vector<string> testVector;
-			string testInput = "Jack, and, Jill, went, up, the, hill";
-			string expected[] = { "Jack", "and", "Jill", "went", "up", "the", "hill" };
+			string testInput = "test -date test -due test -desc test -label test -priority test";
+			string expected[] = { "test", "-date test", "-due test", "-desc test", "-label test", "-priority test" };
 
 			testVector = testParser.tokeniseText(testInput);
 
@@ -330,6 +349,42 @@ namespace iPlannerParserTest {
 			Assert::IsFalse(actualThree);
 		}
 
+		TEST_METHOD(parserSetDateTimeTest) {
+			string trueTestDateTime[] = { "10 Nov 2012", "10/11/12, 6pm", "10 November 12, 10PM" };
+			string expectedDateTime[] = { "10 11 2012 -1 -1", "10 11 12 18 -1", "10 11 12 22 -1" };
+
+			for (int i = 0; i < 1; i++) {
+				string testString = trueTestDateTime[i];
+				string actual = testParser.setDateTime(testString);
+			}
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+				string actualDateTime = iter->text;
+				Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			}
+		}
+
+		TEST_METHOD(parserSplitDateTimeTest) {
+			string trueTestDateTime[] = { "10/11/12, 6pm", "10 November 12, 10PM" };
+			string expectedDateTime[] = { "10 11 12 18 -1", "10 11 12 22 -1" };
+
+			for (int i = 0; i < 2; i++) {
+				string testString = trueTestDateTime[i];
+				string actual = testParser.splitDateTime(testString);
+			}
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+				string actualDateTime = iter->text;
+				Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			}
+		}
+
 		TEST_METHOD(parserhasStartEndTest) {
 			string trueTestDates[] = { "10/11/12 to 12/11/12", "10 November 12-12 November 2012" };
 			unsigned int expectedIndex[] = { 9, 14 };
@@ -347,14 +402,16 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		TEST_METHOD(parserSplitStartEndTest) {
+		/*TEST_METHOD(parserSplitAndSetStartEndTest) {
+			string testDateTime = "10/11/2012 9pm to 12/11/2012 10pm";
 			string testDates[] = { "10/11/2012 to 12/11/2012", "10 November 2012 - 12 November 2012" };
 			string testTimes[] = { "9pm to 11pm", "9-11", "10:00 to 11:00", "10:30 - 11:30" };
+			string expectedStartDateTime = "10 11 2012 21 -1";
+			string expectedEndDateTime = "12 11 2012 22 -1";
 			string expectedStartDate = "10 11 2012";
 			string expectedEndDate = "12 11 2012";
 			string expectedStartTime[] { "21 -1", "9 -1", "10 00", "10 30" };
 			string expectedEndTime[] { "23 -1", "11 -1", "11 00", "11 30" };
-
 
 			for (int i = 0; i < 2; i++) {
 				string testString = testDates[i];
@@ -363,9 +420,9 @@ namespace iPlannerParserTest {
 
 				if (testParser.hasStartEnd(testString, index, size)) {
 					unsigned int type = -1;
-					unsigned int expectedType = 1;
+					unsigned int expectedType = 2;
 
-					START_AND_END actual = testParser.splitStartEnd(testString, index, size, type );
+					START_AND_END actual = testParser.splitAndSetStartEnd(testString, index, size, type );
 					unsigned int actualType = type;
 					Assert::AreEqual(expectedStartDate, actual.start);
 					Assert::AreEqual(expectedEndDate, actual.end);
@@ -380,9 +437,9 @@ namespace iPlannerParserTest {
 
 				if (testParser.hasStartEnd(testString, index, size)) {
 					unsigned int type = -1;
-					unsigned int expectedType = 2;
+					unsigned int expectedType = 3;
 
-					START_AND_END actual = testParser.splitStartEnd(testString, index, size, type);
+					START_AND_END actual = testParser.splitAndSetStartEnd(testString, index, size, type);
 					unsigned int actualType = type;
 					Assert::AreEqual(expectedStartTime[i], actual.start);
 					Assert::AreEqual(expectedEndTime[i], actual.end);
@@ -390,7 +447,19 @@ namespace iPlannerParserTest {
 				}
 			}
 
-		}
+			unsigned int index = -1;
+			unsigned int size = 0;
+			if (testParser.hasStartEnd(testDateTime, index, size)) {
+				unsigned int type = -1;
+				unsigned int expectedType = 1;
+
+				START_AND_END actual = testParser.splitAndSetStartEnd(testDateTime, index, size, type);
+				unsigned int actualType = type;
+				Assert::AreEqual(expectedStartDateTime, actual.start);
+				Assert::AreEqual(expectedEndDateTime, actual.end);
+				Assert::AreEqual(expectedType, actualType);
+			}
+		}*/
 
 		TEST_METHOD(parserIsValidDateTest) {
 			string trueTestDates[] = { "10/11/12", "10 November 12", "10 Nov 12" };
@@ -497,23 +566,6 @@ namespace iPlannerParserTest {
 				Assert::AreEqual(expectedTwo[i], actualTwo);
 				Assert::AreEqual(expectedOne[i], actualThree);
 			}
-		}
-
-		TEST_METHOD(parserIsValidDateTimeStringTest) {
-			string trueTestString[] = { "10 11 12 13 14", "10 11 12 -1 -1", "10 11 -1 -1 -1",
-				"-1 11 -1 -1 -1", "monday -1 -1 -1 -1", "tuesday -1 -1 23 59",
-				"wednesday -1 -1 -1 -1", "thursday -1 -1 23 59", "friday -1 -1 -1 -1",
-				"saturday -1 -1 23 59", "sunday -1 -1 -1 -1" };
-			string falseTestString = "a b c d e";
-
-			for (int i = 0; i < 11; i++) {
-				string testString = trueTestString[i];
-				bool actual = testParser.isValidDateTimeString(testString);
-				Assert::IsTrue(actual);
-			}
-
-			bool actual = testParser.isValidDateTimeString(falseTestString);
-			Assert::IsFalse(actual);
 		}
 
 		TEST_METHOD(parserIsDayTest) {
