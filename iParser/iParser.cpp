@@ -801,7 +801,7 @@ string iParser::splitAndSetObliqueDateInformation(string date, const unsigned in
 	}
 
 	ostringstream output;
-	output << day << CHAR_SPACE << month << CHAR_SPACE << year;
+	output << year << CHAR_SPACE << month << CHAR_SPACE << day;
 
 	return output.str();
 }
@@ -869,7 +869,7 @@ string iParser::splitAndSetSpaceDateInformation(string date, const unsigned int 
 	}
 
 	ostringstream output;
-	output << day << CHAR_SPACE << month << CHAR_SPACE << year;
+	output << year << CHAR_SPACE << month << CHAR_SPACE << day;
 
 	return output.str();
 }
