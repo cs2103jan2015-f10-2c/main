@@ -282,6 +282,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
@@ -290,6 +291,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "1222 12 12 12 12";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
@@ -298,29 +300,32 @@ namespace iLogicTest {
 			testCommandAndText.text = "1333 11 11 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
-
-			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST2";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "end";
-			testCommandAndText.text = "1333 11 11 -1 -1";
-			testParseInfo.push_back(testCommandAndText);
-			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "end";
+			testCommandAndText.text = "1333 11 11 -1 -1";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST4";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "description";
 			testCommandAndText.text = "UNITTESTING";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
-
+			testParseInfo.clear();
 
 
 
 			testLogic.resetDisplaySchedule();
 			testLogic.setCurrentSorting("name");
-			testLogic.sortTask();
+			string message = testLogic.sortTask();
+			Assert::AreEqual((string) "successful_sort", message);
 			vector<Item> retrievedSchedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "TEST";

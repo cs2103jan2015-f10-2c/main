@@ -344,8 +344,7 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 }
 
 string Logic::sortTask(){
-	vector<Item> sortedDisplaySchedule;
-	resetAndGetDisplaySchedule();
+	vector<Item> sortedDisplaySchedule = resetAndGetDisplaySchedule();
 	if (_currentSorting == SORT_NAME){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
 	}
