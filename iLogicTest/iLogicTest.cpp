@@ -282,6 +282,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
@@ -290,6 +291,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "1222 12 12 12 12";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
@@ -298,9 +300,11 @@ namespace iLogicTest {
 			testCommandAndText.text = "1333 11 11 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
+<<<<<<< HEAD
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "end";
 			testCommandAndText.text = "1344 11 11 -1 -1";
@@ -366,6 +370,8 @@ namespace iLogicTest {
 
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
+=======
+>>>>>>> 3a74738fb523f1c6824865cd4469c3491de92295
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "end";
 			testCommandAndText.text = "1333 11 11 -1 -1";
@@ -374,7 +380,7 @@ namespace iLogicTest {
 			testParseInfo.clear();
 
 			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST3";
+			testCommandAndText.text = "TEST4";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "start";
 			testCommandAndText.text = "1344 11 11 -1 -1";
@@ -390,13 +396,22 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3a74738fb523f1c6824865cd4469c3491de92295
 
 
 
 			testLogic.resetDisplaySchedule();
+<<<<<<< HEAD
 			testLogic.setCurrentSorting("date");
 			testLogic.sortTask();
+=======
+			testLogic.setCurrentSorting("name");
+			string message = testLogic.sortTask();
+			Assert::AreEqual((string) "successful_sort", message);
+>>>>>>> 3a74738fb523f1c6824865cd4469c3491de92295
 			vector<Item> retrievedSchedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "TEST";
