@@ -245,7 +245,7 @@ string iParser::executeSearchParsing(string textToSearch) {
 
 string iParser::executeSaveParsing(string saveDirectory) {
 	if (saveDirectory != STRING_BLANK) {
-		setParseInfo(COMMAND_SEARCH, saveDirectory);
+		setParseInfo(COMMAND_SAVE, saveDirectory);
 		return MESSAGE_SUCCESS;
 	}
 	else {
