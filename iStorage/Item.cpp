@@ -80,7 +80,7 @@ bool Item::hasValidItemLabel(){
 		return true;
 	}
 
-	assert(_priority != 'P' && _priority != 'O' && _priority != 'M');
+	assert(_label != 'P' && _label != 'O' && _label != 'M');
 	return false;
 }
 

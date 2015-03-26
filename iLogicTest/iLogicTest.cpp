@@ -20,7 +20,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "priority";
-			testCommandAndText.text = "H";
+			testCommandAndText.text = "M";
 			testParseInfo.push_back(testCommandAndText);
 
 			testLogic.addTask(testParseInfo);
@@ -29,7 +29,7 @@ namespace iLogicTest {
 
 			string expectedItemName1 = "Young Bin";
 			unsigned int expectedItemID1 = 1;
-			char expectedItemPriority1 = 'H';
+			char expectedItemPriority1 = 'M';
 
 			string actualItemName1 = retrievedShedule[0].getItemName();
 			unsigned int actualItemID1 = retrievedShedule[0].getItemID();
