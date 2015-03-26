@@ -52,6 +52,7 @@ const string iParser::MESSAGE_INVALID_COMMAND = "invalid command";
 const string iParser::MESSAGE_INVALID_ADD = "invalid text added";
 const string iParser::MESSAGE_INVALID_EDIT = "invalid edit";
 const string iParser::MESSAGE_INVALID_INDEX = "invalid index";
+const string iParser::MESSAGE_INVALID_SAVE = "invalid save directory";
 const string iParser::MESSAGE_INVALID_DATE_TIME = "invalid date and time";
 const string iParser::MESSAGE_TERMINATE = "error encountered.Press any button to terminate programme...";
 
@@ -105,6 +106,7 @@ string iParser::executeParsing(string userInput) {
 	case VIEW:
 		break;
 	case SAVE:
+		executeSaveParsing(textWithoutCommand);
 		break;
 	case DONE:
 		executeDoneParsing(textWithoutCommand);
@@ -237,6 +239,17 @@ string iParser::executeSearchParsing(string textToSearch) {
 	}
 	else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+}
+
+string iParser::executeSaveParsing(string saveDirectory) {
+	if (saveDirectory != STRING_BLANK) {
+		setParseInfo(COMMAND_SEARCH, saveDirectory);
+		return MESSAGE_SUCCESS;
+	}
+	else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_SAVE);
 		return MESSAGE_FAILURE;
 	}
 }
