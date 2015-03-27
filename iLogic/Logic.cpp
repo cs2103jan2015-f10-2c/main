@@ -201,6 +201,12 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
 	inputTime >> YYYY >> MM >> DD >> hh >> mm;
+	if (mm == -1) {
+		mm = 0;
+	}
+	if (MM != -1 && DD != -1 && YYYY == -1) {
+
+	}
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
 }
@@ -616,4 +622,9 @@ string Logic::setCurrentSorting(string currentSorting){
 void Logic::thingsToDoAfterEveryExecution(){
 	sortTask();
 	writeDataOntoFile();
+}
+
+bool Logic::isExistingFileInDirectory(string directoryAndFileName) {
+	ifstream infile(directoryAndFileName);
+	return infile.good();
 }

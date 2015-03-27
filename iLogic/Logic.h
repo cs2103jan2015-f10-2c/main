@@ -198,6 +198,7 @@ public:
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
 	void printChangeSavingDirectorySuccessful();
+	bool isExistingFileInDirectory(string directoryAndFileName);
 	
 
 	//store saving directory and file name in order to 
