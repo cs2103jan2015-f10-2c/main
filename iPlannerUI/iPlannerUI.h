@@ -88,6 +88,8 @@ namespace iPlannerUI {
 			// 
 			// commandInputBox
 			// 
+			this->commandInputBox->BackColor = System::Drawing::Color::Black;
+			this->commandInputBox->ForeColor = System::Drawing::Color::Silver;
 			this->commandInputBox->Location = System::Drawing::Point(12, 349);
 			this->commandInputBox->Name = L"commandInputBox";
 			this->commandInputBox->Size = System::Drawing::Size(656, 20);
@@ -96,6 +98,8 @@ namespace iPlannerUI {
 			// 
 			// outputBox
 			// 
+			this->outputBox->BackColor = System::Drawing::Color::Black;
+			this->outputBox->ForeColor = System::Drawing::SystemColors::InactiveCaption;
 			this->outputBox->Location = System::Drawing::Point(12, 58);
 			this->outputBox->Multiline = true;
 			this->outputBox->Name = L"outputBox";
@@ -109,6 +113,7 @@ namespace iPlannerUI {
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
+			this->label1->ForeColor = System::Drawing::Color::Salmon;
 			this->label1->Location = System::Drawing::Point(297, 21);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(74, 20);
@@ -118,6 +123,8 @@ namespace iPlannerUI {
 			// commandOutcomeLabel
 			// 
 			this->commandOutcomeLabel->AutoSize = true;
+			this->commandOutcomeLabel->BackColor = System::Drawing::Color::Black;
+			this->commandOutcomeLabel->ForeColor = System::Drawing::Color::IndianRed;
 			this->commandOutcomeLabel->Location = System::Drawing::Point(12, 324);
 			this->commandOutcomeLabel->Name = L"commandOutcomeLabel";
 			this->commandOutcomeLabel->Size = System::Drawing::Size(0, 13);
@@ -127,6 +134,7 @@ namespace iPlannerUI {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::SystemColors::ActiveCaptionText;
 			this->ClientSize = System::Drawing::Size(686, 438);
 			this->Controls->Add(this->commandOutcomeLabel);
 			this->Controls->Add(this->label1);
@@ -148,22 +156,22 @@ namespace iPlannerUI {
 			os = chars;
 			Marshal::FreeHGlobal(IntPtr((void*)chars));
 		}
-
+				
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 iParser testParser;
 				 String^ userInput;
 				 Item iterItem;
-
 				 userInput = commandInputBox->Text;
 				 string stdUserInput;
 				 MarshalString(userInput, stdUserInput);
 				 if (e->KeyCode == Keys::Enter) {
 					 string outcome = testLogic->initiateCommandAction(testParser, stdUserInput);
+					 
 					 string outcometask;
 					 String^ output = "\t\t\t\t\tSCHEDULE \r\n";
 					 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
 						 iterItem = testLogic->getDisplaySchedule()[i];
-						 String^ IDString = iterItem.getItemID().ToString();
+						 String^ indexString = (i+1).ToString();
 						 String^ nameString = gcnew String(iterItem.getItemName().c_str());
 						 
 						 String^ UIHour;
@@ -260,7 +268,7 @@ namespace iPlannerUI {
 						 string charString3(1, iterItem.getCompletion());
 						 String^ completionString = gcnew String(charString3.c_str());
 
-						 output += IDString + ". " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
+						 output += indexString + ". " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
 						 if (startDateString != "" && startTimeString != "") {
 							 output += "\tStart" + startTimeString + " " + startDateString + "\r\n";
 						 }
@@ -300,6 +308,8 @@ namespace iPlannerUI {
 
 
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
+				 testLogic->retrieveDirectoryFromTextFile();
+				 testLogic->readDataFromFile();
 				 commandOutcomeLabel->Text = "Enter the command";
 	}
 	};
