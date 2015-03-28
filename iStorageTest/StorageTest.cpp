@@ -940,7 +940,107 @@ namespace ScheduleTest
 			Assert::AreEqual((unsigned int)2, YoungbinLifeEvents.getSizeOfSchedule());
 		}
 
-		TEST_METHOD(TestGetDisplayScheduleSize){
+		TEST_METHOD(TestResetDisplaySchedule)
+		{
+			Schedule lohPengKimSchedule;
+			int scheduleSize;
+
+			scheduleSize = lohPengKimSchedule.resetDisplaySchedule();
+			Assert::AreEqual(0, scheduleSize);
+
+			Item *item1;
+			item1 = new Item;
+			item1->setItemName(string("Pressure student into lunch with me"));
+			item1->setLabel('P');
+			item1->setPriority('M');
+			item1->setStartTime(2015, 6, 21, 13, 00);
+
+			Item *item2;
+			item2 = new Item;
+			item2->setItemName(string("Lure student to my house"));
+			item2->setDescription(string("sleeping pills are in the 2nd drawer"));
+			item2->setLabel('P');
+			item2->setPriority('H');
+			item2->setStartTime(2015, 6, 27, 19, 00);
+
+			Item *item3;
+			item3 = new Item;
+			item3->setItemName(string("Raise student's grade to A"));
+			item3->setLabel('P');
+			item3->setPriority('L');
+			item3->setEndTime(2015, 7, 24);
+
+			Item *item4;
+			item4 = new Item;
+			item4->setItemName(string("Buy fake passport and air ticket to Siberia"));
+			item4->setLabel('P');
+			item4->setPriority('H');
+			item4->setEndTime(2015, 8, 20);
+
+			lohPengKimSchedule.addItem(item1);
+			lohPengKimSchedule.addItem(item2);
+			lohPengKimSchedule.addItem(item3);
+			lohPengKimSchedule.addItem(item4);
+
+			scheduleSize = lohPengKimSchedule.resetDisplaySchedule();
+			Assert::AreEqual(4, scheduleSize);
+
+			delete item1;
+			delete item2;
+			delete item3;
+			delete item4;
+			item1 = NULL;
+			item2 = NULL;
+			item3 = NULL;
+			item4 = NULL;
+		}
+
+		TEST_METHOD(TestGetDisplayScheduleSize)
+		{
+			Schedule iseGirlsSchedule1;
+			int scheduleSize;
+
+			Item *item1;
+			item1 = new Item;
+			item1->setItemName(string("Lunch with Loh Peng Kim"));
+			item1->setLabel('O');
+			item1->setPriority('H');
+			item1->setStartTime(2015, 6, 21, 13, 00);
+
+			Item *item2;
+			item2 = new Item;
+			item2->setItemName(string("Dinner at Loh Peng Kim's house :S"));
+			item2->setLabel('O');
+			item2->setPriority('H');
+			item2->setStartTime(2015, 6, 27, 19, 00);
+
+			Item *item3;
+			item3 = new Item;
+			item3->setItemName(string("Appointment at abortion clinic"));
+			item3->setLabel('P');
+			item3->setPriority('H');
+			item3->setStartTime(2015, 8, 15, 9, 00);
+			item3->setEndTime(2015, 8, 15, 12, 00);
+
+			iseGirlsSchedule1.addItem(item1);
+			iseGirlsSchedule1.addItem(item2);
+			iseGirlsSchedule1.addItem(item3);
+
+			iseGirlsSchedule1.resetDisplaySchedule();
+			scheduleSize = iseGirlsSchedule1.getSizeOfDisplaySchedule();
+			Assert::AreEqual(3, scheduleSize);
+
+			iseGirlsSchedule1.deleteItemGivenDisplayVectorIndex(1);
+			iseGirlsSchedule1.resetDisplaySchedule();
+			scheduleSize = iseGirlsSchedule1.getSizeOfDisplaySchedule();
+			Assert::AreEqual(2, scheduleSize);
+
+			delete item1;
+			delete item2;
+			delete item3;
+			item1 = NULL;
+			item2 = NULL;
+			item3 = NULL;
 
 		}
 	};
@@ -1506,9 +1606,195 @@ namespace ScheduleTest
 			// TODO: Your test code here
 		}
 
-		TEST_METHOD(TestSortByDate)
+		TEST_METHOD(TestSortByDateCase1)
 		{
-			// TODO: Your test code here
+			Schedule sem2ExamSchedule;
+			vector<Item> expectedSchedule;
+			vector<Item> retrievedSchedule;
+
+			Item *item1;
+			item1 = new Item;
+			item1->setItemName(string("IE2100 Exam"));
+			item1->setStartTime(2015, 4, 24, 13, 00);
+			item1->setEndTime(2015, 4, 24, 15, 00);
+			item1->setLabel('O');
+
+			Item *item2;
+			item2 = new Item;
+			item2->setItemName(string("IE2130 Exam"));
+			item2->setStartTime(2015, 4, 27, 8, 00);
+			item2->setEndTime(2015, 4, 27, 10, 00);
+			item2->setLabel('O');
+
+			Item *item3;
+			item3 = new Item;
+			item3->setItemName(string("IE2100 Exam"));
+			item3->setStartTime(2015, 4, 21, 13, 00);
+			item3->setEndTime(2015, 4, 21, 15, 00);
+			item3->setLabel('O');
+
+			sem2ExamSchedule.addItem(item1);
+			sem2ExamSchedule.addItem(item2);
+			sem2ExamSchedule.addItem(item3);
+
+			expectedSchedule.push_back(*item1);
+			expectedSchedule.push_back(*item2);
+			expectedSchedule.push_back(*item3);
+			sem2ExamSchedule.resetDisplaySchedule();
+			retrievedSchedule = sem2ExamSchedule.retrieveDisplaySchedule();
+			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
+			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
+			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
+			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
+
+			expectedSchedule.clear();
+
+			expectedSchedule.push_back(*item3);
+			expectedSchedule.push_back(*item1);
+			expectedSchedule.push_back(*item2);
+			sem2ExamSchedule.resetDisplaySchedule();
+			retrievedSchedule = sem2ExamSchedule.retrieveDisplayScheduleByDate();
+			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
+			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
+			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
+			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
+
+			delete item1;
+			delete item2;
+			delete item3;
+			item1 = NULL;
+			item2 = NULL;
+			item3 = NULL;
+		}
+
+		TEST_METHOD(TestSortByDateCase2)
+		{
+			Schedule gymSchedule;
+			vector<Item> expectedSchedule;
+			vector<Item> retrievedSchedule;
+
+			Item *item1;
+			item1 = new Item;
+			item1->setItemName(string("Back Day"));
+			item1->setStartTime(2015, 4, 24);
+			item1->setLabel('P');
+
+			Item *item2;
+			item2 = new Item;
+			item2->setItemName(string("Run and Swim (cardio)"));
+			item2->setStartTime(2015, 4, 19, 8, 00);
+			item2->setEndTime(2015, 4, 19, 11, 00);
+			item2->setLabel('P');
+
+			Item *item3;
+			item3 = new Item;
+			item3->setItemName(string("Run below 8 minutes for 2.4km"));
+			item3->setEndTime(2015, 4, 22, 10, 00);
+			item3->setLabel('O');
+
+			gymSchedule.addItem(item1);
+			gymSchedule.addItem(item2);
+			gymSchedule.addItem(item3);
+
+			expectedSchedule.push_back(*item1);
+			expectedSchedule.push_back(*item2);
+			expectedSchedule.push_back(*item3);
+			gymSchedule.resetDisplaySchedule();
+			retrievedSchedule = gymSchedule.retrieveDisplaySchedule();
+			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
+			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
+			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
+			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
+
+			expectedSchedule.clear();
+
+			expectedSchedule.push_back(*item2);
+			expectedSchedule.push_back(*item3);
+			expectedSchedule.push_back(*item1);
+			gymSchedule.resetDisplaySchedule();
+			retrievedSchedule = gymSchedule.retrieveDisplayScheduleByDate();
+			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
+			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
+			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
+			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
+
+			delete item1;
+			delete item2;
+			delete item3;
+			item1 = NULL;
+			item2 = NULL;
+			item3 = NULL;
+		}
+
+		TEST_METHOD(TestSortByName)
+		{
+			Schedule fishermanSchedule;
+			vector<Item> expectedSchedule;
+			vector<Item> retrievedSchedule;
+
+			Item *item1;
+			item1 = new Item;
+			item1->setItemName(string("Ikan Bilis (1000 kgs)"));
+			item1->setEndTime(2015, 2, 24);
+			item1->setLabel('O');
+
+			Item *item2;
+			item2 = new Item;
+			item2->setItemName(string("golden Promfret la deyyyy"));
+			item2->setEndTime(2015, 6, 19);
+			item2->setLabel('O');
+
+			Item *item3;
+			item3 = new Item;
+			item3->setItemName(string("Ikan Petai"));
+			item3->setDescription(string("boss want at least 6kg per piece"));
+			item3->setEndTime(2015, 4, 21);
+			item3->setLabel('O');
+
+			Item *item4;
+			item4 = new Item;
+			item4->setItemName(string("Red Snapper/ Red Goby"));
+			item4->setEndTime(2015, 5, 29);
+			item4->setLabel('O');
+
+			fishermanSchedule.addItem(item1);
+			fishermanSchedule.addItem(item2);
+			fishermanSchedule.addItem(item3);
+			fishermanSchedule.addItem(item4);
+
+			expectedSchedule.push_back(*item1);
+			expectedSchedule.push_back(*item2);
+			expectedSchedule.push_back(*item3);
+			expectedSchedule.push_back(*item4);
+			fishermanSchedule.resetDisplaySchedule();
+			retrievedSchedule = fishermanSchedule.retrieveDisplaySchedule();
+			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
+			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
+			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
+			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
+			Assert::AreEqual(expectedSchedule[3].getItemName(), retrievedSchedule[3].getItemName());
+
+			expectedSchedule.clear();
+			expectedSchedule.push_back(*item2);
+			expectedSchedule.push_back(*item1);
+			expectedSchedule.push_back(*item3);
+			expectedSchedule.push_back(*item4);
+			fishermanSchedule.resetDisplaySchedule();
+			retrievedSchedule = fishermanSchedule.retrieveDisplayScheduleByItemName();
+			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
+			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
+			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
+			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
+			Assert::AreEqual(expectedSchedule[3].getItemName(), retrievedSchedule[3].getItemName());
+
+			delete item1;
+			delete item2;
+			delete item3;
+			delete item4;
+			item1 = NULL;
+			item2 = NULL;
+			item3 = NULL;
+			item4 = NULL;
 		}
 
 		TEST_METHOD(TestSortByLastUpdate)

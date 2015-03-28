@@ -198,6 +198,7 @@ public:
 	void saveDirectoryToTextFile();
 	string retrieveDirectoryFromTextFile();
 	void printChangeSavingDirectorySuccessful();
+	bool isExistingFileInDirectory(string directoryAndFileName);
 	
 
 	//store saving directory and file name in order to 
@@ -210,7 +211,7 @@ public:
 	// Chon Beng
 	int convertToDigit(string text);
 
-
+	bool isValidSortingMethod(string itemInformation);
 	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
