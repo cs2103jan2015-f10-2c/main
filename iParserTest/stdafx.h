@@ -4,8 +4,6 @@
 //
 
 #pragma once
-#define TESTPARSER
-
 #include "targetver.h"
 
 // Headers for CppUnitTest

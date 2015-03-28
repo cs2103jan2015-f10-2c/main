@@ -18,15 +18,9 @@
     <ClInclude Include="iParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParseInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParseInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

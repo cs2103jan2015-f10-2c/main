@@ -65,11 +65,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="iParser.h" />
-    <ClInclude Include="ParseInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iParser.cpp" />
-    <ClCompile Include="ParseInfo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
