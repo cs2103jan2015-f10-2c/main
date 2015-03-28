@@ -69,7 +69,7 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserExecuteEditParsing) {
 			string testInput = "23 -date 10 Nov 2012, 6:30PM";
 			string expectedCommand[] = { "edit", "start" };
-			string expectedText[] = { "23", "10 11 2012 18 30" };
+			string expectedText[] = { "23", "2012 11 10 18 30" };
 
 			testParser.executeEditParsing(testInput);
 
@@ -349,7 +349,7 @@ namespace iPlannerParserTest {
 
 		TEST_METHOD(parserSetDateTimeTest) {
 			string trueTestDateTime[] = { "10 Nov 2012", "10/11/12, 6pm", "10 November 12, 10PM" };
-			string expectedDateTime[] = { "10 11 2012 -1 -1", "10 11 12 18 -1", "10 11 12 22 -1" };
+			string expectedDateTime[] = { "2012 11 10 -1 -1", "12 11 10 18 -1", "12 11 10 22 -1" };
 			string expectedCommand[] = { "start", "end" };
 
 			string testString = trueTestDateTime[0];
@@ -370,7 +370,7 @@ namespace iPlannerParserTest {
 
 		TEST_METHOD(parserSplitDateTimeTest) {
 			string trueTestDateTime[] = { "10/11/12, 6pm", "10 November 12, 10PM" };
-			string expectedDateTime[] = { "10 11 12 18 -1", "10 11 12 22 -1" };
+			string expectedDateTime[] = { "12 11 10 18 -1", "12 11 10 22 -1" };
 			string expectedCommand = "end";
 
 			for (int i = 0; i < 2; i++) {
@@ -468,7 +468,7 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserIsValidDateTest) {
 			string trueTestDates[] = { "10/11/12", "10 November 12", "10 Nov 12" };
 			string falseTestDates[] = { "10a/11b/12c", "10 Novmbr 12", "10/test/12" };
-			string expected = { "10 11 12" };
+			string expected = { "12 11 10" };
 
 			for (int i = 0; i < 2; i++) {
 				string testStringOne = trueTestDates[i];
@@ -511,8 +511,8 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
 			string stringOne = "10/11/12";
 			string stringTwo = "10/11";
-			string expectedOne = "10 11 12";
-			string expectedTwo = "10 11 -1";
+			string expectedOne = "12 11 10";
+			string expectedTwo = "-1 11 10";
 			
 			string actualOne = testParser.splitAndSetObliqueDateInformation(stringOne, 2);
 			Assert::AreEqual(expectedOne, actualOne);
@@ -526,9 +526,9 @@ namespace iPlannerParserTest {
 			string stringThree = "9 OcT";
 			string stringFive = "MoN";
 			string expectedOne = "-1 1 -1";
-			string expectedTwo = "10 11 2015";
-			string expectedThree = "9 10 -1";
-			string expectedFive = "monday -1 -1";
+			string expectedTwo = "2015 11 10";
+			string expectedThree = "-1 10 9";
+			string expectedFive = "-1 -1 monday";
 
 			string actualOne = testParser.splitAndSetSpaceDateInformation(stringOne, 0);
 			Assert::AreEqual(expectedOne, actualOne);
