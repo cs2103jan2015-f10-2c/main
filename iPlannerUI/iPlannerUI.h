@@ -310,6 +310,136 @@ namespace iPlannerUI {
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
 				 testLogic->retrieveDirectoryFromTextFile();
 				 testLogic->readDataFromFile();
+				 Item iterItem;
+				 String^ output = "\t\t\t\t\tSCHEDULE \r\n";
+				 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
+					 iterItem = testLogic->getDisplaySchedule()[i];
+					 String^ indexString = (i + 1).ToString();
+					 String^ nameString = gcnew String(iterItem.getItemName().c_str());
+
+					 String^ UIHour;
+					 String^ UIMinute;
+					 String^ UIDay;
+					 String^ UIMonth;
+					 String^ UIYear;
+
+					 if (iterItem.getStartTime().getHour() == -1){
+						 UIHour = gcnew String("");
+					 }
+					 else {
+						 UIHour = iterItem.getStartTime().getHour().ToString() + ":";
+					 }
+					 if (iterItem.getStartTime().getMinute() == -1) {
+						 UIMinute = gcnew String("");
+					 }
+					 else {
+						 UIMinute = iterItem.getStartTime().getMinute().ToString() + " ";
+					 }
+					 if (iterItem.getStartTime().getDay() == -1) {
+						 UIDay = gcnew String("");
+					 }
+					 else {
+						 UIDay = iterItem.getStartTime().getDay().ToString() + "/";
+					 }
+					 if (iterItem.getStartTime().getMonth() == -1) {
+						 UIMonth = gcnew String("");
+					 }
+					 else {
+						 UIMonth = iterItem.getStartTime().getMonth().ToString() + "/";
+					 }
+					 if (iterItem.getStartTime().getYear() == -1) {
+						 UIYear = gcnew String("");
+					 }
+					 else {
+						 UIYear = iterItem.getStartTime().getYear().ToString() + " ";
+					 }
+					 String^ startTimeString = UIHour + UIMinute;
+					 String^ startDateString = UIDay + UIMonth + UIYear;
+
+					 if (iterItem.getEndTime().getHour() == -1) {
+						 UIHour = gcnew String("");
+					 }
+					 else {
+						 UIHour = iterItem.getEndTime().getHour().ToString() + ":";
+					 }
+					 if (iterItem.getEndTime().getMinute() == -1) {
+						 UIMinute = gcnew String("");
+					 }
+					 else {
+						 UIMinute = iterItem.getEndTime().getMinute().ToString() + " ";
+					 }
+					 if (iterItem.getEndTime().getDay() == -1) {
+						 UIDay = gcnew String("");
+					 }
+					 else {
+						 UIDay = iterItem.getEndTime().getDay().ToString() + "/";
+					 }
+					 if (iterItem.getEndTime().getMonth() == -1) {
+						 UIMonth = gcnew String("");
+					 }
+					 else {
+						 UIMonth = iterItem.getEndTime().getMonth().ToString() + "/";
+					 }
+					 if (iterItem.getEndTime().getYear() == -1) {
+						 UIYear = gcnew String("");
+					 }
+					 else {
+						 UIYear = iterItem.getEndTime().getYear().ToString() + " ";
+					 }
+					 String^ endTimeString = UIHour + UIMinute;
+					 String^ endDateString = UIDay + UIMonth + UIYear;
+
+					 String^ descriptionString = gcnew String(iterItem.getDescription().c_str());
+					 String^ priorityString;
+					 if (iterItem.getPriority() == 'E') {
+						 priorityString = gcnew String("");
+					 }
+					 else {
+						 string charString1(1, iterItem.getPriority());
+						 priorityString = gcnew String(charString1.c_str());
+					 }
+
+					 String^ labelString;
+					 if (iterItem.getLabel() == 'E') {
+						 labelString = gcnew String("");
+					 }
+					 else {
+						 string charString1(1, iterItem.getPriority());
+						 labelString = gcnew String(charString1.c_str());
+					 }
+
+					 string charString3(1, iterItem.getCompletion());
+					 String^ completionString = gcnew String(charString3.c_str());
+
+					 output += indexString + ". " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
+					 if (startDateString != "" && startTimeString != "") {
+						 output += "\tStart" + startTimeString + " " + startDateString + "\r\n";
+					 }
+					 else if (startDateString == "" && startTimeString != "") {
+						 output += "\tStart" + startTimeString + "\r\n";
+					 }
+					 else if (startDateString != "" && startTimeString == "") {
+						 output += "\tStart :" + startDateString + "\r\n";
+					 }
+					 else {
+						 output += "\r\n";
+					 }
+
+					 if (endDateString != "" && endTimeString != "") {
+						 output += "\tEnd" + endTimeString + " " + endDateString + "\r\n";
+					 }
+					 else if (endDateString == "" && endTimeString != "") {
+						 output += "\tEnd" + endTimeString + "\r\n";
+					 }
+					 else if (endDateString != "" && endTimeString == "") {
+						 output += "\tEnd :" + endDateString + "\r\n";
+					 }
+					 else {
+						 output += "\r\n";
+					 }
+
+				 }
+				 outputBox->Text = output;
 				 commandOutcomeLabel->Text = "Enter the command";
 	}
 	};
