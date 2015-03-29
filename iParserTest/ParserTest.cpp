@@ -55,8 +55,8 @@ namespace iPlannerParserTest {
 				testParser.executeCommandAndTextParsing(testCommand[i], testText[i]);
 			}
 
-			list<COMMAND_AND_TEXT>::iterator iter;
 			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
 			int i = 0;
 			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
 				string actualCommand = iter->command;
@@ -78,8 +78,8 @@ namespace iPlannerParserTest {
 				testParser.executeCommandParsing(testCommand[i], testText[i]);
 			}
 
-			list<COMMAND_AND_TEXT>::iterator iter;
 			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
 			int i = 0;
 			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
 				string actualCommand = iter->command;
@@ -89,58 +89,50 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		/*TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
-			string testInput[][3] = { { "Do CS2103", "1 Mar 2015 to 31 Apr 2015", "" },
-			{ "Do LSM1301", "31 Mar", "10pm-11pm" } };
-			string expectedCommand[] = { "add", "start", "end" };
-			string expectedText[][3] = { { "Do CS2103", "1 3 2015 -1 -1", "31 4 2015 -1 -1" },
-			{ "Do LSM1301", "31 3 -1 22 -1", "31 3 -1 23 -1" } };
-			
-			for (int i = 0; i < 2; i++) {
-				vector<string> testVector;
-				for (int j = 0; j < 3; j++) {
-					{
-						if (i == 0 && j == 2) {
-							break;
-						}
-						else {
-							string input = testInput[i][j];
-							testVector.push_back(input);
-						}
-					}
-				}
+		TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
+			// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
+			string testInput[] = { "add abc", "-desc wear formal", "-date 12/11/10, 10PM", "-due 10 Nov, 1059PM" };
+			string expectedCommand[] = { "description", "start", "end" };
+			string expectedText[] = { "wear formal", "10 11 12 22 -1", "-1 11 10 22 59" };
+			vector<string> testVector;
 
-				testParser.checkAndSetTokenisedInformation(testVector);				
+			for (int i = 0; i < 4; i++) {
+				string input = testInput[i];
+				testVector.push_back(input);
+			}
+
+			testParser.checkAndSetTokenisedInformation(testVector);				
 				
-				list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-				list<COMMAND_AND_TEXT>::iterator iter;
-				int k = 0;
-				for (iter = testList.begin(); iter != testList.end(); k++, iter++) {
-					string actualCommand = iter->command;
-					string actualText = iter->text;
-					Assert::AreEqual(expectedCommand[k], actualCommand);
-					Assert::AreEqual(expectedText[i][k], actualText);
-				}
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i], actualCommand);
+				Assert::AreEqual(expectedText[i], actualText);
+			}
 				
-				testParser.clearParseInfo();
-			}		
-		}*/
+			testParser.clearParseInfo();
+		}		
+
 
 		TEST_METHOD(parserTokeniseTextTest) {
+			// as hyphen is used as the modifier identifier, cases created tests to see
+			//if it recognises the allowed modifiers
 			vector<string> testVector;
-			string testInput = "test -date test -due test -desc test -label test -priority test";
-			string expected[] = { "test", "-date test", "-due test", "-desc test", "-label test", "-priority test" };
+			string testInput = "test -date te-st -due t-e-s-t -start 10AM -end 10PM -from A to B -desc test ---label -priority te-descst";
+			string expected[] = { "test", "-date te-st", "-due t-e-s-t", "-start 10AM", "-end 10PM", "-from A to B", "-desc test --", "-label", "-priority te-descst" };
 
 			testVector = testParser.tokeniseText(testInput);
 
 			for (unsigned int i = 0; i < testVector.size(); i++) {
 				string actual = testVector[i];
-
 				Assert::AreEqual(expected[i], actual);
 			}
 		}
 
-		TEST_METHOD(parserRetrieveCommandOrModifierTest) {
+		/*TEST_METHOD(parserRetrieveCommandOrModifierTest) {
 			string testInput[] = { "ADD   ", "DeLeTe\t\t\t", "-dAtE   ", "-desc\t\t\t", " ", "" };
 			string expected[] = { "add", "delete", "-date", "-desc", "", "" };
 

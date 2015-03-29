@@ -54,6 +54,7 @@ public:
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_DEL;
+	static const string COMMAND_CLEAR;
 	static const string COMMAND_EDIT;
 	static const string COMMAND_UNDO;
 	static const string COMMAND_SORT;
@@ -74,15 +75,22 @@ public:
 	// used to identify whether date time input is appointment or due date
 	static const string MODIFIER_DATE;
 	static const string MODIFIER_DUE;
+	static const string MODIFIER_START;
+	static const string MODIFIER_END;
+	static const string MODIFIER_FROM;
 
 	// used to identify modifiers in UserInput
 	static const string STRING_ITEM;
 	static const string STRING_DATE;
 	static const string STRING_DUE;
+	static const string STRING_START;
+	static const string STRING_END;
+	static const string STRING_FROM;
 	static const string STRING_DESCRIPTION;
 	static const string STRING_DESC;
 	static const string STRING_LABEL;
 	static const string STRING_PRIORITY;
+	static const string STRING_PRIORITY_EXCLAMATION;
 
 	// used for date time functions and checks
 	static const string STRING_DAYS[];
@@ -123,6 +131,9 @@ public:
 	static const unsigned int SIZE_DAYS;
 	static const unsigned int SIZE_MONTHS;
 	static const unsigned int SIZE_DATETIME_WHITESPACE;
+	static const unsigned int HOURS_ZERO;
+	static const unsigned int HOURS_ONE_PM;
+	static const unsigned int HOURS_ELEVEN_PM;
 
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
@@ -135,11 +146,11 @@ public:
 	// =====================================
 
 	enum CommandType {
-		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID_COMMAND
+		ADD, DELETE, CLEAR, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID_COMMAND
 	};
 
 	enum ModifierType {
-		ITEMNAME, DATE, DUE, DESCRIPTION, LABEL, PRIORITY, INVALID_MODIFIER
+		ITEMNAME, DATE, DUE, START, END, FROM, DESCRIPTION, LABEL, PRIORITY, INVALID_MODIFIER
 	};
 
 	// =====================
@@ -168,11 +179,11 @@ public:
 	// Pre:		commandType is "add"
 	// Post:	sets itemName and any modifiers along with their respective information to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
-	string executeAddParsing(string); // unit test + improve
+	string executeAddParsing(string); // unit test + improve =======================================================
 	// Pre:		commandType is "edit"
 	// Post:	sets indexToEdit and any modifiers along with their respective information to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
-	string executeEditParsing(string); // unit test + improve
+	string executeEditParsing(string); // unit test + improve ======================================================
 	// Pre:		commandType is "delete", "del", "sort", "search", "view", "save" or "done"
 	// Post:	sets text or index to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
@@ -200,8 +211,6 @@ public:
 	string removeWhiteSpace(string&);
 	string removeCharacter(string&, const char); 
 	string convertToLowerCase(string&); 
-	bool areDigits(const string);
-	bool isWhiteSpace(const char);
 	string trimText(string&);
 	string trimFront(string); 
 	string trimBack(string); 
@@ -225,6 +234,22 @@ public:
 	bool isMonth(string, unsigned int&); 
 	bool hasTimePeriodAbbreviation(const string);
 	string addTwelveToHours(const string); 
+
+	// =================
+	// boolean functions
+	// =================
+
+	// Pre:		nil
+	// Post:	returns boolean of whether string is a modifier keyword
+	bool isModifier(const string);
+	// Pre:		nil
+	// Post:	returns true if string contains only digits between 0 to 9
+	//			returns false otherwise
+	bool areDigits(const string);
+	// Pre:		nil
+	// Post:	returns true if character is either a space or tab
+	//			returns false otherwise
+	bool isWhiteSpace(const char);
 
 	// =================
 	// character counter
