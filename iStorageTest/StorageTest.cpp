@@ -1312,7 +1312,7 @@ namespace ScheduleTest
 			delete item3;
 		}
 
-		TEST_METHOD(TestRetrieveItemGivenDisplayVectorIndex) 
+		TEST_METHOD(TestRetrieveItemGivenDisplayVectorIndex)
 		{
 			Schedule projectLife;
 
@@ -1360,7 +1360,7 @@ namespace ScheduleTest
 			vector <Item> displaySchedule = projectLife.retrieveDisplaySchedule();
 
 			Item tempItem1 = projectLife.retrieveItemGivenDisplayVectorIndex(1);
-			Assert::AreEqual(item1->displayItemFullDetails(),tempItem1.displayItemFullDetails());
+			Assert::AreEqual(item1->displayItemFullDetails(), tempItem1.displayItemFullDetails());
 
 			Item tempItem2 = projectLife.retrieveItemGivenDisplayVectorIndex(2);
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2.displayItemFullDetails());
@@ -1418,12 +1418,12 @@ namespace ScheduleTest
 			projectLife.resetDisplaySchedule();
 
 			vector<Item> tempItemVector = projectLife.retrieveDisplaySchedule();
-			
+
 			unsigned int index = projectLife.findVectorIndexGivenItemID(item3->getItemID());
-					
+
 			Item tempItem = projectLife.retrieveItemGivenItemID(item3->getItemID());
 			string tempItem1 = tempItem.displayItemFullDetails();
-		    Assert::AreEqual(item3->displayItemFullDetails(), tempItem1);
+			Assert::AreEqual(item3->displayItemFullDetails(), tempItem1);
 			Assert::AreEqual(item3->displayItemFullDetails(), tempItemVector[2].displayItemFullDetails());
 
 			unsigned int index2 = projectLife.findVectorIndexGivenItemID(item2->getItemID());
@@ -1431,17 +1431,17 @@ namespace ScheduleTest
 			string tempItem2 = tempItem.displayItemFullDetails();
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItemVector[1].displayItemFullDetails());
-			
+
 			string tempItem3 = projectLife.replaceItemGivenDisplayVectorIndex(item1, index);
 			tempItemVector = projectLife.retrieveSchedule();
 			Assert::AreEqual(item1->displayItemFullDetails(), tempItem3);
 			Assert::AreEqual(item1->displayItemFullDetails(), tempItemVector[0].displayItemFullDetails());
-			
+
 			tempItem1 = projectLife.replaceItemGivenDisplayVectorIndex(item2, index2);
 			tempItemVector = projectLife.retrieveSchedule();
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItem1);
 			Assert::AreEqual(item2->displayItemFullDetails(), tempItemVector[0].displayItemFullDetails());
-			
+
 			delete item1;
 			delete item2;
 			delete item3;
@@ -1491,22 +1491,22 @@ namespace ScheduleTest
 			projectLife.addItem(item3);
 
 			projectLife.resetDisplaySchedule();
-			
-			string tempItem = item3->displayItemFullDetails();
-			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(201));
-        	Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item3->getItemID()));
-		    Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(2));
-			
-			tempItem = item2->displayItemFullDetails();
-			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(21));
-			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item2->getItemID()));
-			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(1));
-			
-			tempItem = item1->displayItemFullDetails();
-			Assert::AreEqual(tempItem, projectLife.deleteItemGivenItemID(12));
-			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(item1->getItemID()));
-			Assert::AreEqual(tempItem, projectLife.deleteItemGivenDisplayVectorIndex(0));
-			
+
+			string tempString = projectLife.deleteItemGivenDisplayVectorIndex(1);
+			Assert::AreEqual(item1->displayItemFullDetails(), tempString);
+			projectLife.addItem(item1);
+			projectLife.resetDisplaySchedule();
+
+			tempString = projectLife.deleteItemGivenDisplayVectorIndex(2);
+			Assert::AreEqual(item3->displayItemFullDetails(), tempString);
+			projectLife.addItem(item3);
+			projectLife.resetDisplaySchedule();
+
+			tempString = projectLife.deleteItemGivenDisplayVectorIndex(1);
+			Assert::AreEqual(item2->displayItemFullDetails(), tempString);
+			projectLife.addItem(item2);
+			projectLife.resetDisplaySchedule();
+
 			delete item1;
 			delete item2;
 			delete item3;
