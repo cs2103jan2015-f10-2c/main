@@ -89,19 +89,41 @@ namespace iPlannerParserTest {
 			}
 		}
 
+		TEST_METHOD(parserExecuteModifierAndTextParsing) {
+			// testText[4] tests for invalid case where blank string is not allowed
+			string testCommand[] = { "item", "desc", "priority", "desc", "priority" };
+			string testText[] = { "123", "123abc", "abc", " ", "" };
+			string expectedCommand[] = { "item", "desc", "priority", "desc", "invalid" };
+			string expectedText[] = { "123", "123abc", "abc", " ", "Invalid input" };
+
+			for (int i = 0; i < 5; i++) {
+				testParser.executeModifierAndTextParsing(testCommand[i], testText[i]);
+			}
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter;
+			int i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i], actualCommand);
+				Assert::AreEqual(expectedText[i], actualText);
+			}
+		}
+
 		TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
 			// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
-			string testInput[] = { "add abc", "-desc wear formal", "-date 12/11/10, 10PM", "-due 10 Nov, 1059PM" };
-			string expectedCommand[] = { "description", "start", "end" };
-			string expectedText[] = { "wear formal", "10 11 12 22 -1", "-1 11 10 22 59" };
+			string testInput[] = { "add abc", "-desc wear formal", "-date 12/11/10, 10PM", "-due 10 Nov, 1059PM", "-priority " };
+			string expectedCommand[] = { "description", "start", "end", "invalid" };
+			string expectedText[] = { "wear formal", "10 11 12 22 -1", "-1 11 10 22 59", "Invalid input" };
 			vector<string> testVector;
 
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 5; i++) {
 				string input = testInput[i];
 				testVector.push_back(input);
 			}
 
-			testParser.checkAndSetTokenisedInformation(testVector);				
+			testParser.checkAndSetTokenisedInformation(testVector, "edit");				
 				
 			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 			list<COMMAND_AND_TEXT>::iterator iter;
@@ -274,9 +296,9 @@ namespace iPlannerParserTest {
 				Assert::AreEqual(expectedCommand[i], actualCommand);
 			}
 		}
-
+		*/
 		TEST_METHOD(parserSplitDateTimeTest) {
-			string trueTestDateTime[] = { "10/11/12, 6pm", "10 November 12, 10PM" };
+			string trueTestDateTime[] = { "10/11/12, 6pm", "10PM, 10 Nov 12" };
 			string expectedDateTime[] = { "12 11 10 18 -1", "12 11 10 22 -1" };
 			string expectedCommand = "end";
 
@@ -295,7 +317,7 @@ namespace iPlannerParserTest {
 				Assert::AreEqual(expectedCommand, actualCommand);
 			}
 		}
-
+		/*
 		TEST_METHOD(parserhasStartEndTest) {
 			string trueTestDates[] = { "10/11/12 to 12/11/12", "10 November 12-12 November 2012" };
 			unsigned int expectedIndex[] = { 9, 14 };
@@ -372,6 +394,7 @@ namespace iPlannerParserTest {
 			}
 		}*/
 
+		/*
 		TEST_METHOD(parserIsValidDateTest) {
 			string trueTestDates[] = { "10/11/12", "10 November 12", "10 Nov 12" };
 			string falseTestDates[] = { "10a/11b/12c", "10 Novmbr 12", "10/test/12" };
@@ -578,6 +601,6 @@ namespace iPlannerParserTest {
 
 			unsigned int actual = testParser.retrieveCount(testString, ',');
 			Assert::AreEqual(expected, actual);
-		}
-	};
+		} */
+	}; 
 }

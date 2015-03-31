@@ -69,7 +69,6 @@ public:
 	static const string COMMAND_START;
 	static const string COMMAND_END;
 	static const string COMMAND_DESCRIPTION;
-	static const string COMMAND_LABEL;
 	static const string COMMAND_PRIORITY;
 
 	// used to identify whether date time input is appointment or due date
@@ -150,7 +149,7 @@ public:
 	};
 
 	enum ModifierType {
-		ITEMNAME, DATE, DUE, START, END, FROM, DESCRIPTION, LABEL, PRIORITY, INVALID_MODIFIER
+		ITEM, DATE, DUE, START, END, FROM, DESCRIPTION, PRIORITY, INVALID_MODIFIER
 	};
 
 	// =====================
@@ -189,15 +188,19 @@ public:
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeCommandAndTextParsing(const string, string);
 	// Pre:		commandType is "delete", "del", "sort", "search", "view", "save" or "done"
-	// Post:	sets text or index to _parseInfo list
+	// Post:	sets command and text/index to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeCommandParsing(const string, string);
+	// Pre:		ModifierType is "item", "date", "due", "start", "end", "from", "description", "desc" or "priority"
+	// Post:	sets modifier and text to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeModifierAndTextParsing(const string, string);
 
 	// ================
 	// helper functions
 	// ================
 
-	string checkAndSetTokenisedInformation(vector<string>&);
+	string checkAndSetTokenisedInformation(vector<string>&, const string);
 	string executeDateTimeParsing(string, const string);
 
 	// =============================
@@ -231,7 +234,9 @@ public:
 	string splitAndSetNoColonTimeString(string, const string);
 	bool isDay(string, unsigned int&);
 	bool isDay(string);
-	bool isMonth(string, unsigned int&); 
+	string setDay(string);
+	bool isMonth(string); 
+	string setMonth(string);
 	bool hasTimePeriodAbbreviation(const string);
 	string addTwelveToHours(const string); 
 
