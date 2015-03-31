@@ -1,6 +1,7 @@
+//	@author A0111238U
 //	Parser
 //	Tutorial F10-2C
-//	Coder:	Ng Chon Beng (A0111238U)
+//	Coder:	Ng Chon Beng
 
 /*
 ===================================================================================================
@@ -31,12 +32,28 @@ struct START_AND_END {
 };
 
 class iParser {
+
+#define TESTMODE
+#ifndef TESTMODE
+private:
+#else
 public:
+#endif
+
+	// =================
+	// private attribute
+	// =================
+
 	list<COMMAND_AND_TEXT> _parseInfo;
 
+	// =====================
+	// Pre defined variables
+	// =====================
+
+	// used to identify commands in userInput and set as command for logic to intepret
 	static const string COMMAND_ADD;
-	static const string COMMAND_DELETE_ONE;
-	static const string COMMAND_DELETE_TWO;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_DEL;
 	static const string COMMAND_EDIT;
 	static const string COMMAND_UNDO;
 	static const string COMMAND_SORT;
@@ -46,6 +63,7 @@ public:
 	static const string COMMAND_DONE;
 	static const string COMMAND_EXIT;
 
+	// used to set as command for logic to intepret
 	static const string COMMAND_ITEM;
 	static const string COMMAND_START;
 	static const string COMMAND_END;
@@ -53,9 +71,11 @@ public:
 	static const string COMMAND_LABEL;
 	static const string COMMAND_PRIORITY;
 
+	// used to identify whether date time input is appointment or due date
 	static const string MODIFIER_DATE;
 	static const string MODIFIER_DUE;
 
+	// used to identify modifiers in UserInput
 	static const string STRING_ITEM;
 	static const string STRING_DATE;
 	static const string STRING_DUE;
@@ -64,6 +84,7 @@ public:
 	static const string STRING_LABEL;
 	static const string STRING_PRIORITY;
 
+	// used for date time functions and checks
 	static const string STRING_DAYS[];
 	static const string STRING_DAYS_SHORT_FORM[];
 	static const string STRING_MONTHS[];
@@ -84,6 +105,7 @@ public:
 	static const char CHAR_HYPHEN;
 	static const char CHAR_COLON;
 
+	// used for string return type as well as for setting _parseInfo list's text
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_FAILURE;
 	static const string MESSAGE_INVALID;
@@ -91,11 +113,11 @@ public:
 	static const string MESSAGE_INVALID_COMMAND;
 	static const string MESSAGE_INVALID_ADD;
 	static const string MESSAGE_INVALID_EDIT;
-	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_INVALID_SAVE;
 	static const string MESSAGE_INVALID_DATE_TIME;
 	static const string MESSAGE_TERMINATE;
 
+	// used to avoid magic numbers
 	static const unsigned int MAX_NUMBER_OF_COMMAS;
 	static const unsigned int MIN_SIZE_WITH_ABBREVIATION;
 	static const unsigned int SIZE_DAYS;
@@ -108,6 +130,10 @@ public:
 	static const unsigned int TYPE_START_END_DATE;
 	static const unsigned int TYPE_START_END_TIME;
 
+	// =====================================
+	// enumeration for command and modifiers
+	// =====================================
+
 	enum CommandType {
 		ADD, DELETE, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID_COMMAND
 	};
@@ -116,78 +142,131 @@ public:
 		ITEMNAME, DATE, DUE, DESCRIPTION, LABEL, PRIORITY, INVALID_MODIFIER
 	};
 
-	// main functions to be executed in public method parse
-	string executeParsing(string);
+	// =====================
+	// main parsing function
+	// =====================
+	// Pre:		userInput passed to function as string
+	// Post:	sets command and text to _parseInfo list based on user's command
+	//			clears _parseInfo list and sets list as invalid if any invalid input is detected
+	string executeParsing(string); // unit test
 
-	// helper functions to main functions
-	string retrieveCommandOrModifier(string); // unit tested
+	// ========================================
+	// command / modifier determining functions
+	// ========================================
+	
+	// Pre:		command retrieved passed to function
+	// Post:	determines and returns the enum CommandType, returns INVALID_COMMAND if command does not match
 	CommandType determineCommandType(string);
+	// Pre:		modifiers retrieved passed to function
+	// Post:	determines and returns the enum ModifierType, returns INVALID_MODIFIER if modifier does not match
 	ModifierType determineModifierType(string);
 
-	// commandType functions
-	string executeAddParsing(string); // unit tested
-	string executeDeleteParsing(string); // unit tested
-	string executeEditParsing(string); // unit tested // to be improved
-	string executeUndoParsing(string); // unit tested
-	string executeSortParsing(string);
-	string executeSearchParsing(string); // unit tested
-	string executeViewParsing(string);
-	string executeSaveParsing(string);
-	string executeDoneParsing(string); // unit tested
-	string executeExitParsing(string); // unit tested
+	// ===============================
+	// functions within executeParsing
+	// ===============================
+
+	// Pre:		commandType is "add"
+	// Post:	sets itemName and any modifiers along with their respective information to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
+	string executeAddParsing(string); // unit test + improve
+	// Pre:		commandType is "edit"
+	// Post:	sets indexToEdit and any modifiers along with their respective information to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
+	string executeEditParsing(string); // unit test + improve
+	// Pre:		commandType is "delete", "del", "sort", "search", "view", "save" or "done"
+	// Post:	sets text or index to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeCommandAndTextParsing(const string, string);
+	// Pre:		commandType is "delete", "del", "sort", "search", "view", "save" or "done"
+	// Post:	sets text or index to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeCommandParsing(const string, string);
+
+	// ================
+	// helper functions
+	// ================
 
 	string checkAndSetTokenisedInformation(vector<string>&);
 	string executeDateTimeParsing(string, const string);
 
+	// =============================
 	// string manipulation functions
-	vector<string> tokeniseText(const string); // unit tested
-	string trimText(string&); // unit tested
-	string trimFront(string); // unit tested
-	string trimBack(string); // unit tested
-	string removeFirstStringToken(string);  // unit tested
-	string retrieveFirstStringToken(string); // unit tested
-	string removeConsecutiveWhiteSpace(string&); // unit tested
-	string removeWhiteSpace(string&); // unit tested
-	string removeCharacter(string&, const char); // unit tested
-	string convertToLowerCase(string&); // unit tested
-	bool areDigits(const string); // unit tested
-	bool isWhiteSpace(const char); // unit tested
+	// =============================
+	string retrieveCommandOrModifier(string);
+	vector<string> tokeniseText(const string);
+	string removeFirstStringToken(string); 
+	string retrieveFirstStringToken(string); 
+	string removeConsecutiveWhiteSpace(string&);
+	string removeWhiteSpace(string&);
+	string removeCharacter(string&, const char); 
+	string convertToLowerCase(string&); 
+	bool areDigits(const string);
+	bool isWhiteSpace(const char);
+	string trimText(string&);
+	string trimFront(string); 
+	string trimBack(string); 
 
+	// ===================
 	// date time functions
-	string setDateTime(string, const string); // unit tested
-	string splitDateTime(string, const string); // unit tested
-	bool hasStartEnd(string, unsigned int&, unsigned int&); // unit tested
-	START_AND_END splitAndSetStartEnd(const string, const unsigned int, const unsigned int, unsigned int&); // unit tested
-	bool isValidDate(string, string&); // unit tested
-	bool isValidTime(string, string&); // unit tested
-	string splitAndSetObliqueDateInformation(string, const unsigned int); // unit tested
-	string splitAndSetSpaceDateInformation(string, const unsigned int); // unit tested
-	string splitAndSetTimeString(string, const string); // unit tested
-	string splitAndSetColonTimeString(string, const string); // unit tested
-	string splitAndSetNoColonTimeString(string, const string); // unit tested
-	bool isDay(string, unsigned int&); //unit tested
-	bool isDay(string); // unit tested
-	bool isMonth(string, unsigned int&); //unit tested
-	bool hasTimePeriodAbbreviation(const string); // unit tested
-	string addTwelveToHours(const string); // unit tested
+	// ===================
+	string setDateTime(string, const string);
+	string splitDateTime(string, const string);
+	bool hasStartEnd(string, unsigned int&, unsigned int&);
+	START_AND_END splitAndSetStartEnd(const string, const unsigned int, const unsigned int, unsigned int&);
+	bool isValidDate(string, string&);
+	bool isValidTime(string, string&);
+	string splitAndSetObliqueDateInformation(string, const unsigned int);
+	string splitAndSetSpaceDateInformation(string, const unsigned int);
+	string splitAndSetTimeString(string, const string);
+	string splitAndSetColonTimeString(string, const string);
+	string splitAndSetNoColonTimeString(string, const string);
+	bool isDay(string, unsigned int&);
+	bool isDay(string);
+	bool isMonth(string, unsigned int&); 
+	bool hasTimePeriodAbbreviation(const string);
+	string addTwelveToHours(const string); 
 
-	// counters
-	unsigned int retrieveCount(string, const char); // unit tested
+	// =================
+	// character counter
+	// =================
 
+	// Pre:		string to be checked and character to count passed to function
+	// Post:	returns the unsigned int value of character to be counted within string
+	unsigned int retrieveCount(string, const char); 
+
+	// ===================
 	// setters and getters
-	list<COMMAND_AND_TEXT> getParseInfo();
-	string setParseInfo(string, string = "");
-	string clearParseInfo();
-	void showParseInfo();
+	// ===================
 
+	// Pre:		nil
+	// Post:	returns list of _parseInfo
+	list<COMMAND_AND_TEXT> getParseInfo();
+	// Pre:		non-blank command string passed to function
+	// Post:	sets command and text (if applicable) to _parseInfo list
+	string setParseInfo(string, string = "");
+	// Pre:		nil
+	// Post:	clears _parseInfo list
+	string clearParseInfo();
+	
+	// ==============
 	// misc functions
-	void showError(string text);
+	// ==============
+
+	// Pre:		nil
+	// Post:	list of command and text displayed
+	void showParseInfo();
 
 public:
 	iParser();
 	~iParser();
 
-	// main function used to parse information to Logic
+	// ================================================
+	// main function called by logic to parse userInput
+	// ================================================
+
+	// Pre:		nil
+	// Post:	returns a list of a pair of string to logic for logic to interpret
+	//			pair of string consist of command and text
 	list<COMMAND_AND_TEXT> parse(string Input);
 };
 

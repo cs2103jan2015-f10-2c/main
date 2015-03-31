@@ -10,26 +10,6 @@ namespace iPlannerParserTest {
 		iParser testParser;
 	public:
 
-	#ifndef TESTPARSER
-	#else
-		TEST_METHOD(parserRetrieveCommandOrModifierTest) {
-			string stringOne = "ADD text";
-			string stringTwo = "del\ttext";
-			string stringThree = "exit\t";
-			string expectedOne = "add";
-			string expectedTwo = "del";
-			string expectedThree = "exit";
-
-			string actualOne = testParser.retrieveCommandOrModifier(stringOne);
-			Assert::AreEqual(expectedOne, actualOne);
-
-			string actualTwo = testParser.retrieveCommandOrModifier(stringTwo);
-			Assert::AreEqual(expectedTwo, actualTwo);
-
-			string actualThree = testParser.retrieveCommandOrModifier(stringThree);
-			Assert::AreEqual(expectedThree, actualThree);
-		}
-
 		/*TEST_METHOD(parserExecuteAddParsingTest) {
 			string text = "text";
 			string expectedCommand = "add";
@@ -46,30 +26,10 @@ namespace iPlannerParserTest {
 			Assert::AreEqual(expectedText, actualText);
 		}*/
 
-		TEST_METHOD(parserExecuteDeleteParsingTest) {
-			string text[2] = { "123", "abc" };
-			string expectedCommand[2] = { "delete", "invalid" };
-			string expectedText[2] = { "123", "invalid index" };
-
-			testParser.executeDeleteParsing(text[0]);
-			testParser.executeDeleteParsing(text[1]);
-			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-			list<COMMAND_AND_TEXT>::iterator iter;
-			int index = 0;
-
-			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
-				string actualCommand = iter->command;
-				string actualText = iter->text;
-
-				Assert::AreEqual(expectedCommand[index], actualCommand);
-				Assert::AreEqual(expectedText[index], actualText);
-			}
-		}
-
-		TEST_METHOD(parserExecuteEditParsing) {
+		/*TEST_METHOD(parserExecuteEditParsing) {
 			string testInput = "23 -date 10 Nov 2012, 6:30PM";
 			string expectedCommand[] = { "edit", "start" };
-			string expectedText[] = { "23", "10 11 2012 18 30" };
+			string expectedText[] = { "23", "2012 11 10 18 30" };
 
 			testParser.executeEditParsing(testInput);
 
@@ -82,105 +42,50 @@ namespace iPlannerParserTest {
 				Assert::AreEqual(expectedCommand[i], actualCommand);
 				Assert::AreEqual(expectedText[i], actualText);
 			}
-		}
+		}*/
 
-		TEST_METHOD(parserExecuteUndoParsingTest) {
-			string text[2] = { "undo", "undo 123" };
-			string expectedCommand[2] = { "undo", "invalid" };
-			string expectedText[2] = { "", "invalid command" };
+		TEST_METHOD(parserExecuteCommandAndTextParsing) {
+			// testText[4] tests for invalid case where blank string is not allowed
+			string testCommand[] = { "del", "del", "search", "sort", "view" };
+			string testText[] = { "123", "123abc", "abc", " ", "" };
+			string expectedCommand[] = { "del", "del", "search", "sort", "invalid" };
+			string expectedText[] = { "123", "123abc", "abc", " ", "Invalid input" };
 
-			testParser.executeUndoParsing(text[0]);
-			testParser.executeUndoParsing(text[1]);
-			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			for (int i = 0; i < 5; i++) {
+				testParser.executeCommandAndTextParsing(testCommand[i], testText[i]);
+			}
+
 			list<COMMAND_AND_TEXT>::iterator iter;
-			int index = 0;
-
-			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			int i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
 				string actualCommand = iter->command;
 				string actualText = iter->text;
-
-				Assert::AreEqual(expectedCommand[index], actualCommand);
-				Assert::AreEqual(expectedText[index], actualText);
+				Assert::AreEqual(expectedCommand[i], actualCommand);
+				Assert::AreEqual(expectedText[i], actualText);
 			}
 		}
 
-		TEST_METHOD(parserExecuteSearchParsingTest) {
-			string text[2] = { "textToSearch", "" };
-			string expectedCommand[2] = { "search", "invalid" };
-			string expectedText[2] = { "textToSearch", "invalid input" };
+		TEST_METHOD(parserExecuteCommandParsing) {
+			// testText[1] and testText[3] tests for invalid commands where there
+			// are invalid texts after the commands
+			string testCommand[] = { "undo", "undo", "exit", "exit" };
+			string testText[] = { "undo", "undo 123", "exit", "exit abc" };
+			string expectedCommand[] = { "undo", "invalid", "exit", "invalid" };
+			string expectedText[] = { "", "Invalid command", "", "Invalid command" };
 
-			testParser.executeSearchParsing(text[0]);
-			testParser.executeSearchParsing(text[1]);
-			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-			list<COMMAND_AND_TEXT>::iterator iter;
-			int index = 0;
-			
-			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
-				string actualCommand = iter->command;
-				string actualText = iter->text;
-
-				Assert::AreEqual(expectedCommand[index], actualCommand);
-				Assert::AreEqual(expectedText[index], actualText);
+			for (int i = 0; i < 4; i++) {
+				testParser.executeCommandParsing(testCommand[i], testText[i]);
 			}
-		}
 
-		TEST_METHOD(parserExecuteSaveParsingTest) {
-			string text[2] = { "C:\\Users\\Ng Chon Beng\\Documents\\Visual Studio 2013\\Projects", "" };
-			string expectedCommand[2] = { "save", "invalid" };
-			string expectedText[2] = { "C:\\Users\\Ng Chon Beng\\Documents\\Visual Studio 2013\\Projects", "invalid save directory" };
-
-			testParser.executeSaveParsing(text[0]);
-			testParser.executeSaveParsing(text[1]);
-			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 			list<COMMAND_AND_TEXT>::iterator iter;
-			int index = 0;
-
-			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			int i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
 				string actualCommand = iter->command;
 				string actualText = iter->text;
-
-				Assert::AreEqual(expectedCommand[index], actualCommand);
-				Assert::AreEqual(expectedText[index], actualText);
-			}
-		}
-
-		TEST_METHOD(parserExecuteDoneParsingTest) {
-			string text[2] = { "123", "abc" };
-			string expectedCommand[2] = { "done", "invalid" };
-			string expectedText[2] = { "123", "invalid index" };
-
-			testParser.executeDoneParsing(text[0]);
-			testParser.executeDoneParsing(text[1]);
-			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-			list<COMMAND_AND_TEXT>::iterator iter;
-			int index = 0;
-
-			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
-				string actualCommand = iter->command;
-				string actualText = iter->text;
-
-				Assert::AreEqual(expectedCommand[index], actualCommand);
-				Assert::AreEqual(expectedText[index], actualText);
-			}
-		}
-
-		TEST_METHOD(parserExecuteExitParsingTest) {
-			string text[2] = { "exit", "exit 123" };
-			string expectedCommand[2] = { "exit", "invalid" };
-			string expectedText[2] = { "", "invalid command" };
-
-			testParser.executeExitParsing(text[0]);
-			testParser.executeExitParsing(text[1]);
-			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-			list<COMMAND_AND_TEXT>::iterator iter;
-			int index = 0;
-
-			for (iter = testList.begin(); iter != testList.end(); index++, iter++) {
-				string actualCommand = iter->command;
-				string actualText = iter->text;
-
-				Assert::AreEqual(expectedCommand[index], actualCommand);
-				Assert::AreEqual(expectedText[index], actualText);
+				Assert::AreEqual(expectedCommand[i], actualCommand);
+				Assert::AreEqual(expectedText[i], actualText);
 			}
 		}
 
@@ -231,6 +136,16 @@ namespace iPlannerParserTest {
 			for (unsigned int i = 0; i < testVector.size(); i++) {
 				string actual = testVector[i];
 
+				Assert::AreEqual(expected[i], actual);
+			}
+		}
+
+		TEST_METHOD(parserRetrieveCommandOrModifierTest) {
+			string testInput[] = { "ADD   ", "DeLeTe\t\t\t", "-dAtE   ", "-desc\t\t\t", " ", "" };
+			string expected[] = { "add", "delete", "-date", "-desc", "", "" };
+
+			for (int i = 0; i < 6; i++) {
+				string actual = testParser.retrieveCommandOrModifier(testInput[i]);
 				Assert::AreEqual(expected[i], actual);
 			}
 		}
@@ -349,7 +264,7 @@ namespace iPlannerParserTest {
 
 		TEST_METHOD(parserSetDateTimeTest) {
 			string trueTestDateTime[] = { "10 Nov 2012", "10/11/12, 6pm", "10 November 12, 10PM" };
-			string expectedDateTime[] = { "10 11 2012 -1 -1", "10 11 12 18 -1", "10 11 12 22 -1" };
+			string expectedDateTime[] = { "2012 11 10 -1 -1", "12 11 10 18 -1", "12 11 10 22 -1" };
 			string expectedCommand[] = { "start", "end" };
 
 			string testString = trueTestDateTime[0];
@@ -370,7 +285,7 @@ namespace iPlannerParserTest {
 
 		TEST_METHOD(parserSplitDateTimeTest) {
 			string trueTestDateTime[] = { "10/11/12, 6pm", "10 November 12, 10PM" };
-			string expectedDateTime[] = { "10 11 12 18 -1", "10 11 12 22 -1" };
+			string expectedDateTime[] = { "12 11 10 18 -1", "12 11 10 22 -1" };
 			string expectedCommand = "end";
 
 			for (int i = 0; i < 2; i++) {
@@ -468,7 +383,7 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserIsValidDateTest) {
 			string trueTestDates[] = { "10/11/12", "10 November 12", "10 Nov 12" };
 			string falseTestDates[] = { "10a/11b/12c", "10 Novmbr 12", "10/test/12" };
-			string expected = { "10 11 12" };
+			string expected = { "12 11 10" };
 
 			for (int i = 0; i < 2; i++) {
 				string testStringOne = trueTestDates[i];
@@ -511,8 +426,8 @@ namespace iPlannerParserTest {
 		TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
 			string stringOne = "10/11/12";
 			string stringTwo = "10/11";
-			string expectedOne = "10 11 12";
-			string expectedTwo = "10 11 -1";
+			string expectedOne = "12 11 10";
+			string expectedTwo = "-1 11 10";
 			
 			string actualOne = testParser.splitAndSetObliqueDateInformation(stringOne, 2);
 			Assert::AreEqual(expectedOne, actualOne);
@@ -526,9 +441,9 @@ namespace iPlannerParserTest {
 			string stringThree = "9 OcT";
 			string stringFive = "MoN";
 			string expectedOne = "-1 1 -1";
-			string expectedTwo = "10 11 2015";
-			string expectedThree = "9 10 -1";
-			string expectedFive = "monday -1 -1";
+			string expectedTwo = "2015 11 10";
+			string expectedThree = "-1 10 9";
+			string expectedFive = "-1 -1 monday";
 
 			string actualOne = testParser.splitAndSetSpaceDateInformation(stringOne, 0);
 			Assert::AreEqual(expectedOne, actualOne);
@@ -672,7 +587,5 @@ namespace iPlannerParserTest {
 			unsigned int actual = testParser.retrieveCount(testString, ',');
 			Assert::AreEqual(expected, actual);
 		}
-
-	#endif
 	};
 }

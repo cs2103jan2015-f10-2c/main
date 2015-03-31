@@ -201,6 +201,12 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
 	inputTime >> YYYY >> MM >> DD >> hh >> mm;
+	if (mm == -1) {
+		mm = 0;
+	}
+	if (MM != -1 && DD != -1 && YYYY == -1) {
+
+	}
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
 }
@@ -229,23 +235,24 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 
 string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	//try{
-		if (isValidLineIndex(lineIndexToBeDeleted)){
-			cout << "lineIndex : " << lineIndexToBeDeleted << endl;
-			string deletedItem = _logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
-			printDeleteTaskSuccessful(lineIndexToBeDeleted);
-			_scheduleSize--;//Delete successful
-			resetAndPrintSchedule();
-			return MESSAGE_SUCCESSFUL_DELETE;
-		}
-		else{
+	if (isValidLineIndex(lineIndexToBeDeleted)){
+		cout << "lineIndex : " << lineIndexToBeDeleted << endl;
+		string deletedItem = _logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
+		printDeleteTaskSuccessful(lineIndexToBeDeleted);
+		_scheduleSize--;//Delete successful
+		resetAndPrintSchedule();
+		return MESSAGE_SUCCESSFUL_DELETE;
+	}
+	else{
 		//	throw(MESSAGE_INVALID_INPUT_FOR_DELETE); //Delete failed
-			resetAndPrintSchedule();
-		}
+		resetAndPrintSchedule();
+		return MESSAGE_FAILED_DELETE;
+	}
 	//}
 	//catch (const char* e){
 	//	cout << e << endl;
 	//}
-	return MESSAGE_FAILED_DELETE;
+
 }
 
 
@@ -359,19 +366,24 @@ string Logic::changeCurrentSorting(string itemInformation){
 
 
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
-	Item *editedItemToBeReplaced;
-	editedItemToBeReplaced = new Item;
-	*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
-	modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
-	ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
-	if (verifier.isValidItem()){
-		_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
-		resetAndPrintSchedule();
-		return MESSAGE_SUCCESSFUL_EDIT;
+	if (lineIndexToBeEdited <= getDisplaySchedule().size()){
+		Item *editedItemToBeReplaced;
+		editedItemToBeReplaced = new Item;
+		*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
+		modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
+		ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
+		if (verifier.isValidItem()){
+			_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
+			resetAndPrintSchedule();
+			return MESSAGE_SUCCESSFUL_EDIT;
+		}
+		else{
+			printErrorList(verifier);
+			return MESSAGE_FAILED_EDIT;
+		}
 	}
 	else{
-		printErrorList(verifier);
-		return MESSAGE_FAILED_EDIT;
+		return MESSAGE_INVALID_INPUT;
 	}
 }
 
@@ -437,7 +449,7 @@ return false;
 string Logic::changeSavingDirectory(string userInputDirectory){
 	string directoryToMake = "";
 	int truncatePosition;
-	
+
 	while (userInputDirectory != ""){
 		truncatePosition = userInputDirectory.find_first_of("/");
 		if (truncatePosition != -1){
@@ -445,7 +457,7 @@ string Logic::changeSavingDirectory(string userInputDirectory){
 			userInputDirectory = truncateUserInputDirectory(truncatePosition, userInputDirectory);
 		}
 		else{
-			directoryToMake = assignLastFolderToMake(userInputDirectory,directoryToMake);
+			directoryToMake = assignLastFolderToMake(userInputDirectory, directoryToMake);
 			userInputDirectory = "";
 		}
 		_mkdir(directoryToMake.c_str());
@@ -610,4 +622,9 @@ string Logic::setCurrentSorting(string currentSorting){
 void Logic::thingsToDoAfterEveryExecution(){
 	sortTask();
 	writeDataOntoFile();
+}
+
+bool Logic::isExistingFileInDirectory(string directoryAndFileName) {
+	ifstream infile(directoryAndFileName);
+	return infile.good();
 }

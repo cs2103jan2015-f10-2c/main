@@ -128,7 +128,7 @@ namespace iLogicTest {
 			testCommandAndText.text = "1222 12 12 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
-		
+
 			/*add one item with invalid start time*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "Young Bin";
@@ -138,7 +138,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			string expectedAddMessage = "failed_add";
 			string actualAddMessage = testLogic.addTask(testParseInfo);
-			
+
 			vector<Item>retrievedShedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "Young Bin";
@@ -175,7 +175,7 @@ namespace iLogicTest {
 			string testItemName;
 			COMMAND_AND_TEXT testCommandAndText;
 			list<COMMAND_AND_TEXT> testParseInfo;
-			
+
 			/*add one item with valid end time,desc but invalid priority*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "Young Bin";
@@ -189,7 +189,7 @@ namespace iLogicTest {
 			testCommandAndText.command = "priority";
 			testCommandAndText.text = "YYYYYYY";
 			testParseInfo.push_back(testCommandAndText);
-			
+
 			string actualAddMessage = testLogic.addTask(testParseInfo);
 			string expectedAddMessage = "failed_add";
 
@@ -412,7 +412,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
-			
+
 			/*Add Item 2*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
@@ -422,7 +422,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
-			
+
 			/*Add Item 3*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
@@ -432,7 +432,7 @@ namespace iLogicTest {
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
-			
+
 			/*Add Item 4*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
@@ -476,12 +476,14 @@ namespace iLogicTest {
 			COMMAND_AND_TEXT testCommandAndText;
 			list<COMMAND_AND_TEXT> testParseInfo;
 
+			/*Add Item 1*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 2*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
 			testParseInfo.push_back(testCommandAndText);
@@ -491,6 +493,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 3*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
 			testParseInfo.push_back(testCommandAndText);
@@ -500,6 +503,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 4*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
 			testParseInfo.push_back(testCommandAndText);
@@ -509,6 +513,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 5*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST4";
 			testParseInfo.push_back(testCommandAndText);
@@ -539,12 +544,14 @@ namespace iLogicTest {
 			COMMAND_AND_TEXT testCommandAndText;
 			list<COMMAND_AND_TEXT> testParseInfo;
 
+			/*Add Item 1*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 2*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
 			testParseInfo.push_back(testCommandAndText);
@@ -554,6 +561,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 3*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
 			testParseInfo.push_back(testCommandAndText);
@@ -563,15 +571,17 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 4*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
 			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "end";
+			testCommandAndText.command = "start";
 			testCommandAndText.text = "1344 11 11 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 5*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST4";
 			testParseInfo.push_back(testCommandAndText);
@@ -581,6 +591,8 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+
+			/*sort by "name", valid sorting*/
 			testLogic.setCurrentSorting("name");
 			string message = testLogic.sortTask();
 			Assert::AreEqual((string) "successful_sort", message);
@@ -612,12 +624,14 @@ namespace iLogicTest {
 			COMMAND_AND_TEXT testCommandAndText;
 			list<COMMAND_AND_TEXT> testParseInfo;
 
+			/*Add Item 1*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 2*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
 			testParseInfo.push_back(testCommandAndText);
@@ -627,6 +641,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 3*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
 			testParseInfo.push_back(testCommandAndText);
@@ -636,6 +651,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 4*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
 			testParseInfo.push_back(testCommandAndText);
@@ -645,6 +661,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 5*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST4";
 			testParseInfo.push_back(testCommandAndText);
@@ -654,7 +671,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
-
+			/*sort by "date", valid sorting*/
 			testLogic.setCurrentSorting("date");
 			string message = testLogic.sortTask();
 			Assert::AreEqual((string) "successful_sort", message);
@@ -679,22 +696,24 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedItemName5, actualItemName5);
 		}
 
-		/*	TEST_METHOD(SortTaskByPriority)
-			{
+		TEST_METHOD(SortTaskByPriority)
+		{
 			Logic testLogic;
 			string testItemName;
 			COMMAND_AND_TEXT testCommandAndText;
 			list<COMMAND_AND_TEXT> testParseInfo;
 
+			/*Add Item 1*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "Young Bin";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "priority";
-			testCommandAndText.text = "P";
+			testCommandAndText.text = "H";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 2*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST";
 			testParseInfo.push_back(testCommandAndText);
@@ -702,11 +721,12 @@ namespace iLogicTest {
 			testCommandAndText.text = "1222 12 12 12 12";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "priority";
-			testCommandAndText.text = "O";
+			testCommandAndText.text = "M";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 3*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST2";
 			testParseInfo.push_back(testCommandAndText);
@@ -719,6 +739,7 @@ namespace iLogicTest {
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 4*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST3";
 			testParseInfo.push_back(testCommandAndText);
@@ -726,11 +747,12 @@ namespace iLogicTest {
 			testCommandAndText.text = "1344 11 11 -1 -1";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "priority";
-			testCommandAndText.text = "O";
+			testCommandAndText.text = "L";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
+			/*Add Item 5*/
 			testCommandAndText.command = "add";
 			testCommandAndText.text = "TEST4";
 			testParseInfo.push_back(testCommandAndText);
@@ -738,22 +760,22 @@ namespace iLogicTest {
 			testCommandAndText.text = "UNITTESTING";
 			testParseInfo.push_back(testCommandAndText);
 			testCommandAndText.command = "priority";
-			testCommandAndText.text = "P";
+			testCommandAndText.text = "H";
 			testParseInfo.push_back(testCommandAndText);
 			testLogic.addTask(testParseInfo);
 			testParseInfo.clear();
 
-
+			/*sort by "priority", valid sorting */
 			testLogic.setCurrentSorting("priority");
 			string message = testLogic.sortTask();
 			Assert::AreEqual((string) "successful_sort", message);
 			vector<Item> retrievedSchedule = testLogic.getDisplaySchedule();
 
 			string expectedItemName1 = "Young Bin";
-			string expectedItemName2 = "TEST4";
-			string expectedItemName3 = "TEST";
-			string expectedItemName4 = "TEST2";
-			string expectedItemName5 = "TEST3";
+			string expectedItemName2 =  "TEST";
+			string expectedItemName3 = "TEST2";
+			string expectedItemName4 =  "TEST3";
+			string expectedItemName5 = "TEST4";
 
 			string actualItemName1 = retrievedSchedule[0].getItemName();
 			string actualItemName2 = retrievedSchedule[1].getItemName();
@@ -766,8 +788,191 @@ namespace iLogicTest {
 			Assert::AreEqual(expectedItemName3, actualItemName3);
 			Assert::AreEqual(expectedItemName4, actualItemName4);
 			Assert::AreEqual(expectedItemName5, actualItemName5);
-			}
-			*/
+		}
+
+	};
+
+	TEST_CLASS(EditTaskTest)
+	{
+	public:
+		TEST_METHOD(EditTaskTest1)
+		{
+			Logic testLogic;
+			string testItemName;
+			COMMAND_AND_TEXT testCommandAndText;
+			list<COMMAND_AND_TEXT> testParseInfo;
+
+			/*Add Item 1*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "Young Bin";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "H";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 2*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "start";
+			testCommandAndText.text = "1222 12 12 12 12";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "M";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 3*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST2";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "end";
+			testCommandAndText.text = "1333 11 11 -1 -1";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "M";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 4*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST3";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "start";
+			testCommandAndText.text = "1344 11 11 -1 -1";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "L";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 5*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST4";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "description";
+			testCommandAndText.text = "UNITTESTING";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "H";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*EDIT VALID LINE WITH VALID MODIFIER*/
+			testCommandAndText.command = "edit";
+			testCommandAndText.text = "1";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "description";
+			testCommandAndText.text = "TEST DESCRIPTION";
+			testParseInfo.push_back(testCommandAndText);
+			string message = testLogic.editTask(testParseInfo, 1);
+			
+			Assert::AreEqual((string) "successful_edit", message);
+			vector<Item> retrievedSchedule = testLogic.getDisplaySchedule();
+
+			string expectedItemName1 = "Young Bin";
+			char expectedItemPriority = 'H';
+			string expectedDescription = "TEST DESCRIPTION";
+			
+			string actualItemName1 = retrievedSchedule[0].getItemName();
+			char actualItemPriority = retrievedSchedule[0].getPriority();
+			string actualItemDescription = retrievedSchedule[0].getDescription();
+		
+
+			Assert::AreEqual(expectedItemName1, actualItemName1);
+			Assert::AreEqual(expectedItemPriority, actualItemPriority);
+			Assert::AreEqual(expectedDescription, actualItemDescription);
+
+		}
+
+		TEST_METHOD(EditTaskTest2)
+		{
+			Logic testLogic;
+			string testItemName;
+			COMMAND_AND_TEXT testCommandAndText;
+			list<COMMAND_AND_TEXT> testParseInfo;
+
+			/*Add Item 1*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "Young Bin";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "H";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 2*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "start";
+			testCommandAndText.text = "1222 12 12 12 12";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "M";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 3*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST2";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "end";
+			testCommandAndText.text = "1333 11 11 -1 -1";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "M";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 4*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST3";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "start";
+			testCommandAndText.text = "1344 11 11 -1 -1";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "L";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*Add Item 5*/
+			testCommandAndText.command = "add";
+			testCommandAndText.text = "TEST4";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "description";
+			testCommandAndText.text = "UNITTESTING";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "priority";
+			testCommandAndText.text = "H";
+			testParseInfo.push_back(testCommandAndText);
+			testLogic.addTask(testParseInfo);
+			testParseInfo.clear();
+
+			/*EDIT VALID LINE WITH INVALID MODIFIER*/
+			testCommandAndText.command = "edit";
+			testCommandAndText.text = "8";
+			testParseInfo.push_back(testCommandAndText);
+			testCommandAndText.command = "description";
+			testCommandAndText.text = "TESTDESCRIPTION";
+			testParseInfo.push_back(testCommandAndText);
+			string message = testLogic.editTask(testParseInfo, 8);
+
+			Assert::AreEqual((string) "invalid input", message);
+			vector<Item> retrievedSchedule = testLogic.getDisplaySchedule();
+
+		}
 	};
 
 	TEST_CLASS(ChangingSaveDirectoryTest)
