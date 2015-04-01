@@ -55,16 +55,10 @@ namespace iPlannerUI {
 
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::Label^  commandOutcomeLabel;
-	private: System::Windows::Forms::DataGridView^  ScheduleListView;
-
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  TaskNumber;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Schedule;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  TaskPriority;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  TaskLabel;
 	private: System::Windows::Forms::RichTextBox^  outputBox2;
 
-
-
+	private: System::Windows::Forms::RichTextBox^  richTextBox1;
+			 
 
 
 	protected:
@@ -92,13 +86,8 @@ namespace iPlannerUI {
 			this->outputBox = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->commandOutcomeLabel = (gcnew System::Windows::Forms::Label());
-			this->ScheduleListView = (gcnew System::Windows::Forms::DataGridView());
-			this->TaskNumber = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Schedule = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->TaskPriority = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->TaskLabel = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->outputBox2 = (gcnew System::Windows::Forms::RichTextBox());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ScheduleListView))->BeginInit();
+			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
 			this->SuspendLayout();
 			// 
 			// commandInputBox
@@ -120,7 +109,7 @@ namespace iPlannerUI {
 			this->outputBox->Name = L"outputBox";
 			this->outputBox->ReadOnly = true;
 			this->outputBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->outputBox->Size = System::Drawing::Size(656, 251);
+			this->outputBox->Size = System::Drawing::Size(359, 251);
 			this->outputBox->TabIndex = 2;
 			// 
 			// label1
@@ -145,47 +134,10 @@ namespace iPlannerUI {
 			this->commandOutcomeLabel->Size = System::Drawing::Size(0, 13);
 			this->commandOutcomeLabel->TabIndex = 5;
 			// 
-			// ScheduleListView
-			// 
-			this->ScheduleListView->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->ScheduleListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(4) {
-				this->TaskNumber,
-					this->Schedule, this->TaskPriority, this->TaskLabel
-			});
-			this->ScheduleListView->Location = System::Drawing::Point(674, 58);
-			this->ScheduleListView->Name = L"ScheduleListView";
-			this->ScheduleListView->ReadOnly = true;
-			this->ScheduleListView->Size = System::Drawing::Size(385, 251);
-			this->ScheduleListView->TabIndex = 6;
-			// 
-			// TaskNumber
-			// 
-			this->TaskNumber->HeaderText = L"Task Number";
-			this->TaskNumber->Name = L"TaskNumber";
-			this->TaskNumber->ReadOnly = true;
-			// 
-			// Schedule
-			// 
-			this->Schedule->HeaderText = L"Schedule";
-			this->Schedule->Name = L"Schedule";
-			this->Schedule->ReadOnly = true;
-			// 
-			// TaskPriority
-			// 
-			this->TaskPriority->HeaderText = L"Task Priority";
-			this->TaskPriority->Name = L"TaskPriority";
-			this->TaskPriority->ReadOnly = true;
-			// 
-			// TaskLabel
-			// 
-			this->TaskLabel->HeaderText = L"Task Label";
-			this->TaskLabel->Name = L"TaskLabel";
-			this->TaskLabel->ReadOnly = true;
-			// 
 			// outputBox2
 			// 
-			this->outputBox2->BackColor = System::Drawing::Color::White;
-			this->outputBox2->Location = System::Drawing::Point(301, 58);
+			this->outputBox2->BackColor = System::Drawing::SystemColors::Window;
+			this->outputBox2->Location = System::Drawing::Point(392, 58);
 			this->outputBox2->Name = L"outputBox2";
 			this->outputBox2->ReadOnly = true;
 			this->outputBox2->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
@@ -193,14 +145,22 @@ namespace iPlannerUI {
 			this->outputBox2->TabIndex = 7;
 			this->outputBox2->Text = L"";
 			// 
+			// richTextBox1
+			// 
+			this->richTextBox1->Location = System::Drawing::Point(617, 324);
+			this->richTextBox1->Name = L"richTextBox1";
+			this->richTextBox1->Size = System::Drawing::Size(350, 102);
+			this->richTextBox1->TabIndex = 8;
+			this->richTextBox1->Text = L"";
+			// 
 			// iPlannerUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ActiveCaptionText;
 			this->ClientSize = System::Drawing::Size(1083, 438);
+			this->Controls->Add(this->richTextBox1);
 			this->Controls->Add(this->outputBox2);
-			this->Controls->Add(this->ScheduleListView);
 			this->Controls->Add(this->commandOutcomeLabel);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->outputBox);
@@ -210,7 +170,6 @@ namespace iPlannerUI {
 			this->Name = L"iPlannerUI";
 			this->Text = L"iPlannerUI";
 			this->Load += gcnew System::EventHandler(this, &iPlannerUI::iPlannerUI_Load);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ScheduleListView))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -445,20 +404,43 @@ namespace iPlannerUI {
 
 	}
 
+	void displaySchedule(Item iterItem) {
+		
+			
 
+
+		
+	}
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
+			
 				 testLogic->retrieveDirectoryFromTextFile();
 				 testLogic->readDataFromFile();
 				 Item iterItem;
 				 String^ output = "\t\t\t\t\tSCHEDULE \r\n";
-				 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
-					 iterItem = testLogic->getDisplaySchedule()[i];
-					 String^ indexString = (i + 1).ToString();
+				 String^ nameString;
+				 String^ indexString;
+				 
+				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
+				 outputBox2->SelectionColor = Color::Blue;
+				 outputBox2->SelectedText = output;
+				 
+// outputBox2 - RichtextBox outputBox - normal textbox output - a system string to store output for display in outputBox
+//Within the for loop I am not able to display text in outputTextBox2
+//Also th above line SCHEDULE does not get displayed in outputTextBox2
+//Code under this for loop is different from previous function Keydown. In KeyDown, colour of entire text changes which is not required.
+				 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
+					 iterItem = testLogic->getDisplaySchedule()[1];
+					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
+					 outputBox->Text = "hgjkiyujvdg\n";
+					 String ^indexString = (i + 1).ToString();
 					 String^ nameString = gcnew String(iterItem.getItemName().c_str());
-//					 outputBox2->ForeColor = System::Drawing::Color::Blue;
-					 outputBox2->SelectedText = indexString + " " + nameString;
+	
+					 //					 outputBox2->SelectionColor = System::Drawing::Color::Blue;
+					 //		 outputBox2->SelectedText = indexString + "dgfchc " + nameString;
+//					 outputBox2->SelectedText = "nameStrin";
+					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 12, FontStyle::Bold);
 					 outputBox2->SelectionColor = Color::Blue;
-//					 outputBox2->ResetForeColor();
+					 outputBox2->SelectedText = indexString + " " + nameString;
 
 					 String^ UIHour;
 					 String^ UIMinute;
@@ -543,25 +525,20 @@ namespace iPlannerUI {
 					 if (iterItem.getPriority() == 'H') {
 						 priorityString = gcnew String(iterItem.getPriority().ToString());
 						 //						 outputBox2->ForeColor = System::Drawing::Color::Red;
-						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 						 outputBox2->SelectionColor = Color::Red;
-//						 outputBox2->SelectionFont = FontStyle::Bold;
-
+						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 					 }
 					 else if (iterItem.getPriority() == 'M') {
 						 priorityString = gcnew String(iterItem.getPriority().ToString());
 						 //							 outputBox2->Font = System::Drawing::FontStyle::Bold;
-						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 						 outputBox2->SelectionColor = Color::Yellow;
-//						 outputBox2->ResetForeColor();
-
+						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 					 }
 					 else if (iterItem.getPriority() == 'L') {
 						 priorityString = gcnew String(iterItem.getPriority().ToString());
 						 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 						 outputBox2->SelectionColor = Color::Green;
-//						 outputBox2->ResetForeColor();
+						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 
 					 }
 					 else {
@@ -579,27 +556,22 @@ namespace iPlannerUI {
 					 }*/
 					 if (iterItem.getLabel() == 'P') {
 						 labelString = gcnew String(iterItem.getLabel().ToString());
-						 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
+						 //						 outputBox2->SelectionFont = System::Windows::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::Purple;
-//						 outputBox2->ResetForeColor();
-
+						 outputBox2->SelectedText = "\t\t\t" + labelString;
 					 }
 					 else if (iterItem.getLabel() == 'O') {
 						 labelString = gcnew String(iterItem.getLabel().ToString());
-						 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
+						 //outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::LightPink;
-//						 outputBox2->ResetForeColor();
-
+						 outputBox2->SelectedText = "\t\t\t" + labelString;
 					 }
 					 else if (iterItem.getLabel() == 'M') {
 						 labelString = gcnew String(iterItem.getLabel().ToString());
-						 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
+						 //						 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::Maroon;
-//						 outputBox2->ResetForeColor();
-
+						 outputBox2->SelectedText = "\t\t\t" + labelString;
+						 
 					 }
 					 else {
 						 labelString = gcnew String("");
@@ -608,75 +580,107 @@ namespace iPlannerUI {
 
 					 string charString3(1, iterItem.getCompletion());
 					 if (charString3.compare("true")) {
-						 outputBox2->SelectedText = "\t\t\t  Done\r\n";
 						 outputBox2->SelectionColor = Color::Gold;
-//						 outputBox2->ResetForeColor();
+						 outputBox2->SelectedText = "\t\t\t  Done\r\n";
 					 }
 					 else {
-						 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
 						 outputBox2->SelectionColor = Color::Silver;
-//						 outputBox2->ResetForeColor();
+						 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
 					 }
 					 String^ completionString = gcnew String(charString3.c_str());
 
 					 String^ descriptionString = gcnew String(iterItem.getDescription().c_str());
 					 //						 outputBox2->Font = System::Drawing::FontStyle::Italic;
-					 outputBox2->SelectedText = "\r\n" + descriptionString;
 					 outputBox2->SelectionColor = Color::BlueViolet;
-//					 outputBox2->ResetForeColor();
-
-					 output += indexString + ". " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
-					 if (startDateString != "" && startTimeString != "") {
-						 output += "\tStart" + startTimeString + " " + startDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + " " + startDateString + "\r\n";
-						 outputBox2->SelectionColor = Color::BlueViolet;
-//						 outputBox2->ResetForeColor();
-					 }
-					 else if (startDateString == "" && startTimeString != "") {
-						 output += "\tStart" + startTimeString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + "\r\n";
-						 outputBox2->SelectionColor = Color::BlueViolet;
-//						 outputBox2->ResetForeColor();
-					 }
-					 else if (startDateString != "" && startTimeString == "") {
-						 output += "\tStart :" + startDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tStart" + startDateString + "\r\n";
-						 outputBox2->SelectionColor = Color::Red;
-//						 outputBox2->ResetForeColor();
-					 }
-					 else {
-						 output += "\r\n";
-						 outputBox2->Text = "\r\n";
-					 }
-
-					 if (endDateString != "" && endTimeString != "") {
-						 output += "\tEnd" + endTimeString + " " + endDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + " " + endDateString + "\r\n";
-						 outputBox2->SelectionColor = Color::Crimson;
-//						 outputBox2->ResetForeColor();
-					 }
-					 else if (endDateString == "" && endTimeString != "") {
-						 output += "\tEnd" + endTimeString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + "\r\n";
-						 outputBox2->SelectionColor = Color::Crimson;
-//						 outputBox2->ResetForeColor();
-					 }
-					 else if (endDateString != "" && endTimeString == "") {
-						 output += "\tEnd :" + endDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tEnd" + endDateString + "\r\n";
-						 outputBox2->SelectionColor = Color::Crimson;
-//						 outputBox2->ResetForeColor();
-					 }
-					 else {
-						 output += "\r\n";
-						 outputBox2->Text = "\r\n";
-					 }
+					 outputBox2->SelectedText = "\r\n" + descriptionString;
 					 
 
+
+					 //			output += indexString + ". " + nameString + "\t\t" + priorityString + " " + labelString + completionString + "\r\n";
+					 
+					 outputBox2->SelectionColor = Color::BlueViolet;
+					 if (startDateString != "" && startTimeString != "") {
+						 //				output += "\tStart" + startTimeString + " " + startDateString + "\r\n";
+						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + " " + startDateString + "\r\n";
+					 }
+					 else if (startDateString == "" && startTimeString != "") {
+						 //				output += "\tStart" + startTimeString + "\r\n";
+						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + "\r\n";
+					 }
+					 else if (startDateString != "" && startTimeString == "") {
+						 //				output += "\tStart :" + startDateString + "\r\n";
+						 outputBox2->SelectedText = "\r\n\tStart" + startDateString + "\r\n";
+					}
+					 else {
+						 //				output += "\r\n";
+						 outputBox2->Text = "\r\n";
+					 }
+					 outputBox2->SelectionColor = Color::Crimson;
+					 if (endDateString != "" && endTimeString != "") {
+						 //				output += "\tEnd" + endTimeString + " " + endDateString + "\r\n";
+						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + " " + endDateString + "\r\n";
+					 }
+				 	 else if (endDateString == "" && endTimeString != "") {
+						 //				output += "\tEnd" + endTimeString + "\r\n";
+						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + "\r\n";
+				    }
+					 else if (endDateString != "" && endTimeString == "") {
+						 //				output += "\tEnd :" + endDateString + "\r\n";
+						 outputBox2->SelectedText = "\r\n\tEnd" + endDateString + "\r\n";
+					}
+					 else {
+						 //				output += "\r\n";
+						 outputBox2->Text = "\r\n";
+					 }
 				 }
-				 outputBox->Text = output;
-				 outputBox2->Text = output;
+					
+				//	 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
+					// outputBox2->SelectedText = output;
+									 
+//				 outputBox->Text = output;
+				 //outputBox2->Text = output;
+	//			 outputBox2->Select
+//				 outputBox2->ForeColor = Color::Crimson;
 				 commandOutcomeLabel->Text = "Enter the command";
+
+				 //Sample code to test displaying in RichTextBox
+
+				 // Clear all text from the RichTextBox;
+				 richTextBox1->Clear();
+
+				 // Set the font for the opening text to a larger Arial font;
+				 richTextBox1->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
+
+				 // Assign the introduction text to the RichTextBox control.
+				 richTextBox1->SelectedText = "The following is a list of bulleted items: \n";
+
+				 // Set the Font for the first item to a smaller size Arial font.
+				 richTextBox1->SelectionFont = gcnew System::Drawing::Font("Arial", 12);
+
+				 // Specify that the following items are to be added to a bulleted list.
+				 richTextBox1->SelectionBullet = true;
+
+				 // Set the color of the item text.
+				 richTextBox1->SelectionColor = Color::Red;
+
+				 // Assign the text to the bulleted item.
+				 richTextBox1->SelectedText = "Apples \n";
+
+				 // Apply same font since font settings do not carry to next line.
+				 richTextBox1->SelectionFont = gcnew System::Drawing::Font("Arial", 12);
+				 richTextBox1->SelectionColor = Color::Orange;
+				 richTextBox1->SelectedText = "Oranges \n";
+				 richTextBox1->SelectionFont = gcnew System::Drawing::Font("Arial", 12);
+				 richTextBox1->SelectionColor = Color::Purple;
+				 richTextBox1->SelectedText = "Grapes \n";
+
+				 // End the bulleted list.
+				 richTextBox1->SelectionBullet = false;
+
+				 // Specify the font size and string for text displayed below bulleted list.
+				 richTextBox1->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
+				 richTextBox1->SelectedText = "Bulleted Text Complete!";
 	}
-	};
+
+};
 }
