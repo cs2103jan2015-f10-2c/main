@@ -40,56 +40,47 @@ bool DateTimeVerification::isValidDateTimeValues() {
 		isValidHourRange() &&
 		isValidMinuteRange()) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
 
-bool DateTimeVerification::isValidYearRange(){
+bool DateTimeVerification::isValidYearRange() {
 	if (_year >= MIN_YEAR && _year <= MAX_YEAR) {
 		return true;
-	}
-	else if (_year == EMPTYFIELD_DATETIME) {
+	} else if (_year == EMPTYFIELD_DATETIME) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
 
-bool DateTimeVerification::isValidMonthRange(){
+bool DateTimeVerification::isValidMonthRange() {
 	if (_month >= MIN_MONTH && _month <= MAX_MONTH) {
 		return true;
-	}
-	else if (_month == EMPTYFIELD_DATETIME) {
+	} else if (_month == EMPTYFIELD_DATETIME) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
 
-bool DateTimeVerification::isValidDayRange(){
+bool DateTimeVerification::isValidDayRange() {
 	if (_day >= MIN_DAY && _day <= MAX_DAY) {
 		return true;
-	}
-	else if (_day == EMPTYFIELD_DATETIME) {
+	} else if (_day == EMPTYFIELD_DATETIME) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
 
-bool DateTimeVerification::isValidHourRange(){
+bool DateTimeVerification::isValidHourRange() {
 	if (_hour >= MIN_HOUR && _hour <= MAX_HOUR) {
 		return true;
-	}
-	else if (_hour == EMPTYFIELD_DATETIME) {
+	} else if (_hour == EMPTYFIELD_DATETIME) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -97,11 +88,9 @@ bool DateTimeVerification::isValidHourRange(){
 bool DateTimeVerification::isValidMinuteRange() {
 	if (_minute >= MIN_MINUTE && _minute <= MAX_MINUTE) {
 		return true;
-	}
-	else if (_minute == EMPTYFIELD_DATETIME) {
+	} else if (_minute == EMPTYFIELD_DATETIME) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -109,8 +98,7 @@ bool DateTimeVerification::isValidMinuteRange() {
 bool DateTimeVerification::hasYearMonthDay() {
 	if (hasYear() && hasMonth() && hasDay()) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -118,8 +106,7 @@ bool DateTimeVerification::hasYearMonthDay() {
 bool DateTimeVerification::hasMonthDay() {
 	if (!hasYear() && hasMonth() && hasDay()) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -127,11 +114,9 @@ bool DateTimeVerification::hasMonthDay() {
 bool DateTimeVerification::hasYear() {
 	if (!isValidYearRange()) {
 		return false;
-	}
-	else if (_year == EMPTYFIELD_DATETIME) {
+	} else if (_year == EMPTYFIELD_DATETIME) {
 		return false;
-	}
-	else {
+	} else {
 		return true;
 	}
 }
@@ -139,11 +124,9 @@ bool DateTimeVerification::hasYear() {
 bool DateTimeVerification::hasMonth() {
 	if (!isValidMonthRange()) {
 		return false;
-	}
-	else if (_month == EMPTYFIELD_DATETIME) {
+	} else if (_month == EMPTYFIELD_DATETIME) {
 		return false;
-	}
-	else {
+	} else {
 		return true;
 	}
 }
@@ -151,11 +134,9 @@ bool DateTimeVerification::hasMonth() {
 bool DateTimeVerification::hasDay() {
 	if (!isValidDayRange()) {
 		return false;
-	}
-	else if (_day == EMPTYFIELD_DATETIME) {
+	} else if (_day == EMPTYFIELD_DATETIME) {
 		return false;
-	}
-	else {
+	} else {
 		return true;
 	}
 }
@@ -163,8 +144,7 @@ bool DateTimeVerification::hasDay() {
 bool DateTimeVerification::hasHourMinute() {
 	if (hasHour() && hasMinute()) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -172,8 +152,7 @@ bool DateTimeVerification::hasHourMinute() {
 bool DateTimeVerification::hasHour() {
 	if (_hour >= MIN_HOUR && _hour <= MAX_HOUR) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -181,21 +160,18 @@ bool DateTimeVerification::hasHour() {
 bool DateTimeVerification::hasMinute() {
 	if (_minute >= MIN_MINUTE && _minute <= MAX_MINUTE) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
 
 
-bool DateTimeVerification::isValidTime(){
+bool DateTimeVerification::isValidTime() {
 	if (hasHour() && hasMinute()) {
 		return true;
-	}
-	else if (!hasHour() && !hasMinute()) {
+	} else if (!hasHour() && !hasMinute()) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -203,23 +179,17 @@ bool DateTimeVerification::isValidTime(){
 bool DateTimeVerification::isActualYearMonthDayDate() {
 	if ((_day == DAY_31) && (_month == MONTH_FEB || _month == MONTH_APR || _month == MONTH_JUN || _month == MONTH_SEP || _month == MONTH_NOV)) {
 		return false;
-	}
-	else if ((_day == DAY_30) && (_month == MONTH_FEB)) {
+	} else if ((_day == DAY_30) && (_month == MONTH_FEB)) {
 		return false;
-	}
-	else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_4 != 0)){
+	} else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_4 != 0)) {
 		return false;
-	}
-	else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_400 == 0)) {
+	} else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_400 == 0)) {
 		return true;
-	}
-	else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_100 == 0)) {
+	} else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_100 == 0)) {
 		return false;
-	}
-	else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_4 == 0)){
+	} else if ((_month == MONTH_FEB) && (_day == DAY_29) && (_year % YEAR_4 == 0)) {
 		return true;
-	}
-	else {
+	} else {
 		return true;
 	}
 }
@@ -237,14 +207,13 @@ bool DateTimeVerification::isValidDateTime() {
 		} else if (!hasYear() && !hasMonth() && !hasDay() && !hasHour() && !hasMinute()) {
 			return true;
 		}
-//		else if (hasMonthDay() && isValidTime()) {
-//			return true;
-//		}
+		//		else if (hasMonthDay() && isValidTime()) {
+		//			return true;
+		//		}
 		else {
 			return false;
 		}
-	}
-	else {
+	} else {
 		return false;
 	}
 }
