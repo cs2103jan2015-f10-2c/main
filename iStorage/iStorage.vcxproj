@@ -65,11 +65,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DateTime.h" />
+    <ClInclude Include="History.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Schedule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DateTime.cpp" />
+    <ClCompile Include="History.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Schedule.cpp" />
   </ItemGroup>
