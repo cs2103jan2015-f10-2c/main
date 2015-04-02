@@ -22,6 +22,13 @@ private:
 	//	Pre:	Valid itemID, valid vectorIndex
 	//	Post:	Returns true if the itemID matches; false otherwise
 	bool isMatchingItemID(unsigned int, unsigned int);
+	
+	//	Checks if an item's attribute matches that specified by the user
+	//	Pre:	Valid user-specified attribute
+	//	Post:	Returns true if the attributes match; false otherwise
+	bool isMatchingPriority(char, char);
+	bool isMatchingLabel(char, char);
+	bool isMatchingCompletionStatus (bool, bool);
 
 	//	Checks how an item compares with another according to the item's attribute
 	//			isEarlierThan uses start time, if any, else uses end time, if any
@@ -117,9 +124,19 @@ public:
 	//			Valid label - P, O, or M
 	//			Valid completion status - true, false
 	//	Post:	Constant reference to the filtered schedule is returned
-	const vector<Item>& retrieveScheduleFilteredByPriority(char);
-	const vector<Item>& retrieveScheduleFilteredByLabel(char);
-	const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
+	const vector<Item>& retrieveDisplayScheduleFilteredByPriority(char);
+	const vector<Item>& retrieveDisplayScheduleFilteredByLabel(char);
+	const vector<Item>& retrieveDisplayScheduleFilteredByCompletion(bool);
+
+
+	//	Checks given item in the schedule, and removes it if it does not have the specified attribute
+	//	Pre:	Valid priority - L, M, or H
+	//			Valid label - P, O, or M
+	//			Valid completion status - true, false
+	//	Post:	Returns true if item is removed, false otherwise
+	bool filterDisplayScheduleByPriority(int, char);
+	bool filterDisplayScheduleByLabel(int, char);
+	bool filterDisplayScheduleByCompletion(int, bool);
 
 	//    Returns only items spanning a certain date
 	//vector<Item>& returnScheduleFilteredByDate();

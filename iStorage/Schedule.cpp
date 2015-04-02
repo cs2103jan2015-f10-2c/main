@@ -30,7 +30,7 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 
 //	Retrieves item ID given display vector index
 unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int displayVectorIndex){
-	return _displaySchedule[displayVectorIndex-1].getItemID();
+	return _displaySchedule[displayVectorIndex - 1].getItemID();
 }
 
 //	Retrieves the size of the schedule
@@ -208,54 +208,107 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 }
 
 //	Filters the schedule by priority
-const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char) {
-	
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char priority) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByPriority(index, priority)){
+			index--;
+		}
+	}
+
+	return _displaySchedule;
 }
 
+//	Checks given item in the schedule, and removes it if it does not have the user-specified priority
+bool Schedule::filterDisplayScheduleByPriority(int index, char priority) {
+	Item removedItem;
+
+	if (!isMatchingPriority(_displaySchedule[index].getPriority(), priority)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks if an item's priority matches that specified by the user
+bool Schedule::isMatchingPriority(char itemPriority, char userPriority) {
+	if (itemPriority == userPriority) {
+		return true;
+	}
+	return false;
+}
+
+//	Filters the schedule by label
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByLabel(index, label)){
+			index--;
+		}
+	}
+
+	return _displaySchedule;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified label
+bool Schedule::filterDisplayScheduleByLabel(int index, char label) {
+	Item removedItem;
+
+	if (!isMatchingLabel(_displaySchedule[index].getLabel(), label)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks if an item's label matches that specified by the user
+bool Schedule::isMatchingLabel(char itemLabel, char userLabel) {
+	if (itemLabel == userLabel) {
+		return true;
+	}
+	return false;
+}
+
+//	Filters the schedule by completion status
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByCompletion(index, completionStatus)){
+			index--;
+		}
+	}
+
+	return _displaySchedule;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified completion status
+bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatus) {
+	Item removedItem;
+
+	if (!isMatchingCompletionStatus(_displaySchedule[index].getCompletion(), completionStatus)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks if an item's completion status matches that specified by the user
+bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompletion) {
+	if (itemCompletion == userCompletion) {
+		return true;
+	}
+	return false;
+}
 
 /*
 //	Sorts the display schedule by last update (latest first), returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
 return retrieveDisplaySchedule();
-}
-
-
-//	Filters the schedule by Priority
-const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char priority){
-_filteredSchedule.clear();
-
-for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-if (priority = _schedule[index].getPriority()) {
-_filteredSchedule.push_back(_schedule[index]);
-}
-}
-
-return _filteredSchedule;
-}
-
-//	Filters the schedule by Label
-const vector<Item>& Schedule::retrieveScheduleFilteredByLabel(char label){
-_filteredSchedule.clear();
-
-for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-if (label = _schedule[index].getLabel()) {
-_filteredSchedule.push_back(_schedule[index]);
-}
-}
-
-return _filteredSchedule;
-}
-
-//	Filters the schedule by Completion
-const vector<Item>& Schedule::retrieveScheduleFilteredByCompletion(bool isCompleted){
-_filteredSchedule.clear();
-
-for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-if (isCompleted = _schedule[index].getCompletion()) {
-_filteredSchedule.push_back(_schedule[index]);
-}
-}
-
-return _filteredSchedule;
 }
 */
