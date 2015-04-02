@@ -128,7 +128,6 @@ public:
 	const vector<Item>& retrieveDisplayScheduleFilteredByLabel(char);
 	const vector<Item>& retrieveDisplayScheduleFilteredByCompletion(bool);
 
-
 	//	Checks given item in the schedule, and removes it if it does not have the specified attribute
 	//	Pre:	Valid priority - L, M, or H
 	//			Valid label - P, O, or M
@@ -140,8 +139,6 @@ public:
 
 	//    Returns only items spanning a certain date
 	//vector<Item>& returnScheduleFilteredByDate();
-
-
 };
 
 #endif

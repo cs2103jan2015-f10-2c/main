@@ -17,6 +17,30 @@ bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
 	return false;
 }
 
+//	Checks if an item's priority matches that specified by the user
+bool Schedule::isMatchingPriority(char itemPriority, char userPriority) {
+	if (itemPriority == userPriority) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's label matches that specified by the user
+bool Schedule::isMatchingLabel(char itemLabel, char userLabel) {
+	if (itemLabel == userLabel) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's completion status matches that specified by the user
+bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompletion) {
+	if (itemCompletion == userCompletion) {
+		return true;
+	}
+	return false;
+}
+
 //	Retrieves schedule vector index given itemID
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = 0;
@@ -218,6 +242,28 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char pri
 	return _displaySchedule;
 }
 
+//	Filters the schedule by label
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByLabel(index, label)){
+			index--;
+		}
+	}
+
+	return _displaySchedule;
+}
+
+//	Filters the schedule by completion status
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByCompletion(index, completionStatus)){
+			index--;
+		}
+	}
+
+	return _displaySchedule;
+}
+
 //	Checks given item in the schedule, and removes it if it does not have the user-specified priority
 bool Schedule::filterDisplayScheduleByPriority(int index, char priority) {
 	Item removedItem;
@@ -230,25 +276,6 @@ bool Schedule::filterDisplayScheduleByPriority(int index, char priority) {
 	}
 
 	return false;
-}
-
-//	Checks if an item's priority matches that specified by the user
-bool Schedule::isMatchingPriority(char itemPriority, char userPriority) {
-	if (itemPriority == userPriority) {
-		return true;
-	}
-	return false;
-}
-
-//	Filters the schedule by label
-const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
-	for (int index = 0; index < _displaySchedule.size(); index++) {
-		if (filterDisplayScheduleByLabel(index, label)){
-			index--;
-		}
-	}
-
-	return _displaySchedule;
 }
 
 //	Checks given item in the schedule, and removes it if it does not have the user-specified label
@@ -265,25 +292,6 @@ bool Schedule::filterDisplayScheduleByLabel(int index, char label) {
 	return false;
 }
 
-//	Checks if an item's label matches that specified by the user
-bool Schedule::isMatchingLabel(char itemLabel, char userLabel) {
-	if (itemLabel == userLabel) {
-		return true;
-	}
-	return false;
-}
-
-//	Filters the schedule by completion status
-const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
-	for (int index = 0; index < _displaySchedule.size(); index++) {
-		if (filterDisplayScheduleByCompletion(index, completionStatus)){
-			index--;
-		}
-	}
-
-	return _displaySchedule;
-}
-
 //	Checks given item in the schedule, and removes it if it does not have the user-specified completion status
 bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatus) {
 	Item removedItem;
@@ -295,14 +303,6 @@ bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatu
 		return true;
 	}
 
-	return false;
-}
-
-//	Checks if an item's completion status matches that specified by the user
-bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompletion) {
-	if (itemCompletion == userCompletion) {
-		return true;
-	}
 	return false;
 }
 
