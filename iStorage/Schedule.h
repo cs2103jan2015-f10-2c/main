@@ -112,20 +112,19 @@ public:
 	const vector<Item>& retrieveDisplayScheduleByCompletionStatus();
 	const vector<Item>& retrieveDisplayScheduleByLastUpdate();
 
-	/*
-		//	Filters the schedule by attribute (priority, label, or completion status)
-		//	Pre:	Valid priority - L, M, or H
-		//			Valid label - P, O, or M
-		//			Valid completion status - true, false
-		//	Post:	Constant reference to the filtered schedule is returned
-		const vector<Item>& retrieveScheduleFilteredByPriority(char);
-		const vector<Item>& retrieveScheduleFilteredByLabel(char);
-		const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
+	//	Filters the schedule by attribute (priority, label, or completion status)
+	//	Pre:	Valid priority - L, M, or H
+	//			Valid label - P, O, or M
+	//			Valid completion status - true, false
+	//	Post:	Constant reference to the filtered schedule is returned
+	const vector<Item>& retrieveScheduleFilteredByPriority(char);
+	const vector<Item>& retrieveScheduleFilteredByLabel(char);
+	const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
 
-		//    Returns only items spanning a certain date
-		//vector<Item>& returnScheduleFilteredByDate();
+	//    Returns only items spanning a certain date
+	//vector<Item>& returnScheduleFilteredByDate();
 
-		*/
+
 };
 
 #endif

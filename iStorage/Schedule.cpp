@@ -207,7 +207,10 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 	return retrieveDisplaySchedule();
 }
 
-
+//	Filters the schedule by priority
+const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char) {
+	
+}
 
 
 /*
