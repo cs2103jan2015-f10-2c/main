@@ -48,14 +48,13 @@ DateTime::DateTime(int year, int month, int day) {
 }
 
 //	Destructor
-DateTime::~DateTime() { }
+DateTime::~DateTime() {}
 
 //	Sets the year
 int DateTime::setYear(int year) {
 	if (isValidYearRange(year)) {
 		_year = year;
-	}
-	else {
+	} else {
 		_year = INDICATOR_FAILEDSETATTEMPT;
 	}
 	return _year;
@@ -65,8 +64,7 @@ int DateTime::setYear(int year) {
 int DateTime::setMonth(int month) {
 	if (isValidMonthRange(month)) {
 		_month = month;
-	}
-	else {
+	} else {
 		_month = INDICATOR_FAILEDSETATTEMPT;
 	}
 	return _month;
@@ -76,8 +74,7 @@ int DateTime::setMonth(int month) {
 int DateTime::setDay(int day) {
 	if (isValidDayRange(day)) {
 		_day = day;
-	}
-	else {
+	} else {
 		_day = INDICATOR_FAILEDSETATTEMPT;
 	}
 	return _day;
@@ -87,8 +84,7 @@ int DateTime::setDay(int day) {
 int DateTime::setHour(int hour) {
 	if (isValidHourRange(hour)) {
 		_hour = hour;
-	}
-	else {
+	} else {
 		_hour = INDICATOR_FAILEDSETATTEMPT;
 	}
 	return _hour;
@@ -98,8 +94,7 @@ int DateTime::setHour(int hour) {
 int DateTime::setMinute(int minute) {
 	if (isValidMinuteRange(minute)) {
 		_minute = minute;
-	}
-	else {
+	} else {
 		_minute = INDICATOR_FAILEDSETATTEMPT;
 	}
 	return _minute;
@@ -134,8 +129,7 @@ int DateTime::getMinute() {
 bool DateTime::isValidYearRange(int year) {
 	if (year >= MIN_YEAR && year <= MAX_YEAR) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -144,8 +138,7 @@ bool DateTime::isValidYearRange(int year) {
 bool DateTime::isValidMonthRange(int month) {
 	if (month >= MIN_MONTH && month <= MAX_MONTH) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -154,8 +147,7 @@ bool DateTime::isValidMonthRange(int month) {
 bool DateTime::isValidDayRange(int day) {
 	if (day >= MIN_DAY && day <= MAX_DAY) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -164,23 +156,17 @@ bool DateTime::isValidDayRange(int day) {
 bool DateTime::isValidDate(int year, int month, int day) {
 	if (!isValidYearRange(year) || !isValidMonthRange(month) || !isValidDayRange(day)) {
 		return false;
-	}
-	else if ((day == 31) && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
+	} else if ((day == 31) && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
 		return false;
-	}
-	else if ((day == 30) && (month == 2)) {
+	} else if ((day == 30) && (month == 2)) {
 		return false;
-	}		
-	else if ((month == 2) && (day == 29) && (year % 4 != 0)){
+	} else if ((month == 2) && (day == 29) && (year % 4 != 0)) {
 		return false;
-	}		
-	else if ((month == 2) && (day == 29) && (year % 400 == 0)) {
+	} else if ((month == 2) && (day == 29) && (year % 400 == 0)) {
 		return true;
-	}
-	else if ((month == 2) && (day == 29) && (year % 100 == 0)) {
+	} else if ((month == 2) && (day == 29) && (year % 100 == 0)) {
 		return false;
-	}	
-	else if ((month == 2) && (day == 29) && (year % 4 == 0)){
+	} else if ((month == 2) && (day == 29) && (year % 4 == 0)) {
 		return true;
 	}
 
@@ -191,8 +177,7 @@ bool DateTime::isValidDate(int year, int month, int day) {
 bool DateTime::isValidHourRange(int hour) {
 	if (hour >= MIN_HOUR && hour <= MAX_HOUR) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -201,8 +186,7 @@ bool DateTime::isValidHourRange(int hour) {
 bool DateTime::isValidMinuteRange(int minute) {
 	if (minute >= MIN_MINUTE && minute <= MAX_MINUTE) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -238,20 +222,15 @@ bool DateTime::operator!= (DateTime secondaryDateTime) {
 bool DateTime::isAfter(DateTime secondaryDateTime) {
 	if (_year != secondaryDateTime.getYear()) {
 		return (_year > secondaryDateTime.getYear());
-	}
-	else if (_month != secondaryDateTime.getMonth()){
+	} else if (_month != secondaryDateTime.getMonth()) {
 		return (_month > secondaryDateTime.getMonth());
-	}
-	else if (_day != secondaryDateTime.getDay()) {
+	} else if (_day != secondaryDateTime.getDay()) {
 		return (_day > secondaryDateTime.getDay());
-	}
-	else if (_hour != secondaryDateTime.getHour()) {
+	} else if (_hour != secondaryDateTime.getHour()) {
 		return (_hour > secondaryDateTime.getHour());
-}
-	else if (_minute != secondaryDateTime.getMinute()) {
+	} else if (_minute != secondaryDateTime.getMinute()) {
 		return (_minute > secondaryDateTime.getMinute());
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -260,20 +239,15 @@ bool DateTime::isAfter(DateTime secondaryDateTime) {
 bool DateTime::isBefore(DateTime secondaryDateTime) {
 	if (_year != secondaryDateTime.getYear()) {
 		return (_year < secondaryDateTime.getYear());
-	}
-	else if (_month != secondaryDateTime.getMonth()){
+	} else if (_month != secondaryDateTime.getMonth()) {
 		return (_month < secondaryDateTime.getMonth());
-	}
-	else if (_day != secondaryDateTime.getDay()) {
+	} else if (_day != secondaryDateTime.getDay()) {
 		return (_day < secondaryDateTime.getDay());
-	}
-	else if (_hour != secondaryDateTime.getHour()) {
+	} else if (_hour != secondaryDateTime.getHour()) {
 		return (_hour < secondaryDateTime.getHour());
-	}
-	else if (_minute != secondaryDateTime.getMinute()) {
+	} else if (_minute != secondaryDateTime.getMinute()) {
 		return (_minute < secondaryDateTime.getMinute());
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -312,8 +286,7 @@ string DateTime::displayDateTime() {
 			displayOutput << DISPLAY_SEPARATOR_DATETIME;
 			displayOutput << displayTime();
 		}
-	}
-	else if (isValidTime(_hour,_minute)) {
+	} else if (isValidTime(_hour, _minute)) {
 		displayOutput << displayTime();
 	}
 

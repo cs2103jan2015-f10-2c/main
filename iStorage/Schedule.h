@@ -11,8 +11,7 @@
 //	#include "History.h"
 using namespace std;
 
-class Schedule
-{
+class Schedule {
 private:
 	vector <Item> _schedule;
 	vector <Item> _displaySchedule;
@@ -22,13 +21,16 @@ private:
 	//	Pre:	Valid itemID, valid vectorIndex
 	//	Post:	Returns true if the itemID matches; false otherwise
 	bool isMatchingItemID(unsigned int, unsigned int);
-	
+
 	//	Checks if an item's attribute matches that specified by the user
 	//	Pre:	Valid user-specified attribute
 	//	Post:	Returns true if the attributes match; false otherwise
 	bool isMatchingPriority(char, char);
 	bool isMatchingLabel(char, char);
-	bool isMatchingCompletionStatus (bool, bool);
+	bool isMatchingCompletionStatus(bool, bool);
+
+	//	Checks if an item's name or description has a keyword or a string
+	bool hasKeyword(string, string, string);
 
 	//	Checks how an item compares with another according to the item's attribute
 	//			isEarlierThan uses start time, if any, else uses end time, if any
@@ -127,6 +129,7 @@ public:
 	const vector<Item>& retrieveDisplayScheduleFilteredByPriority(char);
 	const vector<Item>& retrieveDisplayScheduleFilteredByLabel(char);
 	const vector<Item>& retrieveDisplayScheduleFilteredByCompletion(bool);
+	const vector<Item>& retrieveDisplayScheduleFilteredByKeyword(string);
 
 	//	Checks given item in the schedule, and removes it if it does not have the specified attribute
 	//	Pre:	Valid priority - L, M, or H
@@ -136,6 +139,7 @@ public:
 	bool filterDisplayScheduleByPriority(int, char);
 	bool filterDisplayScheduleByLabel(int, char);
 	bool filterDisplayScheduleByCompletion(int, bool);
+	bool filterDisplayScheduleByKeyword(int, string);
 
 	//    Returns only items spanning a certain date
 	//vector<Item>& returnScheduleFilteredByDate();
