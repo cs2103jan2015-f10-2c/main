@@ -103,6 +103,7 @@ public:
 	static const string STRING_DATE_INITIALISE;
 	static const string STRING_TIME_INITIALISE;
 	static const string STRING_BLANK;
+	static const string STRING_ZERO;
 	static const string STRING_NEGATIVE_ONE;
 
 	static const char CHAR_SPACE;
@@ -129,6 +130,7 @@ public:
 	static const unsigned int MIN_SIZE_WITH_ABBREVIATION;
 	static const unsigned int SIZE_DAYS;
 	static const unsigned int SIZE_MONTHS;
+	static const unsigned int SIZE_HOURS;
 	static const unsigned int SIZE_DATETIME_WHITESPACE;
 	static const unsigned int HOURS_ZERO;
 	static const unsigned int HOURS_ONE_PM;
@@ -208,8 +210,8 @@ public:
 	// =============================
 	string retrieveCommandOrModifier(string);
 	vector<string> tokeniseText(const string);
+	string retrieveFirstStringToken(string);
 	string removeFirstStringToken(string); 
-	string retrieveFirstStringToken(string); 
 	string removeConsecutiveWhiteSpace(string&);
 	string removeWhiteSpace(string&);
 	string removeCharacter(string&, const char); 
@@ -221,9 +223,9 @@ public:
 	// ===================
 	// date time functions
 	// ===================
-	string setDateTime(string, const string);
-	string splitDateTime(string, const string);
-	bool hasStartEnd(string, unsigned int&, unsigned int&);
+	string setDateTime(string, const string); // do unit testing ==============================================
+	string splitDateTime(string, const string); // do unit testing ============================================
+	bool hasStartEnd(string, unsigned int&, unsigned int&); // do unit testing ================================
 	START_AND_END splitAndSetStartEnd(const string, const unsigned int, const unsigned int, unsigned int&);
 	bool isValidDate(string, string&);
 	bool isValidTime(string, string&);
@@ -232,13 +234,14 @@ public:
 	string splitAndSetTimeString(string, const string);
 	string splitAndSetColonTimeString(string, const string);
 	string splitAndSetNoColonTimeString(string, const string);
-	bool isDay(string, unsigned int&);
 	bool isDay(string);
 	string setDay(string);
 	bool isMonth(string); 
 	string setMonth(string);
 	bool hasTimePeriodAbbreviation(const string);
 	string addTwelveToHours(const string); 
+	bool isAppropriateHour(const string);
+	bool hasNoDayButHasTime(const string); // do unit testing =================================================
 
 	// =================
 	// boolean functions
@@ -246,7 +249,7 @@ public:
 
 	// Pre:		nil
 	// Post:	returns boolean of whether string is a modifier keyword
-	bool isModifier(const string);
+	bool isModifier(string);
 	// Pre:		nil
 	// Post:	returns true if string contains only digits between 0 to 9
 	//			returns false otherwise
