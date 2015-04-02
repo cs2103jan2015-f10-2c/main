@@ -23,6 +23,7 @@ bool History::isValidHistoryCommand(string command) {
 	return false;
 }
 
+//	Adds commands that modifies storage information (add, delete, edit)
 string History::addCommand(string command, Item item) {
 	if (isValidHistoryCommand(command)) {
 		_commandStack.push(command);
@@ -34,6 +35,7 @@ string History::addCommand(string command, Item item) {
 	return ERROR_ADD;
 }
 
+//	Returns true if command and item stacks are not empty
 bool History::isValidUndoCall() {
 	if (_commandStack.empty() || _itemStack.empty()) {
 		return false;
@@ -41,6 +43,7 @@ bool History::isValidUndoCall() {
 	return true;
 }
 
+//	Removes commands from the item and command stack; returns item and command (both via reference)
 string History::undoLastCommand(string& command, Item& latestItem) {
 	if (isValidUndoCall()) {
 		return ERROR_EMPTYSTACKS;
