@@ -15,3 +15,4 @@
 #include "..\iStorage\DateTime.h"
 #include "..\iStorage\Schedule.h"
 #include "..\iStorage\Item.h"
+#include "..\iStorage\History.h"
