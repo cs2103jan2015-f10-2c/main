@@ -396,10 +396,3 @@ bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
 		return false;
 	}
 }
-
-/*
-//	Sorts the display schedule by last update (latest first), returns constant reference to sorted display schedule
-const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
-return retrieveDisplaySchedule();
-}
-*/
