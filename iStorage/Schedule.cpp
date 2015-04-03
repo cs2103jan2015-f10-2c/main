@@ -249,21 +249,21 @@ bool Schedule::isLowerPriorityThan(Item leftItem, Item rightItem) {
 	char leftItemPriority = leftItem.getPriority();
 	char rightItemPriority = rightItem.getPriority();
 
-	if (leftItemPriority = 'H') {
+	if (leftItemPriority == 'H') {
 		leftItemPriority = '1';
-	} else if (leftItemPriority = 'M') {
+	} else if (leftItemPriority == 'M') {
 		leftItemPriority = '2';
-	} else if (leftItemPriority = 'L') {
+	} else if (leftItemPriority == 'L') {
 		leftItemPriority = '3';
 	} else {
 		leftItemPriority = '4';
 	}
 
-	if (rightItemPriority = 'H') {
+	if (rightItemPriority == 'H') {
 		rightItemPriority = '1';
-	} else if (rightItemPriority = 'M') {
+	} else if (rightItemPriority == 'M') {
 		rightItemPriority = '2';
-	} else if (rightItemPriority = 'L') {
+	} else if (rightItemPriority == 'L') {
 		rightItemPriority = '3';
 	} else {
 		rightItemPriority = '4';

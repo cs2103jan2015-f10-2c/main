@@ -1077,6 +1077,8 @@ bool iParser::isAppropriateAMHour(const string hourString) {
 		int hourInInt = stoi(hourString);
 		if (hourInInt > NUMBER_OF_HOURS) {
 			return false;
+		} else {
+			return true;
 		}
 	} else {
 		return false;
