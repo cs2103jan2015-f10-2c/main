@@ -93,6 +93,7 @@ public:
 	static const string STRING_TO;
 	static const string STRING_AM;
 	static const string STRING_PM;
+	static const string STRING_HR;
 	static const string STRING_DATE_INITIALISE;
 	static const string STRING_TIME_INITIALISE;
 	static const string STRING_BLANK;

@@ -50,6 +50,7 @@ const string iParser::STRING_MONTHS_IN_NUMBER[] { "1", "2", "3", "4", "5", "6", 
 const string iParser::STRING_TO = "to";
 const string iParser::STRING_AM = "am";
 const string iParser::STRING_PM = "pm";
+const string iParser::STRING_HR = "hr";
 const string iParser::STRING_DATE_INITIALISE = "-1 -1 -1";
 const string iParser::STRING_TIME_INITIALISE = "-1 -1";
 const string iParser::STRING_BLANK = "";
@@ -680,8 +681,8 @@ bool iParser::isValidTime(string timeString, string& timeToBeSet) {
 		unsigned int endIndex = timeString.size() - 2;
 
 		abbreviation = timeString.substr(endIndex);
-		timeString = timeString.substr(startIndex, endIndex);
 		convertToLowerCase(abbreviation);
+		timeString = timeString.substr(startIndex, endIndex);
 	}
 
 	try{
@@ -856,15 +857,19 @@ string iParser::splitAndSetColonTimeString(string timeString, const string abbre
 
 string iParser::splitAndSetNoColonTimeString(string timeString, const string abbreviation) {
 	assert(timeString != STRING_BLANK);
+
+	if (abbreviation != STRING_AM && abbreviation != STRING_PM && abbreviation != STRING_HR) {
+		throw false;
+	}
+
 	string hour = STRING_NEGATIVE_ONE;
 	string minute = STRING_NEGATIVE_ONE;
 	unsigned int numberOfDigits = timeString.length();
 
-	if ((numberOfDigits == 1 || numberOfDigits == 2) &&
-		(abbreviation == STRING_AM || abbreviation == STRING_PM)) {
+	if (numberOfDigits == 1 || numberOfDigits == 2) {
 		hour = timeString;
 		minute = STRING_ZERO;
-	} else if (numberOfDigits == 3 && (abbreviation == STRING_AM || abbreviation == STRING_PM)) {
+	} else if (numberOfDigits == 3) {
 		hour = timeString.substr(INDEX_START, 1);
 		minute = timeString.substr(1);
 		if (!areDigits(minute) || hour == STRING_ZERO) {
@@ -967,7 +972,7 @@ bool iParser::hasTimePeriodAbbreviation(const string timeString) {
 
 	convertToLowerCase(abbreviation);
 
-	if (abbreviation == STRING_AM || abbreviation == STRING_PM) {
+	if (abbreviation == STRING_AM || abbreviation == STRING_PM || abbreviation == STRING_HR) {
 		return true;
 	} else {
 		return false;
