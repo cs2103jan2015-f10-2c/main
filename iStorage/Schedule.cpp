@@ -3,11 +3,11 @@
 
 #include "Schedule.h"
 
-const string History::COMMAND_ADD = "ADD";
-const string History::COMMAND_DELETE = "DELETE";
-const string History::COMMAND_REPLACE = "REPLACE";
-const string History::ERROR_ADD = "ERROR: Command and Item were not recorded.";
-const string History::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
+const string Schedule::COMMAND_ADD = "ADD";
+const string Schedule::COMMAND_DELETE = "DELETE";
+const string Schedule::COMMAND_REPLACE = "REPLACE";
+const string Schedule::ERROR_ADD = "ERROR: Command and Item were not recorded.";
+const string Schedule::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
 
 //	Constructor
 Schedule::Schedule() {}
@@ -163,7 +163,7 @@ string Schedule::undoLastCommand() {
 
 //	Undoes the last command that modified the schedule (add)
 string Schedule::undoAdd(Item latestItem) {
-	string confirmation = deleteItemGivenItemID(latestItem.getItemID);
+	string confirmation = deleteItemGivenItemID(latestItem.getItemID());
 	_scheduleHistory.removeUndoneCommand();
 
 	return (COMMAND_ADD + confirmation);
@@ -291,7 +291,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 
 //	Filters the schedule by priority
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char priority) {
-	for (int index = 0; index < _displaySchedule.size(); index++) {
+	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByPriority(index, priority)) {
 			index--;
 		}
@@ -302,7 +302,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char pri
 
 //	Filters the schedule by label
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
-	for (int index = 0; index < _displaySchedule.size(); index++) {
+	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByLabel(index, label)) {
 			index--;
 		}
@@ -313,7 +313,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label)
 
 //	Filters the schedule by completion status
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
-	for (int index = 0; index < _displaySchedule.size(); index++) {
+	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByCompletion(index, completionStatus)) {
 			index--;
 		}
@@ -322,8 +322,9 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool c
 	return _displaySchedule;
 }
 
+//	Filters the schedule by keyword
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByKeyword(string keyword) {
-	for (int index = 0; index < _displaySchedule.size(); index++) {
+	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByKeyword(index, keyword)) {
 			index--;
 		}
@@ -374,13 +375,14 @@ bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatu
 	return false;
 }
 
+//	Checks given item in the schedule, and removes it if it does not have the user-specified keyword
 bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
-	if (!hasKeyword(_displaySchedule[index].getItemName, _displaySchedule[index].getDescription, keyword)) {
+	if (!hasKeyword(_displaySchedule[index].getItemName(), _displaySchedule[index].getDescription(), keyword)) {
 		_displaySchedule.erase(_displaySchedule.begin() + index);
 		return true;
 	} else {
 		return false;
-	}	
+	}
 }
 
 /*
