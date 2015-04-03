@@ -113,9 +113,9 @@ public:
 
 	TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
 		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
-		string testInput[] = { "add abc", "-desc wear formal", "-date 12/11/10, 10PM", "-priority high" };
+		string testInput[] = { "add abc", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-priority H" };
 		string expectedCommand[] = { "description", "start", "priority" };
-		string expectedText[] = { "wear formal", "10 11 12 22 00", "high" };
+		string expectedText[] = { "WEAR FORMAL", "10 11 12 22 00", "h" };
 		vector<string> testVector;
 
 		for (int i = 0; i < 4; i++) {
