@@ -102,7 +102,7 @@ Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorInd
 //	Replaces an existing item in the schedule, returns full details of the item (string)
 string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int itemID) {
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
-	
+
 	_scheduleHistory.addCommand(COMMAND_REPLACE, _schedule[vectorIndex]);
 	_schedule[vectorIndex] = *replacementItem;
 
@@ -169,9 +169,9 @@ string Schedule::undoReplace(Item latestItem) {
 
 //	Undoes the last command that modified the schedule (delete)
 string Schedule::undoDelete(Item latestItem) {
-	string confirmation = addItem(&latestItem);	
+	string confirmation = addItem(&latestItem);
 	_scheduleHistory.removeUndoneCommand();
-	
+
 	return (COMMAND_DELETE + confirmation);
 }
 

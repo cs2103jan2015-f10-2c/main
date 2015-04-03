@@ -48,13 +48,22 @@ string History::addCommand(string command, Item item) {
 string History::undoLastCommand(string& command, Item& latestItem) {
 	if (isValidUndoCall()) {
 		command = _commandStack.top();
-		_commandStack.pop();
-
 		latestItem = _itemStack.top();
-		_itemStack.pop();
+
+		removeUndoneCommand();
 
 		return (command + "\n" + latestItem.displayItemFullDetails());
 	}
 
 	return ERROR_EMPTYSTACKS;
+}
+
+bool History::removeUndoneCommand() {
+	bool commandCompleted = false;
+
+	_commandStack.pop();
+	_itemStack.pop();
+	commandCompleted = true;
+
+	return commandCompleted;
 }
