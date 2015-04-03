@@ -223,7 +223,7 @@ public:
 	// ===================
 	bool hasStartEndDateTime(string);
 	string setDateTime(string, const string); // do more unit testing ==============================================
-	string splitAndSetDateTime(string, const string); // do unit testing ============================================
+	string splitAndSetDateTime(string, const string);
 	string splitAndSetStartEndDateTime(const string);
 	string splitAndSetNoCommaStartEndDateTime(const string);
 	string splitAndSetOneCommaStartEndDateTime(const string);

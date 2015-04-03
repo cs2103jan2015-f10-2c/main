@@ -366,7 +366,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 
 string iParser::executeDateTimeParsing(string dateTimeString, const string modifierType) {
 	if (hasStartEndDateTime(dateTimeString)) {
-		//splitAndSetStartEnd(dateTimeString);
+		splitAndSetStartEndDateTime(dateTimeString);
 	} else {
 		setDateTime(dateTimeString, modifierType);
 	}
@@ -627,8 +627,63 @@ string iParser::splitAndSetNoCommaStartEndDateTime(const string dateTimeString) 
 	return MESSAGE_SUCCESS;
 }
 string iParser::splitAndSetOneCommaStartEndDateTime(const string dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
 
+	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
+	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
+	unsigned int commaIndex = dateTimeString.find_first_of(",");
+	unsigned int seperatorIndex = INDEX_INVALID;
+	unsigned int seperatorSize = 0;
 
+	if (seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) {
+		seperatorIndex = seperatorToIndex;
+		seperatorSize = SIZE_OF_STRING_TO;
+	} else {
+		seperatorIndex = seperatorHyphenIndex;
+		seperatorSize = SIZE_OF_STRING_HYPHEN;
+	}
+
+	string startDateTimeString = STRING_BLANK;
+	string endDateTimeString = STRING_BLANK;
+	string fixedDateTimeString = STRING_BLANK;
+	if (commaIndex < seperatorIndex) {
+		fixedDateTimeString = dateTimeString.substr(INDEX_START, commaIndex);
+		startDateTimeString = dateTimeString.substr(commaIndex + 1, seperatorIndex - commaIndex - 1);
+		endDateTimeString = dateTimeString.substr(seperatorIndex + seperatorSize);
+	} else {
+		startDateTimeString = dateTimeString.substr(INDEX_START, seperatorIndex);
+		unsigned int startIndexForEndDateTime = seperatorIndex + seperatorSize;
+		endDateTimeString = dateTimeString.substr(startIndexForEndDateTime + 1, commaIndex - startIndexForEndDateTime - 1);
+		fixedDateTimeString = dateTimeString.substr(commaIndex + 1);
+	}
+
+	string dateToSet = STRING_BLANK;
+	if (isValidTime(fixedDateTimeString, dateToSet)) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+	else if (isValidDate(fixedDateTimeString, dateToSet)) {
+		string startTimeToSet = STRING_BLANK;
+		string endTimeToSet = STRING_BLANK;
+		
+		if (isValidTime(startDateTimeString, startTimeToSet) && isValidTime(endDateTimeString, endTimeToSet)) {
+			string startDateTime = dateToSet + CHAR_SPACE + startTimeToSet;
+			string endDateTime = dateToSet + CHAR_SPACE + endTimeToSet;
+
+			if (hasNoDayButHasTime(startDateTime)) {
+				throw MESSAGE_INVALID_DATE_TIME;
+			}
+
+			setParseInfo(COMMAND_START, startDateTime);
+			setParseInfo(COMMAND_END, endDateTime);
+		}
+		else {
+			throw MESSAGE_INVALID_DATE_TIME;
+		}
+	}
+	else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+	
 	return MESSAGE_SUCCESS;
 }
 
