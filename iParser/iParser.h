@@ -123,7 +123,7 @@ public:
 	// used to avoid magic numbers
 	static const unsigned int SIZE_SEPERATOR_TO;
 	static const unsigned int SIZE_SEPERATOR_HYPHEN;
-	static const unsigned int MIN_SIZE_WITH_ABBREVIATION;
+	static const unsigned int MIN_SIZE_WITH_SUFFIX;
 	static const unsigned int SIZE_DAYS;
 	static const unsigned int SIZE_MONTHS;
 	static const unsigned int SIZE_HOURS;
@@ -235,7 +235,7 @@ public:
 	string setDay(string);
 	bool isMonth(string); 
 	string setMonth(string);
-	bool hasTimePeriodAbbreviation(const string);
+	bool hasTimePeriodSuffix(const string);
 	string addTwelveToHours(const string); 
 	bool isAppropriateHour(const string);
 	bool hasNoDayButHasTime(const string); // do unit testing =================================================

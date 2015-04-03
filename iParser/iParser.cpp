@@ -77,7 +77,7 @@ const string iParser::MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER = "Unable to 
 
 const unsigned int iParser::SIZE_SEPERATOR_TO = 2;
 const unsigned int iParser::SIZE_SEPERATOR_HYPHEN = 1;
-const unsigned int iParser::MIN_SIZE_WITH_ABBREVIATION = 3;
+const unsigned int iParser::MIN_SIZE_WITH_SUFFIX = 3;
 const unsigned int iParser::SIZE_DAYS = 7;
 const unsigned int iParser::SIZE_MONTHS = 12;
 const unsigned int iParser::SIZE_HOURS = 12;
@@ -675,18 +675,18 @@ bool iParser::isValidTime(string timeString, string& timeToBeSet) {
 
 	removeWhiteSpace(timeString);
 
-	string abbreviation = STRING_BLANK;
-	if (hasTimePeriodAbbreviation(timeString)) {
+	string suffix = STRING_BLANK;
+	if (hasTimePeriodSuffix(timeString)) {
 		unsigned int startIndex = 0;
 		unsigned int endIndex = timeString.size() - 2;
 
-		abbreviation = timeString.substr(endIndex);
-		convertToLowerCase(abbreviation);
+		suffix = timeString.substr(endIndex);
+		convertToLowerCase(suffix);
 		timeString = timeString.substr(startIndex, endIndex);
 	}
 
 	try{
-		timeToBeSet = splitAndSetTimeString(timeString, abbreviation);
+		timeToBeSet = splitAndSetTimeString(timeString, suffix);
 	}
 	catch (bool& booleanException) {
 		return booleanException;
@@ -808,15 +808,15 @@ string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigne
 	return output.str();
 }
 
-string iParser::splitAndSetTimeString(string timeString, const string abbreviation) {
+string iParser::splitAndSetTimeString(string timeString, const string suffix) {
 	assert(timeString != STRING_BLANK);
 	const unsigned int numberOfColons = retrieveCount(timeString, CHAR_COLON);
 	string output;
 
 	if (numberOfColons == 0) {
-		output = splitAndSetNoColonTimeString(timeString, abbreviation);
+		output = splitAndSetNoColonTimeString(timeString, suffix);
 	} else if (numberOfColons == 1) {
-		output = splitAndSetColonTimeString(timeString, abbreviation);
+		output = splitAndSetColonTimeString(timeString, suffix);
 	} else {
 		throw false;
 	}
@@ -824,7 +824,7 @@ string iParser::splitAndSetTimeString(string timeString, const string abbreviati
 	return output;
 }
 
-string iParser::splitAndSetColonTimeString(string timeString, const string abbreviation) {
+string iParser::splitAndSetColonTimeString(string timeString, const string suffix) {
 	assert(timeString != STRING_BLANK);
 	string hour = STRING_NEGATIVE_ONE;
 	string minute = STRING_NEGATIVE_ONE;
@@ -839,9 +839,9 @@ string iParser::splitAndSetColonTimeString(string timeString, const string abbre
 	startIndex = endIndex + 1;
 	minute = timeString.substr(startIndex);
 
-	if (abbreviation == STRING_PM) {
+	if (suffix == STRING_PM) {
 		hour = addTwelveToHours(hour);
-	} else if (abbreviation == STRING_AM && !isAppropriateHour(hour)) {
+	} else if (suffix == STRING_AM && !isAppropriateHour(hour)) {
 		throw false;
 	}
 
@@ -855,10 +855,10 @@ string iParser::splitAndSetColonTimeString(string timeString, const string abbre
 	return output.str();
 }
 
-string iParser::splitAndSetNoColonTimeString(string timeString, const string abbreviation) {
+string iParser::splitAndSetNoColonTimeString(string timeString, const string suffix) {
 	assert(timeString != STRING_BLANK);
 
-	if (abbreviation != STRING_AM && abbreviation != STRING_PM && abbreviation != STRING_HR) {
+	if (suffix != STRING_AM && suffix != STRING_PM && suffix != STRING_HR) {
 		throw false;
 	}
 
@@ -885,9 +885,9 @@ string iParser::splitAndSetNoColonTimeString(string timeString, const string abb
 		throw false;
 	}
 
-	if (abbreviation == STRING_PM) {
+	if (suffix == STRING_PM) {
 		hour = addTwelveToHours(hour);
-	} else if (abbreviation == STRING_AM && !isAppropriateHour(hour)) {
+	} else if (suffix == STRING_AM && !isAppropriateHour(hour)) {
 		throw false;
 	}
 
@@ -961,18 +961,18 @@ string iParser::setMonth(string monthString) {
 	return STRING_BLANK;
 }
 
-bool iParser::hasTimePeriodAbbreviation(const string timeString) {
+bool iParser::hasTimePeriodSuffix(const string timeString) {
 	assert(timeString != STRING_BLANK);
-	if (timeString.size() < MIN_SIZE_WITH_ABBREVIATION) {
+	if (timeString.size() < MIN_SIZE_WITH_SUFFIX) {
 		return false;
 	}
 
 	unsigned int secondLastCharacterIndex = timeString.size() - 2;
-	string abbreviation = timeString.substr(secondLastCharacterIndex);
+	string suffix = timeString.substr(secondLastCharacterIndex);
 
-	convertToLowerCase(abbreviation);
+	convertToLowerCase(suffix);
 
-	if (abbreviation == STRING_AM || abbreviation == STRING_PM || abbreviation == STRING_HR) {
+	if (suffix == STRING_AM || suffix == STRING_PM || suffix == STRING_HR) {
 		return true;
 	} else {
 		return false;

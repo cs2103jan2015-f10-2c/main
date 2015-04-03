@@ -470,17 +470,17 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserHasTimePeriodAbbreviationTest) {
+	TEST_METHOD(parserHasTimePeriodSuffixTest) {
 		string testTime[] = { "1010AM", "1010PM", "1010aM", "1010Pm", "1010am", "1010pm" };
 		string testTimeFalse[] = { "1010", "1010mp", "1010ma", "1010cs", "PM", "AM" };
 
 		for (int i = 0; i < 6; i++) {
-			bool actual = testParser.hasTimePeriodAbbreviation(testTime[i]);
+			bool actual = testParser.hasTimePeriodSuffix(testTime[i]);
 			Assert::IsTrue(actual);
 		}
 
 		for (int i = 0; i < 6; i++) {
-			bool actual = testParser.hasTimePeriodAbbreviation(testTimeFalse[i]);
+			bool actual = testParser.hasTimePeriodSuffix(testTimeFalse[i]);
 			Assert::IsFalse(actual);
 		}
 	}
