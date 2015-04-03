@@ -236,12 +236,25 @@ public:
 		}
 	}
 
+	TEST_METHOD(parserHasStartEndTest) {
+		string testDateTime[] = { "10/11/12 to 12/11/12", "10 November 12-12 November 2012", "10 Nov 2012, 12Pm", "1030, 11 Sep 2015" };
+
+		for (int i = 0; i < 4; i++) {
+			bool actual = testParser.hasStartEndDateTime(testDateTime[i]);
+			if (i < 2) {
+				Assert::IsTrue(actual);
+			} else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
+
 	TEST_METHOD(parserSetDateTimeTest) {
-		string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030, 10/11/12", "930PM, 10 Dec 2015" };
-		string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30" };
+		string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030, 10/11/12", "930PM, 10 Dec 2015", "1pm" };
+		string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30", "-1 -1 -1 13 0" };
 		string expectedCommand[] = { "start", "end" };
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 7; i++) {
 			testParser.setDateTime(testDateTime[i], "date");
 		}
 
@@ -256,7 +269,7 @@ public:
 		}
 
 		testParser.clearParseInfo();
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 7; i++) {
 			testParser.setDateTime(testDateTime[i], "due");
 		}
 
@@ -270,15 +283,30 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserHasStartEndTest) {
-		string testDateTime[] = { "10/11/12 to 12/11/12", "10 November 12-12 November 2012", "10 Nov 2012, 12Pm", "1030, 11 Sep 2015" };
+	TEST_METHOD(parserSplitAndSetNoCommaStartEndDateTimeTest) {
+		string testDates[] = { "10AM to 1PM", "930AM to 1230PM", "1 Oct to 23 Oct", "1 Oct 2012 - 23 Oct 2015", "mon to wed" };
+		string expectedStart[] = { "-1 -1 -1 10 0", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1", "-1 -1 monday -1 1"};
+		string expectedEnd[] = { "-1 -1 -1 13 0", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1", "-1 -1 wednesday -1 -1" };
+		string start = "start";
+		string end = "end";
 
 		for (int i = 0; i < 4; i++) {
-			bool actual = testParser.hasStartEndDateTime(testDateTime[i]);
-			if (i < 2) {
-				Assert::IsTrue(actual);
+			testParser.splitAndSetNoCommaStartEndDateTime(testDates[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStart[i/2], actualText);
 			} else {
-				Assert::IsFalse(actual);
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEnd[i/2], actualText);
 			}
 		}
 	}

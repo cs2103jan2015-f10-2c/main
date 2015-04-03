@@ -120,7 +120,8 @@ public:
 	static const string MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 
 	// used to avoid magic numbers
-	static const unsigned int MAX_NUMBER_OF_COMMAS;
+	static const unsigned int SIZE_SEPERATOR_TO;
+	static const unsigned int SIZE_SEPERATOR_HYPHEN;
 	static const unsigned int MIN_SIZE_WITH_ABBREVIATION;
 	static const unsigned int SIZE_DAYS;
 	static const unsigned int SIZE_MONTHS;
@@ -174,11 +175,11 @@ public:
 	// Pre:		commandType is "add"
 	// Post:	sets itemName and any modifiers along with their respective information to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
-	string executeAddParsing(string); // unit test + improve =======================================================
+	string executeAddParsing(string); 
 	// Pre:		commandType is "edit"
 	// Post:	sets indexToEdit and any modifiers along with their respective information to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
-	string executeEditParsing(string); // unit test + improve ======================================================
+	string executeEditParsing(string);
 	// Pre:		commandType is "delete", "del", "sort", "search", "view", "save" or "done"
 	// Post:	sets text or index to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
@@ -217,10 +218,11 @@ public:
 	// ===================
 	// date time functions
 	// ===================
+	bool hasStartEndDateTime(string);
 	string setDateTime(string, const string); // do more unit testing ==============================================
 	string splitAndSetDateTime(string, const string); // do unit testing ============================================
-	bool hasStartEndDateTime(string);
-	string splitAndSetStartEndDateTime(const string, const unsigned int, const unsigned int, unsigned int&);
+	string splitAndSetStartEndDateTime(const string);
+	string splitAndSetNoCommaStartEndDateTime(const string);
 	bool isValidDate(string, string&);
 	bool isValidTime(string, string&);
 	string splitAndSetObliqueDateInformation(string, const unsigned int);
