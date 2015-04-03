@@ -3,6 +3,12 @@
 
 #include "Schedule.h"
 
+const string History::COMMAND_ADD = "ADD";
+const string History::COMMAND_DELETE = "DELETE";
+const string History::COMMAND_REPLACE = "REPLACE";
+const string History::ERROR_ADD = "ERROR: Command and Item were not recorded.";
+const string History::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
+
 //	Constructor
 Schedule::Schedule() {}
 
@@ -41,6 +47,16 @@ bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompleti
 	return false;
 }
 
+bool Schedule::hasKeyword(string name, string description, string keyword) {
+	if (name.find(keyword) != string::npos) {
+		return true;
+	} else if (description.find(keyword) != string::npos) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 //	Retrieves schedule vector index given itemID
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = 0;
@@ -75,7 +91,9 @@ unsigned int Schedule::resetDisplaySchedule() {
 
 //	Adds the item to the schedule, returns full details of the item (string)
 string Schedule::addItem(Item* item) {
+	_scheduleHistory.addCommand(COMMAND_ADD, *item);
 	_schedule.push_back(*item);
+
 	return _schedule.back().displayItemFullDetails();
 }
 
@@ -94,7 +112,10 @@ Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorInd
 //	Replaces an existing item in the schedule, returns full details of the item (string)
 string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int itemID) {
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+
+	_scheduleHistory.addCommand(COMMAND_REPLACE, _schedule[vectorIndex]);
 	_schedule[vectorIndex] = *replacementItem;
+
 	return _schedule[vectorIndex].displayItemFullDetails();
 }
 
@@ -109,7 +130,9 @@ string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 	unsigned int index = findVectorIndexGivenItemID(itemID);
 	Item itemToBeDeleted = _schedule[index];
 
+	_scheduleHistory.addCommand(COMMAND_DELETE, itemToBeDeleted);
 	_schedule.erase(_schedule.begin() + index);
+
 	return itemToBeDeleted.displayItemFullDetails();
 }
 
@@ -117,6 +140,49 @@ string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 string Schedule::deleteItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
 	return deleteItemGivenItemID(itemID);
+}
+
+//	Undoes the last command that modified the schedule (add, replace, delete)
+string Schedule::undoLastCommand() {
+	Item latestItem;
+	string command;
+	string confirmation = _scheduleHistory.undoLastCommand(command, latestItem);
+
+	if (confirmation == ERROR_EMPTYSTACKS) {
+		return confirmation;
+	} else if (command == COMMAND_ADD) {
+		confirmation = undoAdd(latestItem);
+	} else if (command == COMMAND_DELETE) {
+		confirmation = undoDelete(latestItem);
+	} else if (command == COMMAND_REPLACE) {
+		confirmation = undoReplace(latestItem);
+	}
+
+	return confirmation;
+}
+
+//	Undoes the last command that modified the schedule (add)
+string Schedule::undoAdd(Item latestItem) {
+	string confirmation = deleteItemGivenItemID(latestItem.getItemID);
+	_scheduleHistory.removeUndoneCommand();
+
+	return (COMMAND_ADD + confirmation);
+}
+
+//	Undoes the last command that modified the schedule (replace)
+string Schedule::undoReplace(Item latestItem) {
+	string confirmation = replaceItemGivenItemID(&latestItem, latestItem.getItemID());
+	_scheduleHistory.removeUndoneCommand();
+
+	return (COMMAND_REPLACE + confirmation);
+}
+
+//	Undoes the last command that modified the schedule (delete)
+string Schedule::undoDelete(Item latestItem) {
+	string confirmation = addItem(&latestItem);
+	_scheduleHistory.removeUndoneCommand();
+
+	return (COMMAND_DELETE + confirmation);
 }
 
 //	Retrieves the entire schedule
@@ -309,16 +375,12 @@ bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatu
 }
 
 bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
-	Item removedItem;
-
 	if (!hasKeyword(_displaySchedule[index].getItemName, _displaySchedule[index].getDescription, keyword)) {
-		removedItem = _displaySchedule[index];
-
 		_displaySchedule.erase(_displaySchedule.begin() + index);
 		return true;
-	}
-
-	return false;
+	} else {
+		return false;
+	}	
 }
 
 /*

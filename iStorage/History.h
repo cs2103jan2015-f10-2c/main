@@ -32,11 +32,14 @@ public:
 	//	Pre:	Valid item
 	//	Post:	Command is added into the command stack; item is added into the item stack
 	string addCommand(string, Item);
-	
+
 	//	Removes commands from the item and command stack; returns item and command (both via reference)
 	//	Pre:	Item and command stacks are not empty
 	//	Post:	Command and Item are returned via reference; success/failure message is returned
 	string undoLastCommand(string&, Item& latestItem);
+
+	//	From the item and command stack, removes the undone command (that is re-added during execution of undo)
+	bool removeUndoneCommand();
 };
 
 #endif

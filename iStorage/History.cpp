@@ -15,12 +15,21 @@ History::History() {}
 //	Default Destructor
 History::~History() {}
 
+//	Returns true if command is add, delete, or replace
 bool History::isValidHistoryCommand(string command) {
 	if (command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_REPLACE) {
 		return true;
 	}
 
 	return false;
+}
+
+//	Returns true if command and item stacks are both not empty
+bool History::isValidUndoCall() {
+	if (_commandStack.empty() || _itemStack.empty()) {
+		return false;
+	}
+	return true;
 }
 
 //	Adds commands that modifies storage information (add, delete, edit)
@@ -35,25 +44,26 @@ string History::addCommand(string command, Item item) {
 	return ERROR_ADD;
 }
 
-//	Returns true if command and item stacks are not empty
-bool History::isValidUndoCall() {
-	if (_commandStack.empty() || _itemStack.empty()) {
-		return false;
-	}
-	return true;
-}
-
 //	Removes commands from the item and command stack; returns item and command (both via reference)
 string History::undoLastCommand(string& command, Item& latestItem) {
 	if (isValidUndoCall()) {
-		return ERROR_EMPTYSTACKS;
-	} else {
 		command = _commandStack.top();
-		_commandStack.pop();
-
 		latestItem = _itemStack.top();
-		_itemStack.pop();
 
-		return (command + latestItem.displayItemFullDetails());
+		removeUndoneCommand();
+
+		return (command + "\n" + latestItem.displayItemFullDetails());
 	}
+
+	return ERROR_EMPTYSTACKS;
+}
+
+bool History::removeUndoneCommand() {
+	bool commandCompleted = false;
+
+	_commandStack.pop();
+	_itemStack.pop();
+	commandCompleted = true;
+
+	return commandCompleted;
 }
