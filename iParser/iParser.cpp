@@ -118,34 +118,34 @@ string iParser::executeParsing(string userInput) {
 		executeAddParsing(textWithoutCommand);
 		break;
 	case DELETE:
-		executeCommandAndTextParsing(textWithoutCommand, COMMAND_DELETE);
+		executeCommandAndTextParsing(COMMAND_DELETE, textWithoutCommand);
 		break;
 	case CLEAR:
-		executeCommandParsing(userInput, COMMAND_CLEAR);
+		executeCommandParsing(COMMAND_CLEAR, userInput);
 		break;
 	case EDIT:
 		executeEditParsing(textWithoutCommand);
 		break;
 	case UNDO:
-		executeCommandParsing(userInput, COMMAND_UNDO);
+		executeCommandParsing(COMMAND_UNDO, userInput);
 		break;
 	case SORT:
-		executeCommandAndTextParsing(textWithoutCommand, COMMAND_SORT);
+		executeCommandAndTextParsing(COMMAND_SORT, textWithoutCommand);
 		break;
 	case SEARCH:
-		executeCommandAndTextParsing(textWithoutCommand, COMMAND_SEARCH);
+		executeCommandAndTextParsing(COMMAND_SEARCH, textWithoutCommand);
 		break;
 	case VIEW:
-		executeCommandAndTextParsing(textWithoutCommand, COMMAND_VIEW);
+		executeCommandAndTextParsing(COMMAND_VIEW, textWithoutCommand);
 		break;
 	case SAVE:
-		executeCommandAndTextParsing(textWithoutCommand, COMMAND_SAVE);
+		executeCommandAndTextParsing(COMMAND_SAVE, textWithoutCommand);
 		break;
 	case DONE:
-		executeCommandAndTextParsing(textWithoutCommand, COMMAND_DONE);
+		executeCommandAndTextParsing(COMMAND_DONE, textWithoutCommand);
 		break;
 	case EXIT:
-		executeCommandParsing(userInput, COMMAND_EXIT);
+		executeCommandParsing(COMMAND_EXIT, userInput);
 		break;
 	case INVALID_COMMAND:
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
@@ -1077,6 +1077,8 @@ bool iParser::isAppropriateAMHour(const string hourString) {
 		int hourInInt = stoi(hourString);
 		if (hourInInt > NUMBER_OF_HOURS) {
 			return false;
+		} else {
+			return true;
 		}
 	} else {
 		return false;
