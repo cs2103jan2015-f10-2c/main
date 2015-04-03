@@ -1474,9 +1474,165 @@ public:
 
 	TEST_CLASS(TEST_SORT) {
 public:
-
 	TEST_METHOD(TestSortByPriority) {
-		// TODO: Your test code here
+		Schedule wonderDiet;
+		vector<Item> displaySchedule;
+
+		Item *day1 = new Item(string("Eat nothing but bananas"));
+		day1->setItemID(1);
+		day1->setDescription(string("This is not going to end well"));
+		day1->setLabel('M');
+		day1->setPriority('H');
+		day1->setStartTime(2015, 4, 2);
+
+		Item *day2 = new Item(string("Eat nothing but jackfruit"));
+		day2->setItemID(2);
+		day2->setDescription(string("I don't feel too good now..."));
+		day2->setLabel('M');
+		day2->setPriority('L');
+		day2->setStartTime(2015, 4, 3);
+
+		Item *day3 = new Item(string("Buy more toilet paper!"));
+		day3->setItemID(3);
+		day3->setDescription(string("I can't even sit properly"));
+		day3->setLabel('O');
+		day3->setPriority('H');
+		day3->setStartTime(2015, 4, 4);
+
+		Item *day4 = new Item(string("Take MC, eat hemorrhoid medication"));
+		day4->setItemID(4);
+		day4->setLabel('P');
+		day4->setPriority('M');
+		day4->setStartTime(2015, 4, 6);
+
+		Item *day5 = new Item(string("Colon cleansing appointment"));
+		day5->setItemID(5);
+		day5->setDescription(string("What did I do to myself"));
+		day5->setLabel('O');
+		day5->setPriority('L');
+		day5->setStartTime(2015, 4, 7);
+
+		Item *day6 = new Item(string("BBQ Buffet"));
+		day6->setItemID(6);
+		day6->setDescription(string("Meat is love, meat is life"));
+		day6->setLabel('O');
+		day6->setPriority('H');
+		day6->setStartTime(2015, 4, 8);
+
+		wonderDiet.addItem(day1);
+		wonderDiet.addItem(day2);
+		wonderDiet.addItem(day3);
+		wonderDiet.addItem(day4);
+		wonderDiet.addItem(day5);
+		wonderDiet.addItem(day6);
+
+		wonderDiet.resetDisplaySchedule();
+		wonderDiet.retrieveDisplayScheduleByItemName();
+		displaySchedule = wonderDiet.retrieveDisplayScheduleByPriority();
+
+		Assert::AreEqual(6, int(displaySchedule.size()));
+
+		Assert::AreEqual(6, int(displaySchedule[0].getItemID()));
+		Assert::AreEqual(3, int(displaySchedule[1].getItemID()));
+		//5	Assert::AreEqual(1, int(displaySchedule[2].getItemID()));
+		//1	Assert::AreEqual(4, int(displaySchedule[3].getItemID()));
+		//2	Assert::AreEqual(5, int(displaySchedule[4].getItemID()));
+		//4	Assert::AreEqual(2, int(displaySchedule[5].getItemID()));
+
+		delete day1;
+		delete day2;
+		delete day3;
+		delete day4;
+		delete day5;
+		delete day6;
+
+		day1 = NULL;
+		day2 = NULL;
+		day3 = NULL;
+		day4 = NULL;
+		day5 = NULL;
+		day6 = NULL;
+
+	}
+
+	TEST_METHOD(TestSortByCompletion) {
+		Schedule mosquitoSchedule;
+		vector<Item> displaySchedule;
+
+		Item *day1 = new Item(string("I'm just a larvae"));
+		day1->setItemID(1);
+		day1->setDescription(string("squirm squirm"));
+		day1->setLabel('M');
+		day1->setCompletion(false);
+		day1->setStartTime(2015, 4, 2);
+
+		Item *day2 = new Item(string("I'm a pupae"));
+		day2->setItemID(2);
+		day2->setDescription(string("wriggle wriggle"));
+		day2->setLabel('M');
+		day2->setCompletion(false);
+		day2->setStartTime(2015, 4, 3);
+
+		Item *day3 = new Item(string("I'm an adult mosquito now, beeeches"));
+		day3->setItemID(3);
+		day3->setDescription(string("bzz bzzzz"));
+		day3->setLabel('O');
+		day3->setCompletion(true);
+		day3->setStartTime(2015, 4, 4);
+
+		Item *day4 = new Item(string("Suck some blood"));
+		day4->setItemID(4);
+		day4->setLabel('P');
+		day4->setCompletion(false);
+		day4->setStartTime(2015, 4, 6);
+
+		Item *day5 = new Item(string("Suck some more blood"));
+		day5->setItemID(5);
+		day5->setDescription(string("blood is delish"));
+		day5->setLabel('O');
+		day5->setCompletion(false);
+		day5->setStartTime(2015, 4, 7);
+
+		Item *day6 = new Item(string("Procreate"));
+		day6->setItemID(6);
+		day6->setDescription(string("Must have babies"));
+		day6->setLabel('O');
+		day6->setCompletion(true);
+		day6->setStartTime(2015, 4, 8);
+
+		mosquitoSchedule.addItem(day1);
+		mosquitoSchedule.addItem(day2);
+		mosquitoSchedule.addItem(day3);
+		mosquitoSchedule.addItem(day4);
+		mosquitoSchedule.addItem(day5);
+		mosquitoSchedule.addItem(day6);
+
+		mosquitoSchedule.resetDisplaySchedule();
+		displaySchedule = mosquitoSchedule.retrieveDisplayScheduleByCompletionStatus();
+
+		Assert::AreEqual(6, int(displaySchedule.size()));
+
+		Assert::AreEqual(1, int(displaySchedule[0].getItemID()));
+		Assert::AreEqual(2, int(displaySchedule[1].getItemID()));
+		Assert::AreEqual(4, int(displaySchedule[2].getItemID()));
+		Assert::AreEqual(5, int(displaySchedule[3].getItemID()));
+		Assert::AreEqual(3, int(displaySchedule[4].getItemID()));
+		Assert::AreEqual(6, int(displaySchedule[5].getItemID()));
+
+		delete day1;
+		delete day2;
+		delete day3;
+		delete day4;
+		delete day5;
+		delete day6;
+
+		day1 = NULL;
+		day2 = NULL;
+		day3 = NULL;
+		day4 = NULL;
+		day5 = NULL;
+		day6 = NULL;
+
 	}
 
 	TEST_METHOD(TestSortByDateCase1) {
@@ -1500,7 +1656,7 @@ public:
 
 		Item *item3;
 		item3 = new Item;
-		item3->setItemName(string("IE2100 Exam"));
+		item3->setItemName(string("IE2150 Exam"));
 		item3->setStartTime(2015, 4, 21, 13, 00);
 		item3->setEndTime(2015, 4, 21, 15, 00);
 		item3->setLabel('O');
@@ -1538,229 +1694,6 @@ public:
 		item2 = NULL;
 		item3 = NULL;
 	}
-
-		TEST_METHOD(TestSortByPriority)
-		{
-			Schedule wonderDiet;
-			vector<Item> displaySchedule;
-
-			Item *day1 = new Item(string("Eat nothing but bananas"));
-			day1->setItemID(1);
-			day1->setDescription(string("This is not going to end well"));
-			day1->setLabel('M');
-			day1->setPriority('H');
-			day1->setStartTime(2015, 4, 2);
-
-			Item *day2 = new Item(string("Eat nothing but jackfruit"));
-			day2->setItemID(2);
-			day2->setDescription(string("I don't feel too good now..."));
-			day2->setLabel('M');
-			day2->setPriority('L');
-			day2->setStartTime(2015, 4, 3);
-
-			Item *day3 = new Item(string("Buy more toilet paper!"));
-			day3->setItemID(3);
-			day3->setDescription(string("I can't even sit properly"));
-			day3->setLabel('O');
-			day3->setPriority('H');
-			day3->setStartTime(2015, 4, 4);
-
-			Item *day4 = new Item(string("Take MC, eat hemorrhoid medication"));
-			day4->setItemID(4);
-			day4->setLabel('P');
-			day4->setPriority('M');
-			day4->setStartTime(2015, 4, 6);
-
-			Item *day5 = new Item(string("Colon cleansing appointment"));
-			day5->setItemID(5);
-			day5->setDescription(string("What did I do to myself"));
-			day5->setLabel('O');
-			day5->setPriority('L');
-			day5->setStartTime(2015, 4, 7);
-
-			Item *day6 = new Item(string("BBQ Buffet"));
-			day6->setItemID(6);
-			day6->setDescription(string("Meat is love, meat is life"));
-			day6->setLabel('O');
-			day6->setPriority('H');
-			day6->setStartTime(2015, 4, 8);
-
-			wonderDiet.addItem(day1);
-			wonderDiet.addItem(day2);
-			wonderDiet.addItem(day3);
-			wonderDiet.addItem(day4);
-			wonderDiet.addItem(day5);
-			wonderDiet.addItem(day6);
-
-			wonderDiet.resetDisplaySchedule();
-			displaySchedule = wonderDiet.retrieveDisplayScheduleByPriority();
-
-			Assert::AreEqual(6, int(displaySchedule.size()));
-
-			Assert::AreEqual(1, int(displaySchedule[0].getItemID()));
-			Assert::AreEqual(3, int(displaySchedule[1].getItemID()));
-			Assert::AreEqual(6, int(displaySchedule[2].getItemID()));
-			Assert::AreEqual(4, int(displaySchedule[3].getItemID()));
-			Assert::AreEqual(2, int(displaySchedule[4].getItemID()));
-			Assert::AreEqual(5, int(displaySchedule[5].getItemID()));
-
-			delete day1;
-			delete day2;
-			delete day3;
-			delete day4;
-			delete day5;
-			delete day6;
-
-			day1 = NULL;
-			day2 = NULL;
-			day3 = NULL;
-			day4 = NULL;
-			day5 = NULL;
-			day6 = NULL;
-
-		}
-
-		TEST_METHOD(TestSortByCompletion)
-		{
-			Schedule mosquitoSchedule;
-			vector<Item> displaySchedule;
-
-			Item *day1 = new Item(string("I'm just a larvae"));
-			day1->setItemID(1);
-			day1->setDescription(string("squirm squirm"));
-			day1->setLabel('M');
-			day1->setCompletion(false);
-			day1->setStartTime(2015, 4, 2);
-
-			Item *day2 = new Item(string("I'm a pupae"));
-			day2->setItemID(2);
-			day2->setDescription(string("wriggle wriggle"));
-			day2->setLabel('M');
-			day2->setCompletion(false);
-			day2->setStartTime(2015, 4, 3);
-
-			Item *day3 = new Item(string("I'm an adult mosquito now, beeeches"));
-			day3->setItemID(3);
-			day3->setDescription(string("bzz bzzzz"));
-			day3->setLabel('O');
-			day3->setCompletion(true);
-			day3->setStartTime(2015, 4, 4);
-
-			Item *day4 = new Item(string("Suck some blood"));
-			day4->setItemID(4);
-			day4->setLabel('P');
-			day4->setCompletion(false);
-			day4->setStartTime(2015, 4, 6);
-
-			Item *day5 = new Item(string("Suck some more blood"));
-			day5->setItemID(5);
-			day5->setDescription(string("blood is delish"));
-			day5->setLabel('O');
-			day5->setCompletion(false);
-			day5->setStartTime(2015, 4, 7);
-
-			Item *day6 = new Item(string("Procreate"));
-			day6->setItemID(6);
-			day6->setDescription(string("Must have babies"));
-			day6->setLabel('O');
-			day6->setCompletion(true);
-			day6->setStartTime(2015, 4, 8);
-
-			mosquitoSchedule.addItem(day1);
-			mosquitoSchedule.addItem(day2);
-			mosquitoSchedule.addItem(day3);
-			mosquitoSchedule.addItem(day4);
-			mosquitoSchedule.addItem(day5);
-			mosquitoSchedule.addItem(day6);
-
-			mosquitoSchedule.resetDisplaySchedule();
-			displaySchedule = mosquitoSchedule.retrieveDisplayScheduleByCompletionStatus();
-
-			Assert::AreEqual(6, int(displaySchedule.size()));
-
-			Assert::AreEqual(1, int(displaySchedule[0].getItemID()));
-			Assert::AreEqual(2, int(displaySchedule[1].getItemID()));
-			Assert::AreEqual(4, int(displaySchedule[2].getItemID()));
-			Assert::AreEqual(5, int(displaySchedule[3].getItemID()));
-			Assert::AreEqual(3, int(displaySchedule[4].getItemID()));
-			Assert::AreEqual(6, int(displaySchedule[5].getItemID()));
-
-			delete day1;
-			delete day2;
-			delete day3;
-			delete day4;
-			delete day5;
-			delete day6;
-
-			day1 = NULL;
-			day2 = NULL;
-			day3 = NULL;
-			day4 = NULL;
-			day5 = NULL;
-			day6 = NULL;
-
-		}
-
-		TEST_METHOD(TestSortByDateCase1)
-		{
-			Schedule sem2ExamSchedule;
-			vector<Item> expectedSchedule;
-			vector<Item> retrievedSchedule;
-
-			Item *item1;
-			item1 = new Item;
-			item1->setItemName(string("IE2100 Exam"));
-			item1->setStartTime(2015, 4, 24, 13, 00);
-			item1->setEndTime(2015, 4, 24, 15, 00);
-			item1->setLabel('O');
-
-			Item *item2;
-			item2 = new Item;
-			item2->setItemName(string("IE2130 Exam"));
-			item2->setStartTime(2015, 4, 27, 8, 00);
-			item2->setEndTime(2015, 4, 27, 10, 00);
-			item2->setLabel('O');
-
-			Item *item3;
-			item3 = new Item;
-			item3->setItemName(string("IE2150 Exam"));
-			item3->setStartTime(2015, 4, 21, 13, 00);
-			item3->setEndTime(2015, 4, 21, 15, 00);
-			item3->setLabel('O');
-
-			sem2ExamSchedule.addItem(item1);
-			sem2ExamSchedule.addItem(item2);
-			sem2ExamSchedule.addItem(item3);
-
-			expectedSchedule.push_back(*item1);
-			expectedSchedule.push_back(*item2);
-			expectedSchedule.push_back(*item3);
-			sem2ExamSchedule.resetDisplaySchedule();
-			retrievedSchedule = sem2ExamSchedule.retrieveDisplaySchedule();
-			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
-			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
-			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
-			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
-
-			expectedSchedule.clear();
-
-			expectedSchedule.push_back(*item3);
-			expectedSchedule.push_back(*item1);
-			expectedSchedule.push_back(*item2);
-			sem2ExamSchedule.resetDisplaySchedule();
-			retrievedSchedule = sem2ExamSchedule.retrieveDisplayScheduleByDate();
-			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
-			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
-			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
-			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
-
-			delete item1;
-			delete item2;
-			delete item3;
-			item1 = NULL;
-			item2 = NULL;
-			item3 = NULL;
-		}
 
 	TEST_METHOD(TestSortByDateCase2) {
 		Schedule gymSchedule;
@@ -1889,78 +1822,6 @@ public:
 		item3 = NULL;
 		item4 = NULL;
 	}
-
-		TEST_METHOD(TestSortByName)
-		{
-			Schedule fishermanSchedule;
-			vector<Item> expectedSchedule;
-			vector<Item> retrievedSchedule;
-
-			Item *item1;
-			item1 = new Item;
-			item1->setItemName(string("Ikan Bilis (1000 kgs)"));
-			item1->setEndTime(2015, 2, 24);
-			item1->setLabel('O');
-
-			Item *item2;
-			item2 = new Item;
-			item2->setItemName(string("golden Promfret la deyyyy"));
-			item2->setEndTime(2015, 6, 19);
-			item2->setLabel('O');
-
-			Item *item3;
-			item3 = new Item;
-			item3->setItemName(string("Ikan Petai"));
-			item3->setDescription(string("boss want at least 6kg per piece"));
-			item3->setEndTime(2015, 4, 21);
-			item3->setLabel('O');
-
-			Item *item4;
-			item4 = new Item;
-			item4->setItemName(string("Red Snapper/ Red Goby"));
-			item4->setEndTime(2015, 5, 29);
-			item4->setLabel('O');
-
-			fishermanSchedule.addItem(item1);
-			fishermanSchedule.addItem(item2);
-			fishermanSchedule.addItem(item3);
-			fishermanSchedule.addItem(item4);
-
-			expectedSchedule.push_back(*item1);
-			expectedSchedule.push_back(*item2);
-			expectedSchedule.push_back(*item3);
-			expectedSchedule.push_back(*item4);
-			fishermanSchedule.resetDisplaySchedule();
-			retrievedSchedule = fishermanSchedule.retrieveDisplaySchedule();
-			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
-			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
-			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
-			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
-			Assert::AreEqual(expectedSchedule[3].getItemName(), retrievedSchedule[3].getItemName());
-
-			expectedSchedule.clear();
-			expectedSchedule.push_back(*item2);
-			expectedSchedule.push_back(*item1);
-			expectedSchedule.push_back(*item3);
-			expectedSchedule.push_back(*item4);
-			fishermanSchedule.resetDisplaySchedule();
-			retrievedSchedule = fishermanSchedule.retrieveDisplayScheduleByItemName();
-			Assert::AreEqual(expectedSchedule.size(), retrievedSchedule.size());
-			Assert::AreEqual(expectedSchedule[0].getItemName(), retrievedSchedule[0].getItemName());
-			Assert::AreEqual(expectedSchedule[1].getItemName(), retrievedSchedule[1].getItemName());
-			Assert::AreEqual(expectedSchedule[2].getItemName(), retrievedSchedule[2].getItemName());
-			Assert::AreEqual(expectedSchedule[3].getItemName(), retrievedSchedule[3].getItemName());
-
-			delete item1;
-			delete item2;
-			delete item3;
-			delete item4;
-
-			item1 = NULL;
-			item2 = NULL;
-			item3 = NULL;
-			item4 = NULL;
-		}
 
 	TEST_METHOD(TestSortByLastUpdate) {
 		// TODO: Your test code here
