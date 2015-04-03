@@ -1528,7 +1528,7 @@ public:
 		wonderDiet.addItem(day6);
 
 		wonderDiet.resetDisplaySchedule();
-		wonderDiet.retrieveDisplayScheduleByItemName();
+		wonderDiet.retrieveDisplayScheduleByDate();
 		displaySchedule = wonderDiet.retrieveDisplayScheduleByPriority();
 
 		Assert::AreEqual(6, int(displaySchedule.size()));
@@ -1827,6 +1827,27 @@ public:
 	TEST_METHOD(TestSortByLastUpdate) {
 		// TODO: Your test code here
 	}
+
+	};
+
+	TEST_CLASS(TEST_UNDO) {
+public:
+	TEST_METHOD(ScheduleTestUndoLastCommand) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestUndoAdd) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestUndoReplace) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestUndoDelete) {
+		//
+	}
+
 	};
 }
 
@@ -1907,7 +1928,7 @@ public:
 		string command1 = "ADD";
 		Item item1(string("This is the first item"));
 		testHistory.addCommand(command1, item1);
-		
+
 		isValidCallForUndo = testHistory.isValidUndoCall();
 		Assert::AreEqual(true, isValidCallForUndo);
 	}
