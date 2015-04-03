@@ -9,8 +9,7 @@
 #include "DateTime.h"
 using namespace std;
 
-class Item
-{
+class Item {
 private:
 	static const string EMPTYFIELD_ITEMNAME;
 	static const string EMPTYFIELD_DESCRIPTION;

@@ -15,7 +15,7 @@ const char Item::EMPTYFIELD_PRIORITY = 'E';
 const char Item::EMPTYFIELD_LABEL = 'E';
 
 //	Checks if item has a valid item name
-bool Item::hasValidItemName(){
+bool Item::hasValidItemName() {
 	if (_itemName != EMPTYFIELD_ITEMNAME) {
 		return true;
 	}
@@ -25,8 +25,8 @@ bool Item::hasValidItemName(){
 }
 
 //	Checks if item has a valid start time
-bool Item::hasValidItemStartTime(){
-	if (_startTime.displayDateTime() != EMPTYFIELD_TIME){
+bool Item::hasValidItemStartTime() {
+	if (_startTime.displayDateTime() != EMPTYFIELD_TIME) {
 		return true;
 	}
 
@@ -35,8 +35,8 @@ bool Item::hasValidItemStartTime(){
 }
 
 //	Checks if item has a valid end time
-bool Item::hasValidItemEndTime(){
-	if (_endTime.displayDateTime() != EMPTYFIELD_TIME){
+bool Item::hasValidItemEndTime() {
+	if (_endTime.displayDateTime() != EMPTYFIELD_TIME) {
 		return true;
 	}
 
@@ -45,7 +45,7 @@ bool Item::hasValidItemEndTime(){
 }
 
 //	Checks if item has a valid description
-bool Item::hasValidItemDescription(){
+bool Item::hasValidItemDescription() {
 	if (_description != EMPTYFIELD_DESCRIPTION) {
 		return true;
 	}
@@ -55,7 +55,7 @@ bool Item::hasValidItemDescription(){
 }
 
 //	Checks if item has a valid item ID
-bool Item::hasValidItemID(){
+bool Item::hasValidItemID() {
 	if (_itemID > EMPTYFIELD_ITEMID) {
 		return true;
 	}
@@ -65,7 +65,7 @@ bool Item::hasValidItemID(){
 }
 
 //	Checks if item has a valid priority
-bool Item::hasValidItemPriority(){
+bool Item::hasValidItemPriority() {
 	if (ALLOWABLEOPTIONS_PRIORITY.find_first_of(_priority) != string::npos) {
 		return true;
 	}
@@ -75,7 +75,7 @@ bool Item::hasValidItemPriority(){
 }
 
 //	Checks if item has a valid label
-bool Item::hasValidItemLabel(){
+bool Item::hasValidItemLabel() {
 	if (ALLOWABLEOPTIONS_LABEL.find_first_of(_label) != string::npos) {
 		return true;
 	}
@@ -95,7 +95,7 @@ Item::Item() {
 }
 
 //	Overloaded Constructor with itemName
-Item::Item(string itemName){
+Item::Item(string itemName) {
 	_itemName = itemName;
 	_description = EMPTYFIELD_DESCRIPTION;
 	_itemID = EMPTYFIELD_ITEMID;
@@ -105,7 +105,7 @@ Item::Item(string itemName){
 }
 
 //	Overloaded Constructor with itemID
-Item::Item(unsigned int itemID){
+Item::Item(unsigned int itemID) {
 	_itemID = itemID;
 	_itemName = EMPTYFIELD_ITEMNAME;
 	_description = EMPTYFIELD_DESCRIPTION;
@@ -115,7 +115,7 @@ Item::Item(unsigned int itemID){
 }
 
 //	Overloaded Constructor with itemName and itemID
-Item::Item(string itemName, unsigned int itemID){
+Item::Item(string itemName, unsigned int itemID) {
 	_itemID = itemID;
 	_itemName = itemName;
 	_description = EMPTYFIELD_DESCRIPTION;
@@ -125,7 +125,7 @@ Item::Item(string itemName, unsigned int itemID){
 }
 
 //	Destructor
-Item::~Item() { }
+Item::~Item() {}
 
 //	Sets the item name
 string Item::setItemName(string itemName) {
@@ -209,12 +209,12 @@ string Item::getItemName() {
 }
 
 //	Retrieves the item description
-string Item::getDescription()  {
+string Item::getDescription() {
 	return _description;
 }
 
 //	Retrieves the item start time (DateTime object)
-DateTime Item::getStartTime(){
+DateTime Item::getStartTime() {
 	return _startTime;
 }
 
@@ -251,7 +251,7 @@ string Item::displayItemForUser() {
 		displayOutput << "Name:\t" << _itemName << endl;
 	}
 
-	try{
+	try {
 		if (hasValidItemStartTime()) {
 			displayOutput << "Start Time:\t" << _startTime.displayDateTime() << endl;
 		}
@@ -289,7 +289,7 @@ string Item::displayItemForUser() {
 string Item::displayItemFullDetails() {
 	ostringstream displayOutput;
 
-	if (hasValidItemID()){
+	if (hasValidItemID()) {
 		displayOutput << "Item ID:\t" << _itemID << endl;
 	}
 

@@ -8,20 +8,35 @@
 #include <vector>
 #include <algorithm>
 #include "Item.h"
-//	#include "History.h"
+#include "History.h"
 using namespace std;
 
-class Schedule
-{
+class Schedule {
 private:
+	static const string COMMAND_ADD;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_REPLACE;
+	static const string ERROR_ADD;
+	static const string ERROR_EMPTYSTACKS;
+
 	vector <Item> _schedule;
 	vector <Item> _displaySchedule;
-	//	History _scheduleHistory;
+	History _scheduleHistory;
 
 	//	Checks if an itemID matches the itemID of an item in a given vector cell
 	//	Pre:	Valid itemID, valid vectorIndex
 	//	Post:	Returns true if the itemID matches; false otherwise
 	bool isMatchingItemID(unsigned int, unsigned int);
+
+	//	Checks if an item's attribute matches that specified by the user
+	//	Pre:	Valid user-specified attribute
+	//	Post:	Returns true if the attributes match; false otherwise
+	bool isMatchingPriority(char, char);
+	bool isMatchingLabel(char, char);
+	bool isMatchingCompletionStatus(bool, bool);
+
+	//	Checks if an item's name or description has a keyword or a string
+	bool hasKeyword(string, string, string);
 
 	//	Checks how an item compares with another according to the item's attribute
 	//			isEarlierThan uses start time, if any, else uses end time, if any
@@ -94,6 +109,14 @@ public:
 	string replaceItemGivenDisplayVectorIndex(Item*, unsigned int);
 	string deleteItemGivenDisplayVectorIndex(unsigned int);
 
+	//	Undoes the last command that modified the schedule (add, edit, delete)
+	//	Pre:	Previous commands valid
+	//	Post:	Reverses the effect of the last command
+	string undoLastCommand();
+	string undoAdd(Item);
+	string undoReplace(Item);
+	string undoDelete(Item);
+
 	//	Retrieves the entire schedule/display schedule
 	//	Pre:	Nil
 	//	Post:	Constant reference to vector of Item is returned.
@@ -112,20 +135,28 @@ public:
 	const vector<Item>& retrieveDisplayScheduleByCompletionStatus();
 	const vector<Item>& retrieveDisplayScheduleByLastUpdate();
 
-	/*
-		//	Filters the schedule by attribute (priority, label, or completion status)
-		//	Pre:	Valid priority - L, M, or H
-		//			Valid label - P, O, or M
-		//			Valid completion status - true, false
-		//	Post:	Constant reference to the filtered schedule is returned
-		const vector<Item>& retrieveScheduleFilteredByPriority(char);
-		const vector<Item>& retrieveScheduleFilteredByLabel(char);
-		const vector<Item>& retrieveScheduleFilteredByCompletion(bool);
+	//	Filters the schedule by attribute (priority, label, or completion status)
+	//	Pre:	Valid priority - L, M, or H
+	//			Valid label - P, O, or M
+	//			Valid completion status - true, false
+	//	Post:	Constant reference to the filtered schedule is returned
+	const vector<Item>& retrieveDisplayScheduleFilteredByPriority(char);
+	const vector<Item>& retrieveDisplayScheduleFilteredByLabel(char);
+	const vector<Item>& retrieveDisplayScheduleFilteredByCompletion(bool);
+	const vector<Item>& retrieveDisplayScheduleFilteredByKeyword(string);
 
-		//    Returns only items spanning a certain date
-		//vector<Item>& returnScheduleFilteredByDate();
+	//	Checks given item in the schedule, and removes it if it does not have the specified attribute
+	//	Pre:	Valid priority - L, M, or H
+	//			Valid label - P, O, or M
+	//			Valid completion status - true, false
+	//	Post:	Returns true if item is removed, false otherwise
+	bool filterDisplayScheduleByPriority(int, char);
+	bool filterDisplayScheduleByLabel(int, char);
+	bool filterDisplayScheduleByCompletion(int, bool);
+	bool filterDisplayScheduleByKeyword(int, string);
 
-		*/
+	//    Returns only items spanning a certain date
+	//vector<Item>& returnScheduleFilteredByDate();
 };
 
 #endif

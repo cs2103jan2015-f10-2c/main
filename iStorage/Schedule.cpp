@@ -3,6 +3,12 @@
 
 #include "Schedule.h"
 
+const string History::COMMAND_ADD = "ADD";
+const string History::COMMAND_DELETE = "DELETE";
+const string History::COMMAND_REPLACE = "REPLACE";
+const string History::ERROR_ADD = "ERROR: Command and Item were not recorded.";
+const string History::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
+
 //	Constructor
 Schedule::Schedule() {}
 
@@ -17,6 +23,40 @@ bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
 	return false;
 }
 
+//	Checks if an item's priority matches that specified by the user
+bool Schedule::isMatchingPriority(char itemPriority, char userPriority) {
+	if (itemPriority == userPriority) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's label matches that specified by the user
+bool Schedule::isMatchingLabel(char itemLabel, char userLabel) {
+	if (itemLabel == userLabel) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's completion status matches that specified by the user
+bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompletion) {
+	if (itemCompletion == userCompletion) {
+		return true;
+	}
+	return false;
+}
+
+bool Schedule::hasKeyword(string name, string description, string keyword) {
+	if (name.find(keyword) != string::npos) {
+		return true;
+	} else if (description.find(keyword) != string::npos) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 //	Retrieves schedule vector index given itemID
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = 0;
@@ -29,8 +69,8 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 }
 
 //	Retrieves item ID given display vector index
-unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int displayVectorIndex){
-	return _displaySchedule[displayVectorIndex-1].getItemID();
+unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
+	return _displaySchedule[displayVectorIndex - 1].getItemID();
 }
 
 //	Retrieves the size of the schedule
@@ -39,7 +79,7 @@ unsigned int Schedule::getSizeOfSchedule() {
 }
 
 //	Retrieves the size of the display schedule
-unsigned int Schedule::getSizeOfDisplaySchedule(){
+unsigned int Schedule::getSizeOfDisplaySchedule() {
 	return _displaySchedule.size();
 }
 
@@ -51,18 +91,20 @@ unsigned int Schedule::resetDisplaySchedule() {
 
 //	Adds the item to the schedule, returns full details of the item (string)
 string Schedule::addItem(Item* item) {
+	_scheduleHistory.addCommand(COMMAND_ADD, *item);
 	_schedule.push_back(*item);
+
 	return _schedule.back().displayItemFullDetails();
 }
 
 //	Retrieves a copy of an existing item in the schedule give Item ID
-Item Schedule::retrieveItemGivenItemID(unsigned int itemID){
+Item Schedule::retrieveItemGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
 	return _schedule[vectorIndex];
 }
 
 //	Retrieves a copy of an existing item in the schedule given the item's display vector index
-Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorIndex){
+Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
 	return retrieveItemGivenItemID(itemID);
 }
@@ -70,7 +112,10 @@ Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorInd
 //	Replaces an existing item in the schedule, returns full details of the item (string)
 string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int itemID) {
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+
+	_scheduleHistory.addCommand(COMMAND_REPLACE, _schedule[vectorIndex]);
 	_schedule[vectorIndex] = *replacementItem;
+
 	return _schedule[vectorIndex].displayItemFullDetails();
 }
 
@@ -85,7 +130,9 @@ string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 	unsigned int index = findVectorIndexGivenItemID(itemID);
 	Item itemToBeDeleted = _schedule[index];
 
+	_scheduleHistory.addCommand(COMMAND_DELETE, itemToBeDeleted);
 	_schedule.erase(_schedule.begin() + index);
+
 	return itemToBeDeleted.displayItemFullDetails();
 }
 
@@ -93,6 +140,49 @@ string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 string Schedule::deleteItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
 	return deleteItemGivenItemID(itemID);
+}
+
+//	Undoes the last command that modified the schedule (add, replace, delete)
+string Schedule::undoLastCommand() {
+	Item latestItem;
+	string command;
+	string confirmation = _scheduleHistory.undoLastCommand(command, latestItem);
+
+	if (confirmation == ERROR_EMPTYSTACKS) {
+		return confirmation;
+	} else if (command == COMMAND_ADD) {
+		confirmation = undoAdd(latestItem);
+	} else if (command == COMMAND_DELETE) {
+		confirmation = undoDelete(latestItem);
+	} else if (command == COMMAND_REPLACE) {
+		confirmation = undoReplace(latestItem);
+	}
+
+	return confirmation;
+}
+
+//	Undoes the last command that modified the schedule (add)
+string Schedule::undoAdd(Item latestItem) {
+	string confirmation = deleteItemGivenItemID(latestItem.getItemID);
+	_scheduleHistory.removeUndoneCommand();
+
+	return (COMMAND_ADD + confirmation);
+}
+
+//	Undoes the last command that modified the schedule (replace)
+string Schedule::undoReplace(Item latestItem) {
+	string confirmation = replaceItemGivenItemID(&latestItem, latestItem.getItemID());
+	_scheduleHistory.removeUndoneCommand();
+
+	return (COMMAND_REPLACE + confirmation);
+}
+
+//	Undoes the last command that modified the schedule (delete)
+string Schedule::undoDelete(Item latestItem) {
+	string confirmation = addItem(&latestItem);
+	_scheduleHistory.removeUndoneCommand();
+
+	return (COMMAND_DELETE + confirmation);
 }
 
 //	Retrieves the entire schedule
@@ -106,21 +196,19 @@ const vector<Item>& Schedule::retrieveDisplaySchedule() {
 }
 
 //	Checks if an item is earlier than another
-bool Schedule::isEarlierThan(Item leftItem, Item rightItem){
+bool Schedule::isEarlierThan(Item leftItem, Item rightItem) {
 	string leftDateTime = "";
 	string rightDateTime = "";
 
 	if (leftItem.displayStartTime() != "") {
 		leftDateTime = leftItem.displayStartTime();
-	}
-	else if (leftItem.displayEndTime() != "") {
+	} else if (leftItem.displayEndTime() != "") {
 		leftDateTime = leftItem.displayEndTime();
 	}
 
 	if (rightItem.displayStartTime() != "") {
 		rightDateTime = rightItem.displayStartTime();
-	}
-	else if (rightItem.displayEndTime() != "") {
+	} else if (rightItem.displayEndTime() != "") {
 		rightDateTime = rightItem.displayEndTime();
 	}
 
@@ -163,27 +251,21 @@ bool Schedule::isLowerPriorityThan(Item leftItem, Item rightItem) {
 
 	if (leftItemPriority = 'H') {
 		leftItemPriority = '1';
-	}
-	else if (leftItemPriority = 'M') {
+	} else if (leftItemPriority = 'M') {
 		leftItemPriority = '2';
-	}
-	else if (leftItemPriority = 'L') {
+	} else if (leftItemPriority = 'L') {
 		leftItemPriority = '3';
-	}
-	else {
+	} else {
 		leftItemPriority = '4';
 	}
 
 	if (rightItemPriority = 'H') {
 		rightItemPriority = '1';
-	}
-	else if (rightItemPriority = 'M') {
+	} else if (rightItemPriority = 'M') {
 		rightItemPriority = '2';
-	}
-	else if (rightItemPriority = 'L') {
+	} else if (rightItemPriority = 'L') {
 		rightItemPriority = '3';
-	}
-	else {
+	} else {
 		rightItemPriority = '4';
 	}
 
@@ -207,52 +289,103 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 	return retrieveDisplaySchedule();
 }
 
+//	Filters the schedule by priority
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char priority) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByPriority(index, priority)) {
+			index--;
+		}
+	}
 
+	return _displaySchedule;
+}
 
+//	Filters the schedule by label
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByLabel(index, label)) {
+			index--;
+		}
+	}
+
+	return _displaySchedule;
+}
+
+//	Filters the schedule by completion status
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByCompletion(index, completionStatus)) {
+			index--;
+		}
+	}
+
+	return _displaySchedule;
+}
+
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByKeyword(string keyword) {
+	for (int index = 0; index < _displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByKeyword(index, keyword)) {
+			index--;
+		}
+	}
+
+	return _displaySchedule;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified priority
+bool Schedule::filterDisplayScheduleByPriority(int index, char priority) {
+	Item removedItem;
+
+	if (!isMatchingPriority(_displaySchedule[index].getPriority(), priority)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified label
+bool Schedule::filterDisplayScheduleByLabel(int index, char label) {
+	Item removedItem;
+
+	if (!isMatchingLabel(_displaySchedule[index].getLabel(), label)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified completion status
+bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatus) {
+	Item removedItem;
+
+	if (!isMatchingCompletionStatus(_displaySchedule[index].getCompletion(), completionStatus)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
+	if (!hasKeyword(_displaySchedule[index].getItemName, _displaySchedule[index].getDescription, keyword)) {
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	} else {
+		return false;
+	}	
+}
 
 /*
 //	Sorts the display schedule by last update (latest first), returns constant reference to sorted display schedule
 const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
 return retrieveDisplaySchedule();
-}
-
-
-//	Filters the schedule by Priority
-const vector<Item>& Schedule::retrieveScheduleFilteredByPriority(char priority){
-_filteredSchedule.clear();
-
-for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-if (priority = _schedule[index].getPriority()) {
-_filteredSchedule.push_back(_schedule[index]);
-}
-}
-
-return _filteredSchedule;
-}
-
-//	Filters the schedule by Label
-const vector<Item>& Schedule::retrieveScheduleFilteredByLabel(char label){
-_filteredSchedule.clear();
-
-for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-if (label = _schedule[index].getLabel()) {
-_filteredSchedule.push_back(_schedule[index]);
-}
-}
-
-return _filteredSchedule;
-}
-
-//	Filters the schedule by Completion
-const vector<Item>& Schedule::retrieveScheduleFilteredByCompletion(bool isCompleted){
-_filteredSchedule.clear();
-
-for (unsigned int index = 0; index < getSizeOfSchedule(); index++) {
-if (isCompleted = _schedule[index].getCompletion()) {
-_filteredSchedule.push_back(_schedule[index]);
-}
-}
-
-return _filteredSchedule;
 }
 */

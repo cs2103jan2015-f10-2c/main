@@ -10,8 +10,7 @@
 #include <iomanip>
 using namespace std;
 
-class DateTime
-{
+class DateTime {
 private:
 	static const int MIN_YEAR;
 	static const int MAX_YEAR;

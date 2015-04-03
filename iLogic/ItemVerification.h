@@ -9,6 +9,7 @@
 using namespace std;
 
 class ItemVerification {
+
 private:
 	Item _itemObjectToVerify;
 	list<string> _itemVerificationErrors;
