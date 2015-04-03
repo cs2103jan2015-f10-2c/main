@@ -37,6 +37,9 @@ public:
 	//	Pre:	Item and command stacks are not empty
 	//	Post:	Command and Item are returned via reference; success/failure message is returned
 	string undoLastCommand(string&, Item& latestItem);
+
+	//	From the item and command stack, removes the undone command (that is re-added during execution of undo)
+	string removeUndoneCommand();
 };
 
 #endif

@@ -8,14 +8,20 @@
 #include <vector>
 #include <algorithm>
 #include "Item.h"
-//	#include "History.h"
+#include "History.h"
 using namespace std;
 
 class Schedule {
 private:
+	static const string COMMAND_ADD;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_REPLACE;
+	static const string ERROR_ADD;
+	static const string ERROR_EMPTYSTACKS;
+
 	vector <Item> _schedule;
 	vector <Item> _displaySchedule;
-	//	History _scheduleHistory;
+	History _scheduleHistory;
 
 	//	Checks if an itemID matches the itemID of an item in a given vector cell
 	//	Pre:	Valid itemID, valid vectorIndex
@@ -102,6 +108,14 @@ public:
 	Item retrieveItemGivenDisplayVectorIndex(unsigned int);
 	string replaceItemGivenDisplayVectorIndex(Item*, unsigned int);
 	string deleteItemGivenDisplayVectorIndex(unsigned int);
+
+	//	Undoes the last command that modified the schedule (add, edit, delete)
+	//	Pre:	Previous commands valid
+	//	Post:	Reverses the effect of the last command
+	string undoLastCommand();
+	string undoAdd(Item);
+	string undoReplace(Item);
+	string undoDelete(Item);
 
 	//	Retrieves the entire schedule/display schedule
 	//	Pre:	Nil
