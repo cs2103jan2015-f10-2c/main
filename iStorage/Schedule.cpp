@@ -47,6 +47,16 @@ bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompleti
 	return false;
 }
 
+bool Schedule::hasKeyword(string name, string description, string keyword) {
+	if (name.find(keyword) != string::npos) {
+		return true;
+	} else if (description.find(keyword) != string::npos) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 //	Retrieves schedule vector index given itemID
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = 0;
@@ -365,16 +375,12 @@ bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatu
 }
 
 bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
-	Item removedItem;
-
 	if (!hasKeyword(_displaySchedule[index].getItemName, _displaySchedule[index].getDescription, keyword)) {
-		removedItem = _displaySchedule[index];
-
 		_displaySchedule.erase(_displaySchedule.begin() + index);
 		return true;
-	}
-
-	return false;
+	} else {
+		return false;
+	}	
 }
 
 /*
