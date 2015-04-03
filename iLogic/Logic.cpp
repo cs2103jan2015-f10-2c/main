@@ -63,6 +63,7 @@ Logic::Logic() {
 	//default file name is save.txt
 	_currentSorting = DEFAULT_SORTING;
 	//default sorting is by last update
+	
 }
 
 
@@ -309,6 +310,13 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
+	/*Debugging*/
+	list<COMMAND_AND_TEXT>::iterator iter;
+	for (iter = parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
+		cout << "command : " << iter->command << endl;
+		cout << "text : " << iter->text << endl;
+	}
+	/*Debegging Done*/
 	if (command == COMMAND_ADD) {
 		returnMessage = addTask(parseInfoToBeProcessed);
 	}
@@ -494,7 +502,8 @@ void Logic::saveDirectoryToTextFile(){
 	writeFile << _directoryToBeSaved << endl;
 	writeFile << _fileNameToBeSaved << endl;
 	writeFile << getScheduleSize() << endl;
-	writeFile << _currentSorting;
+	writeFile << _currentSorting << endl;
+	writeFile << _nextItemID;
 }
 
 string Logic::getDirectoryAndFileName(){
@@ -515,6 +524,7 @@ string Logic::retrieveDirectoryFromTextFile(){
 	getline(readFile, _fileNameToBeSaved);
 	readFile >> _scheduleSize;
 	readFile >> _currentSorting;
+	readFile >> _nextItemID;
 	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
 
 	if (_directoryToBeSaved == ""){
