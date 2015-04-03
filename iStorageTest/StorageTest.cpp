@@ -1475,7 +1475,6 @@ public:
 
 	TEST_CLASS(TEST_SORT) {
 public:
-
 	TEST_METHOD(TestSortByPriority) {
 		Schedule wonderDiet;
 		vector<Item> displaySchedule;
@@ -1529,16 +1528,17 @@ public:
 		wonderDiet.addItem(day6);
 
 		wonderDiet.resetDisplaySchedule();
+		wonderDiet.retrieveDisplayScheduleByItemName();
 		displaySchedule = wonderDiet.retrieveDisplayScheduleByPriority();
 
 		Assert::AreEqual(6, int(displaySchedule.size()));
-
 		Assert::AreEqual(1, int(displaySchedule[0].getItemID()));
 		Assert::AreEqual(3, int(displaySchedule[1].getItemID()));
 		Assert::AreEqual(6, int(displaySchedule[2].getItemID()));
 		Assert::AreEqual(4, int(displaySchedule[3].getItemID()));
 		Assert::AreEqual(2, int(displaySchedule[4].getItemID()));
 		Assert::AreEqual(5, int(displaySchedule[5].getItemID()));
+
 
 		delete day1;
 		delete day2;
