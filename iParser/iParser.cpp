@@ -270,8 +270,7 @@ string iParser::executeModifierAndTextParsing(const string ModifierType, string 
 		setParseInfo(ModifierType, text);
 		return MESSAGE_SUCCESS;
 	} else {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
-		return MESSAGE_FAILURE;
+		throw MESSAGE_INVALID_INPUT;
 	}
 }
 
@@ -365,7 +364,7 @@ string iParser::executeDateTimeParsing(string dateTimeString, const string modif
 	unsigned int seperatorSize = INDEX_INVALID;
 	unsigned int dateTimeType = INDEX_INVALID;
 
-	if (hasStartEndDateTime(dateTimeString, seperatorPosition, seperatorSize)) {
+	if (hasStartEndDateTime(dateTimeString)) {
 		//START_AND_END information = splitAndSetStartEnd(dateTimeString, seperatorPosition, seperatorSize, dateTimeType);
 	} else {
 		setDateTime(dateTimeString, modifierType);
@@ -510,17 +509,15 @@ string iParser::trimBack(string text) {
 	return text.substr(INDEX_START, endIndex);
 }
 
-bool iParser::hasStartEndDateTime(string dateTimeString, unsigned int& seperatorPosition, unsigned int& seperatorSize) {
+bool iParser::hasStartEndDateTime(string dateTimeString) {
 	assert(dateTimeString != STRING_BLANK);
-	seperatorPosition = dateTimeString.find(STRING_TO);
-	if (seperatorPosition != INDEX_INVALID) {
-		seperatorSize = STRING_TO.size();
+	unsigned int seperatorIndex = dateTimeString.find(STRING_TO);
+	if (seperatorIndex != INDEX_INVALID) {
 		return true;
 	}
 
-	seperatorPosition = dateTimeString.find(CHAR_HYPHEN);
-	if (seperatorPosition != INDEX_INVALID) {
-		seperatorSize = 1;
+	seperatorIndex = dateTimeString.find(CHAR_HYPHEN);
+	if (seperatorIndex != INDEX_INVALID) {
 		return true;
 	}
 
@@ -593,12 +590,20 @@ string iParser::splitAndSetDateTime(string dateTimeString, const string commandT
 	return MESSAGE_SUCCESS;
 }
 
-string iParser::splitAndSetStartEndDateTime(const string text, const unsigned int seperatorPosition, const unsigned int seperatorSize, unsigned int& type) {
-	assert(text != STRING_BLANK);
+string iParser::splitAndSetStartEndDateTime(const string dateTimeString, const unsigned int seperatorPosition, const unsigned int seperatorSize, unsigned int& type) {
+	assert(dateTimeString != STRING_BLANK);
 
-	unsigned int numberOfCommas = retrieveCount(text, CHAR_COMMA);
+	unsigned int numberOfCommas = retrieveCount(dateTimeString, CHAR_COMMA);
 
+	if (numberOfCommas == 0) {
+		//splitAndSetNoCommaStartEndDateTime(dateTimeString,
+	} else if (numberOfCommas == 1) {
 
+	} else if (numberOfCommas == 2) {
+
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
 	return MESSAGE_SUCCESS;
 }
 

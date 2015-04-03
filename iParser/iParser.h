@@ -217,9 +217,9 @@ public:
 	// ===================
 	// date time functions
 	// ===================
-	string setDateTime(string, const string); // do unit testing ==============================================
+	string setDateTime(string, const string); // do more unit testing ==============================================
 	string splitAndSetDateTime(string, const string); // do unit testing ============================================
-	bool hasStartEndDateTime(string, unsigned int&, unsigned int&); // do unit testing ================================
+	bool hasStartEndDateTime(string);
 	string splitAndSetStartEndDateTime(const string, const unsigned int, const unsigned int, unsigned int&);
 	bool isValidDate(string, string&);
 	bool isValidTime(string, string&);
