@@ -92,6 +92,16 @@ private:
 
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
+	static const string EDIT_TASK_SUCCESSFUL;	
+	static const string SORT_TASK_SUCCESSFUL;
+
+	static const string ADD_TASK_FAILED;
+	static const string DELETE_TASK_FAILED;
+	static const string EDIT_TASK_FAILED;
+	static const string INVALID_LINE_INDEX;
+	static const string SORT_TASK_FAILED;
+
+
 
 
 public:
@@ -105,7 +115,15 @@ public:
 	void printItem(Item itemToBePrinted);
 	void printAddTaskSuccessful(string itemInformationToBePrinted);
 	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
+	void printEditTaskSuccessful(int lineNumberToBeEdited);
+	void printSortTaskSuccessful();
+
+	void printAddTaskFailed(ItemVerification verifier);
+	void printDeleteTaskFailed();
+	void printEditTaskInvalidLineIndex();
+	void printEditTaskInvalidItemParts(ItemVerification verifier);
 	void printInvalidInput();
+	void printSortTaskFailed();
 
 
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);

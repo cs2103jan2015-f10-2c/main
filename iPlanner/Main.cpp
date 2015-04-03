@@ -34,6 +34,7 @@ void main() {
 
 	testLogic.retrieveDirectoryFromTextFile();
 	testLogic.readDataFromFile();
+	testLogic.sortTask();
 
 	cout << "command : ";
 	while (getline(cin, userInput)){

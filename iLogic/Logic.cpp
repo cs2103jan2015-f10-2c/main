@@ -53,7 +53,14 @@ const string Logic::MESSAGE_FAILED_SORT = "failed_sort";
 char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
 const string Logic::DELETE_TASK_SUCCESSFUL = "Task %d is removed from schedule";
+const string Logic::EDIT_TASK_SUCCESSFUL = "Task %d is edited from schedule";
+const string Logic::SORT_TASK_SUCCESSFUL = "Sorting Changed to : %s";
 
+const string Logic::ADD_TASK_FAILED = "Task cannot be added to schedule";
+const string Logic::DELETE_TASK_FAILED = "Task cannot be removed from schedule";
+const string Logic::INVALID_LINE_INDEX = "invalid line index";
+const string Logic::SORT_TASK_FAILED = "Invalid Sort Method";
+const string Logic::EDIT_TASK_FAILED = "Task cannot be edited from schedule";
 
 Logic::Logic() {
 	_nextItemID = 1;
@@ -102,7 +109,44 @@ void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
 	sprintf_s(buffer, DELETE_TASK_SUCCESSFUL.c_str(), lineNumberToBeDeleted);
 	cout << buffer << endl;
 }
+void Logic::printEditTaskSuccessful(int lineNumberToBeEdited){
+	sprintf_s(buffer, EDIT_TASK_SUCCESSFUL.c_str(), lineNumberToBeEdited);
+	cout << buffer << endl;
+}
 
+
+void Logic::printSortTaskSuccessful(){
+	sprintf_s(buffer, SORT_TASK_SUCCESSFUL.c_str(), _currentSorting);
+	cout << buffer << endl;
+}
+
+void Logic::printAddTaskFailed(ItemVerification verifier){
+	cout << ADD_TASK_FAILED << endl;
+	printErrorList(verifier);
+	return;
+}
+
+void Logic::printDeleteTaskFailed(){
+	cout << DELETE_TASK_FAILED << endl;
+	cout << INVALID_LINE_INDEX << endl;
+	return;
+}
+
+void Logic::printEditTaskInvalidLineIndex(){
+	cout << EDIT_TASK_FAILED << endl;
+	cout << INVALID_LINE_INDEX << endl;
+	return;
+}
+
+void Logic::printSortTaskFailed(){
+	cout << SORT_TASK_FAILED << endl;
+	return;
+}
+void Logic::printEditTaskInvalidItemParts(ItemVerification verifier){
+	cout << EDIT_TASK_FAILED << endl;
+	printErrorList(verifier);
+	return;
+}
 
 void Logic::printInvalidInput(){
 	cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
@@ -122,11 +166,10 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
 		addedItemID = _nextItemID;
 		increaseItemID();
-		resetAndPrintSchedule();
 		printAddTaskSuccessful(addCompleted);
 		return MESSAGE_SUCCESSFUL_ADD;
 	} else{
-		printErrorList(verifier);
+		printAddTaskFailed(verifier);
 		return MESSAGE_FAILED_ADD;
 	}
 }
@@ -260,11 +303,10 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 		string deletedItem = _logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 		printDeleteTaskSuccessful(lineIndexToBeDeleted);
 		_scheduleSize--;//Delete successful
-		resetAndPrintSchedule();
 		return MESSAGE_SUCCESSFUL_DELETE;
 	} else{
 		//	throw(MESSAGE_INVALID_INPUT_FOR_DELETE); //Delete failed
-		resetAndPrintSchedule();
+		printDeleteTaskFailed();
 		return MESSAGE_FAILED_DELETE;
 	}
 	//}
@@ -372,9 +414,10 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 string Logic::changeCurrentSorting(string itemInformation){
 	if (isValidSortingMethod(itemInformation)){
 		_currentSorting = itemInformation;
+		printSortTaskSuccessful();
 		return MESSAGE_SUCCESSFUL_SORT;
 	} else {
-		printInvalidInput();
+		printSortTaskFailed();
 		return MESSAGE_FAILED_SORT;
 	}
 }
@@ -393,10 +436,11 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 			resetAndPrintSchedule();
 			return MESSAGE_SUCCESSFUL_EDIT;
 		} else{
-			printErrorList(verifier);
+			printEditTaskInvalidItemParts(verifier);
 			return MESSAGE_FAILED_EDIT;
 		}
 	} else{
+		printEditTaskInvalidLineIndex();
 		return MESSAGE_INVALID_INPUT;
 	}
 }
