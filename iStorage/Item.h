@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <atltime.h>
 #include "DateTime.h"
 using namespace std;
 
@@ -23,6 +24,7 @@ private:
 	string _itemName;
 	DateTime _startTime;
 	DateTime _endTime;
+	DateTime _lastUpdate;
 	string _description;
 	unsigned int _itemID;
 	char _priority;
@@ -36,6 +38,8 @@ private:
 	bool hasValidItemID();
 	bool hasValidItemPriority();
 	bool hasValidItemLabel();
+
+	DateTime setLastUpdate();
 
 public:
 	//	Constructor
@@ -84,6 +88,7 @@ public:
 	string getDescription();
 	DateTime getStartTime();
 	DateTime getEndTime();
+	DateTime getLastUpdate();
 	unsigned int getItemID();
 	char getPriority();
 	char getLabel();
@@ -96,6 +101,7 @@ public:
 	string displayItemFullDetails();
 	string displayStartTime();
 	string displayEndTime();
+	string displayLastUpdatedTime();
 };
 
 #endif
