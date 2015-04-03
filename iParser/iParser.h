@@ -26,11 +26,6 @@ struct COMMAND_AND_TEXT {
 	string text;
 };
 
-struct START_AND_END {
-	string start;
-	string end;
-};
-
 class iParser {
 
 #define TESTMODE
@@ -76,7 +71,6 @@ public:
 	static const string MODIFIER_DUE;
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
-	static const string MODIFIER_FROM;
 
 	// used to identify modifiers in UserInput
 	static const string STRING_ITEM;
@@ -84,7 +78,6 @@ public:
 	static const string STRING_DUE;
 	static const string STRING_START;
 	static const string STRING_END;
-	static const string STRING_FROM;
 	static const string STRING_DESCRIPTION;
 	static const string STRING_DESC;
 	static const string STRING_LABEL;
@@ -119,11 +112,12 @@ public:
 	static const string MESSAGE_INVALID;
 	static const string MESSAGE_INVALID_INPUT;
 	static const string MESSAGE_INVALID_COMMAND;
-	static const string MESSAGE_INVALID_ADD;
-	static const string MESSAGE_INVALID_EDIT;
-	static const string MESSAGE_INVALID_SAVE;
 	static const string MESSAGE_INVALID_DATE_TIME;
 	static const string MESSAGE_TERMINATE;
+
+	static const string MESSAGE_INVALID_ADD_ITEM;
+	static const string MESSAGE_INVALID_NUMBER_OF_ITEM;
+	static const string MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 
 	// used to avoid magic numbers
 	static const unsigned int MAX_NUMBER_OF_COMMAS;
@@ -151,7 +145,7 @@ public:
 	};
 
 	enum ModifierType {
-		ITEM, DATE, DUE, START, END, FROM, DESCRIPTION, PRIORITY, INVALID_MODIFIER
+		ITEM, DATE, DUE, START, END, DESCRIPTION, PRIORITY, INVALID_MODIFIER
 	};
 
 	// =====================
@@ -193,7 +187,7 @@ public:
 	// Post:	sets command and text/index to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeCommandParsing(const string, string);
-	// Pre:		ModifierType is "item", "date", "due", "start", "end", "from", "description", "desc" or "priority"
+	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
 	// Post:	sets modifier and text to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeModifierAndTextParsing(const string, string);
@@ -224,9 +218,9 @@ public:
 	// date time functions
 	// ===================
 	string setDateTime(string, const string); // do unit testing ==============================================
-	string splitDateTime(string, const string); // do unit testing ============================================
-	bool hasStartEnd(string, unsigned int&, unsigned int&); // do unit testing ================================
-	START_AND_END splitAndSetStartEnd(const string, const unsigned int, const unsigned int, unsigned int&);
+	string splitAndSetDateTime(string, const string); // do unit testing ============================================
+	bool hasStartEndDateTime(string, unsigned int&, unsigned int&); // do unit testing ================================
+	string splitAndSetStartEndDateTime(const string, const unsigned int, const unsigned int, unsigned int&);
 	bool isValidDate(string, string&);
 	bool isValidTime(string, string&);
 	string splitAndSetObliqueDateInformation(string, const unsigned int);

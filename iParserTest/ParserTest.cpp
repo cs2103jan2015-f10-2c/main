@@ -236,15 +236,14 @@ namespace iPlannerParserTest {
 			}
 		}
 
-		/*TEST_METHOD(parserSetDateTimeTest) {
-			string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 930AM", "23 Mar, 23:59 PM", "9 Sep, 130PM", "1030, 10/11/12", "930PM, 10 Dec 2015" };
-			string expectedDateTime[] = {};
+		TEST_METHOD(parserSetDateTimeTest) {
+			string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030, 10/11/12", "930PM, 10 Dec 2015" };
+			string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30" };
 			string expectedCommand[] = { "start", "end" };
 
-			string testString = testDateTime[0];
-			testParser.setDateTime(testString, "date");
-			testString = testDateTime[1];
-			testParser.setDateTime(testString, "due");
+			for (int i = 0; i < 6; i++) {
+				testParser.setDateTime(testDateTime[i], "date");
+			}
 
 			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 			list<COMMAND_AND_TEXT>::iterator iter;
@@ -253,9 +252,23 @@ namespace iPlannerParserTest {
 				string actualCommand = iter->command;
 				string actualDateTime = iter->text;
 				Assert::AreEqual(expectedDateTime[i], actualDateTime);
-				Assert::AreEqual(expectedCommand[i], actualCommand);
+				Assert::AreEqual(expectedCommand[0], actualCommand);
 			}
-		}*/
+
+			testParser.clearParseInfo();
+			for (int i = 0; i < 6; i++) {
+				testParser.setDateTime(testDateTime[i], "due");
+			}
+
+			testList = testParser.getParseInfo();
+			i = 0;
+			for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+				string actualCommand = iter->command;
+				string actualDateTime = iter->text;
+				Assert::AreEqual(expectedDateTime[i], actualDateTime);
+				Assert::AreEqual(expectedCommand[1], actualCommand);
+			}
+		}
 
 		TEST_METHOD(parserIsValidDateTest) {
 			string testDates[] = { "10/ 11/ 12", " 11/12\t", "9 Jan 10", "10 November 12", "15 FEB", "11 Sep", "Monday", "tue", "Jan", "march" };

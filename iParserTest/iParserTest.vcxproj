@@ -96,9 +96,6 @@
     <ProjectReference Include="..\iParser\iParser.vcxproj">
       <Project>{0bd891d4-882d-4b27-a8c8-b3c06dc73829}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\iStorage\iStorage.vcxproj">
-      <Project>{46c693bb-9cef-4d7c-b8ab-6489af895d25}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
