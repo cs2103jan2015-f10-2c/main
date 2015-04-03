@@ -34,21 +34,21 @@ const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "directory.txt";
 const string Logic::DEFAULT_FILENAME = "save.txt";
 const string Logic::DEFAULT_SORTING = "update";
 
-const string Logic::MESSAGE_SUCCESSFUL_ADD = "successful_add";
-const string Logic::MESSAGE_SUCCESSFUL_DELETE = "successful_delete";
-const string Logic::MESSAGE_SUCCESSFUL_EDIT = "successful_edit";
-const string Logic::MESSAGE_SUCCESSFUL_SORT = "successful_sort";
-const string Logic::MESSAGE_SUCCESSFUL_VIEW = "successful_view";
-const string Logic::MESSAGE_SUCCESSFUL_SAVE = "successful_save";
-const string Logic::MESSAGE_SUCCESSFUL_UNDO = "successful_undo";
+const string Logic::MESSAGE_SUCCESSFUL_ADD = "Task added to Schedule";
+const string Logic::MESSAGE_SUCCESSFUL_DELETE = "Task deleted from Schedule";
+const string Logic::MESSAGE_SUCCESSFUL_EDIT = "Task edited";
+const string Logic::MESSAGE_SUCCESSFUL_SORT = "Schedule sorted";
+const string Logic::MESSAGE_SUCCESSFUL_VIEW = "Schedule filtered";
+const string Logic::MESSAGE_SUCCESSFUL_SAVE = "Save directory changed";
+const string Logic::MESSAGE_SUCCESSFUL_UNDO = "Last action reversed";
 
-const string Logic::MESSAGE_FAILED_ADD = "failed_add";
-const string Logic::MESSAGE_FAILED_DELETE = "failed_delete";
-const string Logic::MESSAGE_FAILED_EDIT = "failed_edit";
-const string Logic::MESSAGE_FAILED_VIEW = "failed_view";
-const string Logic::MESSAGE_FAILED_SAVE = "failed_save";
-const string Logic::MESSAGE_FAILED_UNDO = "failed_undo";
-const string Logic::MESSAGE_FAILED_SORT = "failed_sort";
+const string Logic::MESSAGE_FAILED_ADD = "Sorry, Task was not added to Schedule";
+const string Logic::MESSAGE_FAILED_DELETE = "Sorry, Task was not deleted from Schedule";
+const string Logic::MESSAGE_FAILED_EDIT = "Sorry, Unable to edit the specified Task";
+const string Logic::MESSAGE_FAILED_VIEW = "Schedule not filtered";
+const string Logic::MESSAGE_FAILED_SAVE = "Sorry, save directory not changed";
+const string Logic::MESSAGE_FAILED_UNDO = "Sorry, last action was not reversed";
+const string Logic::MESSAGE_FAILED_SORT = "Sorry, Schedule was not sorted";
 
 char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
