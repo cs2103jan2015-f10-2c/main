@@ -96,6 +96,7 @@ public:
 	static const string STRING_HR;
 	static const string STRING_DATE_INITIALISE;
 	static const string STRING_TIME_INITIALISE;
+	static const string STRING_MINUTE_INITIALISE;
 	static const string STRING_BLANK;
 	static const string STRING_ZERO;
 	static const string STRING_NEGATIVE_ONE;
@@ -121,13 +122,15 @@ public:
 	static const string MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 
 	// used to avoid magic numbers
-	static const unsigned int SIZE_SEPERATOR_TO;
-	static const unsigned int SIZE_SEPERATOR_HYPHEN;
-	static const unsigned int MIN_SIZE_WITH_SUFFIX;
-	static const unsigned int SIZE_DAYS;
-	static const unsigned int SIZE_MONTHS;
-	static const unsigned int SIZE_HOURS;
-	static const unsigned int SIZE_DATETIME_WHITESPACE;
+	static const unsigned int SIZE_OF_STRING_TO;
+	static const unsigned int SIZE_OF_STRING_HYPHEN;
+	static const unsigned int MAX_SIZE_OF_STRING_HOURS;
+	static const unsigned int MIN_SIZE_OF_STRING_HOURS;
+	static const unsigned int SIZE_OF_STRING_MINUTES;
+	static const unsigned int MIN_SIZE_OF_STRING_WITH_SUFFIX;
+	static const unsigned int NUMBER_OF_DAYS;
+	static const unsigned int NUMBER_OF_MONTHS;
+	static const unsigned int NUMBER_OF_HOURS;
 	static const unsigned int HOURS_ZERO;
 	static const unsigned int HOURS_ONE_PM;
 	static const unsigned int HOURS_ELEVEN_PM;
@@ -210,7 +213,6 @@ public:
 	string removeFirstStringToken(string); 
 	string removeConsecutiveWhiteSpace(string&);
 	string removeWhiteSpace(string&);
-	string removeCharacter(string&, const char); 
 	string convertToLowerCase(string&); 
 	string trimText(string&);
 	string trimFront(string); 
@@ -224,6 +226,8 @@ public:
 	string splitAndSetDateTime(string, const string); // do unit testing ============================================
 	string splitAndSetStartEndDateTime(const string);
 	string splitAndSetNoCommaStartEndDateTime(const string);
+	string splitAndSetOneCommaStartEndDateTime(const string);
+	string splitAndSetTwoCommaStartEndDateTime(const string);
 	bool isValidDate(string, string&);
 	bool isValidTime(string, string&);
 	string splitAndSetObliqueDateInformation(string, const unsigned int);
@@ -237,7 +241,8 @@ public:
 	string setMonth(string);
 	bool hasTimePeriodSuffix(const string);
 	string addTwelveToHours(const string); 
-	bool isAppropriateHour(const string);
+	bool isAppropriateHour(const string); // do unit testing =================================================
+	bool isAppropriateTiming(const string, const string, const string); // do unit testing =================================================
 	bool hasNoDayButHasTime(const string); // do unit testing =================================================
 
 	// =================

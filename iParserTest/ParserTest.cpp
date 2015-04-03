@@ -115,7 +115,7 @@ public:
 		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
 		string testInput[] = { "add abc", "-desc wear formal", "-date 12/11/10, 10PM", "-priority high" };
 		string expectedCommand[] = { "description", "start", "priority" };
-		string expectedText[] = { "wear formal", "10 11 12 22 0", "high" };
+		string expectedText[] = { "wear formal", "10 11 12 22 00", "high" };
 		vector<string> testVector;
 
 		for (int i = 0; i < 4; i++) {
@@ -209,14 +209,6 @@ public:
 		Assert::AreEqual(expected, actual);
 	}
 
-	TEST_METHOD(parserRemoveCharacterSpace) {
-		string actual = "/1//2///3///4//5/";
-		string expected = "12345";
-
-		testParser.removeCharacter(actual, '/');
-		Assert::AreEqual(expected, actual);
-	}
-
 	TEST_METHOD(parserConvertToLowerCaseTest) {
 		string actual = "ABCDEFGHIJKLM123456789NOPQRSTUVWXYZ";
 		string expected = "abcdefghijklm123456789nopqrstuvwxyz";
@@ -251,7 +243,7 @@ public:
 
 	TEST_METHOD(parserSetDateTimeTest) {
 		string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030hr, 10/11/12", "930PM, 10 Dec 2015", "1pm" };
-		string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30", "-1 -1 -1 13 0" };
+		string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30", "-1 -1 -1 13 00" };
 		string expectedCommand[] = { "start", "end" };
 
 		for (int i = 0; i < 7; i++) {
@@ -285,8 +277,8 @@ public:
 
 	TEST_METHOD(parserSplitAndSetNoCommaStartEndDateTimeTest) {
 		string testDates[] = { "10AM to 1PM", "930AM to 1230PM", "1 Oct to 23 Oct", "1 Oct 2012 - 23 Oct 2015", "mon to wed" };
-		string expectedStart[] = { "-1 -1 -1 10 0", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1", "-1 -1 monday -1 1"};
-		string expectedEnd[] = { "-1 -1 -1 13 0", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1", "-1 -1 wednesday -1 -1" };
+		string expectedStart[] = { "-1 -1 -1 10 00", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1", "-1 -1 monday -1 1"};
+		string expectedEnd[] = { "-1 -1 -1 13 00", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1", "-1 -1 wednesday -1 -1" };
 		string start = "start";
 		string end = "end";
 
@@ -307,6 +299,34 @@ public:
 			} else {
 				Assert::AreEqual(end, actualCommand);
 				Assert::AreEqual(expectedEnd[i/2], actualText);
+			}
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetTwoCommaStartEndDateTimeTest) {
+		string testDates[] = { "10 Nov 12, 10am to 20 Nov 12, 10PM", "930AM, 11/9 - 130PM, 9/11", "monday, 0300hr to fri, 1559hr"};
+		string expectedStart[] = { "12 11 10 10 00", "-1 9 11 9 30", "-1 -1 monday 03 00" };
+		string expectedEnd[] = { "12 11 20 22 00", "-1 11 9 13 30", "-1 -1 friday 15 59" };
+		string start = "start";
+		string end = "end";
+
+		for (int i = 0; i < 3; i++) {
+			testParser.splitAndSetTwoCommaStartEndDateTime(testDates[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStart[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEnd[i / 2], actualText);
 			}
 		}
 	}
@@ -332,7 +352,7 @@ public:
 	TEST_METHOD(parserIsValidTimeTest) {
 		string testTimes[] = { "00 : 59", "10:59PM", "10:59 pm", "1059AM", "930 am", "10 pm", "930pm", "1 pm" };
 		string testTimesFalse[] = { "10::59", "10a:59b", "10a:59bpm", "1059bpm", "1", "10", "12345", "030" };
-		string expected[] = { "00 59", "22 59", "22 59", "10 59", "9 30", "22 0", "21 30", "13 0" };
+		string expected[] = { "00 59", "22 59", "22 59", "10 59", "9 30", "22 00", "21 30", "13 00" };
 		string expectedFalse = "";
 
 		for (int i = 0; i < 8; i++) {
@@ -390,11 +410,11 @@ public:
 	}
 
 	TEST_METHOD(parserSplitAndSetNoColonTimeStringTest) {
-		string testTime[] = { "1011", "910", "1330", "11", "1" };
-		string expectedAM[] = { "10 11", "9 10", "13 30", "11 0", "1 0" };
-		string expectedPM[] = { "22 11", "21 10", "13 30", "23 0", "13 0" };
+		string testTime[] = { "1011", "0910", "1330", "230", "11", "1" };
+		string expectedAM[] = { "10 11", "09 10", "13 30", "2 30", "11 0", "1 0" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "14 30", "23 00", "13 00" };
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			string testString = testTime[i];
 
 			if (i < 2) {
@@ -402,8 +422,11 @@ public:
 				Assert::AreEqual(expectedAM[i], actualAM);
 			}
 
-			string actual = testParser.splitAndSetNoColonTimeString(testString, "hr");
-			Assert::AreEqual(expectedAM[i], actual);
+			if (i < 3) {
+				string actual = testParser.splitAndSetNoColonTimeString(testString, "hr");
+				Assert::AreEqual(expectedAM[i], actual);
+			}
+
 			string actualPM = testParser.splitAndSetNoColonTimeString(testString, "pm");
 			Assert::AreEqual(expectedPM[i], actualPM);
 		}
