@@ -27,19 +27,22 @@ void main() {
 	}*/
 
 
-	/*iParser testParser;
+	iParser testParser;
 	Logic testLogic;
 	string userInput;
 	list<COMMAND_AND_TEXT> parseInfo;
 
 	testLogic.retrieveDirectoryFromTextFile();
 	testLogic.readDataFromFile();
+	testLogic.sortTask();
 
 	cout << "command : ";
 	while (getline(cin, userInput)){
+	
 	testLogic.initiateCommandAction(testParser, userInput);
+	
 	cout << "command : ";
-	}*/
+	}
 
 	return;
 }

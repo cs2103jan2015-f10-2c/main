@@ -271,7 +271,6 @@ string iParser::executeCommandParsing(const string commandType, string userInput
 
 string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
 	if (text != STRING_BLANK) {
-		convertToLowerCase(text);
 		setParseInfo(ModifierType, text);
 		return MESSAGE_SUCCESS;
 	} else {
@@ -350,6 +349,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 			break;
 		case PRIORITY:
 			if (!hasPriority) {
+				convertToLowerCase(textWithoutCommand);
 				executeModifierAndTextParsing(COMMAND_PRIORITY, textWithoutCommand);
 				hasPriority = true;
 			} else {

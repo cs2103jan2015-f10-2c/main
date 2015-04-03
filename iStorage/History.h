@@ -18,6 +18,8 @@ private:
 	stack <string> _commandStack;
 	stack <Item> _itemStack;
 
+// CHANGE BACK TO PRIVATE LATER
+public:
 	bool isValidHistoryCommand(string);
 	bool isValidUndoCall();
 

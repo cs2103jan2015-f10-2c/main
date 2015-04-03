@@ -992,23 +992,24 @@ public:
 	};
 
 	TEST_CLASS(TEST_CONVERSION) {
-		TEST_METHOD(TestFindVectorIndexGivenItemID) {
-			Schedule premierLeague;
-			Item soccerMatch;
+public:
+	TEST_METHOD(TestFindVectorIndexGivenItemID) {
+		Schedule premierLeague;
+		Item soccerMatch;
 
-			for (int i = 0; i < 10; i++) {
-				soccerMatch.setItemID(1000 + i);
-				premierLeague.addItem(&soccerMatch);
-			}
-
-			for (unsigned int i = 0; i < 10; i++) {
-				Assert::AreEqual(i, premierLeague.findVectorIndexGivenItemID(1000 + i));
-			}
+		for (int i = 0; i < 10; i++) {
+			soccerMatch.setItemID(1000 + i);
+			premierLeague.addItem(&soccerMatch);
 		}
 
-		TEST_METHOD(TestFindItemIDGivenDisplayVectorIndex) {
-
+		for (unsigned int i = 0; i < 10; i++) {
+			Assert::AreEqual(i, premierLeague.findVectorIndexGivenItemID(1000 + i));
 		}
+	}
+
+	TEST_METHOD(TestFindItemIDGivenDisplayVectorIndex) {
+
+	}
 	};
 
 	TEST_CLASS(TEST_ITEMS_IN_SCHEDULE) {
@@ -1527,17 +1528,17 @@ public:
 		wonderDiet.addItem(day6);
 
 		wonderDiet.resetDisplaySchedule();
-		wonderDiet.retrieveDisplayScheduleByItemName();
+		wonderDiet.retrieveDisplayScheduleByDate();
 		displaySchedule = wonderDiet.retrieveDisplayScheduleByPriority();
 
 		Assert::AreEqual(6, int(displaySchedule.size()));
-
-		Assert::AreEqual(6, int(displaySchedule[0].getItemID()));
+		Assert::AreEqual(1, int(displaySchedule[0].getItemID()));
 		Assert::AreEqual(3, int(displaySchedule[1].getItemID()));
-		//5	Assert::AreEqual(1, int(displaySchedule[2].getItemID()));
-		//1	Assert::AreEqual(4, int(displaySchedule[3].getItemID()));
-		//2	Assert::AreEqual(5, int(displaySchedule[4].getItemID()));
-		//4	Assert::AreEqual(2, int(displaySchedule[5].getItemID()));
+		Assert::AreEqual(6, int(displaySchedule[2].getItemID()));
+		Assert::AreEqual(4, int(displaySchedule[3].getItemID()));
+		Assert::AreEqual(2, int(displaySchedule[4].getItemID()));
+		Assert::AreEqual(5, int(displaySchedule[5].getItemID()));
+
 
 		delete day1;
 		delete day2;
@@ -1826,5 +1827,127 @@ public:
 	TEST_METHOD(TestSortByLastUpdate) {
 		// TODO: Your test code here
 	}
+
+	};
+
+	TEST_CLASS(TEST_UNDO) {
+public:
+	TEST_METHOD(ScheduleTestUndoLastCommand) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestUndoAdd) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestUndoReplace) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestUndoDelete) {
+		//
+	}
+
+	};
+}
+
+namespace HistoryTest {
+	TEST_CLASS(TEST_HISTORY) {
+public:
+	TEST_METHOD(HistoryTestIsValidHistoryCommand) {
+		History testHistory;
+		bool isValidHistoryCmd;
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("ADD"));
+		Assert::AreEqual(true, isValidHistoryCmd);
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("DELETE"));
+		Assert::AreEqual(true, isValidHistoryCmd);
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("REPLACE"));
+		Assert::AreEqual(true, isValidHistoryCmd);
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Add"));
+		Assert::AreEqual(false, isValidHistoryCmd);
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Delete"));
+		Assert::AreEqual(false, isValidHistoryCmd);
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Replace"));
+		Assert::AreEqual(false, isValidHistoryCmd);
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("whattt"));
+		Assert::AreEqual(false, isValidHistoryCmd);
+
+		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("ADDD"));
+		Assert::AreEqual(false, isValidHistoryCmd);
+	}
+
+	TEST_METHOD(HistoryTestAddCommand) {
+		History testHistory;
+		string returnMessage;
+
+		string command1 = "ADD";
+		Item item1(string("This is the first item"));
+
+		string command2 = "DELETE";
+		Item item2(string("This is the second item"));
+
+		string command3 = "REPLACE";
+		Item item3(string("This is the third item"));
+
+		string command4 = "ADDD";
+		Item item4(string("This is the fourth item"));
+
+		string command5 = "SIT";
+		Item item5(string("This is the fifth item"));
+
+		returnMessage = testHistory.addCommand(command1, item1);
+		Assert::AreEqual(command1 + item1.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command2, item2);
+		Assert::AreEqual(command2 + item2.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command3, item3);
+		Assert::AreEqual(command3 + item3.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command4, item4);
+		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
+
+		returnMessage = testHistory.addCommand(command5, item5);
+		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
+	}
+
+	TEST_METHOD(HistoryTestIsValidUndoCall) {
+		History testHistory;
+		bool isValidCallForUndo;
+
+		isValidCallForUndo = testHistory.isValidUndoCall();
+		Assert::AreEqual(false, isValidCallForUndo);
+
+		string command1 = "ADD";
+		Item item1(string("This is the first item"));
+		testHistory.addCommand(command1, item1);
+
+		isValidCallForUndo = testHistory.isValidUndoCall();
+		Assert::AreEqual(true, isValidCallForUndo);
+	}
+
+	TEST_METHOD(HistoryTestUndoLastCommand) {
+		History testHistory;
+		string returnMessage;
+		string commandFromHistory;
+		Item latestItemFromHistory;
+
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory);
+		Assert::AreEqual(string("ERROR: Undo has reached its limit."), returnMessage);
+
+		string command1 = "ADD";
+		Item item1(string("What's up with it, vanilla face?"));
+		testHistory.addCommand(command1, item1);
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory);
+		Assert::AreEqual(command1 + "\n" + item1.displayItemFullDetails(), returnMessage);
+	}
+
 	};
 }
