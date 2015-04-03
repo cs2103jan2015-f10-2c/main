@@ -25,6 +25,9 @@ const string Logic::SORT_DATE = "date";
 const string Logic::SORT_PRIORITY = "priority";
 const string Logic::SORT_COMPLETION = "completion";
 const string Logic::SORT_LAST_UPDATE = "update";
+const string Logic::FILTER_COMPLETION = "completion";
+const string Logic::FILTER_PRIORITY = "priority";
+const string Logic::FILTER_LABEL = "label";
 
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "directory.txt";
@@ -63,7 +66,7 @@ Logic::Logic() {
 	//default file name is save.txt
 	_currentSorting = DEFAULT_SORTING;
 	//default sorting is by last update
-	
+
 }
 
 
@@ -122,8 +125,7 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		resetAndPrintSchedule();
 		printAddTaskSuccessful(addCompleted);
 		return MESSAGE_SUCCESSFUL_ADD;
-	}
-	else{
+	} else{
 		printErrorList(verifier);
 		return MESSAGE_FAILED_ADD;
 	}
@@ -181,23 +183,29 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 	if (modifier == MODIFIER_DESCRIPTION){
 		string descriptionToBeAdded = iter->text;
 		itemToBeModified->setDescription(descriptionToBeAdded);
-	}
-	else if (modifier == MODIFIER_START){
+	} else if (modifier == MODIFIER_START){
 		itemToBeModified->setStartTime(interpreteDateTime(iter->text));
-	}
-	else if (modifier == MODIFIER_END){
+	} else if (modifier == MODIFIER_END){
 		itemToBeModified->setEndTime(interpreteDateTime(iter->text));
-	}
-	else if (modifier == MODIFIER_LABEL){
+	} else if (modifier == MODIFIER_LABEL){
 		char labelToBeModified = iter->text[0];
 		itemToBeModified->setLabel(labelToBeModified);
-	}
-	else if (modifier == MODIFIER_PRIORITY){
-		char priorityToBeModified = iter->text[0];
+	} else if (modifier == MODIFIER_PRIORITY){
+		char priorityToBeModified = checkPriority(iter->text);
 		itemToBeModified->setPriority(priorityToBeModified);
 	}
 }
+char Logic::checkPriority(string priorityToBeModified){
+	if (priorityToBeModified == "high" || "h" || "H"){
+		return 'H';
+	} else if (priorityToBeModified == "medium" || "m" || "M"){
+		return 'M';
+	} else if (priorityToBeModified == "low" || "l" || "L"){
+		return 'L';
+	} else
+		return 'E';
 
+}
 DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
@@ -205,11 +213,24 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	if (mm == -1) {
 		mm = 0;
 	}
-	if (MM != -1 && DD != -1 && YYYY == -1) {
-
-	}
+	if (MM == -1 && DD == -1 && YYYY == -1) {
+		YYYY = getCurrentTime().getYear();
+		MM = getCurrentTime().getMonth();
+		DD = getCurrentTime().getDay();
+	} /*NEEDS IMPROVEMENT*/
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
+}
+
+DateTime Logic::getCurrentTime(){
+	CTime t = CTime::GetCurrentTime();
+	int currentDay = t.GetDay();
+	int currentMonth = t.GetMonth();
+	int currentYear = t.GetYear();
+	int currentHour = t.GetHour();
+	int currentMinute = t.GetMinute();
+	DateTime currentDateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute);
+	return currentDateTime;
 }
 
 
@@ -217,8 +238,7 @@ bool Logic::isValidSortingMethod(string itemInformation){
 	if (itemInformation == SORT_NAME || itemInformation == SORT_COMPLETION || itemInformation == SORT_DATE ||
 		itemInformation == SORT_LAST_UPDATE || itemInformation == SORT_PRIORITY){
 		return true;
-	}
-	else{
+	} else{
 		return false;
 	}
 }
@@ -227,8 +247,7 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 	ItemVerification itemVerifier(itemToBeChecked, _nextItemID);
 	if (itemVerifier.isValidItem()) {
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -243,8 +262,7 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 		_scheduleSize--;//Delete successful
 		resetAndPrintSchedule();
 		return MESSAGE_SUCCESSFUL_DELETE;
-	}
-	else{
+	} else{
 		//	throw(MESSAGE_INVALID_INPUT_FOR_DELETE); //Delete failed
 		resetAndPrintSchedule();
 		return MESSAGE_FAILED_DELETE;
@@ -261,8 +279,7 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	if (getScheduleSize() >= lineIndexToBeChecked){
 		return true;
-	}
-	else{
+	} else{
 		return false;
 	}
 }
@@ -319,8 +336,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	/*Debegging Done*/
 	if (command == COMMAND_ADD) {
 		returnMessage = addTask(parseInfoToBeProcessed);
-	}
-	else if (command == COMMAND_DELETE) {
+	} else if (command == COMMAND_DELETE) {
 		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
 		returnMessage = deleteTask(lineIndexToBeDeleted);
 	}
@@ -328,28 +344,21 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	else if (command == COMMAND_EDIT){
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
 		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
-	}
-	else if (command == COMMAND_UNDO){
+	} else if (command == COMMAND_UNDO){
 
-	}
-	else if (command == COMMAND_SORT){
+	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
-	}
-	else if (command == COMMAND_SEARCH){
+	} else if (command == COMMAND_SEARCH){
 
-	}
-	else if (command == COMMAND_VIEW){
-
-	}
-	else if (command == COMMAND_SAVE){
+	} else if (command == COMMAND_VIEW){
+		returnMessage = filterTask(itemInformation);
+	} else if (command == COMMAND_SAVE){
 		changeSavingDirectory(itemInformation);
 		returnMessage = MESSAGE_SUCCESSFUL_SAVE;
-	}
-	else if (command == COMMAND_EXIT){
+	} else if (command == COMMAND_EXIT){
 		saveDirectoryToTextFile();
 		exit(0);
-	}
-	else {
+	} else {
 		printInvalidInput();
 		returnMessage = MESSAGE_INVALID_INPUT;
 	}
@@ -364,8 +373,7 @@ string Logic::changeCurrentSorting(string itemInformation){
 	if (isValidSortingMethod(itemInformation)){
 		_currentSorting = itemInformation;
 		return MESSAGE_SUCCESSFUL_SORT;
-	}
-	else {
+	} else {
 		printInvalidInput();
 		return MESSAGE_FAILED_SORT;
 	}
@@ -384,36 +392,47 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 			_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
 			resetAndPrintSchedule();
 			return MESSAGE_SUCCESSFUL_EDIT;
-		}
-		else{
+		} else{
 			printErrorList(verifier);
 			return MESSAGE_FAILED_EDIT;
 		}
-	}
-	else{
+	} else{
 		return MESSAGE_INVALID_INPUT;
 	}
 }
 
+string Logic::filterTask(string filterToBeImplemented){
+	istringstream iss(filterToBeImplemented);
+	string filterType;
+	char modifierType;
+	iss >> filterType >> modifierType;
+	cout << "filterType :" << filterType << endl;
+	cout << "modifier Type : " << modifierType;
+	if (filterType == FILTER_COMPLETION){
+		_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(modifierType);
+	} else if (filterType == FILTER_LABEL) {
+		_logicSchedule.retrieveDisplayScheduleFilteredByLabel(modifierType);
+	} else if (filterType == FILTER_PRIORITY){
+		_logicSchedule.retrieveDisplayScheduleFilteredByPriority(modifierType);
+	} else {
+		return MESSAGE_FAILED_VIEW;
+	}
+	return MESSAGE_SUCCESSFUL_VIEW;
+}
 
 string Logic::sortTask(){
 	vector<Item> sortedDisplaySchedule = resetAndGetDisplaySchedule();
 	if (_currentSorting == SORT_NAME){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
-	}
-	else if (_currentSorting == SORT_PRIORITY){
+	} else if (_currentSorting == SORT_PRIORITY){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
-	}
-	else if (_currentSorting == SORT_COMPLETION){
+	} else if (_currentSorting == SORT_COMPLETION){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
-	}
-	else if (_currentSorting == SORT_DATE){
+	} else if (_currentSorting == SORT_DATE){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
-	}
-	//	else if (_currentSorting == SORT_LAST_UPDATE){
-	//		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-	//	}
-	else{
+	} /*else if (_currentSorting == SORT_LAST_UPDATE){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
+	} */else{
 		return MESSAGE_FAILED_SORT;
 	}
 	printSchedule(sortedDisplaySchedule);
@@ -463,8 +482,7 @@ string Logic::changeSavingDirectory(string userInputDirectory){
 		if (truncatePosition != -1){
 			directoryToMake = directoryToMake + assignOneFolderToMake(truncatePosition, userInputDirectory);
 			userInputDirectory = truncateUserInputDirectory(truncatePosition, userInputDirectory);
-		}
-		else{
+		} else{
 			directoryToMake = assignLastFolderToMake(userInputDirectory, directoryToMake);
 			userInputDirectory = "";
 		}
@@ -512,8 +530,7 @@ string Logic::getDirectoryAndFileName(){
 			_fileNameToBeSaved == DEFAULT_FILENAME;
 		}
 		return _fileNameToBeSaved;
-	}
-	else{
+	} else{
 		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
 	}
 }
@@ -532,8 +549,7 @@ string Logic::retrieveDirectoryFromTextFile(){
 			_fileNameToBeSaved == DEFAULT_FILENAME;
 		}
 		return _fileNameToBeSaved;
-	}
-	else{
+	} else{
 		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
 	}
 }
