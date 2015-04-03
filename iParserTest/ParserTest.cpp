@@ -295,14 +295,95 @@ public:
 		}
 	}
 
+	TEST_METHOD(parserSplitAndSetStartEndTest) {
+		string testDatesForNoComma[] = { "10AM to 1PM", "930AM to 1230PM", "1 Oct to 23 Oct", "1 Oct 2012 - 23 Oct 2015", "mon to wed" };
+		string expectedStartForNoComma[] = { "-1 -1 -1 10 00", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1", "-1 -1 monday -1 -1" };
+		string expectedEndForNoComma[] = { "-1 -1 -1 13 00", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1", "-1 -1 wednesday -1 -1" };
+
+		string testDatesForOneComma[] = { "10 Nov 12, 10am to 10PM", "930AM - 1130PM, 9/11", "monday, 13:59 - 23:59" };
+		string expectedStartForOneComma[] = { "12 11 10 10 00", "-1 11 9 9 30", "-1 -1 monday 13 59" };
+		string expectedEndForOneComma[] = { "12 11 10 22 00", "-1 11 9 23 30", "-1 -1 monday 23 59" };
+
+		string testDatesForTwoCommas[] = { "10 Nov 12, 10am to 20 Nov 12, 10PM", "930AM, 11/9 - 130PM, 9/11", "monday, 0300hr to fri, 1559hr" };
+		string expectedStartForTwoCommas[] = { "12 11 10 10 00", "-1 9 11 9 30", "-1 -1 monday 03 00" };
+		string expectedEndForTwoCommas[] = { "12 11 20 22 00", "-1 11 9 13 30", "-1 -1 friday 15 59" };
+
+		string start = "start";
+		string end = "end";
+
+		for (int i = 0; i < 5; i++) {
+			testParser.splitAndSetNoCommaStartEndDateTime(testDatesForNoComma[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStartForNoComma[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEndForNoComma[i / 2], actualText);
+			}
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 3; i++) {
+			testParser.splitAndSetNoCommaStartEndDateTime(testDatesForNoComma[i]);
+		}
+
+		testList = testParser.getParseInfo();
+		iter;
+		i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStartForNoComma[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEndForNoComma[i / 2], actualText);
+			}
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 3; i++) {
+			testParser.splitAndSetNoCommaStartEndDateTime(testDatesForNoComma[i]);
+		}
+
+		testList = testParser.getParseInfo();
+		iter;
+		i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStartForNoComma[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEndForNoComma[i / 2], actualText);
+			}
+		}
+	}
+
 	TEST_METHOD(parserSplitAndSetNoCommaStartEndDateTimeTest) {
 		string testDates[] = { "10AM to 1PM", "930AM to 1230PM", "1 Oct to 23 Oct", "1 Oct 2012 - 23 Oct 2015", "mon to wed" };
-		string expectedStart[] = { "-1 -1 -1 10 00", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1", "-1 -1 monday -1 1" };
+		string expectedStart[] = { "-1 -1 -1 10 00", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1", "-1 -1 monday -1 -1" };
 		string expectedEnd[] = { "-1 -1 -1 13 00", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1", "-1 -1 wednesday -1 -1" };
 		string start = "start";
 		string end = "end";
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			testParser.splitAndSetNoCommaStartEndDateTime(testDates[i]);
 		}
 
@@ -566,6 +647,49 @@ public:
 		}
 	}
 
+	TEST_METHOD(parserIsAppropriateHourTest) {
+		string testHour[] = { "1", "6", "11", "06", "12", "18", "23" };
+
+		for (int i = 0; i < 7; i++) {
+			bool actual = testParser.isAppropriateAMHour(testHour[i]);
+			if (i < 5) {
+				Assert::IsTrue(actual);
+			}
+			else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
+
+	TEST_METHOD(parserIsAppropriateTimingTest) {
+		string testHour[] = { "1", "6", "11", "12", "18", "23", "09", "abc", "10", "123", "10", "23" };
+		string testMinute[] = { "00", "10", "20", "30", "40", "50", "59", "00", "abc", "00", "123", "59" };
+		string testSuffix[] = { "pm", "am", "pm", "am", "pm", "pm", "pm", "pm", "pm", "pm", "pm", "am" };
+
+		for (int i = 0; i < 12; i++) {
+			bool actual = testParser.isAppropriateTiming(testHour[i], testMinute[i], testSuffix[i]);
+			if (i < 7) {
+				Assert::IsTrue(actual);
+			}
+			else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
+
+	TEST_METHOD(parserHasNoDayButHasTimeTest) {
+		string testDateTimeString[] = { "-1 -1 monday 23 59", "2015 10 10 23 59", "2015 10 -1 23 59" };
+
+		for (int i = 0; i < 3; i++) {
+			bool actual = testParser.hasNoDayButHasTime(testDateTimeString[i]);
+			if (i < 2) {
+				Assert::IsFalse(actual);
+			} else {
+				Assert::IsTrue(actual);
+			}
+		}
+	}
+
 	TEST_METHOD(parserIsModifierTest) {
 		string testString[] = { "-ITEM", "-DaTe", "-dUe", "-start", "-end", "-Desc", "-dESCRIPTION", "-pRiORiTy" };
 		string testStringfalse[] = { "-items", "-descrb", "-123", "-abc", "-", " " };
@@ -619,65 +743,5 @@ public:
 		Assert::AreEqual(expected, actual);
 	}
 
-	/*
-
-	TEST_METHOD(parserSplitAndSetStartEndTest) {
-	string testDateTime = "10/11/2012 9pm to 12/11/2012 10pm";
-	string testDates[] = { "10/11/2012 to 12/11/2012", "10 November 2012 - 12 November 2012" };
-	string testTimes[] = { "9pm to 11pm", "9-11", "10:00 to 11:00", "10:30 - 11:30" };
-	string expectedStartDateTime = "10 11 2012 21 -1";
-	string expectedEndDateTime = "12 11 2012 22 -1";
-	string expectedStartDate = "10 11 2012";
-	string expectedEndDate = "12 11 2012";
-	string expectedStartTime[] { "21 -1", "9 -1", "10 00", "10 30" };
-	string expectedEndTime[] { "23 -1", "11 -1", "11 00", "11 30" };
-
-	for (int i = 0; i < 2; i++) {
-	string testString = testDates[i];
-	unsigned int index = -1;
-	unsigned int size = 0;
-
-	if (testParser.hasStartEnd(testString, index, size)) {
-	unsigned int type = -1;
-	unsigned int expectedType = 2;
-
-	START_AND_END actual = testParser.splitAndSetStartEnd(testString, index, size, type );
-	unsigned int actualType = type;
-	Assert::AreEqual(expectedStartDate, actual.start);
-	Assert::AreEqual(expectedEndDate, actual.end);
-	Assert::AreEqual(expectedType, actualType);
-	}
-	}
-
-	for (int i = 0; i < 2; i++) {
-	string testString = testTimes[i];
-	unsigned int index = -1;
-	unsigned int size = 0;
-
-	if (testParser.hasStartEnd(testString, index, size)) {
-	unsigned int type = -1;
-	unsigned int expectedType = 3;
-
-	START_AND_END actual = testParser.splitAndSetStartEnd(testString, index, size, type);
-	unsigned int actualType = type;
-	Assert::AreEqual(expectedStartTime[i], actual.start);
-	Assert::AreEqual(expectedEndTime[i], actual.end);
-	Assert::AreEqual(expectedType, actualType);
-	}
-	}
-
-	unsigned int index = -1;
-	unsigned int size = 0;
-	if (testParser.hasStartEnd(testDateTime, index, size)) {
-	unsigned int type = -1;
-	unsigned int expectedType = 1;
-
-	START_AND_END actual = testParser.splitAndSetStartEnd(testDateTime, index, size, type);
-	unsigned int actualType = type;
-	Assert::AreEqual(expectedStartDateTime, actual.start);
-	Assert::AreEqual(expectedEndDateTime, actual.end);
-	Assert::AreEqual(expectedType, actualType);
-	}
-	}*/
 	};
 }

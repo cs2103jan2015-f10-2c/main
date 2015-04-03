@@ -222,7 +222,7 @@ public:
 	// date time functions
 	// ===================
 	bool hasStartEndDateTime(string);
-	string setDateTime(string, const string); // do more unit testing ==============================================
+	string setDateTime(string, const string);
 	string splitAndSetDateTime(string, const string);
 	string splitAndSetStartEndDateTime(const string);
 	string splitAndSetNoCommaStartEndDateTime(const string);
@@ -241,9 +241,9 @@ public:
 	string setMonth(string);
 	bool hasTimePeriodSuffix(const string);
 	string addTwelveToHours(const string); 
-	bool isAppropriateHour(const string); // do unit testing =================================================
-	bool isAppropriateTiming(const string, const string, const string); // do unit testing =================================================
-	bool hasNoDayButHasTime(const string); // do unit testing =================================================
+	bool isAppropriateAMHour(const string);
+	bool isAppropriateTime(const string, const string, const string);
+	bool hasNoDayButHasTime(const string);
 
 	// =================
 	// boolean functions

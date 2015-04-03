@@ -923,7 +923,7 @@ string iParser::splitAndSetColonTimeString(string timeString, const string suffi
 		hour = addTwelveToHours(hour);
 	}
 
-	if (!isAppropriateTiming(hour, minute, suffix)) {
+	if (!isAppropriateTime(hour, minute, suffix)) {
 		throw false;
 	}
 
@@ -963,7 +963,7 @@ string iParser::splitAndSetNoColonTimeString(string timeString, const string suf
 		hour = addTwelveToHours(hour);
 	}
 
-	if (!isAppropriateTiming(hour, minute, suffix)) {
+	if (!isAppropriateTime(hour, minute, suffix)) {
 		throw false;
 	}
 
@@ -1070,7 +1070,7 @@ string iParser::addTwelveToHours(const string hourString) {
 	return output.str();
 }
 
-bool iParser::isAppropriateHour(const string hourString) {
+bool iParser::isAppropriateAMHour(const string hourString) {
 	assert(hourString != STRING_BLANK);
 
 	if (areDigits(hourString)) {
@@ -1081,23 +1081,21 @@ bool iParser::isAppropriateHour(const string hourString) {
 	} else {
 		return false;
 	}
-
-	return true;
 }
 
-bool iParser::isAppropriateTiming(const string hour, const string minute, const string suffix) {
+bool iParser::isAppropriateTime(const string hour, const string minute, const string suffix) {
 	bool isValid = true;
 
-	if (!areDigits(hour) && !areDigits(minute)) {
+	if (!areDigits(hour) || !areDigits(minute)) {
 		isValid = false;
 	}
 	
-	if (isValid && minute.size() != SIZE_OF_STRING_MINUTES &&
-		(hour.size() < MIN_SIZE_OF_STRING_HOURS || hour.size() > MAX_SIZE_OF_STRING_HOURS)) {
+	if (isValid && (minute.size() != SIZE_OF_STRING_MINUTES ||
+		hour.size() < MIN_SIZE_OF_STRING_HOURS || hour.size() > MAX_SIZE_OF_STRING_HOURS)) {
 		isValid = false;
 	}
 
-	if (isValid && suffix == STRING_AM && !isAppropriateHour(hour)) {
+	if (isValid && suffix == STRING_AM && !isAppropriateAMHour(hour)) {
 		isValid = false;
 	}
 
@@ -1114,14 +1112,15 @@ bool iParser::hasNoDayButHasTime(const string dateTimeString) {
 	startOfDayIndex++;
 	startOfTimeIndex++;
 
-	string day = dateTimeString.substr(startOfDayIndex, startOfTimeIndex - startOfDayIndex);
+	string day = dateTimeString.substr(startOfDayIndex, startOfTimeIndex - startOfDayIndex - 1);
 	string time = dateTimeString.substr(startOfTimeIndex);
 
 	if (day == STRING_NEGATIVE_ONE && time != STRING_TIME_INITIALISE) {
 		return true;
-	} else return false;
+	} else {
+		return false;
+	}
 }
-
 
 bool iParser::isModifier(string modifier) {
 	convertToLowerCase(modifier);
