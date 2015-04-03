@@ -261,6 +261,16 @@ namespace VerificationTests
 			DateTimeVerification verify15(dateTimeObject15);
 			isValidDateTime = verify15.isValidDateTime();
 			Assert::AreEqual(true, isValidDateTime);
+
+			DateTime dateTimeObject16(12, 12, 12, -1, -1);
+			DateTimeVerification verify16(dateTimeObject16);
+			isValidDateTime = verify16.isValidDateTime();
+			Assert::AreEqual(true, isValidDateTime);
+
+			DateTime dateTimeObject17(-1, 4, 4, 23, 59);
+			DateTimeVerification verify17(dateTimeObject17);
+			isValidDateTime = verify17.isValidDateTime();
+			Assert::AreEqual(false, isValidDateTime);
 		}
 
 	};
@@ -323,7 +333,20 @@ namespace VerificationTests
 			ItemVerification verify5(item5, 100);
 			isValidStartDateTime = verify5.isValidStartDateTime();
 			Assert::AreEqual(true, isValidStartDateTime);
+
+			Item item6;
+			DateTime startTime6(12, 12, 12, -1, -1);
+			item6.setStartTime(startTime6);
+			ItemVerification verify6(item6, 100);
+			isValidStartDateTime = verify6.isValidStartDateTime();
+			Assert::AreEqual(true, isValidStartDateTime);
 			
+			Item item7;
+			DateTime startTime7(-1, -1, -1, -1, -1);
+			item7.setStartTime(startTime6);
+			ItemVerification verify7(item7, 100);
+			isValidStartDateTime = verify7.isValidStartDateTime();
+			Assert::AreEqual(true, isValidStartDateTime);
 		}
 
 		TEST_METHOD(VerificationTestIsValidEndDateTime)
@@ -530,6 +553,17 @@ namespace VerificationTests
 			ItemVerification verify8(item5, 20);
 			isValid = verify8.isValidItem();
 			Assert::AreEqual(false, isValid);
+
+			DateTime startTime6(12, 12, 12, -1, -1);
+			DateTime endTime6(-1, -1, -1, -1, -1);
+			Item item6("AIYOO");
+			item6.setStartTime(startTime6);
+			item6.setEndTime(endTime6);
+			item6.setItemID(20);
+			item6.setPriority('L');
+			ItemVerification verify9(item6, 20);
+			isValid = verify9.isValidItem();
+			Assert::AreEqual(true, isValid);
 		}
 
 		TEST_METHOD(VerificationTestGetItemVerificationErrors)

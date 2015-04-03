@@ -1,17 +1,17 @@
 #include "ItemVerification.h"
 
-const string ItemVerification::EMPTY_STRING = "";
-const string ItemVerification::AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
-const string ItemVerification::AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
-const string ItemVerification::ERROR_INVALID_NAME = "Error: Invalid Name";
-const string ItemVerification::ERROR_INVALID_DESCRIPTION = "Error: Invalid Description";
-const string ItemVerification::ERROR_INVALID_START_DATE_TIME = "Error: Invalid Start Date/Time";
-const string ItemVerification::ERROR_INVALID_END_DATE_TIME = "Error: Invalid End Date/TIME";
-const string ItemVerification::ERROR_SAME_START_END_DATE_TIME = "Error: Start Date/Time same as End Date/Time";
-const string ItemVerification::ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME = "Error: Start Date/Time is later than End Date/Time";
-const string ItemVerification::ERROR_INVALID_ID = "Error: Invalid ID";
-const string ItemVerification::ERROR_INVALID_PRIORITY = "Error: Invalid Priority";
-const string ItemVerification::ERROR_INVALID_LABEL = "Error: Invalid Label";
+const string ItemVerification::ITEM_VERIFICATION_EMPTY_STRING = "";
+const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
+const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_NAME = "Error: Invalid Name";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_DESCRIPTION = "Error: Invalid Description";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME = "Error: Invalid Start Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME = "Error: Invalid End Date/TIME";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME = "Error: Start Date/Time same as End Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME = "Error: Start Date/Time is later than End Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_ID = "Error: Invalid ID";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_PRIORITY = "Error: Invalid Priority";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_LABEL = "Error: Invalid Label";
 
 ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 	_itemObjectToVerify = itemObject;
@@ -20,8 +20,8 @@ ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 
 bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
-	if (name == EMPTY_STRING) {
-		_itemVerificationErrors.push_back(ERROR_INVALID_NAME);
+	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
 		return false;
 	} else {
 		return true;
@@ -38,7 +38,7 @@ bool ItemVerification::isValidStartDateTime() {
 	if (startDateTimeVerification.isValidDateTime()) {
 		return true;
 	} else {
-		_itemVerificationErrors.push_back(ERROR_INVALID_START_DATE_TIME);
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME);
 		return false;
 	}
 }
@@ -49,7 +49,7 @@ bool ItemVerification::isValidEndDateTime() {
 	if (endDateTimeVerification.isValidDateTime()) {
 		return true;
 	} else {
-		_itemVerificationErrors.push_back(ERROR_INVALID_END_DATE_TIME);
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME);
 		return false;
 	}
 }
@@ -63,10 +63,10 @@ bool ItemVerification::isValidTimeFrame() {
 	if (startDateTimeVerification.isValidDateTime() && endDateTimeVerification.isValidDateTime()) {
 		if (startDateTimeVerification.hasHourMinute() && endDateTimeVerification.hasHourMinute()) {
 			if (startDateTime == endDateTime) {
-				_itemVerificationErrors.push_back(ERROR_SAME_START_END_DATE_TIME);
+				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME);
 				return false;
 			} else if (startDateTime.isAfter(endDateTime)) {
-				_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
 				return false;
 			} else {
 				return true;
@@ -81,7 +81,7 @@ bool ItemVerification::isValidTimeFrame() {
 			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() == startDateTime.getMonth() && endDateTime.getDay() >= startDateTime.getDay()) {
 				return true;
 			} else {
-				_itemVerificationErrors.push_back(ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
 				return false;
 			}
 		}
@@ -95,7 +95,7 @@ bool ItemVerification::isValidID() {
 	if (itemID <= _nextID) {
 		return true;
 	} else {
-		_itemVerificationErrors.push_back(ERROR_INVALID_ID);
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_ID);
 		return false;
 	}
 }
@@ -105,11 +105,11 @@ bool ItemVerification::isValidPriority() {
 	char priorityChar = _itemObjectToVerify.getPriority();
 	unsigned int priorityFound;
 	priorityString.push_back(priorityChar);
-	priorityFound = priorityString.find_first_of(AVAILABLE_PRIORITIES);
+	priorityFound = priorityString.find_first_of(ITEM_VERIFICATION_AVAILABLE_PRIORITIES);
 	if (priorityFound != string::npos) {
 		return true;
 	} else {
-		_itemVerificationErrors.push_back(ERROR_INVALID_PRIORITY);
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
 		return false;
 	}
 }
@@ -119,11 +119,11 @@ bool ItemVerification::isValidLabel() {
 	char labelChar = _itemObjectToVerify.getLabel();
 	unsigned int labelFound;
 	labelString.push_back(labelChar);
-	labelFound = labelString.find_first_of(AVAILABLE_LABELS);
+	labelFound = labelString.find_first_of(ITEM_VERIFICATION_AVAILABLE_LABELS);
 	if (labelFound != string::npos) {
 		return true;
 	} else {
-		_itemVerificationErrors.push_back(ERROR_INVALID_LABEL);
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_LABEL);
 		return false;
 	}
 }

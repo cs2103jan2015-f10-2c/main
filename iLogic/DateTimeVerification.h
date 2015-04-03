@@ -10,29 +10,29 @@ class DateTimeVerification {
 
 private:
 
-	static const int MIN_YEAR;
-	static const int MAX_YEAR;
-	static const int MIN_MONTH;
-	static const int MAX_MONTH;
-	static const int MIN_DAY;
-	static const int MAX_DAY;
-	static const int MIN_HOUR;
-	static const int MAX_HOUR;
-	static const int MIN_MINUTE;
-	static const int MAX_MINUTE;
-	static const int EMPTYFIELD_DATETIME;
+	static const int DATETIME_VERIFICATION_MIN_YEAR;
+	static const int DATETIME_VERIFICATION_MAX_YEAR;
+	static const int DATETIME_VERIFICATION_MIN_MONTH;
+	static const int DATETIME_VERIFICATION_MAX_MONTH;
+	static const int DATETIME_VERIFICATION_MIN_DAY;
+	static const int DATETIME_VERIFICATION_MAX_DAY;
+	static const int DATETIME_VERIFICATION_MIN_HOUR;
+	static const int DATETIME_VERIFICATION_MAX_HOUR;
+	static const int DATETIME_VERIFICATION_MIN_MINUTE;
+	static const int DATETIME_VERIFICATION_MAX_MINUTE;
+	static const int DATETIME_VERIFICATION_EMPTYFIELD_DATETIME;
 
-	static const int DAY_29;
-	static const int DAY_30;
-	static const int DAY_31;
-	static const int MONTH_FEB;
-	static const int MONTH_APR;
-	static const int MONTH_JUN;
-	static const int MONTH_SEP;
-	static const int MONTH_NOV;
-	static const int YEAR_4;
-	static const int YEAR_100;
-	static const int YEAR_400;
+	static const int DATETIME_VERIFICATION_DAY_29;
+	static const int DATETIME_VERIFICATION_DAY_30;
+	static const int DATETIME_VERIFICATION_DAY_31;
+	static const int DATETIME_VERIFICATION_MONTH_FEB;
+	static const int DATETIME_VERIFICATION_MONTH_APR;
+	static const int DATETIME_VERIFICATION_MONTH_JUN;
+	static const int DATETIME_VERIFICATION_MONTH_SEP;
+	static const int DATETIME_VERIFICATION_MONTH_NOV;
+	static const int DATETIME_VERIFICATION_YEAR_4;
+	static const int DATETIME_VERIFICATION_YEAR_100;
+	static const int DATETIME_VERIFICATION_YEAR_400;
 
 
 	DateTime _dateTimeObjectToVerify;
