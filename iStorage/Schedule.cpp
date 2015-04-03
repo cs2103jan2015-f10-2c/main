@@ -289,6 +289,18 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 	return retrieveDisplaySchedule();
 }
 
+bool Schedule::isUpdatedLaterThan(Item leftItem, Item rightItem) {
+	string leftDateTime = leftItem.displayLastUpdatedTime();
+	string rightDateTime = rightItem.displayLastUpdatedTime();
+
+	return (leftDateTime > rightDateTime);
+}
+
+const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isUpdatedLaterThan);
+	return retrieveDisplaySchedule();
+}
+
 //	Filters the schedule by priority
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char priority) {
 	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {

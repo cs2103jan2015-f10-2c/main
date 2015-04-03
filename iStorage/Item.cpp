@@ -84,6 +84,14 @@ bool Item::hasValidItemLabel() {
 	return false;
 }
 
+DateTime Item::setLastUpdate() {
+	CTime time = CTime::GetCurrentTime();
+	DateTime currentTime(time.GetYear(), time.GetMonth(), time.GetDay(), time.GetHour(), time.GetMinute());
+	_lastUpdate = currentTime;
+
+	return _lastUpdate;
+}
+
 //	Default Constructor
 Item::Item() {
 	_itemName = EMPTYFIELD_ITEMNAME;
@@ -92,6 +100,7 @@ Item::Item() {
 	_priority = EMPTYFIELD_PRIORITY;
 	_label = EMPTYFIELD_LABEL;
 	_isCompleted = false;
+	setLastUpdate();
 }
 
 //	Overloaded Constructor with itemName
@@ -102,6 +111,7 @@ Item::Item(string itemName) {
 	_priority = EMPTYFIELD_PRIORITY;
 	_label = EMPTYFIELD_LABEL;
 	_isCompleted = false;
+	setLastUpdate();
 }
 
 //	Overloaded Constructor with itemID
@@ -112,6 +122,7 @@ Item::Item(unsigned int itemID) {
 	_priority = EMPTYFIELD_PRIORITY;
 	_label = EMPTYFIELD_LABEL;
 	_isCompleted = false;
+	setLastUpdate();
 }
 
 //	Overloaded Constructor with itemName and itemID
@@ -122,6 +133,7 @@ Item::Item(string itemName, unsigned int itemID) {
 	_priority = EMPTYFIELD_PRIORITY;
 	_label = EMPTYFIELD_LABEL;
 	_isCompleted = false;
+	setLastUpdate();
 }
 
 //	Destructor
@@ -130,18 +142,21 @@ Item::~Item() {}
 //	Sets the item name
 string Item::setItemName(string itemName) {
 	_itemName = itemName;
+	setLastUpdate();
 	return _itemName;
 }
 
 //	Sets the item description
 string Item::setDescription(string description) {
 	_description = description;
+	setLastUpdate();
 	return _description;
 }
 
 //	Sets the item start time, given DateTime object
 DateTime Item::setStartTime(DateTime startTime) {
 	_startTime = startTime;
+	setLastUpdate();
 	return _startTime;
 }
 
@@ -149,6 +164,7 @@ DateTime Item::setStartTime(DateTime startTime) {
 DateTime Item::setStartTime(int year, int month, int day) {
 	DateTime dateTime(year, month, day);
 	_startTime = dateTime;
+	setLastUpdate();
 	return _startTime;
 }
 
@@ -156,12 +172,14 @@ DateTime Item::setStartTime(int year, int month, int day) {
 DateTime Item::setStartTime(int year, int month, int day, int hour, int minute) {
 	DateTime dateTime(year, month, day, hour, minute);
 	_startTime = dateTime;
+	setLastUpdate();
 	return _startTime;
 }
 
 //	Sets the item end time, given DateTime object
 DateTime Item::setEndTime(DateTime endTime) {
 	_endTime = endTime;
+	setLastUpdate();
 	return _endTime;
 }
 
@@ -169,6 +187,7 @@ DateTime Item::setEndTime(DateTime endTime) {
 DateTime Item::setEndTime(int year, int month, int day) {
 	DateTime dateTime(year, month, day);
 	_endTime = dateTime;
+	setLastUpdate();
 	return _endTime;
 }
 
@@ -176,30 +195,35 @@ DateTime Item::setEndTime(int year, int month, int day) {
 DateTime Item::setEndTime(int year, int month, int day, int hour, int minute) {
 	DateTime dateTime(year, month, day, hour, minute);
 	_endTime = dateTime;
+	setLastUpdate();
 	return _endTime;
 }
 
 //	Sets the item ID
 unsigned int Item::setItemID(unsigned int itemID) {
 	_itemID = itemID;
+	setLastUpdate();
 	return _itemID;
 }
 
 //	Sets the item priority (H, M, L)
 char Item::setPriority(char priority) {
 	_priority = priority;
+	setLastUpdate();
 	return _priority;
 }
 
 //	Sets the item label (P, O, M)
 char Item::setLabel(char label) {
 	_label = label;
+	setLastUpdate();
 	return _label;
 }
 
 //	Sets the item completion status
 bool Item::setCompletion(bool isCompleted) {
 	_isCompleted = isCompleted;
+	setLastUpdate();
 	return _isCompleted;
 }
 
@@ -221,6 +245,10 @@ DateTime Item::getStartTime() {
 //	Retrieves the item end time (DateTime object)
 DateTime Item::getEndTime() {
 	return _endTime;
+}
+
+DateTime Item::getLastUpdate() {
+	return _lastUpdate;
 }
 
 //	Retrieves the item ID
@@ -316,4 +344,9 @@ string Item::displayStartTime() {
 //	Retrieves the item end time (string)
 string Item::displayEndTime() {
 	return _endTime.displayDateTime();
+}
+
+//	Retrieves the item last updated time (string)
+string Item::displayLastUpdatedTime() {
+	return _lastUpdate.displayDateTime();
 }

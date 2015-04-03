@@ -49,6 +49,7 @@ private:
 	static bool isAlphabeticallySmallerThan(Item, Item);
 	static bool isLowerPriorityThan(Item, Item);
 	static bool isLessCompleteThan(Item, Item);
+	static bool isUpdatedLaterThan(Item, Item);
 
 	//	Convert entire string to lowercase
 	//	Pre:	Valid string
