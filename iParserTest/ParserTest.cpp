@@ -661,13 +661,13 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserIsAppropriateTimingTest) {
+	TEST_METHOD(parserIsAppropriateTimeTest) {
 		string testHour[] = { "1", "6", "11", "12", "18", "23", "09", "abc", "10", "123", "10", "23" };
 		string testMinute[] = { "00", "10", "20", "30", "40", "50", "59", "00", "abc", "00", "123", "59" };
 		string testSuffix[] = { "pm", "am", "pm", "am", "pm", "pm", "pm", "pm", "pm", "pm", "pm", "am" };
 
 		for (int i = 0; i < 12; i++) {
-			bool actual = testParser.isAppropriateTiming(testHour[i], testMinute[i], testSuffix[i]);
+			bool actual = testParser.isAppropriateTime(testHour[i], testMinute[i], testSuffix[i]);
 			if (i < 7) {
 				Assert::IsTrue(actual);
 			}
