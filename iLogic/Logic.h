@@ -18,6 +18,7 @@
 #include <cctype>
 #include <algorithm>
 #include <direct.h>
+#include <atltime.h>
 using namespace std;
 
 class Logic
@@ -54,7 +55,9 @@ private:
 	static const string SORT_PRIORITY;
 	static const string SORT_COMPLETION;
 	static const string SORT_LAST_UPDATE;
-
+	static const string FILTER_COMPLETION;
+	static const string FILTER_PRIORITY;
+	static const string FILTER_LABEL;
 
 	static const int ZERO_INDEX = 0;
 	static const unsigned int DEFAULT_ITEM_ID = 0;
@@ -148,6 +151,8 @@ public:
 	string sortTask();
 
 
+	string filterTask(string filterToBeImplemented);
+
 	//modifies an item, specified by the parse info
 	//Pre: takes in an item to be modified, and a parse info list to execute the modification
 	//Post : None
@@ -162,8 +167,9 @@ public:
 	//Post : returns a dateTime object created
 	DateTime interpreteDateTime(string infoToBeInterpreted);
 	DateTime createDateTime(int DD, int MM, int YYYY, int hh, int mm);
+	DateTime getCurrentTime();
 	
-
+	char checkPriority(string priorityToBeModified);
 	//Initiate the update on the display schedule in storage
 	//and get or print the display schedule
 	//Pre : none

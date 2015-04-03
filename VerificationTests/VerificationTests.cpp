@@ -9,7 +9,7 @@ namespace VerificationTests
 	{
 	public:
 
-		TEST_METHOD(TestIsValidDateTimeValues)
+		TEST_METHOD(VerificationTestIsValidDateTimeValues)
 		{
 			bool isValid;
 
@@ -25,7 +25,7 @@ namespace VerificationTests
 			Assert::AreEqual(false, isValid);
 		}
 
-		TEST_METHOD(TestHasYearMonthDay)
+		TEST_METHOD(VerificationTestHasYearMonthDay)
 		{
 			bool hasYMD;
 
@@ -52,7 +52,7 @@ namespace VerificationTests
 			Assert::AreEqual(true, hasYMD);
 		}
 
-		TEST_METHOD(TestHasMonthDay)
+		TEST_METHOD(VerificationTestHasMonthDay)
 		{
 			bool hasMD;
 			
@@ -87,7 +87,7 @@ namespace VerificationTests
 			
 		}
 
-		TEST_METHOD(TestIsActualYearMonthDate)
+		TEST_METHOD(VerificationTestIsActualYearMonthDate)
 		{
 			bool isActualYMD;
 
@@ -152,7 +152,7 @@ namespace VerificationTests
 			Assert::AreEqual(true, isActualYMD);
 		}
 
-		TEST_METHOD(TestIsValidTime)
+		TEST_METHOD(VerificationTestIsValidTime)
 		{
 			DateTime dateTimeObject;
 			bool isValidTime;
@@ -181,7 +181,7 @@ namespace VerificationTests
 			
 		}
 
-		TEST_METHOD(TestIsValidDateTime)
+		TEST_METHOD(VerificationTestIsValidDateTime)
 		{
 			bool isValidDateTime;
 
@@ -270,7 +270,7 @@ namespace VerificationTests
 	{
 	public:
 
-		TEST_METHOD(TestIsValidName)
+		TEST_METHOD(VerificationTestIsValidName)
 		{
 			bool isValidName;
 
@@ -285,7 +285,7 @@ namespace VerificationTests
 			Assert::AreEqual(true, isValidName);
 		}
 
-		TEST_METHOD(TestIsValidStartDateTime)
+		TEST_METHOD(VerificationTestIsValidStartDateTime)
 		{
 			bool isValidStartDateTime;
 
@@ -326,7 +326,7 @@ namespace VerificationTests
 			
 		}
 
-		TEST_METHOD(TestIsValidEndDateTime)
+		TEST_METHOD(VerificationTestIsValidEndDateTime)
 		{
 			bool isValidEndDateTime;
 
@@ -367,7 +367,7 @@ namespace VerificationTests
 			
 		}
 
-		TEST_METHOD(TestIsValidTimeFrame)
+		TEST_METHOD(VerificationTestIsValidTimeFrame)
 		{
 			bool isValidTimeFrame;
 			
@@ -453,7 +453,7 @@ namespace VerificationTests
 			Assert::AreEqual(false, isValidTimeFrame);
 		}
 
-		TEST_METHOD(TestIsValidItem)
+		TEST_METHOD(VerificationTestIsValidItem)
 		{
 			DateTime startTime(2014, 03, 10, 17, 00);
 			DateTime endTime(2014, 10, 15, 0, 01);
@@ -532,7 +532,7 @@ namespace VerificationTests
 			Assert::AreEqual(false, isValid);
 		}
 
-		TEST_METHOD(TestGetItemVerificationErrors)
+		TEST_METHOD(VerificationTestGetItemVerificationErrors)
 		{
 			int numberOfErrors =  0;
 			list<string> errorList;
