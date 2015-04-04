@@ -23,7 +23,7 @@ const string Logic::MODIFIER_COMPLETION = "done";
 const string Logic::SORT_NAME = "name";
 const string Logic::SORT_DATE = "date";
 const string Logic::SORT_PRIORITY = "priority";
-const string Logic::SORT_COMPLETION = "completion";
+const string Logic::SORT_COMPLETION = "done";
 const string Logic::SORT_LAST_UPDATE = "update";
 const string Logic::FILTER_COMPLETION = "done";
 const string Logic::FILTER_PRIORITY = "priority";
@@ -33,7 +33,7 @@ const string Logic::FILTER_ALL = "all";
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation.txt";
 const string Logic::DEFAULT_FILENAME = "save.txt";
-const string Logic::DEFAULT_SORTING = "update";
+const string Logic::DEFAULT_SORTING = "date";
 
 const string Logic::MESSAGE_SUCCESSFUL_ADD = "Task added to Schedule";
 const string Logic::MESSAGE_SUCCESSFUL_DELETE = "Task deleted from Schedule";
@@ -78,7 +78,7 @@ Logic::Logic() {
 	_fileNameToBeSaved = DEFAULT_FILENAME;
 	//default file name is save.txt
 	_currentSorting = DEFAULT_SORTING;
-	//default sorting is by last update
+	//default sorting is by date
 	_currentFilter = FILTER_ALL;
 	//default filter is view all
 
@@ -556,6 +556,7 @@ string Logic::sortTaskWithFilter(){
 	  } */else{
 		return MESSAGE_FAILED_SORT;
 	}
+	cout << "HERE" << endl;
 	printSchedule(sortedDisplaySchedule);
 	return MESSAGE_SUCCESSFUL_SORT;
 }
@@ -662,22 +663,27 @@ string Logic::getDirectoryAndFileName(){
 }
 
 string Logic::retrieveDirectoryFromTextFile(){
-	ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
-	getline(readFile, _directoryToBeSaved);
-	getline(readFile, _fileNameToBeSaved);
-	readFile >> _scheduleSize;
-	readFile >> _currentSorting;
-	readFile >> _nextItemID;
-	readFile >> _currentFilter;
-	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
+	if (isExistingFileInDirectory(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME)){
+		ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
+		getline(readFile, _directoryToBeSaved);
+		getline(readFile, _fileNameToBeSaved);
+		readFile >> _scheduleSize;
+		readFile >> _currentSorting;
+		readFile >> _nextItemID;
+		readFile >> _currentFilter;
+		cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
 
-	if (_directoryToBeSaved == ""){
-		if (_fileNameToBeSaved == ""){
-			_fileNameToBeSaved == DEFAULT_FILENAME;
+		if (_directoryToBeSaved == ""){
+			if (_fileNameToBeSaved == ""){
+				_fileNameToBeSaved == DEFAULT_FILENAME;
+			}
+			return _fileNameToBeSaved;
+		} else{
+			return _directoryToBeSaved + "/" + _fileNameToBeSaved;
 		}
-		return _fileNameToBeSaved;
-	} else{
-		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+	} else {
+		//new user or basicinformation textfile is corrupted
+		saveBasicInformationToTextFile();
 	}
 }
 
@@ -688,53 +694,57 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 }
 
 int Logic::readDataFromFile() {
-	ifstream readFile(getDirectoryAndFileName());
-	for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
+	if (isExistingFileInDirectory(getDirectoryAndFileName())){
+		ifstream readFile(getDirectoryAndFileName());
+		for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
 
-		string itemName;
-		string description;
-		string itemID;
-		string junk;
-		char priority;
-		char label;
-		int DD;
-		int MM;
-		int YYYY;
-		int hh;
-		int mm;
-		unsigned int ID;
-		getline(readFile, itemName);
-		getline(readFile, itemID);
-		ID = convertToDigit(itemID);
-		readFile >> YYYY;
-		readFile >> MM;
-		readFile >> DD;
-		readFile >> hh;
-		readFile >> mm;
-		DateTime startTime(YYYY, MM, DD, hh, mm);
-		readFile >> YYYY;
-		readFile >> MM;
-		readFile >> DD;
-		readFile >> hh;
-		readFile >> mm;
-		DateTime EndTime(YYYY, MM, DD, hh, mm);
-		getline(readFile, junk);
-		getline(readFile, description);
-		readFile >> priority;
-		readFile >> label;
-		getline(readFile, junk);
-		Item *item;
-		item = new Item;
-		item->setItemName(itemName);
-		item->setItemID(ID);
-		item->setStartTime(startTime);
-		item->setEndTime(EndTime);
-		item->setDescription(description);
-		item->setPriority(priority);
-		item->setLabel(label);
-		_logicSchedule.addItem(item);
-		item = NULL;
-		delete item;
+			string itemName;
+			string description;
+			string itemID;
+			string junk;
+			char priority;
+			char label;
+			int DD;
+			int MM;
+			int YYYY;
+			int hh;
+			int mm;
+			unsigned int ID;
+			getline(readFile, itemName);
+			getline(readFile, itemID);
+			ID = convertToDigit(itemID);
+			readFile >> YYYY;
+			readFile >> MM;
+			readFile >> DD;
+			readFile >> hh;
+			readFile >> mm;
+			DateTime startTime(YYYY, MM, DD, hh, mm);
+			readFile >> YYYY;
+			readFile >> MM;
+			readFile >> DD;
+			readFile >> hh;
+			readFile >> mm;
+			DateTime EndTime(YYYY, MM, DD, hh, mm);
+			getline(readFile, junk);
+			getline(readFile, description);
+			readFile >> priority;
+			readFile >> label;
+			getline(readFile, junk);
+			Item *item;
+			item = new Item;
+			item->setItemName(itemName);
+			item->setItemID(ID);
+			item->setStartTime(startTime);
+			item->setEndTime(EndTime);
+			item->setDescription(description);
+			item->setPriority(priority);
+			item->setLabel(label);
+			_logicSchedule.addItem(item);
+			item = NULL;
+			delete item;
+		}
+	} else{
+		ofstream writeFile(getDirectoryAndFileName());
 	}
 	cout << "Schedule retrieived" << endl;
 	resetAndGetDisplaySchedule();
