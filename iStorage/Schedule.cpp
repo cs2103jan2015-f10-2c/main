@@ -94,8 +94,6 @@ string Schedule::addItem(Item* item) {
 	_scheduleHistory.addCommand(COMMAND_ADD, *item);
 	_schedule.push_back(*item);
 
-	delete item;
-
 	return _schedule.back().displayItemFullDetails();
 }
 
@@ -124,11 +122,7 @@ string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int item
 //	Replaces an existing item in the schedule given the item's display vector index
 string Schedule::replaceItemGivenDisplayVectorIndex(Item* replacementItem, unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
-	string itemFullDetails = replaceItemGivenItemID(replacementItem, itemID);
-	
-	delete replacementItem;
-
-	return itemFullDetails;
+	return replaceItemGivenItemID(replacementItem, itemID);
 }
 
 //	Deletes an item from the schedule, returns full details of the item (string)
