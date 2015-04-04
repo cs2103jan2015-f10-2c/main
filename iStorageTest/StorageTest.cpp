@@ -1837,15 +1837,108 @@ public:
 	}
 
 	TEST_METHOD(ScheduleTestUndoAdd) {
-		//
+		Schedule testSchedule;
+		Item *item1 = new Item(string("Item number 1 in schedule!"));
+		item1->setItemID(1);
+		Item *item2 = new Item(string("Item number 2 in schedule!"));
+		item2->setItemID(2);
+
+		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		testSchedule.addItem(item1);
+		testSchedule.addItem(item2);
+
+		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		testSchedule.undoAdd(*item2);
+
+		Assert::AreEqual(1, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(1, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		
+		delete item1;
+		delete item2;
+		item1 = NULL;
+		item2 = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestUndoReplace) {
-		//
+		Schedule testSchedule;
+		Item *item1 = new Item(string("Item number 1 in schedule!"));
+		item1->setItemID(1);
+		Item *item2 = new Item(string("Item number 2 in schedule!"));
+		item2->setItemID(2);
+		Item *itemToReplaceWith = new Item(string("This is the replaced Item"));
+		itemToReplaceWith->setItemID(2);
+		Item replacedItemRetrievedFromSchedule;
+
+		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+
+		testSchedule.addItem(item1);
+		testSchedule.addItem(item2);
+
+		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		testSchedule.replaceItemGivenDisplayVectorIndex(itemToReplaceWith, 2);
+		testSchedule.resetDisplaySchedule();
+		replacedItemRetrievedFromSchedule = testSchedule.retrieveItemGivenDisplayVectorIndex(2);
+		Assert::AreEqual(itemToReplaceWith->getItemName(), replacedItemRetrievedFromSchedule.getItemName());
+
+		testSchedule.undoReplace(*item2);
+		testSchedule.resetDisplaySchedule();
+		replacedItemRetrievedFromSchedule = testSchedule.retrieveItemGivenDisplayVectorIndex(2);
+		Assert::AreEqual(item2->getItemName(), replacedItemRetrievedFromSchedule.getItemName());
+
+		delete item1;
+		delete item2;
+		item1 = NULL;
+		item2 = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestUndoDelete) {
-		//
+		Schedule testSchedule;
+		Item *item1 = new Item(string("Item number 1 in schedule!"));
+		item1->setItemID(1);
+		Item *item2 = new Item(string("Item number 2 in schedule!"));
+		item2->setItemID(2);
+
+		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+
+		testSchedule.addItem(item1);
+		testSchedule.addItem(item2);
+
+		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		testSchedule.deleteItemGivenDisplayVectorIndex(2);
+
+		Assert::AreEqual(1, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(1, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+
+		testSchedule.undoDelete(*item2);
+
+		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+
+		delete item1;
+		delete item2;
+		item1 = NULL;
+		item2 = NULL;
 	}
 
 	};
