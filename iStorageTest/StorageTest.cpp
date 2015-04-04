@@ -1842,7 +1842,7 @@ public:
 		Item *item3 = new Item(string("Item number 3 in schedule!"));
 		item3->setItemID(3);
 		Item *item4 = new Item(string("Item number 4 in schedule!"));
-		item3->setItemID(4);
+		item4->setItemID(4);
 
 		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
 		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
@@ -1931,14 +1931,13 @@ public:
 		Assert::AreEqual(item2->getItemID(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemID());
 		Assert::AreEqual(item4->getItemID(), testSchedule.retrieveItemGivenDisplayVectorIndex(4).getItemID());
 
-		// Problem appears at this step! Refer to error message and StackTrace after running test.
 		confirmationFromSchedule = testSchedule.undoLastCommand();
-		//Assert::AreEqual(string("REPLACE") + item3->displayItemFullDetails(), confirmationFromSchedule);
-		//testSchedule.resetDisplaySchedule();	// <<< This step is very important
-		//Assert::AreEqual(item3->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
-		//Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
-		//Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemName());
-		//Assert::AreEqual(item4->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(4).getItemName());
+		Assert::AreEqual(string("REPLACE") + item3->displayItemFullDetails(), confirmationFromSchedule);
+		testSchedule.resetDisplaySchedule();	// <<< This step is very important
+		Assert::AreEqual(item3->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemName());
+		Assert::AreEqual(item4->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(4).getItemName());
 
 		delete item1;
 		delete item2;
