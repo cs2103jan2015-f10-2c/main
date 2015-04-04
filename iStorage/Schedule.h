@@ -57,6 +57,13 @@ private:
 	//	Post:	All uppercased characters are converted to lowercase
 	static string lowerAllCase(const string& unconvertedString);
 
+	//	Undoes the last command that modified the schedule (add, edit, delete)
+	//	Pre:	Previous commands valid
+	//	Post:	Reverses the effect of the last command
+	string undoAdd(Item);
+	string undoReplace(Item);
+	string undoDelete(Item);
+
 public:
 	//	Constructor
 	//	Pre:    Nil
@@ -115,9 +122,6 @@ public:
 	//	Pre:	Previous commands valid
 	//	Post:	Reverses the effect of the last command
 	string undoLastCommand();
-	string undoAdd(Item);
-	string undoReplace(Item);
-	string undoDelete(Item);
 
 	//	Retrieves the entire schedule/display schedule
 	//	Pre:	Nil
