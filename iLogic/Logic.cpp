@@ -57,7 +57,7 @@ char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
 const string Logic::DELETE_TASK_SUCCESSFUL = "Task %d is removed from schedule";
 const string Logic::EDIT_TASK_SUCCESSFUL = "Task %d is edited from schedule";
-const string Logic::SORT_TASK_SUCCESSFUL = "Sorting Changed to : %s";
+const string Logic::SORT_TASK_SUCCESSFUL = "Sorting Changed to : ";
 const string Logic::MARK_DONE_SUCCESSFUL = "Task %d is done";
 const string Logic::TASK_FOUND = "Tasks are found";
 
@@ -126,8 +126,7 @@ void Logic::printEditTaskSuccessful(int lineNumberToBeEdited){
 
 
 void Logic::printSortTaskSuccessful(){
-	sprintf_s(buffer, SORT_TASK_SUCCESSFUL.c_str(), _currentSorting);
-	cout << buffer << endl;
+	cout << SORT_TASK_SUCCESSFUL << _currentSorting << endl;
 }
 
 
@@ -180,7 +179,6 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	newItemToBeAdded = new Item;
 	setItemNameAndIDForNewItem(newItemToBeAdded, parseInfoToBeProcessed);
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
-	cout << "ItemID : " << newItemToBeAdded->getItemID() << endl;
 	ItemVerification verifier(*newItemToBeAdded, _nextItemID);
 	if (verifier.isValidItem()) {
 		string addCompleted = _logicSchedule.addItem(newItemToBeAdded);
@@ -348,7 +346,6 @@ bool Logic::isValidItemInLogic(Item itemToBeChecked){
 string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	//try{
 	if (isValidLineIndex(lineIndexToBeDeleted)){
-		cout << "lineIndex : " << lineIndexToBeDeleted << endl;
 		string deletedItem = _logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 		printDeleteTaskSuccessful(lineIndexToBeDeleted);
 		_scheduleSize--;//Delete successful
@@ -420,12 +417,12 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
-	/*Debugging*/
+	/*Debugging*//*
 	list<COMMAND_AND_TEXT>::iterator iter;
 	for (iter = parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
 		cout << "command : " << iter->command << endl;
 		cout << "text : " << iter->text << endl;
-	}
+	}*/
 	/*Debegging Done*/
 	if (command == COMMAND_ADD) {
 		returnMessage = addTask(parseInfoToBeProcessed);
@@ -437,6 +434,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	} else if (command == COMMAND_UNDO){
 		returnMessage = _logicSchedule.undoLastCommand();
+		cout << "Undo Previous command" << endl;
 	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
 	} else if (command == COMMAND_SEARCH){
@@ -522,8 +520,6 @@ string Logic::filterTask(string filterToBeImplemented){
 	string filterType;
 	string modifierType;
 	iss >> filterType >> modifierType;
-	cout << "filterType :" << filterType << endl;
-	cout << "modifier Type : " << modifierType;
 	if (filterType == FILTER_COMPLETION){
 		bool done = true;
 		_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(done);
@@ -602,6 +598,9 @@ string Logic::searchTask(string keyWord){
 string Logic::changeSavingDirectory(string userInputDirectory){
 	string directoryToMake = "";
 	int truncatePosition;
+	if (userInputDirectory == "default"){
+		userInputDirectory == "";
+	}
 
 	while (userInputDirectory != ""){
 		truncatePosition = userInputDirectory.find_first_of("/");
