@@ -1833,9 +1833,125 @@ public:
 	TEST_CLASS(TEST_UNDO) {
 public:
 	TEST_METHOD(ScheduleTestUndoLastCommand) {
-		//
+		Schedule testSchedule;
+		string confirmationFromSchedule;
+		Item *item1 = new Item(string("Item number 1 in schedule!"));
+		item1->setItemID(1);
+		Item *item2 = new Item(string("Item number 2 in schedule!"));
+		item2->setItemID(2);
+		Item *item3 = new Item(string("Item number 3 in schedule!"));
+		item3->setItemID(3);
+		Item *item4 = new Item(string("Item number 4 in schedule!"));
+		item4->setItemID(4);
+
+		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		// Testing undoing of Add
+		testSchedule.addItem(item1);
+		testSchedule.addItem(item2);
+
+		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		confirmationFromSchedule = testSchedule.undoLastCommand();
+		Assert::AreEqual(string("ADD") + item2->displayItemFullDetails(), confirmationFromSchedule);
+
+		Assert::AreEqual(1, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(1, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		confirmationFromSchedule = testSchedule.undoLastCommand();
+		Assert::AreEqual(string("ADD") + item1->displayItemFullDetails(), confirmationFromSchedule);
+
+		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		// Testing undoing when no available commands to undo
+		confirmationFromSchedule = testSchedule.undoLastCommand();
+		Assert::AreEqual(string("ERROR: Undo has reached its limit."), confirmationFromSchedule);
+
+		// Testing undoing of Delete
+		testSchedule.addItem(item3);
+		testSchedule.addItem(item1);
+		testSchedule.addItem(item2);
+
+		Assert::AreEqual(3, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(3, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		testSchedule.deleteItemGivenDisplayVectorIndex(2);
+		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(item3->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+
+		confirmationFromSchedule = testSchedule.undoLastCommand();
+		Assert::AreEqual(string("DELETE") + item1->displayItemFullDetails(), confirmationFromSchedule);
+		Assert::AreEqual(3, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(3, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(item3->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemName());
+
+		confirmationFromSchedule = testSchedule.undoLastCommand();
+		Assert::AreEqual(string("ADD") + item2->displayItemFullDetails(), confirmationFromSchedule);
+		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(item3->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+
+		// Testing undoing of Edit
+		Item *itemToReplace = new Item(string("This is the Item to replace the edited Item"));
+		itemToReplace->setItemID(3);
+
+		testSchedule.addItem(item2);
+		testSchedule.addItem(item4);
+
+		Assert::AreEqual(4, int(testSchedule.getSizeOfSchedule()));
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(4, int(testSchedule.getSizeOfDisplaySchedule()));
+
+		Assert::AreEqual(item3->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		testSchedule.replaceItemGivenDisplayVectorIndex(itemToReplace, 1);
+		testSchedule.resetDisplaySchedule();	// <<< This step is very important
+		Assert::AreEqual(4, int(testSchedule.getSizeOfSchedule()));
+		Assert::AreEqual(4, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(itemToReplace->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemName());
+		Assert::AreEqual(item4->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(4).getItemName());
+		Assert::AreEqual(itemToReplace->getItemID(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemID());
+		Assert::AreEqual(item1->getItemID(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemID());
+		Assert::AreEqual(item2->getItemID(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemID());
+		Assert::AreEqual(item4->getItemID(), testSchedule.retrieveItemGivenDisplayVectorIndex(4).getItemID());
+
+		confirmationFromSchedule = testSchedule.undoLastCommand();
+		Assert::AreEqual(string("REPLACE") + item3->displayItemFullDetails(), confirmationFromSchedule);
+		testSchedule.resetDisplaySchedule();	// <<< This step is very important
+		Assert::AreEqual(item3->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemName());
+		Assert::AreEqual(item4->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(4).getItemName());
+
+		delete item1;
+		delete item2;
+		delete item3;
+		delete item4;
+		delete itemToReplace;
+		item1 = NULL;
+		item2 = NULL;
+		item3 = NULL;
+		item4 = NULL;
+		itemToReplace = NULL;
 	}
 
+	/* Muted because functions passed test and moved back to private
 	TEST_METHOD(ScheduleTestUndoAdd) {
 		Schedule testSchedule;
 		Item *item1 = new Item(string("Item number 1 in schedule!"));
@@ -1899,8 +2015,10 @@ public:
 
 		delete item1;
 		delete item2;
+		delete itemToReplaceWith;
 		item1 = NULL;
 		item2 = NULL;
+		itemToReplaceWith = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestUndoDelete) {
@@ -1941,40 +2059,74 @@ public:
 		item2 = NULL;
 	}
 
+	*/
+
 	};
 }
 
 namespace HistoryTest {
 	TEST_CLASS(TEST_HISTORY) {
 public:
-	TEST_METHOD(HistoryTestIsValidHistoryCommand) {
+	/* Tests muted because functions passed test and returned to private.
+	TEST_METHOD(HistoryTestIsNormalHistoryCommand) {
 		History testHistory;
 		bool isValidHistoryCmd;
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("ADD"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADD"));
 		Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("DELETE"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("DELETE"));
 		Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("REPLACE"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("REPLACE"));
 		Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Add"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Add"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Delete"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Delete"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Replace"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Replace"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("whattt"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("whattt"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("ADDD"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADDD"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 	}
+
+	TEST_METHOD(HistoryTestIsClearCommand) {
+		History testHistory;
+		bool isClearCmd;
+
+		isClearCmd = testHistory.isClearCommand(string("CLEAR"));
+		Assert::AreEqual(true, isClearCmd);
+
+		isClearCmd = testHistory.isClearCommand(string("Clear"));
+		Assert::AreEqual(false, isClearCmd);
+
+		isClearCmd = testHistory.isClearCommand(string("ADD"));
+		Assert::AreEqual(false, isClearCmd);
+	}
+
+	TEST_METHOD(HistoryTestIsValidUndoCall) {
+		History testHistory;
+		bool isValidCallForUndo;
+
+		isValidCallForUndo = testHistory.isValidUndoCall();
+		Assert::AreEqual(false, isValidCallForUndo);
+
+		string command1 = "ADD";
+		Item item1(string("This is the first item"));
+		testHistory.addCommand(command1, item1);
+
+		isValidCallForUndo = testHistory.isValidUndoCall();
+		Assert::AreEqual(true, isValidCallForUndo);
+	}
+
+	*/
 
 	TEST_METHOD(HistoryTestAddCommand) {
 		History testHistory;
@@ -2011,19 +2163,15 @@ public:
 		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
 	}
 
-	TEST_METHOD(HistoryTestIsValidUndoCall) {
+	TEST_METHOD(HistoryTestAddClearCommand) {
 		History testHistory;
-		bool isValidCallForUndo;
+		string returnMessage;
+		vector<Item> clearedSchedule;
+		Item* item1 = new Item(string("helloworld"));
 
-		isValidCallForUndo = testHistory.isValidUndoCall();
-		Assert::AreEqual(false, isValidCallForUndo);
-
-		string command1 = "ADD";
-		Item item1(string("This is the first item"));
-		testHistory.addCommand(command1, item1);
-
-		isValidCallForUndo = testHistory.isValidUndoCall();
-		Assert::AreEqual(true, isValidCallForUndo);
+		clearedSchedule.push_back(*item1);
+		returnMessage = testHistory.addClearCommand(clearedSchedule);
+		Assert::AreEqual(string("CLEAR"), returnMessage);
 	}
 
 	TEST_METHOD(HistoryTestUndoLastCommand) {
@@ -2031,15 +2179,23 @@ public:
 		string returnMessage;
 		string commandFromHistory;
 		Item latestItemFromHistory;
+		vector <Item> clearedSchedule;
+		vector <Item> latestClearedScheduleFromHistory;
 
-		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory);
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory, latestClearedScheduleFromHistory);
 		Assert::AreEqual(string("ERROR: Undo has reached its limit."), returnMessage);
 
 		string command1 = "ADD";
 		Item item1(string("What's up with it, vanilla face?"));
 		testHistory.addCommand(command1, item1);
-		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory);
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory, latestClearedScheduleFromHistory);
 		Assert::AreEqual(command1 + "\n" + item1.displayItemFullDetails(), returnMessage);
+
+		testHistory.addCommand(command1, item1);
+		clearedSchedule.push_back(item1);
+		testHistory.addClearCommand(clearedSchedule);
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory, latestClearedScheduleFromHistory);
+		Assert::AreEqual(clearedSchedule[0].getItemName(), latestClearedScheduleFromHistory[0].getItemName());
 	}
 
 	};

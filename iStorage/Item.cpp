@@ -84,10 +84,9 @@ bool Item::hasValidItemLabel() {
 	return false;
 }
 
-DateTime Item::setLastUpdate() {
+CTime Item::setLastUpdate() {
 	CTime time = CTime::GetCurrentTime();
-	DateTime currentTime(time.GetYear(), time.GetMonth(), time.GetDay(), time.GetHour(), time.GetMinute());
-	_lastUpdate = currentTime;
+	_lastUpdate = time;
 
 	return _lastUpdate;
 }
@@ -247,7 +246,7 @@ DateTime Item::getEndTime() {
 	return _endTime;
 }
 
-DateTime Item::getLastUpdate() {
+CTime Item::getLastUpdate() {
 	return _lastUpdate;
 }
 
@@ -350,5 +349,6 @@ string Item::displayEndTime() {
 
 //	Retrieves the item last updated time (string)
 string Item::displayLastUpdatedTime() {
-	return _lastUpdate.displayDateTime();
+	DateTime lastUpdateTime(_lastUpdate.GetYear(), _lastUpdate.GetMonth(), _lastUpdate.GetDay(), _lastUpdate.GetHour(), _lastUpdate.GetMinute());
+	return lastUpdateTime.displayDateTime();
 }

@@ -24,7 +24,7 @@ private:
 	string _itemName;
 	DateTime _startTime;
 	DateTime _endTime;
-	DateTime _lastUpdate;
+	CTime _lastUpdate;
 	string _description;
 	unsigned int _itemID;
 	char _priority;
@@ -39,7 +39,7 @@ private:
 	bool hasValidItemPriority();
 	bool hasValidItemLabel();
 
-	DateTime setLastUpdate();
+	CTime setLastUpdate();
 
 public:
 	//	Constructor
@@ -88,7 +88,7 @@ public:
 	string getDescription();
 	DateTime getStartTime();
 	DateTime getEndTime();
-	DateTime getLastUpdate();
+	CTime getLastUpdate();
 	unsigned int getItemID();
 	char getPriority();
 	char getLabel();
