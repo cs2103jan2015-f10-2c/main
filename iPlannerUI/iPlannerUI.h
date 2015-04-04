@@ -189,7 +189,7 @@ namespace iPlannerUI {
 
 					 string outcometask;
 					 String^ output = "\t\t\t\t\tSCHEDULE \r\n";
-					 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
+					 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
 						 iterItem = testLogic->getDisplaySchedule()[i];
 						 String^ indexString = (i + 1).ToString();
 						 String^ nameString = gcnew String(iterItem.getItemName().c_str());
@@ -433,7 +433,7 @@ namespace iPlannerUI {
 				 //Within the for loop I am not able to display text in outputTextBox2
 				 //Also th above line SCHEDULE does not get displayed in outputTextBox2
 				 //Code under this for loop is different from previous function Keydown. In KeyDown, colour of entire text changes which is not required.
-				 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
+				 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
 					 iterItem = testLogic->getDisplaySchedule()[i];
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 					 //					 outputBox->Text = "hgjkiyujvdg\n";

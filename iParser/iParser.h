@@ -18,8 +18,8 @@ NOTES TO DEVELOPERS
 #include <assert.h>
 using namespace std;
 
-#ifndef IPARSER_H_
-#define IPARSER_H_
+#ifndef IPARSER_H
+#define IPARSER_H
 
 struct COMMAND_AND_TEXT {
 	string command;
