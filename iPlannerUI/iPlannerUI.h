@@ -189,7 +189,7 @@ namespace iPlannerUI {
 
 					 string outcometask;
 					 String^ output = "\t\t\t\t\tSCHEDULE \r\n";
-					 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
+					 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
 						 iterItem = testLogic->getDisplaySchedule()[i];
 						 String^ indexString = (i + 1).ToString();
 						 String^ nameString = gcnew String(iterItem.getItemName().c_str());
@@ -353,20 +353,19 @@ namespace iPlannerUI {
 						 outputBox2->SelectedText = "\r\n" + descriptionString;
 
 						 output += indexString + ". " + nameString + "\t\t\t" + priorityString + "\t\t\t" + labelString + "\t\t\t" + completionString + "\r\n";
-						 output += "   " + descriptionString + "\r\n";
-
+						 
 						 if (startDateString != "" && startTimeString != "") {
-							 output += "\tStart" + startTimeString + " " + startDateString + "\r\n";
+							 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
 							 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + " " + startDateString + "\r\n";
 						 }
 						 else if (startDateString == "" && startTimeString != "") {
-							 output += "\tStart" + startTimeString + "\r\n";
+							 output += "\tStart : " + startTimeString + "\r\n";
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
 							 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + "\r\n";
 						 }
 						 else if (startDateString != "" && startTimeString == "") {
-							 output += "\tStart :" + startDateString + "\r\n";
+							 output += "\tStart : " + startDateString + "\r\n";
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
 							 outputBox2->SelectedText = "\r\n\tStart" + startDateString + "\r\n";
 						 }
@@ -376,17 +375,17 @@ namespace iPlannerUI {
 						 }
 
 						 if (endDateString != "" && endTimeString != "") {
-							 output += "\tEnd" + endTimeString + " " + endDateString + "\r\n";
+							 output += "\tEnd : " + endTimeString + " " + endDateString + "\r\n";
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Crimson;
 							 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + " " + endDateString + "\r\n";
 						 }
 						 else if (endDateString == "" && endTimeString != "") {
-							 output += "\tEnd" + endTimeString + "\r\n";
+							 output += "\tEnd : " + endTimeString + "\r\n";
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Crimson;
 							 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + "\r\n";
 						 }
 						 else if (endDateString != "" && endTimeString == "") {
-							 output += "\tEnd :" + endDateString + "\r\n";
+							 output += "\tEnd : " + endDateString + "\r\n";
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Crimson;
 							 outputBox2->SelectedText = "\r\n\tEnd" + endDateString + "\r\n";
 						 }
@@ -394,7 +393,7 @@ namespace iPlannerUI {
 							 output += "\r\n";
 							 outputBox2->Text = "\r\n";
 						 }
-
+						 output += "\t" + descriptionString + "\r\n";
 					 }
 
 					 String^ outcomeString = gcnew String(outcome.c_str());
@@ -434,7 +433,7 @@ namespace iPlannerUI {
 				 //Within the for loop I am not able to display text in outputTextBox2
 				 //Also th above line SCHEDULE does not get displayed in outputTextBox2
 				 //Code under this for loop is different from previous function Keydown. In KeyDown, colour of entire text changes which is not required.
-				 for (int i = 0; i < testLogic->getScheduleSize(); i++) {
+				 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
 					 iterItem = testLogic->getDisplaySchedule()[i];
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 					 //					 outputBox->Text = "hgjkiyujvdg\n";
@@ -603,19 +602,18 @@ namespace iPlannerUI {
 
 
 					 output += indexString + ". " + nameString + "\t\t\t" + priorityString + "\t\t\t" + labelString + "\t\t\t" + completionString + "\r\n";
-					 output += "   " + descriptionString + "\r\n";
-
+					 
 					 outputBox2->SelectionColor = Color::BlueViolet;
 					 if (startDateString != "" && startTimeString != "") {
-						 output += "\tStart" + startTimeString + " " + startDateString + "\r\n";
+						 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
 						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + " " + startDateString + "\r\n";
 					 }
 					 else if (startDateString == "" && startTimeString != "") {
-						 output += "\tStart" + startTimeString + "\r\n";
+						 output += "\tStart : " + startTimeString + "\r\n";
 						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + "\r\n";
 					 }
 					 else if (startDateString != "" && startTimeString == "") {
-						 output += "\tStart :" + startDateString + "\r\n";
+						 output += "\tStart : " + startDateString + "\r\n";
 						 outputBox2->SelectedText = "\r\n\tStart" + startDateString + "\r\n";
 						 //outputBox2->Text = output;
 					 }
@@ -625,17 +623,17 @@ namespace iPlannerUI {
 					 }
 					 outputBox2->SelectionColor = Color::Crimson;
 					 if (endDateString != "" && endTimeString != "") {
-						 output += "\tEnd" + endTimeString + " " + endDateString + "\r\n";
+						 output += "\tEnd : " + endTimeString + " " + endDateString + "\r\n";
 						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + " " + endDateString + "\r\n";
 						 //						 outputBox2->Text = output;
 					 }
 					 else if (endDateString == "" && endTimeString != "") {
-						 output += "\tEnd" + endTimeString + "\r\n";
+						 output += "\tEnd : " + endTimeString + "\r\n";
 						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + "\r\n";
 						 //						 outputBox2->Text = output;
 					 }
 					 else if (endDateString != "" && endTimeString == "") {
-						 output += "\tEnd :" + endDateString + "\r\n";
+						 output += "\tEnd : " + endDateString + "\r\n";
 						 outputBox2->SelectedText = "\r\n\tEnd" + endDateString + "\r\n";
 						 //						 outputBox2->Text = output;
 					 }
@@ -644,6 +642,7 @@ namespace iPlannerUI {
 						 outputBox2->Text = "\r\n";
 						 //						 outputBox2->Text = output;
 					 }
+					 output += "\t" + descriptionString + "\r\n";
 				 }
 
 				 //	 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
