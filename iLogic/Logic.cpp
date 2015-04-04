@@ -541,10 +541,22 @@ string Logic::filterTask(string filterToBeImplemented){
 	} else if (filterType == FILTER_ALL){
 		_currentFilter = FILTER_ALL;
 	}else{
+		printInvalidViewOption();
 		return MESSAGE_FAILED_VIEW;
 	}
+	printViewChanged();
 	return MESSAGE_SUCCESSFUL_VIEW;
 }
+
+
+void Logic::printInvalidViewOption(){
+	cout << "Invalid view option" << endl;
+}
+
+void Logic::printViewChanged(){
+	cout << "Filter : " << _currentFilter << endl;
+}
+
 string Logic::sortTaskWithFilter(){
 	vector<Item> sortedDisplaySchedule = getDisplaySchedule();
 	if (_currentSorting == SORT_NAME){
@@ -798,5 +810,5 @@ void Logic::thingsToDoAfterEveryExecution(){
 
 bool Logic::isExistingFileInDirectory(string directoryAndFileName) {
 	ifstream infile(directoryAndFileName);
-	return infile.good();
+	return infile.good() ;
 }

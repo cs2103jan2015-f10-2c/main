@@ -124,7 +124,7 @@ public:
 	void printEditTaskSuccessful(int lineNumberToBeEdited);
 	void printSortTaskSuccessful();
 	void printMarkDoneSuccessful(unsigned int lineIndex);
-
+	void printViewChanged();
 
 	void printAddTaskFailed(ItemVerification verifier);
 	void printDeleteTaskFailed();
@@ -133,6 +133,7 @@ public:
 	void printInvalidInput();
 	void printSortTaskFailed();
 	void printInvalidLineIndex();
+	void printInvalidViewOption();
 
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);
 	
