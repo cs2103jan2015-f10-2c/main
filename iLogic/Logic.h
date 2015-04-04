@@ -45,6 +45,7 @@ private:
 	static const string COMMAND_DONE;
 	static const string COMMAND_SAVE;
 	static const string COMMAND_EXIT;
+	static const string COMMAND_CLEAR;
 	static const string MODIFIER_NAME;
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
@@ -85,6 +86,7 @@ private:
 	static const string MESSAGE_SUCCESSFUL_SAVE;
 	static const string MESSAGE_SUCCESSFUL_UNDO;
 	static const string MESSAGE_SUCCESSFUL_MARK_DONE;
+	static const string MESSAGE_CLEAR;
 
 	static const string MESSAGE_FAILED_ADD;
 	static const string MESSAGE_FAILED_DELETE;
@@ -126,6 +128,7 @@ public:
 	void printSortTaskSuccessful();
 	void printMarkDoneSuccessful(unsigned int lineIndex);
 	void printViewChanged();
+	void printUndo();
 
 	void printAddTaskFailed(ItemVerification verifier);
 	void printDeleteTaskFailed();

@@ -13,6 +13,7 @@ const string Logic::COMMAND_SEARCH = "search";
 const string Logic::COMMAND_VIEW = "view";
 const string Logic::COMMAND_DONE = "done";
 const string Logic::COMMAND_SAVE = "save";
+const string Logic::COMMAND_CLEAR = "clear";
 const string Logic::COMMAND_EXIT = "exit";
 const string Logic::MODIFIER_NAME = "name";
 const string Logic::MODIFIER_START = "start";
@@ -44,6 +45,7 @@ const string Logic::MESSAGE_SUCCESSFUL_VIEW = "Schedule filtered";
 const string Logic::MESSAGE_SUCCESSFUL_SAVE = "Save directory changed";
 const string Logic::MESSAGE_SUCCESSFUL_UNDO = "Last action reversed";
 const string Logic::MESSAGE_SUCCESSFUL_MARK_DONE = "Task is completed";
+const string Logic::MESSAGE_CLEAR = "Schedule Cleared";
 
 const string Logic::MESSAGE_FAILED_ADD = "Sorry, Task was not added to Schedule";
 const string Logic::MESSAGE_FAILED_DELETE = "Sorry, Task was not deleted from Schedule";
@@ -441,7 +443,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	} else if (command == COMMAND_UNDO){
 		returnMessage = _logicSchedule.undoLastCommand();
-		cout << "Undo Previous command" << endl;
+		printUndo();
 	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
 	} else if (command == COMMAND_SEARCH){
@@ -451,7 +453,10 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	} else if (command == COMMAND_SAVE){
 		changeSavingDirectory(itemInformation);
 		returnMessage = MESSAGE_SUCCESSFUL_SAVE;
-	} else if (command == COMMAND_EXIT){
+	} else if (command == COMMAND_CLEAR){
+		_logicSchedule.clearDisplaySchedule();
+		returnMessage = MESSAGE_CLEAR;
+	}else if (command == COMMAND_EXIT){
 		saveBasicInformationToTextFile();
 		exit(0);
 	} else if (command == COMMAND_DONE){
@@ -463,6 +468,10 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	}
 	thingsToDoAfterEveryExecution();
 	return returnMessage;
+}
+
+void Logic::printUndo(){
+	cout << "Undo Previous command" << endl;
 }
 
 
