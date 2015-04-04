@@ -14,6 +14,7 @@ const string Logic::COMMAND_VIEW = "view";
 const string Logic::COMMAND_DONE = "done";
 const string Logic::COMMAND_SAVE = "save";
 const string Logic::COMMAND_EXIT = "exit";
+const string Logic::MODIFIER_NAME = "name";
 const string Logic::MODIFIER_START = "start";
 const string Logic::MODIFIER_END = "end";
 const string Logic::MODIFIER_DESCRIPTION = "description";
@@ -243,14 +244,16 @@ void Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* item
 
 void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified){
 	string modifier = iter->command;
-	if (modifier == MODIFIER_DESCRIPTION){
+	if (modifier == MODIFIER_NAME){
+		itemToBeModified->setItemName(iter->text);
+	} else if (modifier == MODIFIER_DESCRIPTION){
 		string descriptionToBeAdded = iter->text;
 		itemToBeModified->setDescription(descriptionToBeAdded);
 	} else if (modifier == MODIFIER_START){
 		DateTime startTimeToBeModified = itemToBeModified->getStartTime();
-		itemToBeModified->setStartTime(interpreteDateTime(iter->text,itemToBeModified->getStartTime()));
+		itemToBeModified->setStartTime(interpreteDateTime(iter->text, itemToBeModified->getStartTime()));
 	} else if (modifier == MODIFIER_END){
-		itemToBeModified->setEndTime(interpreteDateTime(iter->text,itemToBeModified->getEndTime()));
+		itemToBeModified->setEndTime(interpreteDateTime(iter->text, itemToBeModified->getEndTime()));
 	} else if (modifier == MODIFIER_LABEL){
 		char labelToBeModified = iter->text[0];
 		itemToBeModified->setLabel(labelToBeModified);
@@ -277,12 +280,12 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted, DateTime existing
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
 	int YYYY2, MM2, DD2, hh2, mm2;
-	
-		YYYY = existingTimeSetting.getYear();
-		MM = existingTimeSetting.getMonth();
-		DD = existingTimeSetting.getDay();
-		hh = existingTimeSetting.getHour();
-		mm = existingTimeSetting.getMinute();
+
+	YYYY = existingTimeSetting.getYear();
+	MM = existingTimeSetting.getMonth();
+	DD = existingTimeSetting.getDay();
+	hh = existingTimeSetting.getHour();
+	mm = existingTimeSetting.getMinute();
 
 	inputTime >> YYYY2 >> MM2 >> DD2 >> hh2 >> mm2;
 
@@ -424,8 +427,8 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	/*Debugging*//*
 	list<COMMAND_AND_TEXT>::iterator iter;
 	for (iter = parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
-		cout << "command : " << iter->command << endl;
-		cout << "text : " << iter->text << endl;
+	cout << "command : " << iter->command << endl;
+	cout << "text : " << iter->text << endl;
 	}*/
 	/*Debegging Done*/
 	if (command == COMMAND_ADD) {
@@ -451,7 +454,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	} else if (command == COMMAND_EXIT){
 		saveBasicInformationToTextFile();
 		exit(0);
-	}else if(command == COMMAND_DONE){
+	} else if (command == COMMAND_DONE){
 		unsigned int lineIndex = convertToDigit(itemInformation);
 		returnMessage = markDone(lineIndex);
 	} else {
@@ -530,7 +533,7 @@ string Logic::filterTask(string filterToBeImplemented){
 		_currentFilter = FILTER_COMPLETION;
 	}/* else if (filterType == FILTER_LABEL) {
 		_logicSchedule.retrieveDisplayScheduleFilteredByLabel(modifierType);
-	} */else if (filterType == FILTER_PRIORITY){
+		} */else if (filterType == FILTER_PRIORITY){
 		char priorityType = checkPriority(modifierType);
 		if (priorityType != 'E'){
 			_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priorityType);
@@ -540,7 +543,7 @@ string Logic::filterTask(string filterToBeImplemented){
 		}
 	} else if (filterType == FILTER_ALL){
 		_currentFilter = FILTER_ALL;
-	}else{
+	} else{
 		printInvalidViewOption();
 		return MESSAGE_FAILED_VIEW;
 	}
@@ -595,7 +598,7 @@ string Logic::sortTask(){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
 	} /*else if (_currentSorting == SORT_LAST_UPDATE){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-	} */else{
+		} */else{
 		return MESSAGE_FAILED_SORT;
 	}
 	printSchedule(sortedDisplaySchedule);
@@ -810,5 +813,5 @@ void Logic::thingsToDoAfterEveryExecution(){
 
 bool Logic::isExistingFileInDirectory(string directoryAndFileName) {
 	ifstream infile(directoryAndFileName);
-	return infile.good() ;
+	return infile.good();
 }
