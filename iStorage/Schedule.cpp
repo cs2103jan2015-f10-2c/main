@@ -309,7 +309,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char pri
 		}
 	}
 
-	return _displaySchedule;
+	return retrieveDisplaySchedule();
 }
 
 //	Filters the schedule by label
@@ -320,7 +320,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label)
 		}
 	}
 
-	return _displaySchedule;
+	return retrieveDisplaySchedule();
 }
 
 //	Filters the schedule by completion status
@@ -331,7 +331,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool c
 		}
 	}
 
-	return _displaySchedule;
+	return retrieveDisplaySchedule();
 }
 
 //	Filters the schedule by keyword
@@ -342,7 +342,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByKeyword(string ke
 		}
 	}
 
-	return _displaySchedule;
+	return retrieveDisplaySchedule();
 }
 
 //	Checks given item in the schedule, and removes it if it does not have the user-specified priority
