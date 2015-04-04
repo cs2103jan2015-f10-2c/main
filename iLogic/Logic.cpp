@@ -90,13 +90,17 @@ Logic::~Logic() {}
 
 void Logic::printSchedule(vector<Item> retrievedDisplaySchedule){
 	cout << endl;
+	cout << "-------------------------------------------------------------------------------" << endl;
 	cout << "SCHEDULE" << endl;
-	cout << "--------" << endl;
+	cout << "-------------------------------------------------------------------------------" << endl;
 	for (unsigned int lineNumber = 0; lineNumber < retrievedDisplaySchedule.size(); lineNumber++){
-		cout << lineNumber + 1 << ". " << endl;
+		cout << "[Item " << lineNumber + 1 << "]" << endl;
 		printItem(retrievedDisplaySchedule[lineNumber]);
-		cout << endl;
+		if (lineNumber != retrievedDisplaySchedule.size() - 1) {
+			cout << endl;
+		}
 	}
+	cout << "-------------------------------------------------------------------------------" << endl;
 	cout << endl;
 }
 
