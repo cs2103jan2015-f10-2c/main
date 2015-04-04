@@ -349,6 +349,6 @@ string Item::displayEndTime() {
 
 //	Retrieves the item last updated time (string)
 string Item::displayLastUpdatedTime() {
-	DateTime lastUpdateTime(_lastUpdate.GetYear(), _lastUpdate.GetMonth(), _lastUpdate.GetDay, _lastUpdate.GetHour, _lastUpdate.GetMinute);
+	DateTime lastUpdateTime(_lastUpdate.GetYear(), _lastUpdate.GetMonth(), _lastUpdate.GetDay(), _lastUpdate.GetHour(), _lastUpdate.GetMinute());
 	return lastUpdateTime.displayDateTime();
 }
