@@ -14,6 +14,7 @@ const string Logic::COMMAND_VIEW = "view";
 const string Logic::COMMAND_DONE = "done";
 const string Logic::COMMAND_SAVE = "save";
 const string Logic::COMMAND_EXIT = "exit";
+const string Logic::MODIFIER_NAME = "name";
 const string Logic::MODIFIER_START = "start";
 const string Logic::MODIFIER_END = "end";
 const string Logic::MODIFIER_DESCRIPTION = "description";
@@ -109,6 +110,8 @@ void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
 	sprintf_s(buffer, DELETE_TASK_SUCCESSFUL.c_str(), lineNumberToBeDeleted);
 	cout << buffer << endl;
 }
+
+
 void Logic::printEditTaskSuccessful(int lineNumberToBeEdited){
 	sprintf_s(buffer, EDIT_TASK_SUCCESSFUL.c_str(), lineNumberToBeEdited);
 	cout << buffer << endl;
@@ -226,6 +229,8 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 	if (modifier == MODIFIER_DESCRIPTION){
 		string descriptionToBeAdded = iter->text;
 		itemToBeModified->setDescription(descriptionToBeAdded);
+	} else if (modifier == MODIFIER_NAME){
+		itemToBeModified->setItemName(iter->text);
 	} else if (modifier == MODIFIER_START){
 		itemToBeModified->setStartTime(interpreteDateTime(iter->text));
 	} else if (modifier == MODIFIER_END){
@@ -253,14 +258,15 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
 	inputTime >> YYYY >> MM >> DD >> hh >> mm;
-	if (mm == -1) {
-		mm = 0;
-	}
+
 	if (MM == -1 && DD == -1 && YYYY == -1) {
 		YYYY = getCurrentTime().getYear();
 		MM = getCurrentTime().getMonth();
 		DD = getCurrentTime().getDay();
-	} /*NEEDS IMPROVEMENT*/
+	} else if (YYYY == -1 && MM != -1 && DD != -1){
+		YYYY = getCurrentTime().getYear();
+	}
+	/*NEEDS IMPROVEMENT*/
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
 }
@@ -381,9 +387,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	} else if (command == COMMAND_DELETE) {
 		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
 		returnMessage = deleteTask(lineIndexToBeDeleted);
-	}
-
-	else if (command == COMMAND_EDIT){
+	} else if (command == COMMAND_EDIT){
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
 		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	} else if (command == COMMAND_UNDO){
@@ -433,7 +437,6 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 		ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
 		if (verifier.isValidItem()){
 			_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
-			resetAndPrintSchedule();
 			return MESSAGE_SUCCESSFUL_EDIT;
 		} else{
 			printEditTaskInvalidItemParts(verifier);
@@ -476,7 +479,7 @@ string Logic::sortTask(){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
 	} /*else if (_currentSorting == SORT_LAST_UPDATE){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-	} */else{
+		} */else{
 		return MESSAGE_FAILED_SORT;
 	}
 	printSchedule(sortedDisplaySchedule);
@@ -619,8 +622,10 @@ int Logic::readDataFromFile() {
 		int YYYY;
 		int hh;
 		int mm;
+		unsigned int ID;
 		getline(readFile, itemName);
 		getline(readFile, itemID);
+		ID = convertToDigit(itemID);
 		readFile >> YYYY;
 		readFile >> MM;
 		readFile >> DD;
@@ -641,6 +646,7 @@ int Logic::readDataFromFile() {
 		Item *item;
 		item = new Item;
 		item->setItemName(itemName);
+		item->setItemID(ID);
 		item->setStartTime(startTime);
 		item->setEndTime(EndTime);
 		item->setDescription(description);

@@ -15,6 +15,18 @@ private:
 	list<string> _itemVerificationErrors;
 	unsigned int _nextID;
 
+	static const string EMPTY_STRING;
+	static const string AVAILABLE_PRIORITIES;
+	static const string AVAILABLE_LABELS;
+	static const string ERROR_INVALID_NAME2;
+	static const string ERROR_INVALID_DESCRIPTION;
+	static const string ERROR_INVALID_START_DATE_TIME;
+	static const string ERROR_INVALID_END_DATE_TIME;
+	static const string ERROR_SAME_START_END_DATE_TIME;
+	static const string ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME;
+	static const string ERROR_INVALID_ID;
+	static const string ERROR_INVALID_PRIORITY2;
+	static const string ERROR_INVALID_LABEL2;
 	static const string ITEM_VERIFICATION_EMPTY_STRING;
 	static const string ITEM_VERIFICATION_AVAILABLE_PRIORITIES;
 	static const string ITEM_VERIFICATION_AVAILABLE_LABELS;

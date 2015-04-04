@@ -44,6 +44,7 @@ private:
 	static const string COMMAND_DONE;
 	static const string COMMAND_SAVE;
 	static const string COMMAND_EXIT;
+	static const string MODIFIER_NAME;
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
 	static const string MODIFIER_DESCRIPTION;

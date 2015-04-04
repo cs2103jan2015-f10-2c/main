@@ -106,6 +106,7 @@ Item Schedule::retrieveItemGivenItemID(unsigned int itemID) {
 //	Retrieves a copy of an existing item in the schedule given the item's display vector index
 Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
+	std::cout << "ITEMIDDDDDDDDDDD : " << itemID << endl;
 	return retrieveItemGivenItemID(itemID);
 }
 
