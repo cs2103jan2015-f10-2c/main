@@ -331,10 +331,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 }
 
 bool Schedule::isUpdatedLaterThan(Item leftItem, Item rightItem) {
-	string leftDateTime = leftItem.displayLastUpdatedTime();
-	string rightDateTime = rightItem.displayLastUpdatedTime();
-
-	return (leftDateTime > rightDateTime);
+	return leftItem.getLastUpdate().isAfter(rightItem.getLastUpdate());
 }
 
 const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
