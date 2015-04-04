@@ -584,7 +584,6 @@ string Logic::sortTaskWithFilter(){
 	  } else{
 		return MESSAGE_FAILED_SORT;
 	}
-	cout << "HERE" << endl;
 	printSchedule(sortedDisplaySchedule);
 	return MESSAGE_SUCCESSFUL_SORT;
 }
