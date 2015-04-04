@@ -276,7 +276,7 @@ string Item::displayItemForUser() {
 	ostringstream displayOutput;
 
 	if (hasValidItemName()) {
-		displayOutput << "Name:\t" << _itemName << endl;
+		displayOutput << "Name:\t\t" << _itemName << endl;
 	}
 
 	try {
@@ -310,6 +310,14 @@ string Item::displayItemForUser() {
 		displayOutput << "Description:\t" << _description << endl;
 	}
 
+	if (hasValidItemPriority()) {
+		displayOutput << "Priority:\t" << _priority << endl;
+	}
+
+	if (hasValidItemLabel()) {
+		displayOutput << "Label:\t" << _label << endl;
+	}
+
 	return displayOutput.str();
 }
 
@@ -323,13 +331,7 @@ string Item::displayItemFullDetails() {
 
 	displayOutput << displayItemForUser();
 
-	if (hasValidItemPriority()) {
-		displayOutput << "Priority:\t" << _priority << endl;
-	}
 
-	if (hasValidItemLabel()) {
-		displayOutput << "Label:\t" << _label << endl;
-	}
 
 	displayOutput << "Completed?\t" << boolalpha << _isCompleted << endl;
 

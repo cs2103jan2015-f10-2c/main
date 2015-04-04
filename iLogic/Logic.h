@@ -30,6 +30,7 @@ private:
 	string _directoryToBeSaved;
 	string _fileNameToBeSaved;
 	string _currentSorting;
+	string _currentFilter;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
@@ -58,6 +59,7 @@ private:
 	static const string FILTER_COMPLETION;
 	static const string FILTER_PRIORITY;
 	static const string FILTER_LABEL;
+	static const string FILTER_ALL;
 
 	static const int ZERO_INDEX = 0;
 	static const unsigned int DEFAULT_ITEM_ID = 0;
@@ -90,6 +92,7 @@ private:
 	static const string MESSAGE_FAILED_SAVE;
 	static const string MESSAGE_FAILED_UNDO;
 	static const string MESSAGE_FAILED_SORT;
+	static const string MESSAGE_INVALID_PRIORITY;
 
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
@@ -172,6 +175,7 @@ public:
 	//Pre: none
 	//Post: returns the string of _currentSort
 	string sortTask();
+	string sortTaskWithFilter();
 
 
 	string searchTask(string keyWord);
@@ -190,7 +194,7 @@ public:
 	//and createDateTime create a DateTime object based on the 5 integers given
 	//Pre : takes in a string, usually the text part of the COMMAND_AND_TEXT parsed by the parser
 	//Post : returns a dateTime object created
-	DateTime interpreteDateTime(string infoToBeInterpreted);
+	DateTime interpreteDateTime(string infoToBeInterpreted, DateTime existingTimeSetting);
 	DateTime createDateTime(int DD, int MM, int YYYY, int hh, int mm);
 	DateTime getCurrentTime();
 	
@@ -202,13 +206,12 @@ public:
 	vector<Item> resetDisplaySchedule();
 	vector<Item> getDisplaySchedule();
 	vector<Item> resetAndGetDisplaySchedule();
-	vector<Item> resetAndPrintSchedule();
-
 
 	//retrieves display schedule size
 	//Pre : none
 	//Post : returns size of the schedule
 	unsigned int getScheduleSize();
+	unsigned int getDisplayScheduleSize();
 	vector<Item> getSchedule();
 	
 	//changes current Sorting method. display schedule will be sorted according to the current sorting method
@@ -226,7 +229,7 @@ public:
 	string assignLastFolderToMake(string userInputDirectory, string directoryToMake);
 	string truncateUserInputDirectory(int truncatePosition, string userInputDirectory);
 	string getDirectoryAndFileName();
-	void saveDirectoryToTextFile();
+	void saveBasicInformationToTextFile();
 	string retrieveDirectoryFromTextFile();
 	void printChangeSavingDirectorySuccessful();
 	bool isExistingFileInDirectory(string directoryAndFileName);

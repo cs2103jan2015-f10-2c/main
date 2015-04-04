@@ -28,9 +28,10 @@ const string Logic::SORT_LAST_UPDATE = "update";
 const string Logic::FILTER_COMPLETION = "done";
 const string Logic::FILTER_PRIORITY = "priority";
 const string Logic::FILTER_LABEL = "label";
+const string Logic::FILTER_ALL = "all";
 
 
-const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "directory.txt";
+const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation.txt";
 const string Logic::DEFAULT_FILENAME = "save.txt";
 const string Logic::DEFAULT_SORTING = "update";
 
@@ -50,6 +51,7 @@ const string Logic::MESSAGE_FAILED_VIEW = "Schedule not filtered";
 const string Logic::MESSAGE_FAILED_SAVE = "Sorry, save directory not changed";
 const string Logic::MESSAGE_FAILED_UNDO = "Sorry, last action was not reversed";
 const string Logic::MESSAGE_FAILED_SORT = "Sorry, Schedule was not sorted";
+const string Logic::MESSAGE_INVALID_PRIORITY = "Invalid Priority Type";
 
 char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
@@ -77,6 +79,8 @@ Logic::Logic() {
 	//default file name is save.txt
 	_currentSorting = DEFAULT_SORTING;
 	//default sorting is by last update
+	_currentFilter = FILTER_ALL;
+	//default filter is view all
 
 }
 
@@ -207,13 +211,6 @@ vector<Item> Logic::getDisplaySchedule(){
 }
 
 
-vector<Item> Logic::resetAndPrintSchedule(){
-	vector<Item> retrievedDisplaySchedule = resetAndGetDisplaySchedule();
-	printSchedule(retrievedDisplaySchedule);
-	return retrievedDisplaySchedule;
-}
-
-
 vector<Item> Logic::resetAndGetDisplaySchedule(){
 	_logicSchedule.resetDisplaySchedule();
 	vector<Item>retrievedDisplaySchedule = _logicSchedule.retrieveDisplaySchedule();
@@ -248,9 +245,10 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 		string descriptionToBeAdded = iter->text;
 		itemToBeModified->setDescription(descriptionToBeAdded);
 	} else if (modifier == MODIFIER_START){
-		itemToBeModified->setStartTime(interpreteDateTime(iter->text));
+		DateTime startTimeToBeModified = itemToBeModified->getStartTime();
+		itemToBeModified->setStartTime(interpreteDateTime(iter->text,itemToBeModified->getStartTime()));
 	} else if (modifier == MODIFIER_END){
-		itemToBeModified->setEndTime(interpreteDateTime(iter->text));
+		itemToBeModified->setEndTime(interpreteDateTime(iter->text,itemToBeModified->getEndTime()));
 	} else if (modifier == MODIFIER_LABEL){
 		char labelToBeModified = iter->text[0];
 		itemToBeModified->setLabel(labelToBeModified);
@@ -263,26 +261,51 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 	}
 }
 char Logic::checkPriority(string priorityToBeModified){
-	if (priorityToBeModified == "high" || "h" || "H"){
+	if (priorityToBeModified == "high" || priorityToBeModified == "h" || priorityToBeModified == "H"){
 		return 'H';
-	} else if (priorityToBeModified == "medium" || "m" || "M"){
+	} else if (priorityToBeModified == "medium" || priorityToBeModified == "m" || priorityToBeModified == "M"){
 		return 'M';
-	} else if (priorityToBeModified == "low" || "l" || "L"){
+	} else if (priorityToBeModified == "low" || priorityToBeModified == "l" || priorityToBeModified == "L"){
 		return 'L';
 	} else
 		return 'E';
 
 }
-DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
+DateTime Logic::interpreteDateTime(string infoToBeInterpreted, DateTime existingTimeSetting){
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
-	inputTime >> YYYY >> MM >> DD >> hh >> mm;
+	int YYYY2, MM2, DD2, hh2, mm2;
+	
+		YYYY = existingTimeSetting.getYear();
+		MM = existingTimeSetting.getMonth();
+		DD = existingTimeSetting.getDay();
+		hh = existingTimeSetting.getHour();
+		mm = existingTimeSetting.getMinute();
 
-	if (MM == -1 && DD == -1 && YYYY == -1) {
+	inputTime >> YYYY2 >> MM2 >> DD2 >> hh2 >> mm2;
+
+	if (YYYY2 != -1){
+		YYYY = YYYY2;
+	}
+	if (MM2 != -1){
+		MM = MM2;
+	}
+	if (DD2 != -1){
+		DD = DD2;
+	}
+	if (hh2 != -1){
+		hh = hh2;
+	}
+	if (mm2 != -1){
+		mm = mm2;
+	}
+
+	if (YYYY == -1 && YYYY2 == -1 && MM == -1 && MM2 == -1 && DD == -1 && DD2 == -1){
 		YYYY = getCurrentTime().getYear();
 		MM = getCurrentTime().getMonth();
 		DD = getCurrentTime().getDay();
-	} /*NEEDS IMPROVEMENT*/
+	}
+
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
 }
@@ -348,11 +371,13 @@ bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
 	}
 }
 
-
-
 unsigned int Logic::getScheduleSize(){
-	_scheduleSize = _logicSchedule.getSizeOfDisplaySchedule();
+	_scheduleSize = _logicSchedule.getSizeOfSchedule();
 	return _scheduleSize;
+}
+
+unsigned int Logic::getDisplayScheduleSize(){
+	return _logicSchedule.getSizeOfDisplaySchedule();
 }
 
 
@@ -407,7 +432,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
 		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	} else if (command == COMMAND_UNDO){
-
+		returnMessage = _logicSchedule.undoLastCommand();
 	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
 	} else if (command == COMMAND_SEARCH){
@@ -418,7 +443,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 		changeSavingDirectory(itemInformation);
 		returnMessage = MESSAGE_SUCCESSFUL_SAVE;
 	} else if (command == COMMAND_EXIT){
-		saveDirectoryToTextFile();
+		saveBasicInformationToTextFile();
 		exit(0);
 	}else if(command == COMMAND_DONE){
 		unsigned int lineIndex = convertToDigit(itemInformation);
@@ -433,7 +458,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 
 
 string Logic::markDone(unsigned int lineIndex){
-	if (lineIndex <= getScheduleSize()){
+	if (lineIndex <= getDisplayScheduleSize()){
 		Item* retrievedItem;
 		retrievedItem = new Item;
 		*retrievedItem = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndex);
@@ -491,25 +516,58 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 string Logic::filterTask(string filterToBeImplemented){
 	istringstream iss(filterToBeImplemented);
 	string filterType;
-	char modifierType;
+	string modifierType;
 	iss >> filterType >> modifierType;
 	cout << "filterType :" << filterType << endl;
 	cout << "modifier Type : " << modifierType;
 	if (filterType == FILTER_COMPLETION){
 		bool done = true;
 		_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(done);
-	} else if (filterType == FILTER_LABEL) {
+		_currentFilter = FILTER_COMPLETION;
+	}/* else if (filterType == FILTER_LABEL) {
 		_logicSchedule.retrieveDisplayScheduleFilteredByLabel(modifierType);
-	} else if (filterType == FILTER_PRIORITY){
-		_logicSchedule.retrieveDisplayScheduleFilteredByPriority(modifierType);
-	} else {
+	} */else if (filterType == FILTER_PRIORITY){
+		char priorityType = checkPriority(modifierType);
+		if (priorityType != 'E'){
+			_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priorityType);
+			_currentFilter = FILTER_PRIORITY;
+		} else {
+			return MESSAGE_INVALID_PRIORITY;
+		}
+	} else if (filterType == FILTER_ALL){
+		_currentFilter = FILTER_ALL;
+	}else{
 		return MESSAGE_FAILED_VIEW;
 	}
 	return MESSAGE_SUCCESSFUL_VIEW;
 }
+string Logic::sortTaskWithFilter(){
+	vector<Item> sortedDisplaySchedule = getDisplaySchedule();
+	if (_currentSorting == SORT_NAME){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
+	} else if (_currentSorting == SORT_PRIORITY){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
+	} else if (_currentSorting == SORT_COMPLETION){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
+	} else if (_currentSorting == SORT_DATE){
+		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
+	} /*else if (_currentSorting == SORT_LAST_UPDATE){
+	  sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
+	  } */else{
+		return MESSAGE_FAILED_SORT;
+	}
+	printSchedule(sortedDisplaySchedule);
+	return MESSAGE_SUCCESSFUL_SORT;
+}
+
 
 string Logic::sortTask(){
-	vector<Item> sortedDisplaySchedule = resetAndGetDisplaySchedule();
+	vector<Item> sortedDisplaySchedule;
+	if (_currentFilter == FILTER_ALL){
+		sortedDisplaySchedule = resetAndGetDisplaySchedule();
+	} else{
+		sortedDisplaySchedule = getDisplaySchedule();
+	}
 	if (_currentSorting == SORT_NAME){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
 	} else if (_currentSorting == SORT_PRIORITY){
@@ -529,11 +587,10 @@ string Logic::sortTask(){
 
 string Logic::searchTask(string keyWord){
 	_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(keyWord);
-	if (getScheduleSize() == 0){
-		cout << "NOTASKFOUND" << endl;
+	if (getDisplayScheduleSize() == 0){
 		return NO_TASK_FOUND;
 	} else{
-		cout << "TASKFOUND!!" << endl;
+		_currentFilter = "keyword";
 		return TASK_FOUND;
 	}
 }
@@ -554,7 +611,7 @@ string Logic::changeSavingDirectory(string userInputDirectory){
 		_mkdir(directoryToMake.c_str());
 	}
 	_directoryToBeSaved = directoryToMake;
-	saveDirectoryToTextFile();
+	saveBasicInformationToTextFile();
 	printChangeSavingDirectorySuccessful();
 	return directoryToMake;
 }
@@ -580,13 +637,14 @@ void Logic::printChangeSavingDirectorySuccessful(){
 }
 
 
-void Logic::saveDirectoryToTextFile(){
+void Logic::saveBasicInformationToTextFile(){
 	ofstream writeFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
 	writeFile << _directoryToBeSaved << endl;
 	writeFile << _fileNameToBeSaved << endl;
 	writeFile << getScheduleSize() << endl;
 	writeFile << _currentSorting << endl;
-	writeFile << _nextItemID;
+	writeFile << _nextItemID << endl;
+	writeFile << _currentFilter;
 }
 
 string Logic::getDirectoryAndFileName(){
@@ -607,6 +665,7 @@ string Logic::retrieveDirectoryFromTextFile(){
 	readFile >> _scheduleSize;
 	readFile >> _currentSorting;
 	readFile >> _nextItemID;
+	readFile >> _currentFilter;
 	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
 
 	if (_directoryToBeSaved == ""){
@@ -621,7 +680,7 @@ string Logic::retrieveDirectoryFromTextFile(){
 
 string Logic::changeSavingFileName(string FileNameToBeSaved){
 	_fileNameToBeSaved = FileNameToBeSaved;
-	saveDirectoryToTextFile();
+	saveBasicInformationToTextFile();
 	return FileNameToBeSaved;
 }
 
@@ -675,7 +734,7 @@ int Logic::readDataFromFile() {
 		delete item;
 	}
 	cout << "Schedule retrieived" << endl;
-	resetAndPrintSchedule();
+	resetAndGetDisplaySchedule();
 	return 1;
 }
 
@@ -701,7 +760,7 @@ int Logic::writeDataOntoFile(){
 		writeFile << itemToStore.getPriority() << endl;
 		writeFile << itemToStore.getLabel() << endl;
 	}
-	saveDirectoryToTextFile();
+	saveBasicInformationToTextFile();
 	return 1;
 }
 
