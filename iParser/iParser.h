@@ -28,10 +28,12 @@ struct COMMAND_AND_TEXT {
 
 class iParser {
 
-
+#define TESTMODE
+#ifndef TESTMODE
 private:
-
+#else
 public:
+#endif
 
 	// =================
 	// private attribute
@@ -143,13 +145,13 @@ public:
 	// enumeration for command and modifiers
 	// =====================================
 
-	enum CommandType {
+	/*enum CommandType {
 		ADD, DELETE, CLEAR, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID_COMMAND
 	};
 
 	enum ModifierType {
 		ITEM, DATE, DUE, START, END, DESCRIPTION, PRIORITY, INVALID_MODIFIER
-	};
+	};*/
 
 	// =====================
 	// main parsing function
@@ -165,10 +167,10 @@ public:
 	
 	// Pre:		command retrieved passed to function
 	// Post:	determines and returns the enum CommandType, returns INVALID_COMMAND if command does not match
-	CommandType determineCommandType(string);
+	//CommandType determineCommandType(string);
 	// Pre:		modifiers retrieved passed to function
 	// Post:	determines and returns the enum ModifierType, returns INVALID_MODIFIER if modifier does not match
-	ModifierType determineModifierType(string);
+	//ModifierType determineModifierType(string);
 
 	// ===============================
 	// functions within executeParsing
