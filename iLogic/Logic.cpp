@@ -57,12 +57,14 @@ const string Logic::DELETE_TASK_SUCCESSFUL = "Task %d is removed from schedule";
 const string Logic::EDIT_TASK_SUCCESSFUL = "Task %d is edited from schedule";
 const string Logic::SORT_TASK_SUCCESSFUL = "Sorting Changed to : %s";
 const string Logic::MARK_DONE_SUCCESSFUL = "Task %d is done";
+const string Logic::TASK_FOUND = "Tasks are found";
 
 const string Logic::ADD_TASK_FAILED = "Task cannot be added to schedule";
 const string Logic::DELETE_TASK_FAILED = "Task cannot be removed from schedule";
 const string Logic::INVALID_LINE_INDEX = "invalid line index";
 const string Logic::SORT_TASK_FAILED = "Invalid Sort Method";
 const string Logic::EDIT_TASK_FAILED = "Task cannot be edited from schedule";
+const string Logic::NO_TASK_FOUND = "No item can be found";
 
 Logic::Logic() {
 	_nextItemID = 1;
@@ -181,9 +183,14 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		addedItemID = _nextItemID;
 		increaseItemID();
 		printAddTaskSuccessful(addCompleted);
+		newItemToBeAdded = NULL;
+		delete newItemToBeAdded;
 		return MESSAGE_SUCCESSFUL_ADD;
 	} else{
+
 		printAddTaskFailed(verifier);
+		newItemToBeAdded = NULL;
+		delete newItemToBeAdded;
 		return MESSAGE_FAILED_ADD;
 	}
 }
@@ -404,7 +411,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
 	} else if (command == COMMAND_SEARCH){
-
+		returnMessage = searchTask(itemInformation);
 	} else if (command == COMMAND_VIEW){
 		returnMessage = filterTask(itemInformation);
 	} else if (command == COMMAND_SAVE){
@@ -434,6 +441,8 @@ string Logic::markDone(unsigned int lineIndex){
 		retrievedItem->setCompletion(done);
 		_logicSchedule.replaceItemGivenDisplayVectorIndex(retrievedItem, lineIndex);
 		printMarkDoneSuccessful(lineIndex);
+		retrievedItem = NULL;
+		delete retrievedItem;
 		return MESSAGE_SUCCESSFUL_MARK_DONE;
 	} else{
 		printInvalidLineIndex();
@@ -464,8 +473,12 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 		ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
 		if (verifier.isValidItem()){
 			_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
+			editedItemToBeReplaced = NULL;
+			delete editedItemToBeReplaced;
 			return MESSAGE_SUCCESSFUL_EDIT;
 		} else{
+			editedItemToBeReplaced = NULL;
+			delete editedItemToBeReplaced;
 			printEditTaskInvalidItemParts(verifier);
 			return MESSAGE_FAILED_EDIT;
 		}
@@ -514,39 +527,16 @@ string Logic::sortTask(){
 	return MESSAGE_SUCCESSFUL_SORT;
 }
 
-/*
-
-vector<Item> Logic::searchTask(string phraseToSearch){
-vector<Item> searchedItems;
-Item foundItem;
-unsigned int lineIndex;
-unsigned int scheduleSize = getScheduleSize();
-for (lineIndex = 0; lineIndex < scheduleSize; lineIndex++){
-if (isFound(lineIndex, phraseToSearch)){
-foundItem = getItemFromLineIndex(lineIndex);
-searchedItems.push_back(foundItem);
+string Logic::searchTask(string keyWord){
+	_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(keyWord);
+	if (getScheduleSize() == 0){
+		cout << "NOTASKFOUND" << endl;
+		return NO_TASK_FOUND;
+	} else{
+		cout << "TASKFOUND!!" << endl;
+		return TASK_FOUND;
+	}
 }
-}
-return searchedItems;
-}
-
-bool Logic::isFound(int lineIndex, string& phraseToSearch){
-Item itemFromLogicSchedule;
-itemFromLogicSchedule = getItemFromLineIndex(lineIndex);
-unsigned int phraseFoundFromItemName;
-unsigned int phraseFoundFromItemDescription;
-phraseFoundFromItemName = itemFromLogicSchedule.getItemName().find(phraseToSearch);
-if (phraseFoundFromItemName != string::npos) {
-return true;
-}
-phraseFoundFromItemDescription = itemFromLogicSchedule.getDescription().find(phraseToSearch);
-if (phraseFoundFromItemDescription != string::npos) {
-return true;
-}
-return false;
-}
-*/
-
 
 string Logic::changeSavingDirectory(string userInputDirectory){
 	string directoryToMake = "";
@@ -681,6 +671,8 @@ int Logic::readDataFromFile() {
 		item->setPriority(priority);
 		item->setLabel(label);
 		_logicSchedule.addItem(item);
+		item = NULL;
+		delete item;
 	}
 	cout << "Schedule retrieived" << endl;
 	resetAndPrintSchedule();

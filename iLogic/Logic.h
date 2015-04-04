@@ -96,13 +96,14 @@ private:
 	static const string EDIT_TASK_SUCCESSFUL;	
 	static const string SORT_TASK_SUCCESSFUL;
 	static const string MARK_DONE_SUCCESSFUL;
+	static const string TASK_FOUND;
 
 	static const string ADD_TASK_FAILED;
 	static const string DELETE_TASK_FAILED;
 	static const string EDIT_TASK_FAILED;
 	static const string INVALID_LINE_INDEX;
 	static const string SORT_TASK_FAILED;
-
+	static const string NO_TASK_FOUND;
 
 
 
@@ -173,6 +174,7 @@ public:
 	string sortTask();
 
 
+	string searchTask(string keyWord);
 	string filterTask(string filterToBeImplemented);
 
 	//modifies an item, specified by the parse info
