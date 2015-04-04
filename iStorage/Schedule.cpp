@@ -6,6 +6,7 @@
 const string Schedule::COMMAND_ADD = "ADD";
 const string Schedule::COMMAND_DELETE = "DELETE";
 const string Schedule::COMMAND_REPLACE = "REPLACE";
+const string Schedule::COMMAND_REPLACE = "CLEAR";
 const string Schedule::ERROR_ADD = "ERROR: Command and Item were not recorded.";
 const string Schedule::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
 
@@ -151,11 +152,27 @@ string Schedule::deleteItemGivenDisplayVectorIndex(unsigned int displayVectorInd
 	return deleteItemGivenItemID(itemID);
 }
 
+//	Removes all items in the display schedule, from the schedule
+string Schedule::clearDisplaySchedule() {
+	unsigned int index = 0;
+
+	_scheduleHistory.addClearCommand(_displaySchedule);
+
+	while (getSizeOfDisplaySchedule() != 0) {
+		unsigned int itemID = findItemIDGivenDisplayVectorIndex(index);
+		unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+		_schedule.erase(_schedule.begin() + vectorIndex);
+		_displaySchedule.erase(_displaySchedule.begin());
+	}
+}
+
 //	Undoes the last command that modified the schedule (add, replace, delete)
 string Schedule::undoLastCommand() {
 	Item latestItem;
 	string command;
-	string confirmation = _scheduleHistory.undoLastCommand(command, latestItem);
+	vector <Item> latestClearedSchedule;
+
+	string confirmation = _scheduleHistory.undoLastCommand(command, latestItem, latestClearedSchedule);
 
 	if (confirmation == ERROR_EMPTYSTACKS) {
 		return confirmation;
@@ -165,6 +182,8 @@ string Schedule::undoLastCommand() {
 		confirmation = undoDelete(latestItem);
 	} else if (command == COMMAND_REPLACE) {
 		confirmation = undoReplace(latestItem);
+	} else if (command == COMMAND_CLEAR) {
+		confirmation = undoClear(latestClearedSchedule);
 	}
 
 	return confirmation;
@@ -192,6 +211,17 @@ string Schedule::undoDelete(Item latestItem) {
 	_scheduleHistory.removeUndoneCommand();
 
 	return (COMMAND_DELETE + confirmation);
+}
+
+//	Undoes the last command that cleared a schedule
+string Schedule::undoClear(vector<Item> latestClearedSchedule) {
+	unsigned int index;
+	for (index = 0; index < latestClearedSchedule.size(); index++) {
+		addItem(&(latestClearedSchedule[index]));
+		_scheduleHistory.removeUndoneCommand();
+	}
+
+	return to_string (index);
 }
 
 //	Retrieves the entire schedule
