@@ -303,7 +303,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
 
 //	Filters the schedule by priority
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char priority) {
-	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByPriority(index, priority)) {
 			index--;
 		}
@@ -314,7 +314,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char pri
 
 //	Filters the schedule by label
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
-	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByLabel(index, label)) {
 			index--;
 		}
@@ -325,7 +325,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label)
 
 //	Filters the schedule by completion status
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
-	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByCompletion(index, completionStatus)) {
 			index--;
 		}
@@ -336,7 +336,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool c
 
 //	Filters the schedule by keyword
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByKeyword(string keyword) {
-	for (unsigned int index = 0; index < _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByKeyword(index, keyword)) {
 			index--;
 		}
