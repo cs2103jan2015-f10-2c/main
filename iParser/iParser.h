@@ -60,7 +60,7 @@ public:
 	static const string COMMAND_EXIT;
 
 	// used to set as command for logic to intepret
-	static const string COMMAND_ITEM;
+	static const string COMMAND_NAME;
 	static const string COMMAND_START;
 	static const string COMMAND_END;
 	static const string COMMAND_DESCRIPTION;
@@ -73,7 +73,7 @@ public:
 	static const string MODIFIER_END;
 
 	// used to identify modifiers in UserInput
-	static const string STRING_ITEM;
+	static const string STRING_NAME;
 	static const string STRING_DATE;
 	static const string STRING_DUE;
 	static const string STRING_START;
