@@ -25,7 +25,7 @@ const string Logic::SORT_DATE = "date";
 const string Logic::SORT_PRIORITY = "priority";
 const string Logic::SORT_COMPLETION = "completion";
 const string Logic::SORT_LAST_UPDATE = "update";
-const string Logic::FILTER_COMPLETION = "completion";
+const string Logic::FILTER_COMPLETION = "done";
 const string Logic::FILTER_PRIORITY = "priority";
 const string Logic::FILTER_LABEL = "label";
 
@@ -270,9 +270,7 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted){
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
 	inputTime >> YYYY >> MM >> DD >> hh >> mm;
-	if (mm == -1) {
-		mm = 0;
-	}
+
 	if (MM == -1 && DD == -1 && YYYY == -1) {
 		YYYY = getCurrentTime().getYear();
 		MM = getCurrentTime().getMonth();
@@ -466,7 +464,6 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 		ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
 		if (verifier.isValidItem()){
 			_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
-			resetAndPrintSchedule();
 			return MESSAGE_SUCCESSFUL_EDIT;
 		} else{
 			printEditTaskInvalidItemParts(verifier);
@@ -486,7 +483,8 @@ string Logic::filterTask(string filterToBeImplemented){
 	cout << "filterType :" << filterType << endl;
 	cout << "modifier Type : " << modifierType;
 	if (filterType == FILTER_COMPLETION){
-		_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(modifierType);
+		bool done = true;
+		_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(done);
 	} else if (filterType == FILTER_LABEL) {
 		_logicSchedule.retrieveDisplayScheduleFilteredByLabel(modifierType);
 	} else if (filterType == FILTER_PRIORITY){
