@@ -579,9 +579,9 @@ string Logic::sortTaskWithFilter(){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
 	} else if (_currentSorting == SORT_DATE){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
-	} /*else if (_currentSorting == SORT_LAST_UPDATE){
+	} else if (_currentSorting == SORT_LAST_UPDATE){
 	  sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-	  } */else{
+	  } else{
 		return MESSAGE_FAILED_SORT;
 	}
 	cout << "HERE" << endl;
@@ -605,9 +605,9 @@ string Logic::sortTask(){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
 	} else if (_currentSorting == SORT_DATE){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
-	} /*else if (_currentSorting == SORT_LAST_UPDATE){
+	} else if (_currentSorting == SORT_LAST_UPDATE){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-		} */else{
+		} else{
 		return MESSAGE_FAILED_SORT;
 	}
 	printSchedule(sortedDisplaySchedule);
