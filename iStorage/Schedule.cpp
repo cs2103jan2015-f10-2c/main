@@ -48,7 +48,7 @@ bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompleti
 }
 
 //	Checks if an item's time period matches that specified by the user
-bool isRelevantDateTime(DateTime itemStart, DateTime itemEnd, DateTime startTime, DateTime endTime) {
+bool Schedule::isRelevantDateTime(DateTime itemStart, DateTime itemEnd, DateTime startTime, DateTime endTime) {
 	if (itemStart.isAfter(endTime) || itemEnd.isBefore(startTime)) {
 		return false;
 	} else {
