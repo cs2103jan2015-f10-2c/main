@@ -19,7 +19,7 @@ const string Logic::MODIFIER_END = "end";
 const string Logic::MODIFIER_DESCRIPTION = "description";
 const string Logic::MODIFIER_LABEL = "label";
 const string Logic::MODIFIER_PRIORITY = "priority";
-const string Logic::MODIFIER_COMPLETION = "completion";
+const string Logic::MODIFIER_COMPLETION = "done";
 const string Logic::SORT_NAME = "name";
 const string Logic::SORT_DATE = "date";
 const string Logic::SORT_PRIORITY = "priority";
@@ -41,6 +41,7 @@ const string Logic::MESSAGE_SUCCESSFUL_SORT = "Schedule sorted";
 const string Logic::MESSAGE_SUCCESSFUL_VIEW = "Schedule filtered";
 const string Logic::MESSAGE_SUCCESSFUL_SAVE = "Save directory changed";
 const string Logic::MESSAGE_SUCCESSFUL_UNDO = "Last action reversed";
+const string Logic::MESSAGE_SUCCESSFUL_MARK_DONE = "Task is completed";
 
 const string Logic::MESSAGE_FAILED_ADD = "Sorry, Task was not added to Schedule";
 const string Logic::MESSAGE_FAILED_DELETE = "Sorry, Task was not deleted from Schedule";
@@ -55,6 +56,7 @@ const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
 const string Logic::DELETE_TASK_SUCCESSFUL = "Task %d is removed from schedule";
 const string Logic::EDIT_TASK_SUCCESSFUL = "Task %d is edited from schedule";
 const string Logic::SORT_TASK_SUCCESSFUL = "Sorting Changed to : %s";
+const string Logic::MARK_DONE_SUCCESSFUL = "Task %d is done";
 
 const string Logic::ADD_TASK_FAILED = "Task cannot be added to schedule";
 const string Logic::DELETE_TASK_FAILED = "Task cannot be removed from schedule";
@@ -109,6 +111,8 @@ void Logic::printDeleteTaskSuccessful(int lineNumberToBeDeleted){
 	sprintf_s(buffer, DELETE_TASK_SUCCESSFUL.c_str(), lineNumberToBeDeleted);
 	cout << buffer << endl;
 }
+
+
 void Logic::printEditTaskSuccessful(int lineNumberToBeEdited){
 	sprintf_s(buffer, EDIT_TASK_SUCCESSFUL.c_str(), lineNumberToBeEdited);
 	cout << buffer << endl;
@@ -119,6 +123,13 @@ void Logic::printSortTaskSuccessful(){
 	sprintf_s(buffer, SORT_TASK_SUCCESSFUL.c_str(), _currentSorting);
 	cout << buffer << endl;
 }
+
+
+void Logic::printMarkDoneSuccessful(unsigned int lineIndex){
+	sprintf_s(buffer, MARK_DONE_SUCCESSFUL.c_str(), lineIndex);
+	cout << buffer << endl;
+}
+
 
 void Logic::printAddTaskFailed(ItemVerification verifier){
 	cout << ADD_TASK_FAILED << endl;
@@ -152,6 +163,9 @@ void Logic::printInvalidInput(){
 	cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
 }
 
+void Logic::printInvalidLineIndex(){
+	cout << INVALID_LINE_INDEX << endl;
+}
 
 string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	unsigned int addedItemID = DEFAULT_ITEM_ID;
@@ -236,6 +250,9 @@ void Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToB
 	} else if (modifier == MODIFIER_PRIORITY){
 		char priorityToBeModified = checkPriority(iter->text);
 		itemToBeModified->setPriority(priorityToBeModified);
+	} else if (modifier == MODIFIER_COMPLETION){
+		bool done = true;
+		itemToBeModified->setCompletion(done);
 	}
 }
 char Logic::checkPriority(string priorityToBeModified){
@@ -381,9 +398,7 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	} else if (command == COMMAND_DELETE) {
 		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
 		returnMessage = deleteTask(lineIndexToBeDeleted);
-	}
-
-	else if (command == COMMAND_EDIT){
+	} else if (command == COMMAND_EDIT){
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
 		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	} else if (command == COMMAND_UNDO){
@@ -400,6 +415,9 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 	} else if (command == COMMAND_EXIT){
 		saveDirectoryToTextFile();
 		exit(0);
+	}else if(command == COMMAND_DONE){
+		unsigned int lineIndex = convertToDigit(itemInformation);
+		returnMessage = markDone(lineIndex);
 	} else {
 		printInvalidInput();
 		returnMessage = MESSAGE_INVALID_INPUT;
@@ -409,6 +427,21 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 }
 
 
+string Logic::markDone(unsigned int lineIndex){
+	if (lineIndex <= getScheduleSize()){
+		Item* retrievedItem;
+		retrievedItem = new Item;
+		*retrievedItem = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndex);
+		bool done = true;
+		retrievedItem->setCompletion(done);
+		_logicSchedule.replaceItemGivenDisplayVectorIndex(retrievedItem, lineIndex);
+		printMarkDoneSuccessful(lineIndex);
+		return MESSAGE_SUCCESSFUL_MARK_DONE;
+	} else{
+		printInvalidLineIndex();
+		return INVALID_LINE_INDEX;
+	}
+}
 
 
 string Logic::changeCurrentSorting(string itemInformation){
@@ -619,8 +652,10 @@ int Logic::readDataFromFile() {
 		int YYYY;
 		int hh;
 		int mm;
+		unsigned int ID;
 		getline(readFile, itemName);
 		getline(readFile, itemID);
+		ID = convertToDigit(itemID);
 		readFile >> YYYY;
 		readFile >> MM;
 		readFile >> DD;
@@ -641,6 +676,7 @@ int Logic::readDataFromFile() {
 		Item *item;
 		item = new Item;
 		item->setItemName(itemName);
+		item->setItemID(ID);
 		item->setStartTime(startTime);
 		item->setEndTime(EndTime);
 		item->setDescription(description);
