@@ -6,7 +6,7 @@
 const string Schedule::COMMAND_ADD = "ADD";
 const string Schedule::COMMAND_DELETE = "DELETE";
 const string Schedule::COMMAND_REPLACE = "REPLACE";
-const string Schedule::COMMAND_REPLACE = "CLEAR";
+const string Schedule::COMMAND_CLEAR = "CLEAR";
 const string Schedule::ERROR_ADD = "ERROR: Command and Item were not recorded.";
 const string Schedule::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
 
