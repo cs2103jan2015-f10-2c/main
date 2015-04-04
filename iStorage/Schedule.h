@@ -17,6 +17,7 @@ private:
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_REPLACE;
+	static const string COMMAND_CLEAR;
 	static const string ERROR_ADD;
 	static const string ERROR_EMPTYSTACKS;
 
@@ -64,6 +65,7 @@ private:
 	string undoAdd(Item);
 	string undoReplace(Item);
 	string undoDelete(Item);
+	string undoClear(vector<Item>);
 
 public:
 	//	Constructor
@@ -119,6 +121,11 @@ public:
 	string replaceItemGivenDisplayVectorIndex(Item*, unsigned int);
 	string deleteItemGivenDisplayVectorIndex(unsigned int);
 
+	//	Removes all items in the display schedule, from the schedule
+	//	Pre:	Nil
+	//	Post:	Items in the display schedule are deleted from the schedule
+	string clearDisplaySchedule();
+
 	//	Undoes the last command that modified the schedule (add, edit, delete)
 	//	Pre:	Previous commands valid
 	//	Post:	Reverses the effect of the last command
@@ -163,9 +170,6 @@ public:
 	bool filterDisplayScheduleByCompletion(int, bool);
 	bool filterDisplayScheduleByKeyword(int, string);
 	bool filterDisplayScheduleByDateTime(int, DateTime, DateTime);
-
-	//    Returns only items spanning a certain date
-	//vector<Item>& returnScheduleFilteredByDate();
 };
 
 #endif

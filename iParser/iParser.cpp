@@ -18,7 +18,7 @@ const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
 const string iParser::COMMAND_EXIT = "exit";
 
-const string iParser::COMMAND_ITEM = "item";
+const string iParser::COMMAND_NAME = "name";
 const string iParser::COMMAND_START = "start";
 const string iParser::COMMAND_END = "end";
 const string iParser::COMMAND_DESCRIPTION = "description";
@@ -29,7 +29,7 @@ const string iParser::MODIFIER_DUE = "due";
 const string iParser::MODIFIER_START = "start";
 const string iParser::MODIFIER_END = "end";
 
-const string iParser::STRING_ITEM = "-item";
+const string iParser::STRING_NAME = "-name";
 const string iParser::STRING_DATE = "-date";
 const string iParser::STRING_DUE = "-due";
 const string iParser::STRING_START = "-start";
@@ -319,9 +319,9 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		//ModifierType modifierType = determineModifierType(modifier);
 		string textWithoutCommand = removeFirstStringToken(singleInformation);
 
-		if (modifier == STRING_ITEM) {
+		if (modifier == STRING_NAME) {
 			if (command == COMMAND_EDIT && !hasItem) {
-				executeModifierAndTextParsing(COMMAND_ITEM, textWithoutCommand);
+				executeModifierAndTextParsing(COMMAND_NAME, textWithoutCommand);
 				hasItem = true;
 			} else {
 				if (command == COMMAND_ADD) {
@@ -1212,7 +1212,7 @@ bool iParser::hasNoDayButHasTime(const string dateTimeString) {
 bool iParser::isModifier(string modifier) {
 	convertToLowerCase(modifier);
 
-	return (modifier == STRING_ITEM || modifier == STRING_DATE ||
+	return (modifier == STRING_NAME || modifier == STRING_DATE ||
 		modifier == STRING_DUE || modifier == STRING_START ||
 		modifier == STRING_END || modifier == STRING_DESCRIPTION ||
 		modifier == STRING_DESC || modifier == STRING_LABEL || modifier == STRING_PRIORITY);

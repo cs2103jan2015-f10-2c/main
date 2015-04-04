@@ -91,9 +91,9 @@ public:
 
 	TEST_METHOD(parserExecuteModifierAndTextParsing) {
 		// testText[4] tests for invalid case where blank string is not allowed
-		string testCommand[] = { "item", "desc", "priority", "desc", "priority" };
+		string testCommand[] = { "name", "desc", "priority", "desc", "priority" };
 		string testText[] = { "123", "123abc", "abc", "@@@", "high" };
-		string expectedCommand[] = { "item", "desc", "priority", "desc", "priority" };
+		string expectedCommand[] = { "name", "desc", "priority", "desc", "priority" };
 		string expectedText[] = { "123", "123abc", "abc", "@@@", "high" };
 
 		for (int i = 0; i < 5; i++) {
@@ -113,16 +113,16 @@ public:
 
 	TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
 		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
-		string testInput[] = { "add abc", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-priority H" };
-		string expectedCommand[] = { "description", "start", "priority" };
-		string expectedText[] = { "WEAR FORMAL", "10 11 12 22 00", "h" };
+		string testInput[] = { "edit abc", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-priority H" };
+		string expectedCommand[] = { "name", "description", "start", "priority" };
+		string expectedText[] = { "testName", "WEAR FORMAL", "10 11 12 22 00", "h" };
 		vector<string> testVector;
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			testVector.push_back(testInput[i]);
 		}
 
-		testParser.checkAndSetTokenisedInformation(testVector, "add");
+		testParser.checkAndSetTokenisedInformation(testVector, "edit");
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter;
@@ -151,8 +151,8 @@ public:
 		// as hyphen is used as the modifier identifier, cases created tests to see
 		//if it recognises the allowed modifiers
 		vector<string> testVector;
-		string testInput = "test -date te-st -due t-e-s-t -start 10AM -end 10PM -desc test ---label -priority te-descst";
-		string expected[] = { "test", "-date te-st", "-due t-e-s-t", "-start 10AM", "-end 10PM", "-desc test ---label", "-priority te-descst" };
+		string testInput = "test -name testName -date te-st -due t-e-s-t -start 10AM -end 10PM -desc test ---label -priority te-descst";
+		string expected[] = { "test", "-name testName", "-date te-st", "-due t-e-s-t", "-start 10AM", "-end 10PM", "-desc test ---label", "-priority te-descst" };
 
 		testVector = testParser.tokeniseText(testInput);
 
@@ -691,8 +691,8 @@ public:
 	}
 
 	TEST_METHOD(parserIsModifierTest) {
-		string testString[] = { "-ITEM", "-DaTe", "-dUe", "-start", "-end", "-Desc", "-dESCRIPTION", "-pRiORiTy" };
-		string testStringfalse[] = { "-items", "-descrb", "-123", "-abc", "-", " " };
+		string testString[] = { "-NAME", "-DaTe", "-dUe", "-start", "-end", "-Desc", "-dESCRIPTION", "-pRiORiTy" };
+		string testStringfalse[] = { "-names", "-descrb", "-123", "-abc", "-", " " };
 
 		for (int i = 0; i < 8; i++) {
 			bool actual = testParser.isModifier(testString[i]);
