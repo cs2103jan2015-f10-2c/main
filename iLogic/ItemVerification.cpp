@@ -1,17 +1,5 @@
 #include "ItemVerification.h"
 
-const string ItemVerification::EMPTY_STRING = "";
-const string ItemVerification::AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
-const string ItemVerification::AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
-const string ItemVerification::ERROR_INVALID_NAME2 = "Error: Invalid Name";
-const string ItemVerification::ERROR_INVALID_DESCRIPTION = "Error: Invalid Description";
-const string ItemVerification::ERROR_INVALID_START_DATE_TIME = "Error: Invalid Start Date/Time";
-const string ItemVerification::ERROR_INVALID_END_DATE_TIME = "Error: Invalid End Date/TIME";
-const string ItemVerification::ERROR_SAME_START_END_DATE_TIME = "Error: Start Date/Time same as End Date/Time";
-const string ItemVerification::ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME = "Error: Start Date/Time is later than End Date/Time";
-const string ItemVerification::ERROR_INVALID_ID = "Error: Invalid ID";
-const string ItemVerification::ERROR_INVALID_PRIORITY2 = "Error: Invalid Priority";
-const string ItemVerification::ERROR_INVALID_LABEL2 = "Error: Invalid Label";
 const string ItemVerification::ITEM_VERIFICATION_EMPTY_STRING = "";
 const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
 const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
@@ -32,8 +20,6 @@ ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 
 bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
-	if (name == EMPTY_STRING) {
-		_itemVerificationErrors.push_back(ERROR_INVALID_NAME2);
 	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
 		return false;
@@ -123,7 +109,6 @@ bool ItemVerification::isValidPriority() {
 	if (priorityFound != string::npos) {
 		return true;
 	} else {
-		_itemVerificationErrors.push_back(ERROR_INVALID_PRIORITY2);
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
 		return false;
 	}
@@ -138,7 +123,6 @@ bool ItemVerification::isValidLabel() {
 	if (labelFound != string::npos) {
 		return true;
 	} else {
-		_itemVerificationErrors.push_back(ERROR_INVALID_LABEL2);
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_LABEL);
 		return false;
 	}
