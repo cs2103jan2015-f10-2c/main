@@ -992,4 +992,78 @@ namespace iLogicTest {
 
 	};
 
+	TEST_CLASS(IntegrationTest)
+	{
+	public:
+		TEST_METHOD(IntegrationTest1) {
+			iParser testParser;
+			Logic testLogic;
+			
+			string addMessage = "Task added to Schedule";
+
+			string returnMessage1 = testLogic.initiateCommandAction(testParser, "add task1");
+			string returnMessage2 = testLogic.initiateCommandAction(testParser, "add task2 -start 12/4/2015, 12:30");
+			string returnMessage3 = testLogic.initiateCommandAction(testParser, "add task3 -end 14/3/2015, 13:40");
+			string returnMessage4 = testLogic.initiateCommandAction(testParser, "add task3 -desc no description");
+			
+			Assert::AreEqual(addMessage, returnMessage1);
+			Assert::AreEqual(addMessage, returnMessage2);
+			Assert::AreEqual(addMessage, returnMessage3);
+			Assert::AreEqual(addMessage, returnMessage4);
+
+			string addFailedMessage = "Sorry, Task was not added to Schedule";
+
+			returnMessage1 = testLogic.initiateCommandAction(testParser, "add task5 -start 40/4/2012");
+			returnMessage2 = testLogic.initiateCommandAction(testParser, "add task5 -end 39/12/2050");
+
+			Assert::AreEqual(addFailedMessage, returnMessage1);
+			Assert::AreEqual(addFailedMessage, returnMessage2);
+
+			string deleteMessage = "Task deleted from Schedule";
+			
+			returnMessage1 = testLogic.initiateCommandAction(testParser, "delete 4");
+			returnMessage2 = testLogic.initiateCommandAction(testParser, "delete 3");
+
+			Assert::AreEqual(deleteMessage, returnMessage1);
+			Assert::AreEqual(deleteMessage, returnMessage2);
+
+			string deleteFailedMessage = "Sorry, Task was not deleted from Schedule";
+			
+			returnMessage1 = testLogic.initiateCommandAction(testParser, "delete 55");
+			returnMessage2 = testLogic.initiateCommandAction(testParser, "delete e");
+			
+			Assert::AreEqual(deleteFailedMessage, returnMessage1);
+			Assert::AreEqual(deleteFailedMessage, returnMessage2);
+
+			string editMessage = "Task edited";
+			
+			returnMessage1 = testLogic.initiateCommandAction(testParser, "edit 1 -desc testing editing");
+			returnMessage2 = testLogic.initiateCommandAction(testParser, "edit 1 -start 17/1/2000, 22:45");
+			returnMessage3 = testLogic.initiateCommandAction(testParser, "edit 1 -start 17/1/2010, 22:45");
+			
+			Assert::AreEqual(editMessage, returnMessage1);
+			Assert::AreEqual(editMessage, returnMessage2);
+			Assert::AreEqual(editMessage, returnMessage3);
+
+			string editFailedMessage = "Sorry, Unable to edit the specified Task";
+			
+			returnMessage1 = testLogic.initiateCommandAction(testParser, "edit 1 -end 16/1/2000, 22:45");
+			returnMessage2 = testLogic.initiateCommandAction(testParser, "edit 2 -end 17/1/2010, 22:45");
+
+			Assert::AreEqual(editFailedMessage, returnMessage1);
+			Assert::AreEqual(editFailedMessage, returnMessage2);
+
+			string invalidCommandMessage = "invalid input";
+			
+			returnMessage1 = testLogic.initiateCommandAction(testParser, "edit 1 -end ABCD");
+			returnMessage2 = testLogic.initiateCommandAction(testParser, "addd task2");
+			returnMessage3 = testLogic.initiateCommandAction(testParser, "Just a string");
+			returnMessage4 = testLogic.initiateCommandAction(testParser, "edit 2 -end 20/10/2015 22:50");
+			
+			Assert::AreEqual(invalidCommandMessage, returnMessage1);
+			Assert::AreEqual(invalidCommandMessage, returnMessage2);
+			Assert::AreEqual(invalidCommandMessage, returnMessage3);
+			Assert::AreEqual(invalidCommandMessage, returnMessage4);
+		}
+	};
 }
