@@ -35,6 +35,7 @@ private:
 	bool isMatchingPriority(char, char);
 	bool isMatchingLabel(char, char);
 	bool isMatchingCompletionStatus(bool, bool);
+	bool isRelevantDateTime(DateTime, DateTime, DateTime, DateTime);
 
 	//	Checks if an item's name or description has a keyword or a string
 	bool hasKeyword(string, string, string);
@@ -56,6 +57,13 @@ private:
 	//	Pre:	Valid string
 	//	Post:	All uppercased characters are converted to lowercase
 	static string lowerAllCase(const string& unconvertedString);
+
+	//	Undoes the last command that modified the schedule (add, edit, delete)
+	//	Pre:	Previous commands valid
+	//	Post:	Reverses the effect of the last command
+	string undoAdd(Item);
+	string undoReplace(Item);
+	string undoDelete(Item);
 
 public:
 	//	Constructor
@@ -115,9 +123,6 @@ public:
 	//	Pre:	Previous commands valid
 	//	Post:	Reverses the effect of the last command
 	string undoLastCommand();
-	string undoAdd(Item);
-	string undoReplace(Item);
-	string undoDelete(Item);
 
 	//	Retrieves the entire schedule/display schedule
 	//	Pre:	Nil
@@ -146,6 +151,7 @@ public:
 	const vector<Item>& retrieveDisplayScheduleFilteredByLabel(char);
 	const vector<Item>& retrieveDisplayScheduleFilteredByCompletion(bool);
 	const vector<Item>& retrieveDisplayScheduleFilteredByKeyword(string);
+	const vector<Item>& retrieveDisplayScheduleFilteredByDateTime(DateTime, DateTime);
 
 	//	Checks given item in the schedule, and removes it if it does not have the specified attribute
 	//	Pre:	Valid priority - L, M, or H
@@ -156,6 +162,7 @@ public:
 	bool filterDisplayScheduleByLabel(int, char);
 	bool filterDisplayScheduleByCompletion(int, bool);
 	bool filterDisplayScheduleByKeyword(int, string);
+	bool filterDisplayScheduleByDateTime(int, DateTime, DateTime);
 
 	//    Returns only items spanning a certain date
 	//vector<Item>& returnScheduleFilteredByDate();

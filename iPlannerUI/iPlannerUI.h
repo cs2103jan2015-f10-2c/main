@@ -277,19 +277,19 @@ namespace iPlannerUI {
 													   priorityString = gcnew String(charString1.c_str());
 													   }*/
 						 if (iterItem.getPriority() == 'H') {
-							 priorityString = gcnew String(iterItem.getPriority().ToString());
+							 priorityString = "H";
 							 //							 outputBox2->Font = System::Drawing::FontStyle::Bold;
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Red;
 							 outputBox2->SelectedText = "\t\t\t" + priorityString;
 						 }
 						 else if (iterItem.getPriority() == 'M') {
-							 priorityString = gcnew String(iterItem.getPriority().ToString());
+							 priorityString = "M";
 							 //							 outputBox2->Font = System::Drawing::FontStyle::Bold;
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Yellow;
 							 outputBox2->SelectedText = "\t\t\t" + priorityString;
 						 }
 						 else if (iterItem.getPriority() == 'L') {
-							 priorityString = gcnew String(iterItem.getPriority().ToString());
+							 priorityString = "L";
 							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Green;
 							 outputBox2->SelectedText = "\t\t\t" + priorityString;
@@ -308,19 +308,19 @@ namespace iPlannerUI {
 													   labelString = gcnew String(charString1.c_str());
 													   }*/
 						 if (iterItem.getLabel() == 'P') {
-							 labelString = gcnew String(iterItem.getLabel().ToString());
+							 labelString = "Personal";
 							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Purple;
 							 outputBox2->SelectedText = "\t\t\t" + labelString;
 						 }
 						 else if (iterItem.getLabel() == 'O') {
-							 labelString = gcnew String(iterItem.getLabel().ToString());
+							 labelString = "Official";
 							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::LightPink;
 							 outputBox2->SelectedText = "\t\t\t" + labelString;
 						 }
 						 else if (iterItem.getLabel() == 'M') {
-							 labelString = gcnew String(iterItem.getLabel().ToString());
+							 labelString = "Milestone";
 							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Maroon;
 							 outputBox2->SelectedText = "\t\t\t" + labelString;
@@ -529,18 +529,18 @@ namespace iPlannerUI {
 					 priorityString = gcnew String(charString1.c_str());
 					 }*/
 					 if (iterItem.getPriority() == 'H') {
-						 priorityString = gcnew String(iterItem.getPriority().ToString());
+						 priorityString = "H";
 						 outputBox2->SelectionColor = Color::Red;
 						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 					 }
 					 else if (iterItem.getPriority() == 'M') {
-						 priorityString = gcnew String(iterItem.getPriority().ToString());
+						 priorityString = "M";
 						 //							 outputBox2->Font = System::Drawing::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::Yellow;
 						 outputBox2->SelectedText = "\t\t\t" + priorityString;
 					 }
 					 else if (iterItem.getPriority() == 'L') {
-						 priorityString = gcnew String(iterItem.getPriority().ToString());
+						 priorityString = "L";
 						 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::Green;
 						 outputBox2->SelectedText = "\t\t\t" + priorityString;
@@ -560,19 +560,19 @@ namespace iPlannerUI {
 					 labelString = gcnew String(charString1.c_str());
 					 }*/
 					 if (iterItem.getLabel() == 'P') {
-						 labelString = gcnew String(iterItem.getLabel().ToString());
+						 labelString = "Personal";
 						 //						 outputBox2->SelectionFont = System::Windows::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::Purple;
 						 outputBox2->SelectedText = "\t\t\t" + labelString;
 					 }
 					 else if (iterItem.getLabel() == 'O') {
-						 labelString = gcnew String(iterItem.getLabel().ToString());
+						 labelString = "Official";
 						 //outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::LightPink;
 						 outputBox2->SelectedText = "\t\t\t" + labelString;
 					 }
 					 else if (iterItem.getLabel() == 'M') {
-						 labelString = gcnew String(iterItem.getLabel().ToString());
+						 labelString = "Milestone";
 						 //						 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
 						 outputBox2->SelectionColor = Color::Maroon;
 						 outputBox2->SelectedText = "\t\t\t" + labelString;
