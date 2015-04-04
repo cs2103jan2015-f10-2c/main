@@ -28,12 +28,10 @@ struct COMMAND_AND_TEXT {
 
 class iParser {
 
-#define TESTMODE
-#ifndef TESTMODE
+
 private:
-#else
+
 public:
-#endif
 
 	// =================
 	// private attribute

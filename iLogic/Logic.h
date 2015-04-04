@@ -81,6 +81,7 @@ private:
 	static const string MESSAGE_SUCCESSFUL_VIEW;
 	static const string MESSAGE_SUCCESSFUL_SAVE;
 	static const string MESSAGE_SUCCESSFUL_UNDO;
+	static const string MESSAGE_SUCCESSFUL_MARK_DONE;
 
 	static const string MESSAGE_FAILED_ADD;
 	static const string MESSAGE_FAILED_DELETE;
@@ -94,6 +95,7 @@ private:
 	static const string DELETE_TASK_SUCCESSFUL;
 	static const string EDIT_TASK_SUCCESSFUL;	
 	static const string SORT_TASK_SUCCESSFUL;
+	static const string MARK_DONE_SUCCESSFUL;
 
 	static const string ADD_TASK_FAILED;
 	static const string DELETE_TASK_FAILED;
@@ -117,6 +119,8 @@ public:
 	void printDeleteTaskSuccessful(int lineNumberToBeDeleted);
 	void printEditTaskSuccessful(int lineNumberToBeEdited);
 	void printSortTaskSuccessful();
+	void printMarkDoneSuccessful(unsigned int lineIndex);
+
 
 	void printAddTaskFailed(ItemVerification verifier);
 	void printDeleteTaskFailed();
@@ -124,7 +128,7 @@ public:
 	void printEditTaskInvalidItemParts(ItemVerification verifier);
 	void printInvalidInput();
 	void printSortTaskFailed();
-
+	void printInvalidLineIndex();
 
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);
 	
@@ -177,6 +181,7 @@ public:
 	void modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
 	void modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
 	
+	string markDone(unsigned int lineIndex);
 
 	//Parser returns a whole string of dateTime data
 	//interpreteDateTime switches the stringed input into 5 integers
