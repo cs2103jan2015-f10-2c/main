@@ -992,4 +992,16 @@ namespace iLogicTest {
 
 	};
 
+	TEST_CLASS(IntegrationTest)
+	{
+	public:
+		TEST_METHOD(IntegrationTest1) {
+			iParser testParser;
+			Logic testLogic;
+			
+			string returnMessage = testLogic.initiateCommandAction(testParser, "add task1");
+			string addMessage = "Task added to Schedule";
+			Assert::AreEqual(addMessage, returnMessage);
+		}
+	};
 }
