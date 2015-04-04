@@ -100,13 +100,11 @@ iParser::iParser() {}
 iParser::~iParser() {}
 
 list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
-	assert(userInput[0] != NULL);
 	executeParsing(userInput);
 	return _parseInfo;
 }
 
-string iParser::executeParsing(string userInput) {
-	assert(userInput[0] != NULL);
+string iParser::executeParsing(string userInput) {;
 	trimText(userInput);
 	removeConsecutiveWhiteSpace(userInput);
 	string command = retrieveCommandOrModifier(userInput);
@@ -519,6 +517,10 @@ string iParser::removeFirstStringToken(string userInput) {
 
 string iParser::removeConsecutiveWhiteSpace(string& text) {
 	unsigned int index;
+	
+	if (text == STRING_BLANK) {
+		return MESSAGE_SUCCESS;
+	}
 
 	for (index = 0; index < text.length() - 1; index++) {
 		if (isWhiteSpace(text[index]) && isWhiteSpace(text[index + 1])) {
