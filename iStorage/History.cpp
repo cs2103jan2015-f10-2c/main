@@ -57,6 +57,8 @@ string History::addCommand(string command, Item item) {
 string History::addClearCommand(vector<Item> clearedSchedule) {
 	_commandStack.push(COMMAND_CLEAR);
 	_scheduleStack.push(clearedSchedule);
+
+	return COMMAND_CLEAR;
 }
 
 //	Removes commands from the item and command stack; returns item and command (both via reference)

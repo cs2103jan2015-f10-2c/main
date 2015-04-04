@@ -164,6 +164,8 @@ string Schedule::clearDisplaySchedule() {
 		_schedule.erase(_schedule.begin() + vectorIndex);
 		_displaySchedule.erase(_displaySchedule.begin());
 	}
+
+	return COMMAND_CLEAR;
 }
 
 //	Undoes the last command that modified the schedule (add, replace, delete)
