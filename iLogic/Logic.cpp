@@ -306,6 +306,10 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted, DateTime existing
 		DD = getCurrentTime().getDay();
 	}
 
+	if (YYYY == -1 && YYYY2 == -1){
+		YYYY = getCurrentTime().getYear();
+	}
+
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
 	return interpretedDateTime;
 }
