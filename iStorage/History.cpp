@@ -6,6 +6,7 @@
 const string History::COMMAND_ADD = "ADD";
 const string History::COMMAND_DELETE = "DELETE";
 const string History::COMMAND_REPLACE = "REPLACE";
+const string History::COMMAND_CLEAR = "CLEAR";
 const string History::ERROR_ADD = "ERROR: Command and Item were not recorded.";
 const string History::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
 
@@ -16,8 +17,16 @@ History::History() {}
 History::~History() {}
 
 //	Returns true if command is add, delete, or replace
-bool History::isValidHistoryCommand(string command) {
+bool History::isNormalHistoryCommand(string command) {
 	if (command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_REPLACE) {
+		return true;
+	}
+
+	return false;
+}
+
+bool History::isClearCommand(string command) {
+	if (command == COMMAND_CLEAR) {
 		return true;
 	}
 
@@ -26,7 +35,7 @@ bool History::isValidHistoryCommand(string command) {
 
 //	Returns true if command and item stacks are both not empty
 bool History::isValidUndoCall() {
-	if (_commandStack.empty() || _itemStack.empty()) {
+	if (_commandStack.empty()) {
 		return false;
 	}
 	return true;
@@ -34,7 +43,7 @@ bool History::isValidUndoCall() {
 
 //	Adds commands that modifies storage information (add, delete, edit)
 string History::addCommand(string command, Item item) {
-	if (isValidHistoryCommand(command)) {
+	if (isNormalHistoryCommand(command)) {
 		_commandStack.push(command);
 		_itemStack.push(item);
 
@@ -44,13 +53,25 @@ string History::addCommand(string command, Item item) {
 	return ERROR_ADD;
 }
 
+//	Adds clear command that cleared an entire schedule
+string History::addClearCommand(vector<Item> clearedSchedule) {
+	_commandStack.push(COMMAND_CLEAR);
+	_scheduleStack.push(clearedSchedule);
+}
+
 //	Removes commands from the item and command stack; returns item and command (both via reference)
-string History::undoLastCommand(string& command, Item& latestItem) {
+string History::undoLastCommand(string& command, Item& latestItem, vector<Item>& lastestClearedSchedule) {
 	if (isValidUndoCall()) {
 		command = _commandStack.top();
-		latestItem = _itemStack.top();
 
-		removeUndoneCommand();
+		if (isNormalHistoryCommand(command)) {
+			latestItem = _itemStack.top();
+			removeUndoneCommand();
+		} else if (isClearCommand(command)) {
+			lastestClearedSchedule = _scheduleStack.top();
+			_commandStack.pop();
+			_scheduleStack.pop();
+		}
 
 		return (command + "\n" + latestItem.displayItemFullDetails());
 	}
