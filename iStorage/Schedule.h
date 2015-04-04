@@ -34,6 +34,7 @@ private:
 	bool isMatchingPriority(char, char);
 	bool isMatchingLabel(char, char);
 	bool isMatchingCompletionStatus(bool, bool);
+	bool isRelevantDateTime(DateTime, DateTime, DateTime, DateTime);
 
 	//	Checks if an item's name or description has a keyword or a string
 	bool hasKeyword(string, string, string);
@@ -145,6 +146,7 @@ public:
 	const vector<Item>& retrieveDisplayScheduleFilteredByLabel(char);
 	const vector<Item>& retrieveDisplayScheduleFilteredByCompletion(bool);
 	const vector<Item>& retrieveDisplayScheduleFilteredByKeyword(string);
+	const vector<Item>& retrieveDisplayScheduleFilteredByDateTime(DateTime, DateTime);
 
 	//	Checks given item in the schedule, and removes it if it does not have the specified attribute
 	//	Pre:	Valid priority - L, M, or H
@@ -155,6 +157,7 @@ public:
 	bool filterDisplayScheduleByLabel(int, char);
 	bool filterDisplayScheduleByCompletion(int, bool);
 	bool filterDisplayScheduleByKeyword(int, string);
+	bool filterDisplayScheduleByDateTime(int, DateTime, DateTime);
 
 	//    Returns only items spanning a certain date
 	//vector<Item>& returnScheduleFilteredByDate();

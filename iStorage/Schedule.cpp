@@ -47,6 +47,15 @@ bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompleti
 	return false;
 }
 
+//	Checks if an item's time period matches that specified by the user
+bool isRelevantDateTime(DateTime itemStart, DateTime itemEnd, DateTime startTime, DateTime endTime) {
+	if (itemStart.isAfter(endTime) || itemEnd.isBefore(startTime)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
 bool Schedule::hasKeyword(string name, string description, string keyword) {
 	if (name.find(keyword) != string::npos) {
 		return true;
@@ -303,7 +312,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
 
 //	Filters the schedule by priority
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char priority) {
-	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByPriority(index, priority)) {
 			index--;
 		}
@@ -314,7 +323,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char pri
 
 //	Filters the schedule by label
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
-	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByLabel(index, label)) {
 			index--;
 		}
@@ -325,7 +334,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label)
 
 //	Filters the schedule by completion status
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
-	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByCompletion(index, completionStatus)) {
 			index--;
 		}
@@ -336,8 +345,18 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool c
 
 //	Filters the schedule by keyword
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByKeyword(string keyword) {
-	for (int index = 0; index < (int) _displaySchedule.size(); index++) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByKeyword(index, keyword)) {
+			index--;
+		}
+	}
+
+	return retrieveDisplaySchedule();
+}
+
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByDateTime(DateTime startTime, DateTime endTime) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByDateTime(index, startTime, endTime)) {
 			index--;
 		}
 	}
@@ -390,6 +409,15 @@ bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatu
 //	Checks given item in the schedule, and removes it if it does not have the user-specified keyword
 bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
 	if (!hasKeyword(_displaySchedule[index].getItemName(), _displaySchedule[index].getDescription(), keyword)) {
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Schedule::filterDisplayScheduleByDateTime(int index, DateTime startTime, DateTime endTime) {
+	if (!isRelevantDateTime(_displaySchedule[index].getStartTime(), _displaySchedule[index].getEndTime(), startTime, endTime)) {
 		_displaySchedule.erase(_displaySchedule.begin() + index);
 		return true;
 	} else {
