@@ -2067,34 +2067,66 @@ public:
 namespace HistoryTest {
 	TEST_CLASS(TEST_HISTORY) {
 public:
-	TEST_METHOD(HistoryTestIsValidHistoryCommand) {
+	/* Tests muted because functions passed test and returned to private.
+	TEST_METHOD(HistoryTestIsNormalHistoryCommand) {
 		History testHistory;
 		bool isValidHistoryCmd;
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("ADD"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADD"));
 		Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("DELETE"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("DELETE"));
 		Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("REPLACE"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("REPLACE"));
 		Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Add"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Add"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Delete"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Delete"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("Replace"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Replace"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("whattt"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("whattt"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isValidHistoryCommand(string("ADDD"));
+		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADDD"));
 		Assert::AreEqual(false, isValidHistoryCmd);
 	}
+
+	TEST_METHOD(HistoryTestIsClearCommand) {
+		History testHistory;
+		bool isClearCmd;
+
+		isClearCmd = testHistory.isClearCommand(string("CLEAR"));
+		Assert::AreEqual(true, isClearCmd);
+
+		isClearCmd = testHistory.isClearCommand(string("Clear"));
+		Assert::AreEqual(false, isClearCmd);
+
+		isClearCmd = testHistory.isClearCommand(string("ADD"));
+		Assert::AreEqual(false, isClearCmd);
+	}
+
+	TEST_METHOD(HistoryTestIsValidUndoCall) {
+		History testHistory;
+		bool isValidCallForUndo;
+
+		isValidCallForUndo = testHistory.isValidUndoCall();
+		Assert::AreEqual(false, isValidCallForUndo);
+
+		string command1 = "ADD";
+		Item item1(string("This is the first item"));
+		testHistory.addCommand(command1, item1);
+
+		isValidCallForUndo = testHistory.isValidUndoCall();
+		Assert::AreEqual(true, isValidCallForUndo);
+	}
+
+	*/
 
 	TEST_METHOD(HistoryTestAddCommand) {
 		History testHistory;
@@ -2131,19 +2163,15 @@ public:
 		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
 	}
 
-	TEST_METHOD(HistoryTestIsValidUndoCall) {
+	TEST_METHOD(HistoryTestAddClearCommand) {
 		History testHistory;
-		bool isValidCallForUndo;
+		string returnMessage;
+		vector<Item> clearedSchedule;
+		Item* item1 = new Item(string("helloworld"));
 
-		isValidCallForUndo = testHistory.isValidUndoCall();
-		Assert::AreEqual(false, isValidCallForUndo);
-
-		string command1 = "ADD";
-		Item item1(string("This is the first item"));
-		testHistory.addCommand(command1, item1);
-
-		isValidCallForUndo = testHistory.isValidUndoCall();
-		Assert::AreEqual(true, isValidCallForUndo);
+		clearedSchedule.push_back(*item1);
+		returnMessage = testHistory.addClearCommand(clearedSchedule);
+		Assert::AreEqual(string("CLEAR"), returnMessage);
 	}
 
 	TEST_METHOD(HistoryTestUndoLastCommand) {
@@ -2151,15 +2179,23 @@ public:
 		string returnMessage;
 		string commandFromHistory;
 		Item latestItemFromHistory;
+		vector <Item> clearedSchedule;
+		vector <Item> latestClearedScheduleFromHistory;
 
-		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory);
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory, latestClearedScheduleFromHistory);
 		Assert::AreEqual(string("ERROR: Undo has reached its limit."), returnMessage);
 
 		string command1 = "ADD";
 		Item item1(string("What's up with it, vanilla face?"));
 		testHistory.addCommand(command1, item1);
-		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory);
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory, latestClearedScheduleFromHistory);
 		Assert::AreEqual(command1 + "\n" + item1.displayItemFullDetails(), returnMessage);
+
+		testHistory.addCommand(command1, item1);
+		clearedSchedule.push_back(item1);
+		testHistory.addClearCommand(clearedSchedule);
+		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory, latestClearedScheduleFromHistory);
+		Assert::AreEqual(clearedSchedule[0].getItemName(), latestClearedScheduleFromHistory[0].getItemName());
 	}
 
 	};
