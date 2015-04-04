@@ -188,7 +188,7 @@ namespace iPlannerUI {
 					 string outcome = testLogic->initiateCommandAction(testParser, stdUserInput);
 
 					 string outcometask;
-					 String^ output = "\t\t\t\t\tSCHEDULE \r\n";
+					 String^ output = "\t\t\t\t\t   SCHEDULE \r\n";
 					 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
 						 iterItem = testLogic->getDisplaySchedule()[i];
 						 String^ indexString = (i + 1).ToString();
@@ -402,6 +402,7 @@ namespace iPlannerUI {
 					 //					 outputBox->Text = output;
 					 commandInputBox->Clear();
 				 }
+				 /*
 				 if (e->KeyCode == Keys::Alt && e->KeyCode == Keys::L) {
 					 outputBox2->BackColor = Color::White;
 					 outputBox2->ForeColor = Color::Crimson;
@@ -413,7 +414,7 @@ namespace iPlannerUI {
 					 outputBox2->ForeColor = Color::Aqua;
 					 commandInputBox->BackColor = Color::Black;
 					 commandInputBox->ForeColor = Color::Aqua;
-				 }
+				 }*/
 
 	}
 
@@ -426,7 +427,7 @@ namespace iPlannerUI {
 				 String^ output = "\t\t\t\t\t   SCHEDULE \r\n";
 
 				 //				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
-				 outputBox2->SelectionColor = Color::CadetBlue;
+				 outputBox2->ForeColor = Color::CadetBlue;
 				 outputBox2->SelectedText = output;
 
 				 // outputBox2 - RichtextBox outputBox - normal textbox output - a system string to store output for display in outputBox
