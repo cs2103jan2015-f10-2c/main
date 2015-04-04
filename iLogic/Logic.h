@@ -45,6 +45,7 @@ private:
 	static const string COMMAND_DONE;
 	static const string COMMAND_SAVE;
 	static const string COMMAND_EXIT;
+	static const string MODIFIER_NAME;
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
 	static const string MODIFIER_DESCRIPTION;
@@ -96,7 +97,7 @@ private:
 
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
-	static const string EDIT_TASK_SUCCESSFUL;	
+	static const string EDIT_TASK_SUCCESSFUL;
 	static const string SORT_TASK_SUCCESSFUL;
 	static const string MARK_DONE_SUCCESSFUL;
 	static const string TASK_FOUND;
@@ -124,7 +125,7 @@ public:
 	void printEditTaskSuccessful(int lineNumberToBeEdited);
 	void printSortTaskSuccessful();
 	void printMarkDoneSuccessful(unsigned int lineIndex);
-
+	void printViewChanged();
 
 	void printAddTaskFailed(ItemVerification verifier);
 	void printDeleteTaskFailed();
@@ -133,10 +134,11 @@ public:
 	void printInvalidInput();
 	void printSortTaskFailed();
 	void printInvalidLineIndex();
+	void printInvalidViewOption();
 
 	list<COMMAND_AND_TEXT> getParseInfo(iParser parser, string input);
-	
-	
+
+
 	//takes in a parser to interpret the user input and initiate the action according to the command
 	//specified by the user
 	//Pre : takes in a parser, and a whole line of user input
@@ -150,7 +152,7 @@ public:
 	//post:returns Success or Failure message
 	string addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
 	void setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
-	
+
 
 	//ItemID starts from 1, everytime when addTask is called, nextItemID increases by 1
 	//Pre: None
@@ -168,7 +170,7 @@ public:
 	//Pre: takes in the lineIndex and the parse info given by the parser and execute editTask
 	//post: returns Success or Failure message
 	string editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
-	
+
 
 	//sort display schedule according to _currentSort method;
 	//sorting can be done by - last update, name, priority, date, completion
@@ -186,7 +188,7 @@ public:
 	//Post : None
 	void modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
 	void modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
-	
+
 	string markDone(unsigned int lineIndex);
 
 	//Parser returns a whole string of dateTime data
@@ -197,7 +199,7 @@ public:
 	DateTime interpreteDateTime(string infoToBeInterpreted, DateTime existingTimeSetting);
 	DateTime createDateTime(int DD, int MM, int YYYY, int hh, int mm);
 	DateTime getCurrentTime();
-	
+
 	char checkPriority(string priorityToBeModified);
 	//Initiate the update on the display schedule in storage
 	//and get or print the display schedule
@@ -213,14 +215,14 @@ public:
 	unsigned int getScheduleSize();
 	unsigned int getDisplayScheduleSize();
 	vector<Item> getSchedule();
-	
+
 	//changes current Sorting method. display schedule will be sorted according to the current sorting method
 	//everytime a command is executed.
 	//Pre : takes in a string that consists of sorting method to be changed
 	//post : returns current sorting method
 	string changeCurrentSorting(string itemInformation);
-	
-	
+
+
 	//changes directory of the saving text file
 	//Pre : 
 	string changeSavingDirectory(string directoryToBeSaved);
@@ -233,7 +235,7 @@ public:
 	string retrieveDirectoryFromTextFile();
 	void printChangeSavingDirectorySuccessful();
 	bool isExistingFileInDirectory(string directoryAndFileName);
-	
+
 
 	//store saving directory and file name in order to 
 	//retrieve directory and filename when the program is rebooted
