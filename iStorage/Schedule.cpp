@@ -331,7 +331,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 }
 
 bool Schedule::isUpdatedLaterThan(Item leftItem, Item rightItem) {
-	return leftItem.getLastUpdate().isAfter(rightItem.getLastUpdate());
+	return (leftItem.getLastUpdate() > rightItem.getLastUpdate());
 }
 
 const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
