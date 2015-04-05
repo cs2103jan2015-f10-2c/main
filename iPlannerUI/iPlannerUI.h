@@ -414,13 +414,9 @@ namespace iPlannerUI {
 							 outputBox2->Text = "\t\t\t" + labelString;
 						 }
 						 
-						 string charString3(1, iterItem.getCompletion());
 						 String^ completionString;
 
-						 if (charString3.compare("")) {
-							 completionString = "";
-						 }
-						 else if (charString3.compare("true")) {
+						 if (iterItem.getCompletion() == true) {
 							 //							 outputBox2->SelectionColor = System::Drawing::Color::Gold;
 							 outputBox2->SelectedText = "\t\t\t  Done\r\n";
 							 completionString = "Done";
@@ -436,7 +432,7 @@ namespace iPlannerUI {
 						 //						 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
 						 outputBox2->SelectedText = "\r\n" + descriptionString;
 
-						 output += indexString + ". " + nameString + "\t\t\t" + priorityString + "\t\t\t" + labelString + "\t\t\t" + completionString + "\r\n";
+						 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
 
 						 if (startDateString != "" && startTimeString != "") {
 							 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
@@ -521,7 +517,7 @@ namespace iPlannerUI {
 				 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
 					 iterItem = testLogic->getDisplaySchedule()[i];
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-					 //					 outputBox->Text = "hgjkiyujvdg\n";
+					 
 					 String ^indexString = (i + 1).ToString();
 					 String^ nameString = gcnew String(iterItem.getItemName().c_str());
 
@@ -668,16 +664,19 @@ namespace iPlannerUI {
 						 outputBox2->Text = "\t\t\t" + labelString;
 					 }
 
-					 string charString3(1, iterItem.getCompletion());
-					 if (charString3.compare("true")) {
+					 String^ completionString;
+//					 
+					 if (iterItem.getCompletion() == true) {
+						 completionString = "Done";
 						 //	 outputBox2->SelectionColor = Color::Gold;
 						 outputBox2->SelectedText = "\t\t\t  Done\r\n";
 					 }
 					 else {
+						 completionString = "Not Done";
 						 //						 outputBox2->SelectionColor = Color::Silver;
 						 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
 					 }
-					 String^ completionString = gcnew String(charString3.c_str());
+					 // = gcnew String(charString3.c_str());
 
 					 String^ descriptionString = gcnew String(iterItem.getDescription().c_str());
 					 //						 outputBox2->Font = System::Drawing::FontStyle::Italic;
@@ -686,7 +685,7 @@ namespace iPlannerUI {
 
 
 
-					 output += indexString + ". " + nameString + "\t\t\t" + priorityString + "\t\t\t" + labelString + "\t\t\t" + completionString + "\r\n";
+					 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
 
 					 outputBox2->SelectionColor = Color::BlueViolet;
 					 if (startDateString != "" && startTimeString != "") {
