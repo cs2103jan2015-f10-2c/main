@@ -11,4 +11,3 @@ void main(array<String^>^ args) {
 	iPlannerUI::iPlannerUI mainWindow; 
 	Application::Run(%mainWindow);
 }
-

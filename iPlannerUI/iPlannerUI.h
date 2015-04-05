@@ -115,8 +115,7 @@ namespace iPlannerUI {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->label1->Font = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold);
 			this->label1->ForeColor = System::Drawing::Color::Salmon;
 			this->label1->Location = System::Drawing::Point(267, 21);
 			this->label1->Name = L"label1";
