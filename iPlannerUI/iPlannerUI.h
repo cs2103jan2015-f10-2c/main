@@ -8,8 +8,8 @@
 #include "..\iStorage\Item.h"
 #include "..\iLogic\ItemVerification.h"
 #include "..\iLogic\DateTimeVerification.h"
-#include <vector>
 #include <msclr\marshal_cppstd.h>
+
 using namespace std;
 using namespace System;
 
@@ -450,8 +450,8 @@ namespace iPlannerUI {
 							 outputBox2->SelectedText = "\r\n\tStart" + startDateString + "\r\n";
 						 }
 						 else {
-							 output += "\r\n";
-							 outputBox2->Text = "\r\n";
+							 output += "";
+							 outputBox2->Text = "";
 						 }
 
 						 if (endDateString != "" && endTimeString != "") {
@@ -470,8 +470,8 @@ namespace iPlannerUI {
 							 outputBox2->SelectedText = "\r\n\tEnd" + endDateString + "\r\n";
 						 }
 						 else {
-							 output += "\r\n";
-							 outputBox2->Text = "\r\n";
+							 output += "";
+							 outputBox2->Text = "";
 						 }
 						 output += "\t" + descriptionString + "\r\n";
 					 }
@@ -702,8 +702,8 @@ namespace iPlannerUI {
 						 //outputBox2->Text = output;
 					 }
 					 else {
-						 output += "\r\n";
-						 outputBox2->Text = "\r\n";
+						 output += "";
+						 outputBox2->Text = "";
 					 }
 					 //				 outputBox2->SelectionColor = Color::Crimson;
 					 if (endDateString != "" && endTimeString != "") {
@@ -722,8 +722,8 @@ namespace iPlannerUI {
 						 //						 outputBox2->Text = output;
 					 }
 					 else {
-						 output += "\r\n";
-						 outputBox2->Text = "\r\n";
+						 output += "";
+						 outputBox2->Text = "";
 						 //						 outputBox2->Text = output;
 					 }
 					 output += "\t" + descriptionString + "\r\n";
