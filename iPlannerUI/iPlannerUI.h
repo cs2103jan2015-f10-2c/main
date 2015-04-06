@@ -92,6 +92,7 @@ namespace iPlannerUI {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(iPlannerUI::typeid));
 			this->commandInputBox = (gcnew System::Windows::Forms::TextBox());
 			this->outputBox = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -239,7 +240,9 @@ namespace iPlannerUI {
 			this->Controls->Add(this->outputBox);
 			this->Controls->Add(this->commandInputBox);
 			this->Controls->Add(this->HelpmenuStrip1);
+			this->ForeColor = System::Drawing::SystemColors::ControlText;
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MainMenuStrip = this->HelpmenuStrip1;
 			this->MaximizeBox = false;
 			this->Name = L"iPlannerUI";
@@ -384,11 +387,11 @@ namespace iPlannerUI {
 						 }
 
 						 String^ labelString;
-						 /*						 if (iterItem.getLabel() == 'E') {
-													   labelString = gcnew String("");
-													   }
-													   else {
-													   string charString1(1, iterItem.getPriority());
+/*						 if (iterItem.getLabel() == 'E') {
+						   labelString = gcnew String("");
+       					 }
+					    else {
+						   string charString1(1, iterItem.getPriority());
 													   labelString = gcnew String(charString1.c_str());
 													   }*/
 						 if (iterItem.getLabel() == 'P') {
@@ -508,6 +511,8 @@ namespace iPlannerUI {
 
 				 //				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
 				 outputBox2->ForeColor = Color::CadetBlue;
+				 outputBox2->SelectedRtf;
+				 outputBox2->SelectionRightIndent = 5;
 				 outputBox2->SelectedText = output;
 
 				 // outputBox2 - RichtextBox outputBox - normal textbox output - a system string to store output for display in outputBox
