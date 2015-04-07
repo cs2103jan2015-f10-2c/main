@@ -455,7 +455,6 @@ public:
 	//pre : takes in appropriate parameters
 	//post : true or false
 	bool isValidSortingMethod(string itemInformation);
-	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	bool isExistingFileInDirectory(string directoryAndFileName);
 
