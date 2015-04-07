@@ -94,6 +94,7 @@ private:
 	static const string MESSAGE_SUCCESSFUL_UNDO;
 	static const string MESSAGE_SUCCESSFUL_MARK_DONE;
 	static const string MESSAGE_CLEAR;
+	static const string MESSAGE_RETRIEVED_FROM_TEXT_FILE;
 	static const string MESSAGE_FILE_NOT_EXISTING;
 	static const string MESSAGE_FAILED_ADD;
 	static const string MESSAGE_FAILED_DELETE;
@@ -161,6 +162,7 @@ public:
 	//Pre: takes in the parse info given by the parser and execute addTask
 	//post:returns Success or Failure message
 	string addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
+	string Logic::addItemToSchedule(Item* newItemToBeAdded);
 	void setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
 
 
@@ -174,13 +176,13 @@ public:
 	//Pre: takes in the parse info given by the parser and execute deleteTask
 	//post:returns Success or Failure message
 	string deleteTask(unsigned int lineIndexToBeDeleted);
-
+	string deleteItemFromSchedule(unsigned int lineIndexToBeDeleted);
 
 	//modify the item, if valid line index and parse info are passed.
 	//Pre: takes in the lineIndex and the parse info given by the parser and execute editTask
 	//post: returns Success or Failure message
 	string editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
-
+	string replaceItemInSchedule(Item* editedItemToBeReplaced, unsigned int lineIndexToBeEdited);
 
 	//sort display schedule according to _currentSort method;
 	//sorting can be done by - last update, name, priority, date, completion
@@ -190,15 +192,21 @@ public:
 
 
 	string searchTask(string keyWord);
+
+
 	string filterTask(string filterToBeImplemented);
+	string filterByCompletion();
+	string filterByPriority(char priority);
+	string removeFilter();
 
 	//modifies an item, specified by the parse info
 	//Pre: takes in an item to be modified, and a parse info list to execute the modification
 	//Post : None
-	void modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
-	void modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
+	Item* modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
+	string modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
 
 	string markDone(unsigned int lineIndex);
+	string changeCompletionToDone(unsigned int lineIndex);
 
 	//Parser returns a whole string of dateTime data
 	//interpreteDateTime switches the stringed input into 5 integers
@@ -229,8 +237,8 @@ public:
 	//everytime a command is executed.
 	//Pre : takes in a string that consists of sorting method to be changed
 	//post : returns current sorting method
-	string changeCurrentSorting(string itemInformation);
-
+	string changeCurrentSorting(string sortingMethod);
+	string changeCurrentSortingAsUserSpecified(string sortingMethod);
 
 	//changes directory of the saving text file
 	//Pre : 
@@ -241,7 +249,9 @@ public:
 	string truncateUserInputDirectory(int truncatePosition, string userInputDirectory);
 	string getDirectoryAndFileName();
 	void saveBasicInformationToTextFile();
+	string retrieveDirectory();
 	string retrieveDirectoryFromTextFile();
+	string createNewTextFile();
 	void printChangeSavingDirectorySuccessful();
 	bool isExistingFileInDirectory(string directoryAndFileName);
 
@@ -257,7 +267,6 @@ public:
 	int convertToDigit(string text);
 
 	bool isValidSortingMethod(string itemInformation);
-	bool isValidItemInLogic(Item itemToBeChecked);
 	bool isFound(int lineIndex, string& phraseToSearch);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	list<string> getErrorList(ItemVerification verifier);
