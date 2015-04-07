@@ -33,7 +33,6 @@ void main() {
 	list<COMMAND_AND_TEXT> parseInfo;
 
 	testLogic.retrieveDirectoryFromTextFile();
-	cout << "HEREEE" << endl;
 	testLogic.readDataFromFile();
 	testLogic.sortTask();
 

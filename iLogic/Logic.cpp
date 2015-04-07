@@ -46,6 +46,7 @@ const string Logic::MESSAGE_SUCCESSFUL_SAVE = "Save directory changed";
 const string Logic::MESSAGE_SUCCESSFUL_UNDO = "Last action reversed";
 const string Logic::MESSAGE_SUCCESSFUL_MARK_DONE = "Task is completed";
 const string Logic::MESSAGE_CLEAR = "Schedule Cleared";
+const string Logic::MESSAGE_FILE_NOT_EXISTING = "file not existing";
 
 const string Logic::MESSAGE_FAILED_ADD = "Sorry, Task was not added to Schedule";
 const string Logic::MESSAGE_FAILED_DELETE = "Sorry, Task was not deleted from Schedule";
@@ -192,14 +193,11 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		addedItemID = _nextItemID;
 		increaseItemID();
 		printAddTaskSuccessful(addCompleted);
-		newItemToBeAdded = NULL;
-		delete newItemToBeAdded;
+		removeItemPointer(newItemToBeAdded);
 		return MESSAGE_SUCCESSFUL_ADD;
 	} else{
-
 		printAddTaskFailed(verifier);
-		newItemToBeAdded = NULL;
-		delete newItemToBeAdded;
+		removeItemPointer(newItemToBeAdded);
 		return MESSAGE_FAILED_ADD;
 	}
 }
@@ -421,11 +419,12 @@ int Logic::convertToDigit(string text) {
 
 
 
-string Logic::initiateCommandAction(iParser parser, string input) {
+MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) {
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
+	MESSAGE_AND_SCHEDULE userDisplayInformation;
 	/*Debugging*//*
 	list<COMMAND_AND_TEXT>::iterator iter;
 	for (iter = parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
@@ -466,8 +465,8 @@ string Logic::initiateCommandAction(iParser parser, string input) {
 		printInvalidInput();
 		returnMessage = MESSAGE_INVALID_INPUT;
 	}
-	thingsToDoAfterEveryExecution();
-	return returnMessage;
+	userDisplayInformation = returnUserDisplayInformation(returnMessage);
+	return userDisplayInformation;
 }
 
 void Logic::printUndo(){
@@ -484,8 +483,7 @@ string Logic::markDone(unsigned int lineIndex){
 		retrievedItem->setCompletion(done);
 		_logicSchedule.replaceItemGivenDisplayVectorIndex(retrievedItem, lineIndex);
 		printMarkDoneSuccessful(lineIndex);
-		retrievedItem = NULL;
-		delete retrievedItem;
+		removeItemPointer(retrievedItem);
 		return MESSAGE_SUCCESSFUL_MARK_DONE;
 	} else{
 		printInvalidLineIndex();
@@ -516,12 +514,10 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 		ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
 		if (verifier.isValidItem()){
 			_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
-			editedItemToBeReplaced = NULL;
-			delete editedItemToBeReplaced;
+			removeItemPointer(editedItemToBeReplaced);
 			return MESSAGE_SUCCESSFUL_EDIT;
 		} else{
-			editedItemToBeReplaced = NULL;
-			delete editedItemToBeReplaced;
+			removeItemPointer(editedItemToBeReplaced);
 			printEditTaskInvalidItemParts(verifier);
 			return MESSAGE_FAILED_EDIT;
 		}
@@ -569,27 +565,9 @@ void Logic::printViewChanged(){
 	cout << "Filter : " << _currentFilter << endl;
 }
 
-string Logic::sortTaskWithFilter(){
-	vector<Item> sortedDisplaySchedule = getDisplaySchedule();
-	if (_currentSorting == SORT_NAME){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
-	} else if (_currentSorting == SORT_PRIORITY){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
-	} else if (_currentSorting == SORT_COMPLETION){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
-	} else if (_currentSorting == SORT_DATE){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
-	} else if (_currentSorting == SORT_LAST_UPDATE){
-	  sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-	  } else{
-		return MESSAGE_FAILED_SORT;
-	}
-	printSchedule(sortedDisplaySchedule);
-	return MESSAGE_SUCCESSFUL_SORT;
-}
 
 
-string Logic::sortTask(){
+vector<Item> Logic::sortTask(){
 	vector<Item> sortedDisplaySchedule;
 	if (_currentFilter == FILTER_ALL){
 		sortedDisplaySchedule = resetAndGetDisplaySchedule();
@@ -607,10 +585,10 @@ string Logic::sortTask(){
 	} else if (_currentSorting == SORT_LAST_UPDATE){
 		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
 		} else{
-		return MESSAGE_FAILED_SORT;
+		return sortedDisplaySchedule;
 	}
 	printSchedule(sortedDisplaySchedule);
-	return MESSAGE_SUCCESSFUL_SORT;
+	return sortedDisplaySchedule;
 }
 
 string Logic::searchTask(string keyWord){
@@ -711,6 +689,7 @@ string Logic::retrieveDirectoryFromTextFile(){
 	} else {
 		//new user or basicinformation textfile is corrupted
 		saveBasicInformationToTextFile();
+		return MESSAGE_FILE_NOT_EXISTING;
 	}
 }
 
@@ -767,8 +746,7 @@ int Logic::readDataFromFile() {
 			item->setPriority(priority);
 			item->setLabel(label);
 			_logicSchedule.addItem(item);
-			item = NULL;
-			delete item;
+			removeItemPointer(item);
 		}
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
@@ -815,12 +793,22 @@ string Logic::setCurrentSorting(string currentSorting){
 }
 
 
-void Logic::thingsToDoAfterEveryExecution(){
-	sortTask();
+MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage){
+	vector<Item> displayVector = sortTask();
+	MESSAGE_AND_SCHEDULE userDisplayInformation;
+	userDisplayInformation.message = returnMessage;
+	userDisplayInformation.displaySchedule = displayVector;
 	writeDataOntoFile();
+	return userDisplayInformation;
 }
 
 bool Logic::isExistingFileInDirectory(string directoryAndFileName) {
 	ifstream infile(directoryAndFileName);
 	return infile.good();
+}
+
+
+void Logic::removeItemPointer(Item* itemPointer){
+	itemPointer = NULL;
+	delete itemPointer;
 }

@@ -21,6 +21,13 @@
 #include <atltime.h>
 using namespace std;
 
+//structure return to UI
+//return message and display vector
+struct MESSAGE_AND_SCHEDULE {
+	string message;
+	vector<Item> displaySchedule;
+};
+
 class Logic
 {
 private:
@@ -87,7 +94,7 @@ private:
 	static const string MESSAGE_SUCCESSFUL_UNDO;
 	static const string MESSAGE_SUCCESSFUL_MARK_DONE;
 	static const string MESSAGE_CLEAR;
-
+	static const string MESSAGE_FILE_NOT_EXISTING;
 	static const string MESSAGE_FAILED_ADD;
 	static const string MESSAGE_FAILED_DELETE;
 	static const string MESSAGE_FAILED_EDIT;
@@ -146,7 +153,7 @@ public:
 	//specified by the user
 	//Pre : takes in a parser, and a whole line of user input
 	//Post : returns a message whether each command was executed successfully
-	string initiateCommandAction(iParser parser, string input);
+	MESSAGE_AND_SCHEDULE initiateCommandAction(iParser parser, string input);
 
 
 	//add new Item in the Schedule, add task sets ItemID, which is a fixed number assigned to each Item
@@ -178,9 +185,8 @@ public:
 	//sort display schedule according to _currentSort method;
 	//sorting can be done by - last update, name, priority, date, completion
 	//Pre: none
-	//Post: returns the string of _currentSort
-	string sortTask();
-	string sortTaskWithFilter();
+	//Post: returns the Display vector of Items
+	vector<Item> sortTask();
 
 
 	string searchTask(string keyWord);
@@ -263,7 +269,9 @@ public:
 	//Post : returns current sorting
 	string setCurrentSorting(string currentSorting);
 
-	void thingsToDoAfterEveryExecution();
+	MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage);
+
+	void removeItemPointer(Item* itemPointer);
 };
 
 #endif
