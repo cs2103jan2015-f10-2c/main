@@ -50,13 +50,18 @@ bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompleti
 
 //	Checks if an item's time period matches that specified by the user
 bool Schedule::isRelevantDateTime(DateTime itemStart, DateTime itemEnd, DateTime startTime, DateTime endTime) {
-	if (itemStart.isAfter(endTime) || itemEnd.isBefore(startTime)) {
+	if (itemStart.displayDateTime() == "" && itemEnd.displayDateTime() == "") {
+		return false;
+	} else if (itemStart.isAfter(endTime) || itemEnd.isBefore(startTime)) {
+		return false;
+	} else if (itemStart.displayDateTime() == "" && itemEnd.isAfter(endTime)) {
 		return false;
 	} else {
 		return true;
 	}
 }
 
+//	Checks if an item's description and name has a user-specified keyword
 bool Schedule::hasKeyword(string name, string description, string keyword) {
 	if (name.find(keyword) != string::npos) {
 		return true;
@@ -330,10 +335,12 @@ const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
 	return retrieveDisplaySchedule();
 }
 
+//	Checks if an items is updated later than another
 bool Schedule::isUpdatedLaterThan(Item leftItem, Item rightItem) {
 	return (leftItem.getLastUpdate() > rightItem.getLastUpdate());
 }
 
+//	Sorts the display schedule by last updated time
 const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
 	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isUpdatedLaterThan);
 	return retrieveDisplaySchedule();
@@ -383,6 +390,7 @@ const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByKeyword(string ke
 	return retrieveDisplaySchedule();
 }
 
+//	Filters the schedule by a user-specified time period
 const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByDateTime(DateTime startTime, DateTime endTime) {
 	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
 		if (filterDisplayScheduleByDateTime(index, startTime, endTime)) {
@@ -445,6 +453,7 @@ bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
 	}
 }
 
+//	Checks given item in the schedule, and removes it if it does not coincide with the user-specified date and time period
 bool Schedule::filterDisplayScheduleByDateTime(int index, DateTime startTime, DateTime endTime) {
 	if (!isRelevantDateTime(_displaySchedule[index].getStartTime(), _displaySchedule[index].getEndTime(), startTime, endTime)) {
 		_displaySchedule.erase(_displaySchedule.begin() + index);
