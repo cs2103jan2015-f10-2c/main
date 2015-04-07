@@ -51,7 +51,7 @@ namespace iPlannerUI {
 			}
 		}
 	private: System::Windows::Forms::TextBox^  commandInputBox;
-	private: System::Windows::Forms::TextBox^  outputBox;
+
 
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::Label^  commandOutcomeLabel;
@@ -65,6 +65,7 @@ namespace iPlannerUI {
 	private: System::Windows::Forms::ToolStripMenuItem^  sortingScheduleToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  miscellneousToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  dateAndTimeVariationsToolStripMenuItem;
+
 
 
 
@@ -94,7 +95,6 @@ namespace iPlannerUI {
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(iPlannerUI::typeid));
 			this->commandInputBox = (gcnew System::Windows::Forms::TextBox());
-			this->outputBox = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->commandOutcomeLabel = (gcnew System::Windows::Forms::Label());
 			this->outputBox2 = (gcnew System::Windows::Forms::RichTextBox());
@@ -118,18 +118,6 @@ namespace iPlannerUI {
 			this->commandInputBox->Size = System::Drawing::Size(610, 20);
 			this->commandInputBox->TabIndex = 0;
 			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
-			// 
-			// outputBox
-			// 
-			this->outputBox->BackColor = System::Drawing::Color::Black;
-			this->outputBox->ForeColor = System::Drawing::SystemColors::InactiveCaption;
-			this->outputBox->Location = System::Drawing::Point(12, 70);
-			this->outputBox->Multiline = true;
-			this->outputBox->Name = L"outputBox";
-			this->outputBox->ReadOnly = true;
-			this->outputBox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->outputBox->Size = System::Drawing::Size(359, 251);
-			this->outputBox->TabIndex = 2;
 			// 
 			// label1
 			// 
@@ -158,7 +146,7 @@ namespace iPlannerUI {
 			this->outputBox2->BackColor = System::Drawing::SystemColors::MenuText;
 			this->outputBox2->ForeColor = System::Drawing::Color::White;
 			this->outputBox2->HideSelection = false;
-			this->outputBox2->Location = System::Drawing::Point(12, 70);
+			this->outputBox2->Location = System::Drawing::Point(14, 70);
 			this->outputBox2->Name = L"outputBox2";
 			this->outputBox2->ReadOnly = true;
 			this->outputBox2->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
@@ -237,7 +225,6 @@ namespace iPlannerUI {
 			this->Controls->Add(this->outputBox2);
 			this->Controls->Add(this->commandOutcomeLabel);
 			this->Controls->Add(this->label1);
-			this->Controls->Add(this->outputBox);
 			this->Controls->Add(this->commandInputBox);
 			this->Controls->Add(this->HelpmenuStrip1);
 			this->ForeColor = System::Drawing::SystemColors::ControlText;
@@ -263,25 +250,111 @@ namespace iPlannerUI {
 		}
 
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+				 MESSAGE_AND_SCHEDULE display;
 				 iParser testParser;
 				 String^ userInput;
-				 Item iterItem;
 				 userInput = commandInputBox->Text;
 				 string stdUserInput;
 				 MarshalString(userInput, stdUserInput);
-				 outputBox2->Font = gcnew System::Drawing::Font("Arial", 10);
-				 outputBox2->ForeColor = Color::CadetBlue;
+				 vector<Item> tempItem;
 				 if (e->KeyCode == Keys::Enter) {
-					 string outcome = testLogic->initiateCommandAction(testParser, stdUserInput);
+					 display = testLogic->initiateCommandAction(testParser, stdUserInput);
 
-					 string outcometask;
-					 String^ output = "\t\t\t\t\t   SCHEDULE \r\n\r\n";
-					 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
-						 iterItem = testLogic->getDisplaySchedule()[i];
-						 String^ indexString = (i + 1).ToString();
-						 String^ nameString = gcnew String(iterItem.getItemName().c_str());
-						 //						 outputBox2->SelectionColor = System::Drawing::Color::Blue;
-						 outputBox2->SelectedText = indexString + " " + nameString;
+					 outputBox2->Clear();
+
+					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 11, FontStyle::Bold);
+					 //					 String^ output = "\t\t\t\t\t   SCHEDULE \r\n\r\n";
+					 outputBox2->SelectionColor = Color::Beige;
+					 outputBox2->SelectedText = "\t\t\t\t\t  SCHEDULE\r\n";
+
+					 //					 outputBox2->SelectionColor = Color::Red;
+					 //					 outputBox2->SelectedText = "SCHEDULE2\r\n";
+					 tempItem = testLogic->getDisplaySchedule();
+					 vector<Item>::iterator iterItem;
+					 int i = 0;
+					 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
+						 String ^indexString = (++i).ToString();
+						 String^ nameString = gcnew String(iterItem->getItemName().c_str());
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectedText = indexString + ". " + nameString;
+
+						 char pri = iterItem->getPriority();
+
+						 if (pri == 72) {
+
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::Red;
+							 outputBox2->SelectedText = "\t\t\tH";
+						 }
+						 else if (pri == 77) {
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::Yellow;
+							 outputBox2->SelectedText = "\t\t\tM";
+						 }
+						 else if (pri == 76) {
+
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::Green;
+							 outputBox2->SelectedText = "\t\t\tL";
+
+						 }
+						 else {
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectedText = "\t\t\t";
+						 }
+
+
+
+						 /*					 String^ labelString;
+						 if (iterItem.getLabel() == 'E') {
+						 labelString = gcnew String("");
+						 }
+						 else {
+						 string charString1(1, iterItem.getPriority());
+						 labelString = gcnew String(charString1.c_str());
+						 }
+						 if (iterItem.getLabel() == 'P') {
+						 labelString = "Personal";
+						 //						 outputBox2->SelectionFont = System::Windows::FontStyle::Bold;
+						 //						 outputBox2->SelectionColor = Color::Purple;
+						 outputBox2->SelectedText = "\t\t\t" + labelString;
+						 }
+						 else if (iterItem.getLabel() == 'O') {
+						 labelString = "Official";
+						 //outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
+						 //						 outputBox2->SelectionColor = Color::LightPink;
+						 outputBox2->SelectedText = "\t\t\t" + labelString;
+						 }
+						 else if (iterItem.getLabel() == 'M') {
+						 labelString = "Milestone";
+						 //						 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
+						 //						 outputBox2->SelectionColor = Color::Maroon;
+						 outputBox2->SelectedText = "\t\t\t" + labelString;
+
+						 }
+						 else {
+						 labelString = gcnew String("");
+						 outputBox2->Text = "\t\t\t" + labelString;
+						 }
+						 */
+						 String^ completionString;
+
+						 if (iterItem->getCompletion() == true) {
+							 completionString = "Done";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::Gold;
+							 outputBox2->SelectedText = "\t\t\t  Done\r\n";
+						 }
+						 else {
+							 completionString = "Not Done";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::Silver;
+							 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
+						 }
+
+						 //					 output += "\t" + descriptionString + "\r\n";
+						 //					 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
 
 						 String^ UIHour;
 						 String^ UIMinute;
@@ -289,200 +362,132 @@ namespace iPlannerUI {
 						 String^ UIMonth;
 						 String^ UIYear;
 
-						 if (iterItem.getStartTime().getHour() == -1){
+						 if (iterItem->getStartTime().getHour() == -1){
 							 UIHour = gcnew String("");
 						 }
 						 else {
-							 UIHour = iterItem.getStartTime().getHour().ToString() + ":";
+							 UIHour = iterItem->getStartTime().getHour().ToString() + ":";
 						 }
-						 if (iterItem.getStartTime().getMinute() == -1) {
+						 if (iterItem->getStartTime().getMinute() == -1) {
 							 UIMinute = gcnew String("");
 						 }
 						 else {
-							 UIMinute = iterItem.getStartTime().getMinute().ToString() + " ";
+							 UIMinute = iterItem->getStartTime().getMinute().ToString() + " ";
 						 }
-						 if (iterItem.getStartTime().getDay() == -1) {
+						 if (iterItem->getStartTime().getDay() == -1) {
 							 UIDay = gcnew String("");
 						 }
 						 else {
-							 UIDay = iterItem.getStartTime().getDay().ToString() + "/";
+							 UIDay = iterItem->getStartTime().getDay().ToString() + "/";
 						 }
-						 if (iterItem.getStartTime().getMonth() == -1) {
+						 if (iterItem->getStartTime().getMonth() == -1) {
 							 UIMonth = gcnew String("");
 						 }
 						 else {
-							 UIMonth = iterItem.getStartTime().getMonth().ToString() + "/";
+							 UIMonth = iterItem->getStartTime().getMonth().ToString() + "/";
 						 }
-						 if (iterItem.getStartTime().getYear() == -1) {
+						 if (iterItem->getStartTime().getYear() == -1) {
 							 UIYear = gcnew String("");
 						 }
 						 else {
-							 UIYear = iterItem.getStartTime().getYear().ToString() + " ";
+							 UIYear = iterItem->getStartTime().getYear().ToString() + " ";
 						 }
 						 String^ startTimeString = UIHour + UIMinute;
 						 String^ startDateString = UIDay + UIMonth + UIYear;
 
-						 if (iterItem.getEndTime().getHour() == -1) {
+						 if (iterItem->getEndTime().getHour() == -1) {
 							 UIHour = gcnew String("");
 						 }
 						 else {
-							 UIHour = iterItem.getEndTime().getHour().ToString() + ":";
+							 UIHour = iterItem->getEndTime().getHour().ToString() + ":";
 						 }
-						 if (iterItem.getEndTime().getMinute() == -1) {
+						 if (iterItem->getEndTime().getMinute() == -1) {
 							 UIMinute = gcnew String("");
 						 }
 						 else {
-							 UIMinute = iterItem.getEndTime().getMinute().ToString() + " ";
+							 UIMinute = iterItem->getEndTime().getMinute().ToString() + " ";
 						 }
-						 if (iterItem.getEndTime().getDay() == -1) {
+						 if (iterItem->getEndTime().getDay() == -1) {
 							 UIDay = gcnew String("");
 						 }
 						 else {
-							 UIDay = iterItem.getEndTime().getDay().ToString() + "/";
+							 UIDay = iterItem->getEndTime().getDay().ToString() + "/";
 						 }
-						 if (iterItem.getEndTime().getMonth() == -1) {
+						 if (iterItem->getEndTime().getMonth() == -1) {
 							 UIMonth = gcnew String("");
 						 }
 						 else {
-							 UIMonth = iterItem.getEndTime().getMonth().ToString() + "/";
+							 UIMonth = iterItem->getEndTime().getMonth().ToString() + "/";
 						 }
-						 if (iterItem.getEndTime().getYear() == -1) {
+						 if (iterItem->getEndTime().getYear() == -1) {
 							 UIYear = gcnew String("");
 						 }
 						 else {
-							 UIYear = iterItem.getEndTime().getYear().ToString() + " ";
+							 UIYear = iterItem->getEndTime().getYear().ToString() + " ";
 						 }
 						 String^ endTimeString = UIHour + UIMinute;
 						 String^ endDateString = UIDay + UIMonth + UIYear;
 
-						 String^ priorityString;
-						 /*						 if (iterItem.getPriority() == 'E') {
-													   priorityString = gcnew String("");
-													   }
-													   else {
-													   string charString1(1, iterItem.getPriority());
-													   priorityString = gcnew String(charString1.c_str());
-													   }*/
-						 if (iterItem.getPriority() == 'H') {
-							 priorityString = "H";
-							 //							 outputBox2->Font = System::Drawing::FontStyle::Bold;
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Red;
-							 outputBox2->SelectedText = "\t\t\t" + priorityString;
-						 }
-						 else if (iterItem.getPriority() == 'M') {
-							 priorityString = "M";
-							 //							 outputBox2->Font = System::Drawing::FontStyle::Bold;
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Yellow;
-							 outputBox2->SelectedText = "\t\t\t" + priorityString;
-						 }
-						 else if (iterItem.getPriority() == 'L') {
-							 priorityString = "L";
-							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Green;
-							 outputBox2->SelectedText = "\t\t\t" + priorityString;
-						 }
-						 else {
-							 priorityString = gcnew String("");
-							 outputBox2->Text = "\t\t\t" + priorityString;
-						 }
-
-						 String^ labelString;
-/*						 if (iterItem.getLabel() == 'E') {
-						   labelString = gcnew String("");
-       					 }
-					    else {
-						   string charString1(1, iterItem.getPriority());
-													   labelString = gcnew String(charString1.c_str());
-													   }*/
-						 if (iterItem.getLabel() == 'P') {
-							 labelString = "Personal";
-							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Purple;
-							 outputBox2->SelectedText = "\t\t\t" + labelString;
-						 }
-						 else if (iterItem.getLabel() == 'O') {
-							 labelString = "Official";
-							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::LightPink;
-							 outputBox2->SelectedText = "\t\t\t" + labelString;
-						 }
-						 else if (iterItem.getLabel() == 'M') {
-							 labelString = "Milestone";
-							 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Maroon;
-							 outputBox2->SelectedText = "\t\t\t" + labelString;
-						 }
-						 else {
-							 labelString = gcnew String("");
-							 outputBox2->Text = "\t\t\t" + labelString;
-						 }
-						 
-						 String^ completionString;
-
-						 if (iterItem.getCompletion() == true) {
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Gold;
-							 outputBox2->SelectedText = "\t\t\t  Done\r\n";
-							 completionString = "Done";
-						 }
-						 else {
-							 outputBox2->SelectionColor = System::Drawing::Color::Silver;
-							 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
-							 completionString = "Not Done";
-						 }
-
-						 String^ descriptionString = gcnew String(iterItem.getDescription().c_str());
-						 //						 outputBox2->Font = System::Drawing::FontStyle::Italic;
-						 //						 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
-						 outputBox2->SelectedText = "\r\n" + descriptionString;
-
-						 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
-
 						 if (startDateString != "" && startTimeString != "") {
-							 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
-							 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + " " + startDateString + "\r\n";
+							 //						 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+							 outputBox2->SelectedText = "\tStart" + startTimeString + " " + startDateString + "\r\n";
 						 }
 						 else if (startDateString == "" && startTimeString != "") {
-							 output += "\tStart : " + startTimeString + "\r\n";
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
-							 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + "\r\n";
+							 //							 output += "\tStart : " + startTimeString + "\r\n";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+							 outputBox2->SelectedText = "\tStart :" + startTimeString + "\r\n";
 						 }
 						 else if (startDateString != "" && startTimeString == "") {
-							 output += "\tStart : " + startDateString + "\r\n";
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::BlueViolet;
-							 outputBox2->SelectedText = "\r\n\tStart" + startDateString + "\r\n";
+							 //	 output += "\tStart : " + startDateString + "\r\n";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+							 outputBox2->SelectedText = "\tStart :" + startDateString + "\r\n";
 						 }
 						 else {
-							 output += "";
-							 outputBox2->Text = "";
+							 //		 output += "";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+							 outputBox2->SelectedText = "";
 						 }
+
 
 						 if (endDateString != "" && endTimeString != "") {
-							 output += "\tEnd : " + endTimeString + " " + endDateString + "\r\n";
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Crimson;
-							 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + " " + endDateString + "\r\n";
+							 //							 output += "\tEnd : " + endTimeString + " " + endDateString + "\r\n";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightSalmon;
+							 outputBox2->SelectedText = "\tEnd :" + endTimeString + " " + endDateString + "\r\n";
 						 }
 						 else if (endDateString == "" && endTimeString != "") {
-							 output += "\tEnd : " + endTimeString + "\r\n";
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Crimson;
-							 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + "\r\n";
+							 //							 output += "\tEnd : " + endTimeString + "\r\n";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightSalmon;
+							 outputBox2->SelectedText = "\tEnd :" + endTimeString + "\r\n";
 						 }
 						 else if (endDateString != "" && endTimeString == "") {
-							 output += "\tEnd : " + endDateString + "\r\n";
-							 //							 outputBox2->SelectionColor = System::Drawing::Color::Crimson;
-							 outputBox2->SelectedText = "\r\n\tEnd" + endDateString + "\r\n";
+							 //							 output += "\tEnd : " + endDateString + "\r\n";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightSalmon;
+							 outputBox2->SelectedText = "\tEnd :" + endDateString + "\r\n";
 						 }
 						 else {
-							 output += "";
-							 outputBox2->Text = "";
+							 //							 output += "";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectedText = "";
 						 }
-						 output += "\t" + descriptionString + "\r\n";
+						 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
+						 outputBox2->SelectionColor = Color::BlueViolet;
+						 outputBox2->SelectedText = "\t" + descriptionString + "\r\n";
+
+
 					 }
 
-					 String^ outcomeString = gcnew String(outcome.c_str());
+					 String^ outcomeString = gcnew String(display.message.c_str());
 					 commandOutcomeLabel->Text = outcomeString;
-					 outputBox2->Text = output;
-					 //					 outputBox->Text = output;
+
 					 commandInputBox->Clear();
 				 }
 				 /*
@@ -502,252 +507,248 @@ namespace iPlannerUI {
 	}
 
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
-				 
+
 				 testLogic->retrieveDirectoryFromTextFile();
 				 testLogic->readDataFromFile();
-				 Item iterItem;
-				 outputBox2->Font = gcnew System::Drawing::Font("Arial", 10);
+				 vector<Item> tempItem;
+				 outputBox2->Clear();
+
+				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 11, FontStyle::Bold);
 				 String^ output = "\t\t\t\t\t   SCHEDULE \r\n\r\n";
-
-				 //				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
-				 outputBox2->ForeColor = Color::CadetBlue;
-				 outputBox2->SelectedRtf;
-				 outputBox2->SelectionRightIndent = 5;
-				 outputBox2->SelectedText = output;
-
-				 // outputBox2 - RichtextBox outputBox - normal textbox output - a system string to store output for display in outputBox
-				 //Within the for loop I am not able to display text in outputTextBox2
-				 //Also th above line SCHEDULE does not get displayed in outputTextBox2
-				 //Code under this for loop is different from previous function Keydown. In KeyDown, colour of entire text changes which is not required.
-				 for (unsigned int i = 0; i < testLogic->getScheduleSize(); i++) {
-					 iterItem = testLogic->getDisplaySchedule()[i];
+				 outputBox2->SelectionColor = Color::Beige;
+				 outputBox2->SelectedText = "\t\t\t\t\t  SCHEDULE\r\n";
+				 /*
+				 outputBox2->SelectionColor = Color::;
+				 outputBox2->SelectedText = "SCHEDULE2\r\n";
+				 */
+				 tempItem = testLogic->getDisplaySchedule();
+				 vector<Item>::iterator iterItem;
+				 int i = 0;
+				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
+					 String ^indexString = (++i).ToString();
+					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-					 
-					 String ^indexString = (i + 1).ToString();
-					 String^ nameString = gcnew String(iterItem.getItemName().c_str());
+					 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+					 outputBox2->SelectedText = indexString + ". " + nameString;
 
-					 //					 outputBox2->SelectionColor = System::Drawing::Color::Blue;
-					 //		             outputBox2->SelectedText = indexString + "dgfchc " + nameString;
-					 //					 outputBox2->SelectedText = "nameStrin";
-					 //					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 12, FontStyle::Bold);
-					 outputBox2->SelectionColor = Color::CadetBlue;
-					 outputBox2->SelectedText = indexString + " " + nameString;
-					 //					 output = indexString + ". " + nameString;
-					 //					 outputBox2->Text = output;
+					 String^ priorityString = gcnew String(iterItem->getPriority().ToString());
+					 output = priorityString;
+
+					 char pri = iterItem->getPriority();
+
+					 if (pri == 72) {
+
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::Red;
+						 outputBox2->SelectedText = "\t\t\tH";
+					 }
+					 else if (pri == 77) {
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::Yellow;
+						 outputBox2->SelectedText = "\t\t\tM";
+					 }
+					 else if (pri == 76) {
+
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::Green;
+						 outputBox2->SelectedText = "\t\t\tL";
+
+					 }
+					 else {
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectedText = "\t\t\t";
+					 }
+
+
+
+					 /*					 String^ labelString;
+					 if (iterItem.getLabel() == 'E') {
+					 labelString = gcnew String("");
+					 }
+					 else {
+					 string charString1(1, iterItem.getPriority());
+					 labelString = gcnew String(charString1.c_str());
+					 }
+					 if (iterItem.getLabel() == 'P') {
+					 labelString = "Personal";
+					 //						 outputBox2->SelectionFont = System::Windows::FontStyle::Bold;
+					 //						 outputBox2->SelectionColor = Color::Purple;
+					 outputBox2->SelectedText = "\t\t\t" + labelString;
+					 }
+					 else if (iterItem.getLabel() == 'O') {
+					 labelString = "Official";
+					 //outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
+					 //						 outputBox2->SelectionColor = Color::LightPink;
+					 outputBox2->SelectedText = "\t\t\t" + labelString;
+					 }
+					 else if (iterItem.getLabel() == 'M') {
+					 labelString = "Milestone";
+					 //						 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
+					 //						 outputBox2->SelectionColor = Color::Maroon;
+					 outputBox2->SelectedText = "\t\t\t" + labelString;
+
+					 }
+					 else {
+					 labelString = gcnew String("");
+					 outputBox2->Text = "\t\t\t" + labelString;
+					 }
+					 */
+					 String^ completionString;
+
+					 if (iterItem->getCompletion() == true) {
+						 completionString = "Done";
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::Gold;
+						 outputBox2->SelectedText = "\t\t\t  Done\r\n";
+					 }
+					 else {
+						 completionString = "Not Done";
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::Silver;
+						 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
+					 }
+
+					 //					 output += "\t" + descriptionString + "\r\n";
+					 //					 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
+
 					 String^ UIHour;
 					 String^ UIMinute;
 					 String^ UIDay;
 					 String^ UIMonth;
 					 String^ UIYear;
 
-					 if (iterItem.getStartTime().getHour() == -1){
+					 if (iterItem->getStartTime().getHour() == -1){
 						 UIHour = gcnew String("");
 					 }
 					 else {
-						 UIHour = iterItem.getStartTime().getHour().ToString() + ":";
+						 UIHour = iterItem->getStartTime().getHour().ToString() + ":";
 					 }
-					 if (iterItem.getStartTime().getMinute() == -1) {
+					 if (iterItem->getStartTime().getMinute() == -1) {
 						 UIMinute = gcnew String("");
 					 }
 					 else {
-						 UIMinute = iterItem.getStartTime().getMinute().ToString() + " ";
+						 UIMinute = iterItem->getStartTime().getMinute().ToString() + " ";
 					 }
-					 if (iterItem.getStartTime().getDay() == -1) {
+					 if (iterItem->getStartTime().getDay() == -1) {
 						 UIDay = gcnew String("");
 					 }
 					 else {
-						 UIDay = iterItem.getStartTime().getDay().ToString() + "/";
+						 UIDay = iterItem->getStartTime().getDay().ToString() + "/";
 					 }
-					 if (iterItem.getStartTime().getMonth() == -1) {
+					 if (iterItem->getStartTime().getMonth() == -1) {
 						 UIMonth = gcnew String("");
 					 }
 					 else {
-						 UIMonth = iterItem.getStartTime().getMonth().ToString() + "/";
+						 UIMonth = iterItem->getStartTime().getMonth().ToString() + "/";
 					 }
-					 if (iterItem.getStartTime().getYear() == -1) {
+					 if (iterItem->getStartTime().getYear() == -1) {
 						 UIYear = gcnew String("");
 					 }
 					 else {
-						 UIYear = iterItem.getStartTime().getYear().ToString() + " ";
+						 UIYear = iterItem->getStartTime().getYear().ToString() + " ";
 					 }
 					 String^ startTimeString = UIHour + UIMinute;
 					 String^ startDateString = UIDay + UIMonth + UIYear;
 
-					 if (iterItem.getEndTime().getHour() == -1) {
+					 if (iterItem->getEndTime().getHour() == -1) {
 						 UIHour = gcnew String("");
 					 }
 					 else {
-						 UIHour = iterItem.getEndTime().getHour().ToString() + ":";
+						 UIHour = iterItem->getEndTime().getHour().ToString() + ":";
 					 }
-					 if (iterItem.getEndTime().getMinute() == -1) {
+					 if (iterItem->getEndTime().getMinute() == -1) {
 						 UIMinute = gcnew String("");
 					 }
 					 else {
-						 UIMinute = iterItem.getEndTime().getMinute().ToString() + " ";
+						 UIMinute = iterItem->getEndTime().getMinute().ToString() + " ";
 					 }
-					 if (iterItem.getEndTime().getDay() == -1) {
+					 if (iterItem->getEndTime().getDay() == -1) {
 						 UIDay = gcnew String("");
 					 }
 					 else {
-						 UIDay = iterItem.getEndTime().getDay().ToString() + "/";
+						 UIDay = iterItem->getEndTime().getDay().ToString() + "/";
 					 }
-					 if (iterItem.getEndTime().getMonth() == -1) {
+					 if (iterItem->getEndTime().getMonth() == -1) {
 						 UIMonth = gcnew String("");
 					 }
 					 else {
-						 UIMonth = iterItem.getEndTime().getMonth().ToString() + "/";
+						 UIMonth = iterItem->getEndTime().getMonth().ToString() + "/";
 					 }
-					 if (iterItem.getEndTime().getYear() == -1) {
+					 if (iterItem->getEndTime().getYear() == -1) {
 						 UIYear = gcnew String("");
 					 }
 					 else {
-						 UIYear = iterItem.getEndTime().getYear().ToString() + " ";
+						 UIYear = iterItem->getEndTime().getYear().ToString() + " ";
 					 }
 					 String^ endTimeString = UIHour + UIMinute;
 					 String^ endDateString = UIDay + UIMonth + UIYear;
 
-					 String^ priorityString;
-					 /*						 if (iterItem.getPriority() == 'E') {
-					 priorityString = gcnew String("");
-					 }
-					 else {
-					 string charString1(1, iterItem.getPriority());
-					 priorityString = gcnew String(charString1.c_str());
-					 }*/
-					 if (iterItem.getPriority() == 'H') {
-						 priorityString = "H";
-						 //						 outputBox2->SelectionColor = Color::Red;
-						 outputBox2->SelectedText = "\t\t\t" + priorityString;
-					 }
-					 else if (iterItem.getPriority() == 'M') {
-						 priorityString = "M";
-						 //							 outputBox2->Font = System::Drawing::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::Yellow;
-						 outputBox2->SelectedText = "\t\t\t" + priorityString;
-					 }
-					 else if (iterItem.getPriority() == 'L') {
-						 priorityString = "L";
-						 //							 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::Green;
-						 outputBox2->SelectedText = "\t\t\t" + priorityString;
-
-					 }
-					 else {
-						 priorityString = gcnew String("");
-						 outputBox2->Text = "\t\t\t" + priorityString;
-					 }
-
-					 String^ labelString;
-					 /*						 if (iterItem.getLabel() == 'E') {
-					 labelString = gcnew String("");
-					 }
-					 else {
-					 string charString1(1, iterItem.getPriority());
-					 labelString = gcnew String(charString1.c_str());
-					 }*/
-					 if (iterItem.getLabel() == 'P') {
-						 labelString = "Personal";
-						 //						 outputBox2->SelectionFont = System::Windows::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::Purple;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
-					 }
-					 else if (iterItem.getLabel() == 'O') {
-						 labelString = "Official";
-						 //outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::LightPink;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
-					 }
-					 else if (iterItem.getLabel() == 'M') {
-						 labelString = "Milestone";
-						 //						 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::Maroon;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
-
-					 }
-					 else {
-						 labelString = gcnew String("");
-						 outputBox2->Text = "\t\t\t" + labelString;
-					 }
-
-					 String^ completionString;
-//					 
-					 if (iterItem.getCompletion() == true) {
-						 completionString = "Done";
-						 //	 outputBox2->SelectionColor = Color::Gold;
-						 outputBox2->SelectedText = "\t\t\t  Done\r\n";
-					 }
-					 else {
-						 completionString = "Not Done";
-						 //						 outputBox2->SelectionColor = Color::Silver;
-						 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
-					 }
-					 // = gcnew String(charString3.c_str());
-
-					 String^ descriptionString = gcnew String(iterItem.getDescription().c_str());
-					 //						 outputBox2->Font = System::Drawing::FontStyle::Italic;
-					 //					 outputBox2->SelectionColor = Color::BlueViolet;
-					 outputBox2->SelectedText = "\r\n" + descriptionString;
-
-
-
-					 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
-
-					 outputBox2->SelectionColor = Color::BlueViolet;
 					 if (startDateString != "" && startTimeString != "") {
 						 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + " " + startDateString + "\r\n";
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+						 outputBox2->SelectedText = "\tStart" + startTimeString + " " + startDateString + "\r\n";
 					 }
 					 else if (startDateString == "" && startTimeString != "") {
 						 output += "\tStart : " + startTimeString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tStart" + startTimeString + "\r\n";
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+						 outputBox2->SelectedText = "\tStart :" + startTimeString + "\r\n";
 					 }
 					 else if (startDateString != "" && startTimeString == "") {
 						 output += "\tStart : " + startDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tStart" + startDateString + "\r\n";
-						 //outputBox2->Text = output;
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+						 outputBox2->SelectedText = "\tStart :" + startDateString + "\r\n";
 					 }
 					 else {
 						 output += "";
-						 outputBox2->Text = "";
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+						 outputBox2->SelectedText = "";
 					 }
-					 //				 outputBox2->SelectionColor = Color::Crimson;
+
+
 					 if (endDateString != "" && endTimeString != "") {
 						 output += "\tEnd : " + endTimeString + " " + endDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + " " + endDateString + "\r\n";
-						 //						 outputBox2->Text = output;
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightSalmon;
+						 outputBox2->SelectedText = "\tEnd :" + endTimeString + " " + endDateString + "\r\n";
 					 }
 					 else if (endDateString == "" && endTimeString != "") {
 						 output += "\tEnd : " + endTimeString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tEnd" + endTimeString + "\r\n";
-						 //						 outputBox2->Text = output;
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightSalmon;
+						 outputBox2->SelectedText = "\tEnd :" + endTimeString + "\r\n";
 					 }
 					 else if (endDateString != "" && endTimeString == "") {
 						 output += "\tEnd : " + endDateString + "\r\n";
-						 outputBox2->SelectedText = "\r\n\tEnd" + endDateString + "\r\n";
-						 //						 outputBox2->Text = output;
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightSalmon;
+						 outputBox2->SelectedText = "\tEnd :" + endDateString + "\r\n";
 					 }
 					 else {
 						 output += "";
-						 outputBox2->Text = "";
-						 //						 outputBox2->Text = output;
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectedText = "";
 					 }
-					 output += "\t" + descriptionString + "\r\n";
+					 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
+					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
+					 outputBox2->SelectionColor = Color::BlueViolet;
+					 outputBox2->SelectedText = "\t" + descriptionString + "\r\n";
+
 				 }
 
-				 //	 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 16);
-				 // outputBox2->SelectedText = output;
 
-				 //				 outputBox->Text = output;
-				 outputBox2->Text = output;
-				 //			 outputBox2->Select
-				 //				 outputBox2->ForeColor = Color::Crimson;
+				 //	 outputBox2->Text = output;
+
 				 commandOutcomeLabel->Text = "Enter the command";
 
 	}
 
 	private: System::Void addingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuAdd = "\t\tAdding a Task Command List\r\n";
-				 
+
 				 helpMenuAdd += "\r\nadd <taskName> followed by task entities\r\n\r\n";
 				 helpMenuAdd += "The task entities could be one or more of the following : \r\n";
 				 helpMenuAdd += "Starting Time of Task : -start <DateTime> or -date <DateTime>\r\n";
@@ -769,7 +770,7 @@ namespace iPlannerUI {
 				 helpMenuDT += "<Time>, <Date>\r\n";
 				 helpMenuDT += "<Date>\r\n";
 				 helpMenuDT += "<Time> - Today's date is set as Date\r\n";
-				 
+
 				 helpMenuDT += "\r\nDate Variations\r\n";
 				 helpMenuDT += "DD/MM/YYYY\r\n";
 				 helpMenuDT += "DD MonthName/MonthShortForm YYYY\r\n";
@@ -833,5 +834,5 @@ namespace iPlannerUI {
 
 				 MessageBox::Show(helpMenuMisc);
 	}
-};
+	};
 }
