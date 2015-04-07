@@ -33,15 +33,12 @@ void main() {
 	list<COMMAND_AND_TEXT> parseInfo;
 
 	testLogic.retrieveDirectoryFromTextFile();
-	cout << "HEREEE" << endl;
 	testLogic.readDataFromFile();
 	testLogic.sortTask();
 
 	cout << "command : ";
 	while (getline(cin, userInput)){
-	
 	testLogic.initiateCommandAction(testParser, userInput);
-	
 	cout << "command : ";
 	}
 
