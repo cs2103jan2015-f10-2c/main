@@ -55,7 +55,6 @@ const string iParser::STRING_DATE_INITIALISE = "-1 -1 -1";
 const string iParser::STRING_TIME_INITIALISE = "-1 -1";
 const string iParser::STRING_MINUTE_INITIALISE = "00";
 const string iParser::STRING_BLANK = "";
-const string iParser::STRING_ZERO = "0";
 const string iParser::STRING_NEGATIVE_ONE = "-1";
 const char iParser::CHAR_SPACE = ' ';
 const char iParser::CHAR_TAB = '\t';
@@ -70,7 +69,6 @@ const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_INPUT = "Invalid input";
 const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
 const string iParser::MESSAGE_INVALID_DATE_TIME = "Invalid date and time";
-const string iParser::MESSAGE_TERMINATE = "Error encountered.Press any button to terminate programme...";
 
 const string iParser::MESSAGE_INVALID_ADD_ITEM = "Unable to use \'-item\' modifier when using \'add\' command";
 const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM = "Unable to use \'-item\' modifier more than once";
@@ -91,9 +89,6 @@ const unsigned int iParser::HOURS_ELEVEN_PM = 11;
 
 const unsigned int iParser::INDEX_START = 0;
 const unsigned int iParser::INDEX_INVALID = -1;
-const unsigned int iParser::TYPE_START_END_DATE_AND_TIME = 1;
-const unsigned int iParser::TYPE_START_END_DATE = 2;
-const unsigned int iParser::TYPE_START_END_TIME = 3;
 
 iParser::iParser() {}
 

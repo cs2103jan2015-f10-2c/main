@@ -98,7 +98,6 @@ public:
 	static const string STRING_TIME_INITIALISE;
 	static const string STRING_MINUTE_INITIALISE;
 	static const string STRING_BLANK;
-	static const string STRING_ZERO;
 	static const string STRING_NEGATIVE_ONE;
 
 	static const char CHAR_SPACE;
@@ -115,7 +114,6 @@ public:
 	static const string MESSAGE_INVALID_INPUT;
 	static const string MESSAGE_INVALID_COMMAND;
 	static const string MESSAGE_INVALID_DATE_TIME;
-	static const string MESSAGE_TERMINATE;
 
 	static const string MESSAGE_INVALID_ADD_ITEM;
 	static const string MESSAGE_INVALID_NUMBER_OF_ITEM;
@@ -137,9 +135,6 @@ public:
 
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
-	static const unsigned int TYPE_START_END_DATE_AND_TIME;
-	static const unsigned int TYPE_START_END_DATE;
-	static const unsigned int TYPE_START_END_TIME;
 
 	// =====================================
 	// enumeration for command and modifiers
