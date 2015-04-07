@@ -181,6 +181,77 @@ void Logic::printInvalidLineIndex(){
 	cout << INVALID_LINE_INDEX << endl;
 }
 
+
+
+
+MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) {
+	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
+	string command = parseInfoToBeProcessed.begin()->command;
+	string itemInformation = parseInfoToBeProcessed.begin()->text;
+	string returnMessage;
+	MESSAGE_AND_SCHEDULE userDisplayInformation;
+
+	if (command == COMMAND_ADD) {
+		returnMessage = addTask(parseInfoToBeProcessed);
+	} else if (command == COMMAND_DELETE) {
+		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
+		returnMessage = deleteTask(lineIndexToBeDeleted);
+	} else if (command == COMMAND_EDIT){
+		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
+		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
+	} else if (command == COMMAND_UNDO){
+		returnMessage = _logicSchedule.undoLastCommand();
+		printUndo();
+	} else if (command == COMMAND_SORT){
+		returnMessage = changeCurrentSorting(itemInformation);
+	} else if (command == COMMAND_SEARCH){
+		returnMessage = searchTask(itemInformation);
+	} else if (command == COMMAND_VIEW){
+		returnMessage = filterTask(itemInformation);
+	} else if (command == COMMAND_SAVE){
+		changeSavingDirectory(itemInformation);
+		returnMessage = MESSAGE_SUCCESSFUL_SAVE;
+	} else if (command == COMMAND_CLEAR){
+		_logicSchedule.clearDisplaySchedule();
+		returnMessage = MESSAGE_CLEAR;
+	} else if (command == COMMAND_EXIT){
+		saveBasicInformationToTextFile();
+		exit(0);
+	} else if (command == COMMAND_DONE){
+		unsigned int lineIndex = convertToDigit(itemInformation);
+		returnMessage = markDone(lineIndex);
+	} else {
+		printInvalidInput();
+		returnMessage = MESSAGE_INVALID_INPUT;
+	}
+	userDisplayInformation = returnUserDisplayInformation(returnMessage);
+	return userDisplayInformation;
+}
+
+
+
+MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage){
+	vector<Item> displayVector = sortTask();
+	MESSAGE_AND_SCHEDULE userDisplayInformation;
+	userDisplayInformation.message = returnMessage;
+	userDisplayInformation.displaySchedule = displayVector;
+	writeDataOntoFile();
+	return userDisplayInformation;
+}
+
+
+list<COMMAND_AND_TEXT> Logic::getParseInfo(iParser parser, string input){
+	parser.parse(input);
+	return parser.getParseInfo();
+}
+
+
+
+////////////////////////////////////
+////*ADD TASK RELATED FUNCTIONS*////
+////////////////////////////////////
+
+
 string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
@@ -210,10 +281,29 @@ string Logic::addItemToSchedule(Item* newItemToBeAdded){
 }
 
 
+void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
+	newItem->setItemName(parseInfoToBeProcessed.begin()->text);
+	newItem->setItemID(_nextItemID);
+}
+
+
+unsigned int Logic::increaseItemID(){
+	_nextItemID++;
+	return _nextItemID;
+}
+
 vector<Item> Logic::resetDisplaySchedule(){
 	_logicSchedule.resetDisplaySchedule();
 	return getDisplaySchedule();
 }
+
+void Logic::removeItemPointer(Item* itemPointer){
+	itemPointer = NULL;
+	delete itemPointer;
+}
+
+
+
 
 
 vector<Item> Logic::getDisplaySchedule(){
@@ -227,16 +317,6 @@ vector<Item> Logic::resetAndGetDisplaySchedule(){
 }
 
 
-unsigned int Logic::increaseItemID(){
-	_nextItemID++;
-	return _nextItemID;
-}
-
-
-void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
-	newItem->setItemName(parseInfoToBeProcessed.begin()->text);
-	newItem->setItemID(_nextItemID);
-}
 
 
 Item* Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* itemToBeModified){
@@ -408,10 +488,6 @@ list<string> Logic::printErrorList(ItemVerification verifier){
 }
 
 
-list<COMMAND_AND_TEXT> Logic::getParseInfo(iParser parser, string input){
-	parser.parse(input);
-	return parser.getParseInfo();
-}
 
 
 int Logic::convertToDigit(string text) {
@@ -423,49 +499,6 @@ int Logic::convertToDigit(string text) {
 
 
 
-MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) {
-	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
-	string command = parseInfoToBeProcessed.begin()->command;
-	string itemInformation = parseInfoToBeProcessed.begin()->text;
-	string returnMessage;
-	MESSAGE_AND_SCHEDULE userDisplayInformation;
-
-	if (command == COMMAND_ADD) {
-		returnMessage = addTask(parseInfoToBeProcessed);
-	} else if (command == COMMAND_DELETE) {
-		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
-		returnMessage = deleteTask(lineIndexToBeDeleted);
-	} else if (command == COMMAND_EDIT){
-		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
-		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
-	} else if (command == COMMAND_UNDO){
-		returnMessage = _logicSchedule.undoLastCommand();
-		printUndo();
-	} else if (command == COMMAND_SORT){
-		returnMessage = changeCurrentSorting(itemInformation);
-	} else if (command == COMMAND_SEARCH){
-		returnMessage = searchTask(itemInformation);
-	} else if (command == COMMAND_VIEW){
-		returnMessage = filterTask(itemInformation);
-	} else if (command == COMMAND_SAVE){
-		changeSavingDirectory(itemInformation);
-		returnMessage = MESSAGE_SUCCESSFUL_SAVE;
-	} else if (command == COMMAND_CLEAR){
-		_logicSchedule.clearDisplaySchedule();
-		returnMessage = MESSAGE_CLEAR;
-	} else if (command == COMMAND_EXIT){
-		saveBasicInformationToTextFile();
-		exit(0);
-	} else if (command == COMMAND_DONE){
-		unsigned int lineIndex = convertToDigit(itemInformation);
-		returnMessage = markDone(lineIndex);
-	} else {
-		printInvalidInput();
-		returnMessage = MESSAGE_INVALID_INPUT;
-	}
-	userDisplayInformation = returnUserDisplayInformation(returnMessage);
-	return userDisplayInformation;
-}
 
 void Logic::printUndo(){
 	cout << "Undo Previous command" << endl;
@@ -705,9 +738,9 @@ string Logic::getDirectoryAndFileName(){
 	}
 }
 
-string Logic::retrieveDirectory(){
+string Logic::retrieveBasicInformation(){
 	if (isExistingFileInDirectory(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME)){
-		retrieveDirectoryFromTextFile();
+		retrieveBasicInformationFromTextFile();
 		return MESSAGE_RETRIEVED_FROM_TEXT_FILE;
 	} else {
 		//new user or basicinformation textfile is corrupted
@@ -716,7 +749,7 @@ string Logic::retrieveDirectory(){
 	}
 }
 
-string Logic::retrieveDirectoryFromTextFile(){
+string Logic::retrieveBasicInformationFromTextFile(){
 	ifstream readFile(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME);
 	getline(readFile, _directoryToBeSaved);
 	getline(readFile, _fileNameToBeSaved);
@@ -747,7 +780,7 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 	return FileNameToBeSaved;
 }
 
-int Logic::readDataFromFile() {
+void Logic::readDataFromFile() {
 	if (isExistingFileInDirectory(getDirectoryAndFileName())){
 		ifstream readFile(getDirectoryAndFileName());
 		for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
@@ -764,6 +797,8 @@ int Logic::readDataFromFile() {
 			int hh;
 			int mm;
 			unsigned int ID;
+			int completionIndicator;
+			bool completion = false;
 			getline(readFile, itemName);
 			getline(readFile, itemID);
 			ID = convertToDigit(itemID);
@@ -783,6 +818,10 @@ int Logic::readDataFromFile() {
 			getline(readFile, description);
 			readFile >> priority;
 			readFile >> label;
+			readFile >> completionIndicator;
+			if (completionIndicator != 0){
+				completion = true;
+			}
 			getline(readFile, junk);
 			Item *item;
 			item = new Item;
@@ -793,6 +832,7 @@ int Logic::readDataFromFile() {
 			item->setDescription(description);
 			item->setPriority(priority);
 			item->setLabel(label);
+			item->setCompletion(completion);
 			_logicSchedule.addItem(item);
 			removeItemPointer(item);
 		}
@@ -802,11 +842,11 @@ int Logic::readDataFromFile() {
 	_logicSchedule.resetHistory();
 	cout << "Schedule retrieived" << endl;
 	resetAndGetDisplaySchedule();
-	return 1;
+	return;
 }
 
 
-int Logic::writeDataOntoFile(){
+void Logic::writeDataOntoFile(){
 	ofstream writeFile(getDirectoryAndFileName());
 	vector<Item> retrievedSchedule = getSchedule();
 	for (unsigned int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
@@ -826,29 +866,17 @@ int Logic::writeDataOntoFile(){
 		writeFile << itemToStore.getDescription() << endl;
 		writeFile << itemToStore.getPriority() << endl;
 		writeFile << itemToStore.getLabel() << endl;
+		writeFile << itemToStore.getCompletion() << endl;
 	}
 	saveBasicInformationToTextFile();
-	return 1;
+	return;
 }
 
 vector<Item> Logic::getSchedule(){
 	return _logicSchedule.retrieveSchedule();
 }
 
-string Logic::setCurrentSorting(string currentSorting){
-	_currentSorting = currentSorting;
-	return _currentSorting;
-}
 
-
-MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage){
-	vector<Item> displayVector = sortTask();
-	MESSAGE_AND_SCHEDULE userDisplayInformation;
-	userDisplayInformation.message = returnMessage;
-	userDisplayInformation.displaySchedule = displayVector;
-	writeDataOntoFile();
-	return userDisplayInformation;
-}
 
 bool Logic::isExistingFileInDirectory(string directoryAndFileName) {
 	ifstream infile(directoryAndFileName);
@@ -856,7 +884,3 @@ bool Logic::isExistingFileInDirectory(string directoryAndFileName) {
 }
 
 
-void Logic::removeItemPointer(Item* itemPointer){
-	itemPointer = NULL;
-	delete itemPointer;
-}
