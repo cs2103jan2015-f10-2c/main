@@ -63,9 +63,9 @@ bool Schedule::isRelevantDateTime(DateTime itemStart, DateTime itemEnd, DateTime
 
 //	Checks if an item's description and name has a user-specified keyword
 bool Schedule::hasKeyword(string name, string description, string keyword) {
-	if (name.find(keyword) != string::npos) {
+	if (lowerAllCase(name).find(lowerAllCase(keyword)) != string::npos) {
 		return true;
-	} else if (description.find(keyword) != string::npos) {
+	} else if (lowerAllCase(description).find(lowerAllCase(keyword)) != string::npos) {
 		return true;
 	} else {
 		return false;
