@@ -131,6 +131,11 @@ public:
 	//	Post:	Reverses the effect of the last command
 	string undoLastCommand();
 
+	//	Resets the History schedule; to be only executed after readFile
+	//	Pre:	Nil.
+	//	Post:	History schedule is reset.
+	string resetHistory();
+
 	//	Retrieves the entire schedule/display schedule
 	//	Pre:	Nil
 	//	Post:	Constant reference to vector of Item is returned.

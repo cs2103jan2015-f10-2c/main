@@ -9,6 +9,7 @@ const string History::COMMAND_REPLACE = "REPLACE";
 const string History::COMMAND_CLEAR = "CLEAR";
 const string History::ERROR_ADD = "ERROR: Command and Item were not recorded.";
 const string History::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
+const string History::RESET_COMPLETION = "Reset completed.";
 
 //	Default Constructor
 History::History() {}
@@ -89,4 +90,20 @@ bool History::removeUndoneCommand() {
 	commandCompleted = true;
 
 	return commandCompleted;
+}
+
+string History::reset() {
+	while (!_scheduleStack.empty()) {
+		_scheduleStack.pop();
+	}
+
+	while (!_commandStack.empty()) {
+		_commandStack.pop();
+	}
+
+	while (!_itemStack.empty()) {
+		_itemStack.pop();
+	}
+
+	return RESET_COMPLETION;
 }

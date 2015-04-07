@@ -15,6 +15,7 @@ private:
 	static const string COMMAND_CLEAR;
 	static const string ERROR_ADD;
 	static const string ERROR_EMPTYSTACKS;
+	static const string RESET_COMPLETION;
 
 	stack <string> _commandStack;
 	stack <vector <Item>> _scheduleStack;
@@ -47,7 +48,14 @@ public:
 	string undoLastCommand(string&, Item&, vector<Item>&);
 
 	//	From the item and command stack, removes the undone command (that is re-added during execution of undo)
+	//	Pre:	Nil
+	//	Post:	Pops the top item in the command stack and the item stack
 	bool removeUndoneCommand();
+
+	//	Resets the schedule; empties all stack
+	//	Pre:	Nil
+	//	Post:	All stacks are emptied; confirmation string returned
+	string reset();
 };
 
 #endif;
