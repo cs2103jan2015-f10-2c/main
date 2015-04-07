@@ -765,6 +765,7 @@ int Logic::readDataFromFile() {
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
 	}
+	_logicSchedule.resetHistory();
 	cout << "Schedule retrieived" << endl;
 	resetAndGetDisplaySchedule();
 	return 1;

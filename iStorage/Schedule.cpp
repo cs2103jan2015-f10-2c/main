@@ -231,6 +231,10 @@ string Schedule::undoClear(vector<Item> latestClearedSchedule) {
 	return to_string (index);
 }
 
+string Schedule::resetHistory() {
+	return _scheduleHistory.reset();
+}
+
 //	Retrieves the entire schedule
 const vector<Item>& Schedule::retrieveSchedule() {
 	return _schedule;
