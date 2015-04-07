@@ -38,9 +38,7 @@ void main() {
 
 	cout << "command : ";
 	while (getline(cin, userInput)){
-	
 	testLogic.initiateCommandAction(testParser, userInput);
-	
 	cout << "command : ";
 	}
 

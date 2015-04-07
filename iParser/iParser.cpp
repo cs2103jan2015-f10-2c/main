@@ -55,7 +55,6 @@ const string iParser::STRING_DATE_INITIALISE = "-1 -1 -1";
 const string iParser::STRING_TIME_INITIALISE = "-1 -1";
 const string iParser::STRING_MINUTE_INITIALISE = "00";
 const string iParser::STRING_BLANK = "";
-const string iParser::STRING_ZERO = "0";
 const string iParser::STRING_NEGATIVE_ONE = "-1";
 const char iParser::CHAR_SPACE = ' ';
 const char iParser::CHAR_TAB = '\t';
@@ -70,7 +69,6 @@ const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_INPUT = "Invalid input";
 const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
 const string iParser::MESSAGE_INVALID_DATE_TIME = "Invalid date and time";
-const string iParser::MESSAGE_TERMINATE = "Error encountered.Press any button to terminate programme...";
 
 const string iParser::MESSAGE_INVALID_ADD_ITEM = "Unable to use \'-item\' modifier when using \'add\' command";
 const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM = "Unable to use \'-item\' modifier more than once";
@@ -91,9 +89,6 @@ const unsigned int iParser::HOURS_ELEVEN_PM = 11;
 
 const unsigned int iParser::INDEX_START = 0;
 const unsigned int iParser::INDEX_INVALID = -1;
-const unsigned int iParser::TYPE_START_END_DATE_AND_TIME = 1;
-const unsigned int iParser::TYPE_START_END_DATE = 2;
-const unsigned int iParser::TYPE_START_END_TIME = 3;
 
 iParser::iParser() {}
 
@@ -104,7 +99,8 @@ list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
 	return _parseInfo;
 }
 
-string iParser::executeParsing(string userInput) {;
+string iParser::executeParsing(string userInput) {
+	;
 	trimText(userInput);
 	removeConsecutiveWhiteSpace(userInput);
 	string command = retrieveCommandOrModifier(userInput);
@@ -240,8 +236,7 @@ string iParser::executeAddParsing(string text) {
 		if (tokenisedInformation.size() > 1) {
 			checkAndSetTokenisedInformation(tokenisedInformation, COMMAND_ADD);
 		}
-	}
-	catch (string& exceptionMessage) {
+	} catch (string& exceptionMessage) {
 		clearParseInfo();
 		setParseInfo(MESSAGE_INVALID, exceptionMessage);
 		return MESSAGE_FAILURE;
@@ -263,8 +258,7 @@ string iParser::executeEditParsing(string text) {
 		if (tokenisedInformation.size() > 1) {
 			checkAndSetTokenisedInformation(tokenisedInformation, COMMAND_EDIT);
 		}
-	}
-	catch (string& exceptionMessage) {
+	} catch (string& exceptionMessage) {
 		clearParseInfo();
 		setParseInfo(MESSAGE_INVALID, exceptionMessage);
 		return MESSAGE_FAILURE;
@@ -497,12 +491,6 @@ vector<string> iParser::tokeniseText(const string text) {
 	return tokenisedInformation;
 }
 
-string iParser::retrieveFirstStringToken(string text) {
-	unsigned int endIndex = text.find_first_of(" \t");
-	string firstString = text.substr(INDEX_START, endIndex);
-	return firstString;
-}
-
 string iParser::removeFirstStringToken(string userInput) {
 	unsigned int startIndex = userInput.find_first_of(" \t");
 	string text;
@@ -517,7 +505,7 @@ string iParser::removeFirstStringToken(string userInput) {
 
 string iParser::removeConsecutiveWhiteSpace(string& text) {
 	unsigned int index;
-	
+
 	if (text == STRING_BLANK) {
 		return MESSAGE_SUCCESS;
 	}
@@ -586,16 +574,15 @@ string iParser::trimBack(string text) {
 bool iParser::hasStartEndDateTime(string dateTimeString) {
 	assert(dateTimeString != STRING_BLANK);
 
-	bool isValid = false;
 	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
 	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
 
 	if ((seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) ||
 		(seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID)) {
-		isValid = true;
+		return true;
 	}
 
-	return isValid;
+	return false;
 }
 
 string iParser::setDateTime(string dateTimeString, const string modifierType) {
@@ -609,8 +596,10 @@ string iParser::setDateTime(string dateTimeString, const string modifierType) {
 	string commandType;
 	if (modifierType == MODIFIER_DATE || modifierType == MODIFIER_START) {
 		commandType = COMMAND_START;
-	} else {
+	} else if (modifierType == MODIFIER_DUE || modifierType == MODIFIER_END) {
 		commandType = COMMAND_END;
+	} else {
+		throw MESSAGE_INVALID_INPUT;
 	}
 
 	if (numberOfCommas == 0) {
@@ -695,6 +684,8 @@ string iParser::splitAndSetNoCommaStartEndDateTime(const string dateTimeString) 
 	} else if (seperatorHyphenIndex != INDEX_INVALID) {
 		startDateTimeString = dateTimeString.substr(INDEX_START, seperatorHyphenIndex);
 		endDateTimeString = dateTimeString.substr(seperatorHyphenIndex + SIZE_OF_STRING_HYPHEN);
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
 	string startInfo = STRING_BLANK;
@@ -726,9 +717,11 @@ string iParser::splitAndSetOneCommaStartEndDateTime(const string dateTimeString)
 	if (seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) {
 		seperatorIndex = seperatorToIndex;
 		seperatorSize = SIZE_OF_STRING_TO;
-	} else {
+	} else if (seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID) {
 		seperatorIndex = seperatorHyphenIndex;
 		seperatorSize = SIZE_OF_STRING_HYPHEN;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
 	string startDateTimeString = STRING_BLANK;
@@ -785,9 +778,11 @@ string iParser::splitAndSetTwoCommaStartEndDateTime(const string dateTimeString)
 	if (seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) {
 		seperatorIndex = seperatorToIndex;
 		seperatorSize = SIZE_OF_STRING_TO;
-	} else {
+	} else if (seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID) {
 		seperatorIndex = seperatorHyphenIndex;
 		seperatorSize = SIZE_OF_STRING_HYPHEN;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
 	if (!(commaFirst < seperatorIndex && seperatorIndex < commaSecond)) {
@@ -825,8 +820,7 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 				dateToBeSet = splitAndSetSpaceDateInformation(dateString, numberOfSpaces);
 			}
 		}
-	}
-	catch (bool& booleanException) {
+	} catch (bool& booleanException) {
 		return booleanException;
 	}
 
@@ -852,8 +846,7 @@ bool iParser::isValidTime(string timeString, string& timeToBeSet) {
 
 	try{
 		timeToBeSet = splitAndSetTimeString(timeString, suffix);
-	}
-	catch (bool& booleanException) {
+	} catch (bool& booleanException) {
 		return booleanException;
 	}
 

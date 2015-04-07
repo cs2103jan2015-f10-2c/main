@@ -76,7 +76,7 @@ bool Schedule::hasKeyword(string name, string description, string keyword) {
 unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 	unsigned int vectorIndex = 0;
 
-	while (vectorIndex <= _schedule.size() && !isMatchingItemID(vectorIndex, itemID)) {
+	while (vectorIndex < _schedule.size() && !isMatchingItemID(vectorIndex, itemID)) {
 		vectorIndex++;
 	}
 
@@ -159,7 +159,7 @@ string Schedule::deleteItemGivenDisplayVectorIndex(unsigned int displayVectorInd
 
 //	Removes all items in the display schedule, from the schedule
 string Schedule::clearDisplaySchedule() {
-	unsigned int index = 0;
+	unsigned int index = 1;
 
 	_scheduleHistory.addClearCommand(_displaySchedule);
 

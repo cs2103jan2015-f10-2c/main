@@ -98,7 +98,6 @@ public:
 	static const string STRING_TIME_INITIALISE;
 	static const string STRING_MINUTE_INITIALISE;
 	static const string STRING_BLANK;
-	static const string STRING_ZERO;
 	static const string STRING_NEGATIVE_ONE;
 
 	static const char CHAR_SPACE;
@@ -115,7 +114,6 @@ public:
 	static const string MESSAGE_INVALID_INPUT;
 	static const string MESSAGE_INVALID_COMMAND;
 	static const string MESSAGE_INVALID_DATE_TIME;
-	static const string MESSAGE_TERMINATE;
 
 	static const string MESSAGE_INVALID_ADD_ITEM;
 	static const string MESSAGE_INVALID_NUMBER_OF_ITEM;
@@ -137,9 +135,6 @@ public:
 
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
-	static const unsigned int TYPE_START_END_DATE_AND_TIME;
-	static const unsigned int TYPE_START_END_DATE;
-	static const unsigned int TYPE_START_END_TIME;
 
 	// =====================================
 	// enumeration for command and modifiers
@@ -201,48 +196,138 @@ public:
 	// helper functions
 	// ================
 
+	//Pre:		vector with tokenised information has more than one string passed to function
+	//Post:		determines the modifiers available in vector and executes the respective modifiers
+	//			if any modifiers cannot be determined or if sub functions throw an exception, this function will stop it's execution
 	string checkAndSetTokenisedInformation(vector<string>&, const string);
+	// Pre:		nil
+	// Post:	determines whether dateTime string is a single dateTime or a ranged dateTime and executes
+	//			respective dateTime parsing
+	//			if dateTime is not valid, invalid date time message will be thrown as exception
 	string executeDateTimeParsing(string, const string);
 
 	// =============================
 	// string manipulation functions
 	// =============================
+	// Pre:		nil
+	// Post:	retrieves the first word from userInput string
 	string retrieveCommandOrModifier(string);
+	// Pre:		nil
+	// Post:	tokenises userInput into commands and modifiers along with their respective texts that follow after
 	vector<string> tokeniseText(const string);
-	string retrieveFirstStringToken(string);
+	// Pre:		nil
+	// Post:	returns a string with the first word from the text removed
 	string removeFirstStringToken(string); 
+	// Pre:		nil
+	// Post:	if a whitespace character is detected within referenced string,
+	//			any whitespace characters in the next index will be removed
 	string removeConsecutiveWhiteSpace(string&);
+	// Pre:		nil
+	// Post:	removes all whitespace characters detected within the referenced string
 	string removeWhiteSpace(string&);
+	// Pre:		nil
+	// Post:	converts all alphabet characters in the referenced string to lower case alphabets
 	string convertToLowerCase(string&); 
+	// Pre:		nil
+	// Post:	trims text by removing whitespace characters at the front and back of the referenced string until
+	//			the first non-whitespace character
 	string trimText(string&);
+	// Pre:		nil
+	// Post:	trims text by removing whitespace characters at the front of the string until
+	//			the first non-whitespace character
 	string trimFront(string); 
+	// Pre:		nil
+	// Post:	trims text by removing whitespace characters at the back of the string until
+	//			the first non-whitespace character
 	string trimBack(string); 
 
 	// ===================
 	// date time functions
 	// ===================
+	// Pre:		nil
+	// Post:	returns true if "to" or "-" are found
+	//			else, returns false
 	bool hasStartEndDateTime(string);
+	// Pre:		nil
+	// Post:	determines the dateTime which user inputs and sets dateTime information to _parseInfo
+	//			if invalid dateTime is input, invalid input message will be thrown as exception
 	string setDateTime(string, const string);
+	// Pre:		one comma detected in dateTime string
+	// Post:	determines the dateTime which user inputs and sets start OR end dateTime to _parseInfo
+	//			if invalid dateTime is input, invalid input message will be thrown as exception
 	string splitAndSetDateTime(string, const string);
+	// Pre:		hasStartEndDateTime is true
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
 	string splitAndSetStartEndDateTime(const string);
+	// Pre:		startEndDateTime has no commas detected
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			the range may be [date to date] or [time to time] range
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
 	string splitAndSetNoCommaStartEndDateTime(const string);
+	// Pre:		startEndDateTime has 1 comma detected
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			the range may be [date, time to time] or [time to time, date] range
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
 	string splitAndSetOneCommaStartEndDateTime(const string);
+	// Pre:		startEndDateTime has 2 commas detected
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			the range may be [date, time to date, time], [time, date to time, date],
+	//			[date, time to time, date] or [time, date to date, time] range
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
 	string splitAndSetTwoCommaStartEndDateTime(const string);
+	// Pre:		nil
+	// Post:	if date is valid, set date to _parseInfo and return true
 	bool isValidDate(string, string&);
+	// Pre:		nil
+	// Post:	if time is valid, set time to _parseInfo and return true
 	bool isValidTime(string, string&);
+	// Pre:		date userInput contains '/'	
+	// Post:	if date is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidDate to catch
 	string splitAndSetObliqueDateInformation(string, const unsigned int);
+	// Pre:		date userInput does not contain '/'	
+	// Post:	if date is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidDate to catch
 	string splitAndSetSpaceDateInformation(string, const unsigned int);
+	// Pre:		nil
+	// Post:	determines if time string has colon or not and executes the respective time string functiions
+	//			if time string is invalid, false will be thrown as exception for isValidTime to catch
 	string splitAndSetTimeString(string, const string);
+	// Pre:		time userInput does contains ':'	
+	// Post:	if time is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidTime to catch
 	string splitAndSetColonTimeString(string, const string);
+	// Pre:		time userInput does does not contain ':'	
+	// Post:	if time is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidTime to catch
 	string splitAndSetNoColonTimeString(string, const string);
+	// Pre:		nil	
+	// Post:	if day string is a valid day, return true
 	bool isDay(string);
+	// Pre:		isDay is true	
+	// Post:	sets the day with alphabetical string
 	string setDay(string);
+	// Pre:		nil	
+	// Post:	if month string is a valid month, return true
 	bool isMonth(string); 
+	// Pre:		isMonth is true	
+	// Post:	sets the month with digit string
 	string setMonth(string);
+	// Pre:		nil
+	// Post:	returns true if time string contains 'am', 'pm' or 'hr'
 	bool hasTimePeriodSuffix(const string);
+	// Pre:		hasTimePeriodSuffix is true, suffix is 'pm'	
+	// Post:	if time is between 1~11, it will be added by 12 and be returned as a string
 	string addTwelveToHours(const string); 
+	// Pre:		nil
+	// Post:	returns true if suffix is AM and hour falls between 1~12
 	bool isAppropriateAMHour(const string);
+	// Pre:		nil
+	// Post:	returns true if hour and minute strings are valid
 	bool isAppropriateTime(const string, const string, const string);
+	// Pre:		nil
+	// Post:	returns true if day is not detected while time is available
 	bool hasNoDayButHasTime(const string);
 
 	// =================
