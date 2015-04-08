@@ -85,6 +85,7 @@ private:
 	static const string DEFAULT_FILENAME;
 	static const string DEFAULT_SORTING;
 
+	static const string MESSAGE_TASK;
 	static const string MESSAGE_SUCCESSFUL_ADD;
 	static const string MESSAGE_SUCCESSFUL_DELETE;
 	static const string MESSAGE_SUCCESSFUL_EDIT;
@@ -103,21 +104,26 @@ private:
 	static const string MESSAGE_FAILED_SAVE;
 	static const string MESSAGE_FAILED_UNDO;
 	static const string MESSAGE_FAILED_SORT;
+	static const string MESSAGE_INVALID_INDEX;
 	static const string MESSAGE_INVALID_PRIORITY;
+	static const string MESSAGE_INVALID_SORTTYPE;
+	static const string MESSAGE_INVALID_FILTERTYPE;
+	static const string MESSAGE_NO_TASK_FOUND;
+	static const string MESSAGE_TASK_FOUND;
 
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
 	static const string EDIT_TASK_SUCCESSFUL;
 	static const string SORT_TASK_SUCCESSFUL;
 	static const string MARK_DONE_SUCCESSFUL;
-	static const string TASK_FOUND;
+	
 
 	static const string ADD_TASK_FAILED;
 	static const string DELETE_TASK_FAILED;
 	static const string EDIT_TASK_FAILED;
 	static const string INVALID_LINE_INDEX;
 	static const string SORT_TASK_FAILED;
-	static const string NO_TASK_FOUND;
+
 
 
 
@@ -151,7 +157,6 @@ public:
 	void printInvalidLineIndex();
 	void printInvalidViewOption();
 	void printChangeSavingDirectorySuccessful();
-	list<string> printErrorList(ItemVerification verifier);
 
 
 	
@@ -261,14 +266,14 @@ public:
 
 	//modifies an item, specified by the parse info
 	//Pre: takes in an item to be modified, and a parse info list to execute the modification
-	//Post : returns the item pointer of the item to be replaced
-	Item* modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
+	//Post : returns the string of itemparts that is modified
+	string modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeprocessed, Item* itemToBeModified);
 
 
 	//modifies each part of the item, specified by the parse info
 	//Pre : takes in the iterator of the Command and text list, and the item pointer to be modified
 	//post : returns the part that is modified
-	string modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified);
+	string modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified, string& modifiedItemPartsForDisplay);
 
 
 	//changes completion of the specified line index if line index given is valid
@@ -389,8 +394,8 @@ public:
 
 	//get a list of errors that user made
 	//pre : takes in the verifier to check
-	//post : returns a list of string that contains error lists
-	list<string> getErrorList(ItemVerification verifier);
+	//post : returns a  string that contains error lists
+	string getErrorList(ItemVerification verifier);
 
 
 

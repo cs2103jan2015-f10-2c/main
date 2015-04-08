@@ -3,15 +3,15 @@
 const string ItemVerification::ITEM_VERIFICATION_EMPTY_STRING = "";
 const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
 const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_NAME = "Error: Invalid Name";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_DESCRIPTION = "Error: Invalid Description";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME = "Error: Invalid Start Date/Time";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME = "Error: Invalid End Date/TIME";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME = "Error: Start Date/Time same as End Date/Time";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME = "Error: Start Date/Time is later than End Date/Time";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_ID = "Error: Invalid ID";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_PRIORITY = "Error: Invalid Priority";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_LABEL = "Error: Invalid Label";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_NAME = "Invalid Name";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_DESCRIPTION = "Invalid Description";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME = "Invalid Start Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME = "Invalid End Date/TIME";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME = "Start Date/Time same as End Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME = "Start Date/Time is later than End Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_ID = "Invalid ID";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_PRIORITY = "Invalid Priority";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_LABEL = "Invalid Label";
 
 ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 	_itemObjectToVerify = itemObject;
