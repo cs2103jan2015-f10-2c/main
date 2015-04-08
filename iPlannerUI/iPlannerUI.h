@@ -508,7 +508,7 @@ namespace iPlannerUI {
 
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
 
-				 testLogic->retrieveDirectoryFromTextFile();
+				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
 				 vector<Item> tempItem;
 				 outputBox2->Clear();
