@@ -173,16 +173,6 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserRetrieveFirstStringTokenTest) {
-		string testInput[] = { "add   text", "del\t\t\ttext", "exit", " ", "" };
-		string expected[] = { "add", "del", "exit", "", "" };
-
-		for (int i = 0; i < 5; i++) {
-			string actual = testParser.retrieveFirstStringToken(testInput[i]);
-			Assert::AreEqual(expected[i], actual);
-		}
-	}
-
 	TEST_METHOD(parserRemoveFirstStringTokenTest) {
 		string testInput[] = { "add text", "del text", "exit", " ", "" };
 		string expected[] = { "text", "text", "", "", "" };
@@ -513,8 +503,12 @@ public:
 		string expected[] = { "-1 1 -1", "2015 11 10", "-1 10 9", "-1 -1 monday" };
 
 		for (int i = 0; i < 4; i++) {
-			string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
-			Assert::AreEqual(expected[i], actualOne);
+			try {
+				string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
+				Assert::AreEqual(expected[i], actualOne);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
 		}
 	}
 
@@ -654,8 +648,7 @@ public:
 			bool actual = testParser.isAppropriateAMHour(testHour[i]);
 			if (i < 5) {
 				Assert::IsTrue(actual);
-			}
-			else {
+			} else {
 				Assert::IsFalse(actual);
 			}
 		}
@@ -670,8 +663,7 @@ public:
 			bool actual = testParser.isAppropriateTime(testHour[i], testMinute[i], testSuffix[i]);
 			if (i < 7) {
 				Assert::IsTrue(actual);
-			}
-			else {
+			} else {
 				Assert::IsFalse(actual);
 			}
 		}

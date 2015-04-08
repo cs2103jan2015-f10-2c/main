@@ -99,7 +99,8 @@ list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
 	return _parseInfo;
 }
 
-string iParser::executeParsing(string userInput) {;
+string iParser::executeParsing(string userInput) {
+	;
 	trimText(userInput);
 	removeConsecutiveWhiteSpace(userInput);
 	string command = retrieveCommandOrModifier(userInput);
@@ -235,8 +236,7 @@ string iParser::executeAddParsing(string text) {
 		if (tokenisedInformation.size() > 1) {
 			checkAndSetTokenisedInformation(tokenisedInformation, COMMAND_ADD);
 		}
-	}
-	catch (string& exceptionMessage) {
+	} catch (string& exceptionMessage) {
 		clearParseInfo();
 		setParseInfo(MESSAGE_INVALID, exceptionMessage);
 		return MESSAGE_FAILURE;
@@ -258,8 +258,7 @@ string iParser::executeEditParsing(string text) {
 		if (tokenisedInformation.size() > 1) {
 			checkAndSetTokenisedInformation(tokenisedInformation, COMMAND_EDIT);
 		}
-	}
-	catch (string& exceptionMessage) {
+	} catch (string& exceptionMessage) {
 		clearParseInfo();
 		setParseInfo(MESSAGE_INVALID, exceptionMessage);
 		return MESSAGE_FAILURE;
@@ -492,12 +491,6 @@ vector<string> iParser::tokeniseText(const string text) {
 	return tokenisedInformation;
 }
 
-string iParser::retrieveFirstStringToken(string text) {
-	unsigned int endIndex = text.find_first_of(" \t");
-	string firstString = text.substr(INDEX_START, endIndex);
-	return firstString;
-}
-
 string iParser::removeFirstStringToken(string userInput) {
 	unsigned int startIndex = userInput.find_first_of(" \t");
 	string text;
@@ -512,7 +505,7 @@ string iParser::removeFirstStringToken(string userInput) {
 
 string iParser::removeConsecutiveWhiteSpace(string& text) {
 	unsigned int index;
-	
+
 	if (text == STRING_BLANK) {
 		return MESSAGE_SUCCESS;
 	}
@@ -581,16 +574,15 @@ string iParser::trimBack(string text) {
 bool iParser::hasStartEndDateTime(string dateTimeString) {
 	assert(dateTimeString != STRING_BLANK);
 
-	bool isValid = false;
 	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
 	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
 
 	if ((seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) ||
 		(seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID)) {
-		isValid = true;
+		return true;
 	}
 
-	return isValid;
+	return false;
 }
 
 string iParser::setDateTime(string dateTimeString, const string modifierType) {
@@ -604,8 +596,10 @@ string iParser::setDateTime(string dateTimeString, const string modifierType) {
 	string commandType;
 	if (modifierType == MODIFIER_DATE || modifierType == MODIFIER_START) {
 		commandType = COMMAND_START;
-	} else {
+	} else if (modifierType == MODIFIER_DUE || modifierType == MODIFIER_END) {
 		commandType = COMMAND_END;
+	} else {
+		throw MESSAGE_INVALID_INPUT;
 	}
 
 	if (numberOfCommas == 0) {
@@ -690,6 +684,8 @@ string iParser::splitAndSetNoCommaStartEndDateTime(const string dateTimeString) 
 	} else if (seperatorHyphenIndex != INDEX_INVALID) {
 		startDateTimeString = dateTimeString.substr(INDEX_START, seperatorHyphenIndex);
 		endDateTimeString = dateTimeString.substr(seperatorHyphenIndex + SIZE_OF_STRING_HYPHEN);
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
 	string startInfo = STRING_BLANK;
@@ -721,9 +717,11 @@ string iParser::splitAndSetOneCommaStartEndDateTime(const string dateTimeString)
 	if (seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) {
 		seperatorIndex = seperatorToIndex;
 		seperatorSize = SIZE_OF_STRING_TO;
-	} else {
+	} else if (seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID) {
 		seperatorIndex = seperatorHyphenIndex;
 		seperatorSize = SIZE_OF_STRING_HYPHEN;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
 	string startDateTimeString = STRING_BLANK;
@@ -780,9 +778,11 @@ string iParser::splitAndSetTwoCommaStartEndDateTime(const string dateTimeString)
 	if (seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) {
 		seperatorIndex = seperatorToIndex;
 		seperatorSize = SIZE_OF_STRING_TO;
-	} else {
+	} else if (seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID) {
 		seperatorIndex = seperatorHyphenIndex;
 		seperatorSize = SIZE_OF_STRING_HYPHEN;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
 	if (!(commaFirst < seperatorIndex && seperatorIndex < commaSecond)) {
@@ -820,8 +820,7 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 				dateToBeSet = splitAndSetSpaceDateInformation(dateString, numberOfSpaces);
 			}
 		}
-	}
-	catch (bool& booleanException) {
+	} catch (bool& booleanException) {
 		return booleanException;
 	}
 
@@ -847,8 +846,7 @@ bool iParser::isValidTime(string timeString, string& timeToBeSet) {
 
 	try{
 		timeToBeSet = splitAndSetTimeString(timeString, suffix);
-	}
-	catch (bool& booleanException) {
+	} catch (bool& booleanException) {
 		return booleanException;
 	}
 

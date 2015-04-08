@@ -32,7 +32,7 @@ void main() {
 	string userInput;
 	list<COMMAND_AND_TEXT> parseInfo;
 
-	testLogic.retrieveDirectoryFromTextFile();
+	testLogic.retrieveBasicInformationFromTextFile();
 	testLogic.readDataFromFile();
 	testLogic.sortTask();
 
