@@ -6,8 +6,6 @@
 
 #include "..\iLogic\Logic.h"
 #include "..\iStorage\Item.h"
-#include "..\iLogic\ItemVerification.h"
-#include "..\iLogic\DateTimeVerification.h"
 #include <msclr\marshal_cppstd.h>
 
 using namespace std;
@@ -352,131 +350,31 @@ namespace iPlannerUI {
 							 outputBox2->SelectionColor = Color::Silver;
 							 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
 						 }
-
-						 //					 output += "\t" + descriptionString + "\r\n";
-						 //					 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
-
-						 String^ UIHour;
-						 String^ UIMinute;
-						 String^ UIDay;
-						 String^ UIMonth;
-						 String^ UIYear;
-
-						 if (iterItem->getStartTime().getHour() == -1){
-							 UIHour = gcnew String("");
-						 }
-						 else {
-							 UIHour = iterItem->getStartTime().getHour().ToString() + ":";
-						 }
-						 if (iterItem->getStartTime().getMinute() == -1) {
-							 UIMinute = gcnew String("");
-						 }
-						 else {
-							 UIMinute = iterItem->getStartTime().getMinute().ToString() + " ";
-						 }
-						 if (iterItem->getStartTime().getDay() == -1) {
-							 UIDay = gcnew String("");
-						 }
-						 else {
-							 UIDay = iterItem->getStartTime().getDay().ToString() + "/";
-						 }
-						 if (iterItem->getStartTime().getMonth() == -1) {
-							 UIMonth = gcnew String("");
-						 }
-						 else {
-							 UIMonth = iterItem->getStartTime().getMonth().ToString() + "/";
-						 }
-						 if (iterItem->getStartTime().getYear() == -1) {
-							 UIYear = gcnew String("");
-						 }
-						 else {
-							 UIYear = iterItem->getStartTime().getYear().ToString() + " ";
-						 }
-						 String^ startTimeString = UIHour + UIMinute;
-						 String^ startDateString = UIDay + UIMonth + UIYear;
-
-						 if (iterItem->getEndTime().getHour() == -1) {
-							 UIHour = gcnew String("");
-						 }
-						 else {
-							 UIHour = iterItem->getEndTime().getHour().ToString() + ":";
-						 }
-						 if (iterItem->getEndTime().getMinute() == -1) {
-							 UIMinute = gcnew String("");
-						 }
-						 else {
-							 UIMinute = iterItem->getEndTime().getMinute().ToString() + " ";
-						 }
-						 if (iterItem->getEndTime().getDay() == -1) {
-							 UIDay = gcnew String("");
-						 }
-						 else {
-							 UIDay = iterItem->getEndTime().getDay().ToString() + "/";
-						 }
-						 if (iterItem->getEndTime().getMonth() == -1) {
-							 UIMonth = gcnew String("");
-						 }
-						 else {
-							 UIMonth = iterItem->getEndTime().getMonth().ToString() + "/";
-						 }
-						 if (iterItem->getEndTime().getYear() == -1) {
-							 UIYear = gcnew String("");
-						 }
-						 else {
-							 UIYear = iterItem->getEndTime().getYear().ToString() + " ";
-						 }
-						 String^ endTimeString = UIHour + UIMinute;
-						 String^ endDateString = UIDay + UIMonth + UIYear;
-
-						 if (startDateString != "" && startTimeString != "") {
-							 //						 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
+						 						 
+						 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
+						 if (startString != "") {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-							 outputBox2->SelectedText = "\tStart" + startTimeString + " " + startDateString + "\r\n";
-						 }
-						 else if (startDateString == "" && startTimeString != "") {
-							 //							 output += "\tStart : " + startTimeString + "\r\n";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-							 outputBox2->SelectedText = "\tStart :" + startTimeString + "\r\n";
-						 }
-						 else if (startDateString != "" && startTimeString == "") {
-							 //	 output += "\tStart : " + startDateString + "\r\n";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-							 outputBox2->SelectedText = "\tStart :" + startDateString + "\r\n";
+							 outputBox2->SelectedText = "\tStart : " + startString + "\r\n";
 						 }
 						 else {
-							 //		 output += "";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 							 outputBox2->SelectedText = "";
 						 }
 
-
-						 if (endDateString != "" && endTimeString != "") {
-							 //							 output += "\tEnd : " + endTimeString + " " + endDateString + "\r\n";
+						 String^ endString = gcnew String(iterItem->displayEndTimeForUser().c_str());
+						 if (endString != "") {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightSalmon;
-							 outputBox2->SelectedText = "\tEnd :" + endTimeString + " " + endDateString + "\r\n";
-						 }
-						 else if (endDateString == "" && endTimeString != "") {
-							 //							 output += "\tEnd : " + endTimeString + "\r\n";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-							 outputBox2->SelectionColor = Color::LightSalmon;
-							 outputBox2->SelectedText = "\tEnd :" + endTimeString + "\r\n";
-						 }
-						 else if (endDateString != "" && endTimeString == "") {
-							 //							 output += "\tEnd : " + endDateString + "\r\n";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-							 outputBox2->SelectionColor = Color::LightSalmon;
-							 outputBox2->SelectedText = "\tEnd :" + endDateString + "\r\n";
+							 outputBox2->SelectedText = "\tEnd : " + endString + "\r\n";
 						 }
 						 else {
-							 //							 output += "";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = Color::LightSalmon;
 							 outputBox2->SelectedText = "";
 						 }
+
 						 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
 						 outputBox2->SelectionColor = Color::BlueViolet;
@@ -608,130 +506,30 @@ namespace iPlannerUI {
 						 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
 					 }
 
-					 //					 output += "\t" + descriptionString + "\r\n";
-					 //					 output += indexString + ". " + nameString + "\t\t\t\t\t" + priorityString + "\t\t" + labelString + "\t\t" + completionString + "\r\n";
-
-					 String^ UIHour;
-					 String^ UIMinute;
-					 String^ UIDay;
-					 String^ UIMonth;
-					 String^ UIYear;
-
-					 if (iterItem->getStartTime().getHour() == -1){
-						 UIHour = gcnew String("");
-					 }
-					 else {
-						 UIHour = iterItem->getStartTime().getHour().ToString() + ":";
-					 }
-					 if (iterItem->getStartTime().getMinute() == -1) {
-						 UIMinute = gcnew String("");
-					 }
-					 else {
-						 UIMinute = iterItem->getStartTime().getMinute().ToString() + " ";
-					 }
-					 if (iterItem->getStartTime().getDay() == -1) {
-						 UIDay = gcnew String("");
-					 }
-					 else {
-						 UIDay = iterItem->getStartTime().getDay().ToString() + "/";
-					 }
-					 if (iterItem->getStartTime().getMonth() == -1) {
-						 UIMonth = gcnew String("");
-					 }
-					 else {
-						 UIMonth = iterItem->getStartTime().getMonth().ToString() + "/";
-					 }
-					 if (iterItem->getStartTime().getYear() == -1) {
-						 UIYear = gcnew String("");
-					 }
-					 else {
-						 UIYear = iterItem->getStartTime().getYear().ToString() + " ";
-					 }
-					 String^ startTimeString = UIHour + UIMinute;
-					 String^ startDateString = UIDay + UIMonth + UIYear;
-
-					 if (iterItem->getEndTime().getHour() == -1) {
-						 UIHour = gcnew String("");
-					 }
-					 else {
-						 UIHour = iterItem->getEndTime().getHour().ToString() + ":";
-					 }
-					 if (iterItem->getEndTime().getMinute() == -1) {
-						 UIMinute = gcnew String("");
-					 }
-					 else {
-						 UIMinute = iterItem->getEndTime().getMinute().ToString() + " ";
-					 }
-					 if (iterItem->getEndTime().getDay() == -1) {
-						 UIDay = gcnew String("");
-					 }
-					 else {
-						 UIDay = iterItem->getEndTime().getDay().ToString() + "/";
-					 }
-					 if (iterItem->getEndTime().getMonth() == -1) {
-						 UIMonth = gcnew String("");
-					 }
-					 else {
-						 UIMonth = iterItem->getEndTime().getMonth().ToString() + "/";
-					 }
-					 if (iterItem->getEndTime().getYear() == -1) {
-						 UIYear = gcnew String("");
-					 }
-					 else {
-						 UIYear = iterItem->getEndTime().getYear().ToString() + " ";
-					 }
-					 String^ endTimeString = UIHour + UIMinute;
-					 String^ endDateString = UIDay + UIMonth + UIYear;
-
-					 if (startDateString != "" && startTimeString != "") {
-						 output += "\tStart : " + startTimeString + " " + startDateString + "\r\n";
+					 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
+					 if (startString != "") {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-						 outputBox2->SelectedText = "\tStart" + startTimeString + " " + startDateString + "\r\n";
-					 }
-					 else if (startDateString == "" && startTimeString != "") {
-						 output += "\tStart : " + startTimeString + "\r\n";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-						 outputBox2->SelectedText = "\tStart :" + startTimeString + "\r\n";
-					 }
-					 else if (startDateString != "" && startTimeString == "") {
-						 output += "\tStart : " + startDateString + "\r\n";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-						 outputBox2->SelectedText = "\tStart :" + startDateString + "\r\n";
+						 outputBox2->SelectedText = "\tStart : " + startString + "\r\n";
 					 }
 					 else {
-						 output += "";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 						 outputBox2->SelectedText = "";
 					 }
 
-
-					 if (endDateString != "" && endTimeString != "") {
-						 output += "\tEnd : " + endTimeString + " " + endDateString + "\r\n";
+					 String^ endString = gcnew String(iterItem->displayEndTimeForUser().c_str());
+					 if (endString != "") {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightSalmon;
-						 outputBox2->SelectedText = "\tEnd :" + endTimeString + " " + endDateString + "\r\n";
-					 }
-					 else if (endDateString == "" && endTimeString != "") {
-						 output += "\tEnd : " + endTimeString + "\r\n";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-						 outputBox2->SelectionColor = Color::LightSalmon;
-						 outputBox2->SelectedText = "\tEnd :" + endTimeString + "\r\n";
-					 }
-					 else if (endDateString != "" && endTimeString == "") {
-						 output += "\tEnd : " + endDateString + "\r\n";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-						 outputBox2->SelectionColor = Color::LightSalmon;
-						 outputBox2->SelectedText = "\tEnd :" + endDateString + "\r\n";
+						 outputBox2->SelectedText = "\tEnd : " + endString + "\r\n";
 					 }
 					 else {
-						 output += "";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = Color::LightSalmon;
 						 outputBox2->SelectedText = "";
 					 }
+
 					 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
 					 outputBox2->SelectionColor = Color::BlueViolet;
