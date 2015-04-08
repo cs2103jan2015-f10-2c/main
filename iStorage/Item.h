@@ -102,6 +102,12 @@ public:
 	string displayStartTime();
 	string displayEndTime();
 	string displayLastUpdatedTime();
+
+	//	Returns string with item details for display to user
+	//	Pre:	Nil
+	//	Post:	String with existing details are returned (intuitive to user)
+	string displayStartTimeForUser();
+	string displayEndTimeForUser();
 };
 
 #endif

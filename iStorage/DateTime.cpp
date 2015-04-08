@@ -15,7 +15,7 @@ const int DateTime::MIN_MINUTE = 0;
 const int DateTime::MAX_MINUTE = 59;
 const int DateTime::EMPTYFIELD_DATETIME = -1;
 const int DateTime::INDICATOR_FAILEDSETATTEMPT = -2;
-const char DateTime::DISPLAY_SEPARATOR_DATE = ' ';
+const char DateTime::DISPLAY_SEPARATOR_DATE = '/';
 const char DateTime::DISPLAY_SEPARATOR_TIME = ':';
 const char DateTime::DISPLAY_SEPARATOR_DATETIME = ' ';
 const char DateTime::DISPLAY_FILLER = '0';
@@ -281,6 +281,36 @@ string DateTime::displayDateTime() {
 
 	if (isValidDate(_year, _month, _day)) {
 		displayOutput << displayDate();
+
+		if (isValidTime(_hour, _minute)) {
+			displayOutput << DISPLAY_SEPARATOR_DATETIME;
+			displayOutput << displayTime();
+		}
+	} else if (isValidTime(_hour, _minute)) {
+		displayOutput << displayTime();
+	}
+
+	return displayOutput.str();
+}
+
+//	Returns string with DD/MM/YYYY
+string DateTime::displayDateForUser() {
+	ostringstream displayOutput;
+
+	displayOutput
+		<< setw(2) << _day
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _month
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(4) << _year;
+
+	return displayOutput.str();
+}
+
+//	Returns date in DD/MM/YYYY, time in HH:MM, and both in DD/MM/YYYY HH:MM
+string DateTime::displayDateTimeForUser() {
+	ostringstream displayOutput;
+
+	if (isValidDate(_year, _month, _day)) {
+		displayOutput << displayDateForUser();
 
 		if (isValidTime(_hour, _minute)) {
 			displayOutput << DISPLAY_SEPARATOR_DATETIME;

@@ -352,3 +352,13 @@ string Item::displayLastUpdatedTime() {
 	DateTime lastUpdateTime(_lastUpdate.GetYear(), _lastUpdate.GetMonth(), _lastUpdate.GetDay(), _lastUpdate.GetHour(), _lastUpdate.GetMinute());
 	return lastUpdateTime.displayDateTime();
 }
+
+//	Retrieves the item's start time for display to user
+string Item::displayStartTimeForUser() {
+	return _startTime.displayDateTimeForUser();
+}
+
+//	Retrieves the item's end time for display to user
+string Item::displayEndTimeForUser() {
+	return _endTime.displayDateTimeForUser();
+}

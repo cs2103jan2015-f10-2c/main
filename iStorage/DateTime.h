@@ -111,6 +111,8 @@ public:
 	string displayDate();
 	string displayTime();
 	string displayDateTime();
+	string displayDateForUser();
+	string displayDateTimeForUser();
 };
 
 #endif
