@@ -44,7 +44,7 @@ public:
 		}
 		}*/
 
-	TEST_METHOD(parserExecuteCommandAndTextParsing) {
+	TEST_METHOD(parserExecuteCommandAndTextParsingTest) {
 		// testText[4] tests for invalid case where blank string is not allowed
 		string testCommand[] = { "del", "del", "search", "sort", "view" };
 		string testText[] = { "123", "123abc", "abc", " ", "" };
@@ -66,7 +66,7 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserExecuteCommandParsing) {
+	TEST_METHOD(parserExecuteCommandParsingTest) {
 		// testText[1] and testText[3] tests for invalid commands where there
 		// are invalid texts after the commands
 		string testCommand[] = { "undo", "undo", "exit", "exit" };
@@ -89,7 +89,7 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserExecuteModifierAndTextParsing) {
+	TEST_METHOD(parserExecuteModifierAndTextParsingTest) {
 		// testText[4] tests for invalid case where blank string is not allowed
 		string testCommand[] = { "name", "desc", "priority", "desc", "priority" };
 		string testText[] = { "123", "123abc", "abc", "@@@", "high" };
@@ -108,6 +108,40 @@ public:
 			string actualText = iter->text;
 			Assert::AreEqual(expectedCommand[i], actualCommand);
 			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteSearchParsingTest) {
+		string testInput = "test";
+		string expectedCommand = "search";
+		string expectedText = "test";
+
+		testParser.executeSearchParsing(testInput);
+	
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText, actualText);
+		}
+
+		testParser.clearParseInfo();
+
+		string testInputPlus = "test + abc + 123 + @@@";
+		string expectedTextPlus[] = { "test", "abc", "123", "@@@" };
+
+		testParser.executeSearchParsing(testInputPlus);
+
+		testList = testParser.getParseInfo();
+		i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedTextPlus[i], actualText);
 		}
 	}
 

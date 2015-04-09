@@ -106,6 +106,7 @@ public:
 	static const char CHAR_OBLIQUE;
 	static const char CHAR_HYPHEN;
 	static const char CHAR_COLON;
+	static const char CHAR_PLUS;
 
 	// used for string return type as well as for setting _parseInfo list's text
 	static const string MESSAGE_SUCCESS;
@@ -191,6 +192,9 @@ public:
 	// Post:	sets modifier and text to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeModifierAndTextParsing(const string, string);
+	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
+	// Post:	sets modifier and text to _parseInfo list
+	string executeSearchParsing(const string);
 
 	// ================
 	// helper functions

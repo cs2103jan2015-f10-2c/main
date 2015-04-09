@@ -62,6 +62,7 @@ const char iParser::CHAR_COMMA = ',';
 const char iParser::CHAR_OBLIQUE = '/';
 const char iParser::CHAR_HYPHEN = '-';
 const char iParser::CHAR_COLON = ':';
+const char iParser::CHAR_PLUS = '+';
 
 const string iParser::MESSAGE_SUCCESS = "success";
 const string iParser::MESSAGE_FAILURE = "failure";
@@ -100,7 +101,6 @@ list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
 }
 
 string iParser::executeParsing(string userInput) {
-	;
 	trimText(userInput);
 	removeConsecutiveWhiteSpace(userInput);
 	string command = retrieveCommandOrModifier(userInput);
@@ -120,7 +120,7 @@ string iParser::executeParsing(string userInput) {
 	} else if (command == COMMAND_SORT) {
 		executeCommandAndTextParsing(COMMAND_SORT, textWithoutCommand);
 	} else if (command == COMMAND_SEARCH) {
-		executeCommandAndTextParsing(COMMAND_SEARCH, textWithoutCommand);
+		executeSearchParsing(textWithoutCommand);
 	} else if (command == COMMAND_VIEW) {
 		executeCommandAndTextParsing(COMMAND_VIEW, textWithoutCommand);
 	} else if (command == COMMAND_SAVE) {
@@ -295,6 +295,26 @@ string iParser::executeModifierAndTextParsing(const string ModifierType, string 
 	} else {
 		throw MESSAGE_INVALID_INPUT;
 	}
+}
+
+string iParser::executeSearchParsing(const string text) {
+	if (text == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+
+	unsigned int startIndex = INDEX_START;
+	unsigned int endIndex = INDEX_START;
+	do {
+		endIndex = text.find_first_of("+", startIndex);
+		string textToSearch = text.substr(startIndex, endIndex - startIndex);
+		trimText(textToSearch);
+		convertToLowerCase(textToSearch);
+		startIndex = endIndex + 1;
+		setParseInfo(COMMAND_SEARCH, textToSearch);
+	} while (startIndex != 0);
+
+	return MESSAGE_SUCCESS;
 }
 
 string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInformation, const string command) {
