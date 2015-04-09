@@ -360,12 +360,17 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 	bool hasEnd = false;
 	bool hasDescription = false;
 	bool hasPriority = false;
+	bool hasRemove = false;
 
 	for (unsigned int index = 1; index < tokenisedInformation.size(); index++) {
 		string singleInformation = tokenisedInformation[index];
 		string modifier = retrieveCommandOrModifier(singleInformation);
 		//ModifierType modifierType = determineModifierType(modifier);
 		string textWithoutCommand = removeFirstStringToken(singleInformation);
+
+		if (hasRemove) {
+			throw MESSAGE_INVALID_INPUT;
+		}
 
 		if (modifier == STRING_NAME) {
 			if (command == COMMAND_EDIT && !hasItem) {
@@ -422,9 +427,11 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
 		} else if (modifier == STRING_REMOVE || modifier == STRING_RMV) {
-			if (!hasItem && !hasDateOrDue && !hasStart && !hasEnd && !hasDescription) {
+			if (command == COMMAND_EDIT && !hasItem && !hasDateOrDue && !hasStart && !hasEnd && !hasDescription) {
 				convertToLowerCase(textWithoutCommand);
 				executeRemoveParsing(textWithoutCommand);
+			} else if (command == COMMAND_ADD) {
+				throw MESSAGE_INVALID_ADD_ITEM;
 			}
 		} else {
 			throw MESSAGE_INVALID_INPUT;

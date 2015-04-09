@@ -167,7 +167,7 @@ public:
 
 	TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
 		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
-		string testInput[] = { "edit abc", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-priority H" };
+		string testInput[] = { "edit 1", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-priority H" };
 		string expectedCommand[] = { "name", "description", "start", "priority" };
 		string expectedText[] = { "testName", "WEAR FORMAL", "10 11 12 22 00", "h" };
 		vector<string> testVector;
@@ -189,6 +189,26 @@ public:
 		}
 
 		testParser.clearParseInfo();
+
+		string testInputRemove[] = { "edit 2", "-remove date" };
+		string expectedCommandRemove[] = { "start", "end" };
+		string expectedTextRemove = "-1 -1 -1 -1 -1";
+
+		testVector.clear();
+		for (int i = 0; i < 2; i++) {
+			testVector.push_back(testInputRemove[i]);
+		}
+
+		testParser.checkAndSetTokenisedInformation(testVector, "edit");
+
+		testList = testParser.getParseInfo();
+		i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommandRemove[i], actualCommand);
+			Assert::AreEqual(expectedTextRemove, actualText);
+		}
 	}
 
 	TEST_METHOD(parserRetrieveCommandOrModifierTest) {
