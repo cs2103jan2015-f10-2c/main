@@ -57,6 +57,7 @@ public:
 	static const string COMMAND_VIEW;
 	static const string COMMAND_SAVE;
 	static const string COMMAND_DONE;
+	static const string COMMAND_UNDONE;
 	static const string COMMAND_EXIT;
 
 	// used to set as command for logic to intepret
@@ -76,7 +77,7 @@ public:
 	static const string MODIFIER_DESCRIPTION;
 	static const string MODIFIER_DESC;
 	static const string MODIFIER_PRIORITY;
-	static const string MODIFIER_PRIORITY_EXCLAMATION;
+	static const string MODIFIER_PRIORITY_P;
 
 	// used to identify modifiers in UserInput
 	static const string STRING_NAME;
@@ -88,7 +89,7 @@ public:
 	static const string STRING_DESC;
 	static const string STRING_LABEL;
 	static const string STRING_PRIORITY;
-	static const string STRING_PRIORITY_EXCLAMATION;
+	static const string STRING_PRIORITY_P;
 	static const string STRING_REMOVE;
 	static const string STRING_RMV;
 

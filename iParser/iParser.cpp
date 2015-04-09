@@ -16,6 +16,7 @@ const string iParser::COMMAND_SEARCH = "search";
 const string iParser::COMMAND_VIEW = "view";
 const string iParser::COMMAND_SAVE = "save";
 const string iParser::COMMAND_DONE = "done";
+const string iParser::COMMAND_UNDONE = "undone";
 const string iParser::COMMAND_EXIT = "exit";
 
 const string iParser::COMMAND_NAME = "name";
@@ -33,7 +34,7 @@ const string iParser::MODIFIER_END = "end";
 const string iParser::MODIFIER_DESCRIPTION = "description";
 const string iParser::MODIFIER_DESC = "desc";
 const string iParser::MODIFIER_PRIORITY = "priority";
-const string iParser::MODIFIER_PRIORITY_EXCLAMATION = "!";
+const string iParser::MODIFIER_PRIORITY_P = "p";
 
 const string iParser::STRING_NAME = "-name";
 const string iParser::STRING_DATE = "-date";
@@ -44,7 +45,7 @@ const string iParser::STRING_DESCRIPTION = "-description";
 const string iParser::STRING_DESC = "-desc";
 const string iParser::STRING_LABEL = "-label";
 const string iParser::STRING_PRIORITY = "-priority";
-const string iParser::STRING_PRIORITY_EXCLAMATION = "-!";
+const string iParser::STRING_PRIORITY_P = "-p";
 const string iParser::STRING_REMOVE = "-remove";
 const string iParser::STRING_RMV = "-rmv";
 
@@ -135,6 +136,8 @@ string iParser::executeParsing(string userInput) {
 		executeCommandAndTextParsing(COMMAND_SAVE, textWithoutCommand);
 	} else if (command == COMMAND_DONE) {
 		executeCommandAndTextParsing(COMMAND_DONE, textWithoutCommand);
+	} else if (command == COMMAND_UNDONE) {
+		executeCommandAndTextParsing(COMMAND_UNDONE, textWithoutCommand);
 	} else if (command == COMMAND_EXIT) {
 		executeCommandParsing(COMMAND_EXIT, userInput);
 	} else {
@@ -342,7 +345,7 @@ string iParser::executeRemoveParsing(const string textToRemove) {
 		setParseInfo(COMMAND_END, dateTime);
 	} else if (textToRemove == MODIFIER_DESCRIPTION || textToRemove == MODIFIER_DESC) {
 		setParseInfo(COMMAND_DESCRIPTION, STRING_BLANK);
-	} else if (textToRemove == MODIFIER_PRIORITY || textToRemove == MODIFIER_PRIORITY_EXCLAMATION) {
+	} else if (textToRemove == MODIFIER_PRIORITY || textToRemove == MODIFIER_PRIORITY_P) {
 		setParseInfo(COMMAND_PRIORITY, STRING_BLANK);
 	} else {
 		throw MESSAGE_INVALID_INPUT;
@@ -418,7 +421,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
-		} else if (modifier == STRING_PRIORITY || modifier == STRING_PRIORITY_EXCLAMATION) {
+		} else if (modifier == STRING_PRIORITY || modifier == STRING_PRIORITY_P) {
 			if (!hasPriority) {
 				convertToLowerCase(textWithoutCommand);
 				executeModifierAndTextParsing(COMMAND_PRIORITY, textWithoutCommand);
@@ -638,8 +641,6 @@ string iParser::trimBack(string text) {
 }
 
 bool iParser::hasStartEndDateTime(string dateTimeString) {
-	assert(dateTimeString != STRING_BLANK);
-
 	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
 	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
 
@@ -1274,7 +1275,8 @@ bool iParser::isModifier(string modifier) {
 	return (modifier == STRING_NAME || modifier == STRING_DATE ||
 		modifier == STRING_DUE || modifier == STRING_START ||
 		modifier == STRING_END || modifier == STRING_DESCRIPTION ||
-		modifier == STRING_DESC || modifier == STRING_LABEL || modifier == STRING_PRIORITY);
+		modifier == STRING_DESC || modifier == STRING_LABEL ||
+		modifier == STRING_PRIORITY || modifier == STRING_PRIORITY_P);
 }
 
 bool iParser::areDigits(const string text) {

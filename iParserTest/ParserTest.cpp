@@ -146,7 +146,7 @@ public:
 	}
 
 	TEST_METHOD(parserExecuteRemoveParsingTest) {
-		string testText[] = { "date", "start", "end", "description", "desc", "priority", "!" };
+		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
 		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
 		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
 
@@ -167,7 +167,7 @@ public:
 
 	TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
 		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
-		string testInput[] = { "edit 1", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-priority H" };
+		string testInput[] = { "edit 1", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-p H" };
 		string expectedCommand[] = { "name", "description", "start", "priority" };
 		string expectedText[] = { "testName", "WEAR FORMAL", "10 11 12 22 00", "h" };
 		vector<string> testVector;
