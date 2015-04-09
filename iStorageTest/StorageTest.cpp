@@ -1909,7 +1909,66 @@ public:
 	}
 
 	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByCompletion) {
-		//
+		Schedule completionTestSchedule;
+		vector<Item> filteredVectorByCompletion;
+
+		Item *completedItem1 = new Item(string("This is Completed #1"));
+		completedItem1->setItemID(1);
+		completedItem1->setCompletion(true);
+
+		Item *completedItem2 = new Item(string("This is Completed #2"));
+		completedItem2->setItemID(2);
+		completedItem2->setCompletion(true);
+
+		Item *completedItem3 = new Item(string("This is Completed #3"));
+		completedItem3->setItemID(3);
+		completedItem3->setCompletion(true);
+
+		Item *completedItem4 = new Item(string("This is Completed #4"));
+		completedItem4->setItemID(4);
+		completedItem4->setCompletion(true);
+
+		Item *uncompletedItem1 = new Item(string("This is Uncompleted #1"));
+		uncompletedItem1->setItemID(5);
+		uncompletedItem1->setCompletion(false);
+
+		Item *uncompletedItem2 = new Item(string("This is Uncompleted #2"));
+		uncompletedItem2->setItemID(6);
+		uncompletedItem2->setCompletion(false);
+
+		completionTestSchedule.addItem(completedItem1);
+		completionTestSchedule.addItem(completedItem2);
+		completionTestSchedule.addItem(completedItem3);
+		completionTestSchedule.addItem(completedItem4);
+		completionTestSchedule.addItem(uncompletedItem1);
+		completionTestSchedule.addItem(uncompletedItem2);
+
+		filteredVectorByCompletion = completionTestSchedule.retrieveDisplayScheduleFilteredByCompletion(true);
+		Assert::AreEqual(0, int(filteredVectorByCompletion.size()));
+
+		completionTestSchedule.resetDisplaySchedule();
+		Assert::AreEqual(6, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+
+		filteredVectorByCompletion = completionTestSchedule.retrieveDisplayScheduleFilteredByCompletion(true);
+		Assert::AreEqual(4, int(filteredVectorByCompletion.size()));
+
+		completionTestSchedule.resetDisplaySchedule();
+		filteredVectorByCompletion = completionTestSchedule.retrieveDisplayScheduleFilteredByCompletion(false);
+		Assert::AreEqual(2, int(filteredVectorByCompletion.size()));
+
+		delete completedItem1;
+		delete completedItem2;
+		delete completedItem3;
+		delete completedItem4;
+		delete uncompletedItem1;
+		delete uncompletedItem2;
+
+		completedItem1 = NULL;
+		completedItem2 = NULL;
+		completedItem3 = NULL;
+		completedItem4 = NULL;
+		uncompletedItem1 = NULL;
+		uncompletedItem2 = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByDateTime) {
