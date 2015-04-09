@@ -145,6 +145,26 @@ public:
 		}
 	}
 
+	TEST_METHOD(parserExecuteRemoveParsingTest) {
+		string testText[] = { "date", "start", "end", "description", "desc", "priority", "!" };
+		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
+		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
+
+		for (int i = 0; i < 7; i++) {
+			testParser.executeRemoveParsing(testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
 	TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
 		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
 		string testInput[] = { "edit abc", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-priority H" };

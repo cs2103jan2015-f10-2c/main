@@ -65,12 +65,18 @@ public:
 	static const string COMMAND_END;
 	static const string COMMAND_DESCRIPTION;
 	static const string COMMAND_PRIORITY;
+	static const string COMMAND_REMOVE;
+	static const string COMMAND_RMV;
 
 	// used to identify whether date time input is appointment or due date
 	static const string MODIFIER_DATE;
 	static const string MODIFIER_DUE;
 	static const string MODIFIER_START;
 	static const string MODIFIER_END;
+	static const string MODIFIER_DESCRIPTION;
+	static const string MODIFIER_DESC;
+	static const string MODIFIER_PRIORITY;
+	static const string MODIFIER_PRIORITY_EXCLAMATION;
 
 	// used to identify modifiers in UserInput
 	static const string STRING_NAME;
@@ -83,6 +89,8 @@ public:
 	static const string STRING_LABEL;
 	static const string STRING_PRIORITY;
 	static const string STRING_PRIORITY_EXCLAMATION;
+	static const string STRING_REMOVE;
+	static const string STRING_RMV;
 
 	// used for date time functions and checks
 	static const string STRING_DAYS[];
@@ -192,9 +200,12 @@ public:
 	// Post:	sets modifier and text to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeModifierAndTextParsing(const string, string);
-	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
-	// Post:	sets modifier and text to _parseInfo list
+	// Pre:		
+	// Post:	
 	string executeSearchParsing(const string);
+	// Pre:		
+	// Post:	
+	string executeRemoveParsing(const string);
 
 	// ================
 	// helper functions
