@@ -28,11 +28,12 @@ private:
 	static const string ITEM_VERIFICATION_ERROR_INVALID_PRIORITY;
 	static const string ITEM_VERIFICATION_ERROR_INVALID_LABEL;
 
-	////////////////////////////////////////
-	//CHANGE BACK TO PRIVATE AFTER TESTING//
-	////////////////////////////////////////
+/* #ifndef TESTMODE
+private:
+#else
 public:
-
+#endif */
+public:
 	bool isValidName();
 	bool isValidDescription();
 	bool isValidStartDateTime();

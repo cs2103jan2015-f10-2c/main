@@ -1456,6 +1456,11 @@ public:
 	TEST_CLASS(TEST_FILTER) {
 public:
 
+	// Not done since label funcitonality is not implemented
+	TEST_METHOD(ScheduleTestFilterDisplayScheduleByLabel) {
+		// TODO: Your test code here
+	}
+
 	TEST_METHOD(ScheduleTestFilterDisplayScheduleByPriority) {
 		Schedule prioritySchedule;
 		bool isSamePriorityAsDefinedByUser;
@@ -1529,9 +1534,6 @@ public:
 		Assert::AreEqual(10, int(prioritySchedule.getSizeOfDisplaySchedule()));
 
 		prioritySchedule.resetDisplaySchedule();
-		//Assert::AreEqual(' ', prioritySchedule.retrieveItemGivenDisplayVectorIndex(0).getPriority());
-		//Assert::AreEqual(string(" "), prioritySchedule.retrieveItemGivenDisplayVectorIndex(5).getItemName());
-
 		Assert::AreEqual(11, int(prioritySchedule.getSizeOfDisplaySchedule()));
 		isSamePriorityAsDefinedByUser = prioritySchedule.filterDisplayScheduleByPriority(4, 'M');
 		Assert::AreEqual(false, isSamePriorityAsDefinedByUser);
@@ -1563,10 +1565,6 @@ public:
 		lowPriorityItem3 = NULL;
 		lowPriorityItem4 = NULL;
 		lowPriorityItem5 = NULL;
-	}
-
-	TEST_METHOD(ScheduleTestFilterDisplayScheduleByLabel) {
-		// TODO: Your test code here
 	}
 
 	TEST_METHOD(ScheduleTestFilterDisplayScheduleByCompletion) {
@@ -1806,6 +1804,120 @@ public:
 		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(2, string("wahlau eh"));
 		Assert::AreEqual(2, int(keywordSchedule.getSizeOfDisplaySchedule()));
 		Assert::AreEqual(true, hasKeyword);
+	}
+
+	// Not done since label funcitonality is not implemented
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByLabel) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByPriority) {
+		Schedule prioritySchedule;
+		vector<Item> filteredVectorByPriority;
+
+		Item *highPriorityItem1 = new Item(string("This is High #1"));
+		highPriorityItem1->setItemID(1);
+		highPriorityItem1->setPriority('H');
+
+		Item *highPriorityItem2 = new Item(string("This is High #2"));
+		highPriorityItem2->setItemID(2);
+		highPriorityItem2->setPriority('H');
+
+		Item *highPriorityItem3 = new Item(string("This is High #3"));
+		highPriorityItem3->setItemID(3);
+		highPriorityItem3->setPriority('H');
+
+		Item *highPriorityItem4 = new Item(string("This is High #4"));
+		highPriorityItem4->setItemID(4);
+		highPriorityItem4->setPriority('H');
+
+		Item *medPriorityItem1 = new Item(string("This is Medium #1"));
+		medPriorityItem1->setItemID(5);
+		medPriorityItem1->setPriority('M');
+
+		Item *medPriorityItem2 = new Item(string("This is Medium #2"));
+		medPriorityItem2->setItemID(6);
+		medPriorityItem2->setPriority('M');
+
+		Item *lowPriorityItem1 = new Item(string("This is Low #1"));
+		lowPriorityItem1->setItemID(7);
+		lowPriorityItem1->setPriority('L');
+
+		Item *lowPriorityItem2 = new Item(string("This is Low #2"));
+		lowPriorityItem2->setItemID(8);
+		lowPriorityItem2->setPriority('L');
+
+		Item *lowPriorityItem3 = new Item(string("This is Low #3"));
+		lowPriorityItem3->setItemID(9);
+		lowPriorityItem3->setPriority('L');
+
+		Item *lowPriorityItem4 = new Item(string("This is Low #4"));
+		lowPriorityItem4->setItemID(10);
+		lowPriorityItem4->setPriority('L');
+
+		Item *lowPriorityItem5 = new Item(string("This is Low #5"));
+		lowPriorityItem5->setItemID(11);
+		lowPriorityItem5->setPriority('L');
+
+		prioritySchedule.addItem(highPriorityItem1);
+		prioritySchedule.addItem(highPriorityItem2);
+		prioritySchedule.addItem(highPriorityItem3);
+		prioritySchedule.addItem(highPriorityItem4);
+		prioritySchedule.addItem(medPriorityItem1);
+		prioritySchedule.addItem(medPriorityItem2);
+		prioritySchedule.addItem(lowPriorityItem1);
+		prioritySchedule.addItem(lowPriorityItem2);
+		prioritySchedule.addItem(lowPriorityItem3);
+		prioritySchedule.addItem(lowPriorityItem4);
+		prioritySchedule.addItem(lowPriorityItem5);
+
+		prioritySchedule.resetDisplaySchedule();
+		filteredVectorByPriority = prioritySchedule.retrieveDisplayScheduleFilteredByPriority('H');
+		Assert::AreEqual(4, int(filteredVectorByPriority.size()));
+
+		prioritySchedule.resetDisplaySchedule();
+		filteredVectorByPriority = prioritySchedule.retrieveDisplayScheduleFilteredByPriority('L');
+		Assert::AreEqual(5, int(filteredVectorByPriority.size()));
+
+		prioritySchedule.resetDisplaySchedule();
+		filteredVectorByPriority = prioritySchedule.retrieveDisplayScheduleFilteredByPriority('M');
+		Assert::AreEqual(2, int(filteredVectorByPriority.size()));
+
+		delete highPriorityItem1;
+		delete highPriorityItem2;
+		delete highPriorityItem3;
+		delete highPriorityItem4;
+		delete medPriorityItem1;
+		delete medPriorityItem2;
+		delete lowPriorityItem1;
+		delete lowPriorityItem2;
+		delete lowPriorityItem3;
+		delete lowPriorityItem4;
+		delete lowPriorityItem5;
+
+		highPriorityItem1 = NULL;
+		highPriorityItem2 = NULL;
+		highPriorityItem3 = NULL;
+		highPriorityItem4 = NULL;
+		medPriorityItem1 = NULL;
+		medPriorityItem2 = NULL;
+		lowPriorityItem1 = NULL;
+		lowPriorityItem2 = NULL;
+		lowPriorityItem3 = NULL;
+		lowPriorityItem4 = NULL;
+		lowPriorityItem5 = NULL;
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByCompletion) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByDateTime) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByKeyword) {
+		//
 	}
 
 	};
