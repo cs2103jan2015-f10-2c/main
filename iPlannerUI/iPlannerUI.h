@@ -1,3 +1,4 @@
+//@Shri Kishen Rajendran A0105180W
 //	GUI
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
 //	Coder:	Shri Kishen Rajendran A0105180W
@@ -48,6 +49,8 @@ namespace iPlannerUI {
 				delete testLogic;
 			}
 		}
+
+	//@Shri Kishen Rajendran generated
 	private: System::Windows::Forms::TextBox^  commandInputBox;
 
 
@@ -261,6 +264,8 @@ namespace iPlannerUI {
 
 		}
 #pragma endregion
+
+		//@Shri Kishen Rajendran 
 		void MarshalString(String ^ s, string& os) {
 			using namespace Runtime::InteropServices;
 			const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
@@ -276,9 +281,9 @@ namespace iPlannerUI {
 				 string stdUserInput;
 				 MarshalString(userInput, stdUserInput);
 				 vector<Item> tempItem;
+
 				 if (e->KeyCode == Keys::Enter) {
 					 display = testLogic->initiateCommandAction(testParser, stdUserInput);
-
 					 outputBox2->Clear();
 
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 11, FontStyle::Bold);
@@ -287,18 +292,15 @@ namespace iPlannerUI {
 
 					 tempItem = testLogic->getDisplaySchedule();
 					 vector<Item>::iterator iterItem;
-					 int index = 0;
+					 int displayIndex = 0;
 					 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
-						 String ^indexString = (++index).ToString();
+						 String ^indexString = (++displayIndex).ToString();
 						 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 						 outputBox2->SelectedText = indexString + ". ";
 
-
-						 char pri = iterItem->getPriority();
-
-						 if (pri == 72) {
+						 if (iterItem->getPriority() == 72) {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 							 outputBox2->SelectionColor = Color::Red;
 							 outputBox2->SelectedText = "\tH";
@@ -306,17 +308,15 @@ namespace iPlannerUI {
 							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 							 outputBox2->SelectedText = "\t" + nameString;
 
-						 }
-						 else if (pri == 77) {
+						 } else if (iterItem->getPriority() == 77) {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 							 outputBox2->SelectionColor = Color::Yellow;
 							 outputBox2->SelectedText = "\tM";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 							 outputBox2->SelectedText = "\t" + nameString;
-						 }
-						 else if (pri == 76) {
 
+						 } else if (iterItem->getPriority() == 76) {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 							 outputBox2->SelectionColor = Color::LawnGreen;
 							 outputBox2->SelectedText = "\tL";
@@ -324,8 +324,7 @@ namespace iPlannerUI {
 							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 							 outputBox2->SelectedText = "\t" + nameString;
 
-						 }
-						 else {
+						 } else {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 							 outputBox2->SelectedText = "\t-";
@@ -333,8 +332,6 @@ namespace iPlannerUI {
 							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 							 outputBox2->SelectedText = "\t" + nameString;
 						 }
-
-
 
 						 /*					 String^ labelString;
 						 if (iterItem.getLabel() == 'E') {
@@ -369,14 +366,12 @@ namespace iPlannerUI {
 						 }*/
 
 						 String^ completionString;
-
 						 if (iterItem->getCompletion() == true) {
 							 completionString = "Done";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::Gold;
 							 outputBox2->SelectedText = " (D)\r\n";
-						 }
-						 else {
+						 } else {
 							 completionString = "Not Done";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::Silver;
@@ -388,8 +383,7 @@ namespace iPlannerUI {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 							 outputBox2->SelectedText = "\t\t   Start : " + startString + "\r\n";
-						 }
-						 else {
+						 } else {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 							 outputBox2->SelectedText = "";
@@ -400,8 +394,7 @@ namespace iPlannerUI {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightSalmon;
 							 outputBox2->SelectedText = "\t\t   End  : " + endString + "\r\n";
-						 }
-						 else {
+						 } else {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightSalmon;
 							 outputBox2->SelectedText = "";
@@ -412,8 +405,7 @@ namespace iPlannerUI {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
 							 outputBox2->SelectionColor = Color::BlueViolet;
 							 outputBox2->SelectedText = "\t\t   " + descriptionString + "\r\n\r\n";
-						 }
-						 else {
+						 } else {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
 							 outputBox2->SelectionColor = Color::BlueViolet;
 							 outputBox2->SelectedText = "\r\n";
@@ -426,19 +418,6 @@ namespace iPlannerUI {
 
 					 commandInputBox->Clear();
 				 }
-				 /*
-				 if (e->KeyCode == Keys::Alt && e->KeyCode == Keys::L) {
-				 outputBox2->BackColor = Color::White;
-				 outputBox2->ForeColor = Color::Crimson;
-				 commandInputBox->BackColor = Color::White;
-				 commandInputBox->ForeColor = Color::Crimson;
-				 }
-				 if (e->KeyCode == Keys::Alt && e->KeyCode == Keys::D) {
-				 outputBox2->BackColor = Color::Black;
-				 outputBox2->ForeColor = Color::Aqua;
-				 commandInputBox->BackColor = Color::Black;
-				 commandInputBox->ForeColor = Color::Aqua;
-				 }*/
 
 	}
 
@@ -452,25 +431,19 @@ namespace iPlannerUI {
 				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 11, FontStyle::Bold);
 				 outputBox2->SelectionColor = Color::Beige;
 				 outputBox2->SelectedText = "\t\t\t    SCHEDULE\r\n\r\n";
-				 /*
-				 outputBox2->SelectionColor = Color::;
-				 outputBox2->SelectedText = "SCHEDULE2\r\n";
-				 */
 				 tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
-				 int index = 0;
+				 int displayIndex = 0;
+
 				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
 					 
-					 String ^indexString = (++index).ToString();
+					 String ^indexString = (++displayIndex).ToString();
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 					 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 					 outputBox2->SelectedText = indexString + ". ";
 
-					 
-					 char pri = iterItem->getPriority();
-
-					 if (pri == 72) {
+					 if (iterItem->getPriority() == 72) {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 						 outputBox2->SelectionColor = Color::Red;
 						 outputBox2->SelectedText = "\tH";
@@ -478,17 +451,15 @@ namespace iPlannerUI {
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 						 outputBox2->SelectedText = "\t" + nameString;
 						 
-					 }
-					 else if (pri == 77) {
+					 } else if (iterItem->getPriority() == 77) {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 						 outputBox2->SelectionColor = Color::Yellow;
 						 outputBox2->SelectedText = "\tM";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 						 outputBox2->SelectedText = "\t" + nameString;
-					 }
-					 else if (pri == 76) {
 
+					 } else if (iterItem->getPriority() == 76) {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 						 outputBox2->SelectionColor = Color::LawnGreen;
 						 outputBox2->SelectedText = "\tL";
@@ -496,8 +467,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 						 outputBox2->SelectedText = "\t" + nameString;
 
-					 }
-					 else {
+					 } else {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 						 outputBox2->SelectedText = "\t-";
@@ -541,14 +511,12 @@ namespace iPlannerUI {
 					 }*/
 					 
 					 String^ completionString;
-
 					 if (iterItem->getCompletion() == true) {
 						 completionString = "Done";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::Gold;
 						 outputBox2->SelectedText = " (D)\r\n";
-					 }
-					 else {
+					 } else {
 						 completionString = "Not Done";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::Silver;
@@ -560,8 +528,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 						 outputBox2->SelectedText = "\t\t   Start : " + startString + "\r\n";
-					 }
-					 else {
+					 } else {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 						 outputBox2->SelectedText = "";
@@ -572,8 +539,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightSalmon;
 						 outputBox2->SelectedText = "\t\t   End  : " + endString + "\r\n";
-					 }
-					 else {
+					 } else {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightSalmon;
 						 outputBox2->SelectedText = "";
@@ -584,8 +550,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
 						 outputBox2->SelectionColor = Color::BlueViolet;
 						 outputBox2->SelectedText = "\t\t   " + descriptionString + "\r\n\r\n";
-					 }
-					 else {
+					 } else {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
 						 outputBox2->SelectionColor = Color::BlueViolet;
 						 outputBox2->SelectedText = "\r\n";
