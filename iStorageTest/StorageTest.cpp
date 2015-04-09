@@ -1737,6 +1737,45 @@ public:
 		itemWithStartAndEndTime1 = NULL;
 	}
 
+	TEST_METHOD(ScheduleTestFilterDisplayScheduleByKeyword) {
+		Schedule keywordSchedule;
+		bool hasKeyword;
+
+		Item *withKeyword1 = new Item(string("Has keyword wahlau eh"));
+		withKeyword1->setItemID(1);
+
+		Item *withKeyword2 = new Item(string("Has keyword in description"));
+		withKeyword2->setItemID(2);
+		withKeyword2->setDescription(string("the keyword wahLau eH is here"));
+
+		Item* withoutKeyword1 = new Item(string("No keyword in here wah eh"));
+		withoutKeyword1->setItemID(3);
+
+		Item* withoutKeyword2 = new Item(string("No sign of keyword here either"));
+		withoutKeyword2->setItemID(4);
+		withoutKeyword2->setDescription(string("wahskdjlaw eh"));
+
+		keywordSchedule.addItem(withKeyword1);
+		keywordSchedule.addItem(withKeyword2);
+		keywordSchedule.addItem(withoutKeyword1);
+		keywordSchedule.addItem(withoutKeyword2);
+
+		keywordSchedule.resetDisplaySchedule();
+		Assert::AreEqual(4, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(0, string("wahlau eh"));
+		Assert::AreEqual(4, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(false, hasKeyword);
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(1, string("wahlau eh"));
+		Assert::AreEqual(4, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(false, hasKeyword);
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(2, string("wahlau eh"));
+		Assert::AreEqual(3, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(true, hasKeyword);
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(2, string("wahlau eh"));
+		Assert::AreEqual(2, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(true, hasKeyword);
+	}
+
 	};
 
 	TEST_CLASS(TEST_SORT) {
