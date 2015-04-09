@@ -1451,6 +1451,116 @@ public:
 		delete item2;
 		delete item3;
 	}
+
+	TEST_METHOD(ScheduleTestIsRelevantDateTime) {
+		Schedule relevantDateTimeSchedule;
+		bool isRelevantDateTimeAccordingToSchedule;
+
+		Item *noDateTimeItem1 = new Item(string("This is no-DateTime Item #1"));
+		noDateTimeItem1->setItemID(1);
+
+		Item *itemWithStartTime1 = new Item(string("This is Item w/ Start Time #1"));
+		itemWithStartTime1->setItemID(3);
+		itemWithStartTime1->setStartTime(2005, 1, 25, 19, 0);
+
+		Item *itemWithStartTime2 = new Item(string("This is Item w/ Start Time #2"));
+		itemWithStartTime2->setItemID(4);
+		itemWithStartTime2->setStartTime(2016, 1, 1);
+
+		Item *itemWithEndTime1 = new Item(string("This is Item w/ End Time #1"));
+		itemWithEndTime1->setItemID(6);
+		itemWithEndTime1->setEndTime(2000, 11, 17, 8, 15);
+
+		Item *itemWithEndTime2 = new Item(string("This is Item w/ End Time #2"));
+		itemWithEndTime2->setItemID(7);
+		itemWithEndTime2->setEndTime(2020, 1, 19, 20, 15);
+
+		Item *itemWithEndTime3 = new Item(string("This is Item w/ End Time #3"));
+		itemWithEndTime3->setItemID(8);
+		itemWithEndTime3->setEndTime(2014, 11, 30);
+
+		Item *itemWithEndTime4 = new Item(string("This is Item w/ End Time #4"));
+		itemWithEndTime4->setItemID(9);
+		itemWithEndTime4->setEndTime(2050, 5, 2, 18, 18);
+
+		Item *itemWithStartAndEndTime1 = new Item(string("This is Item w/ Start & End Time #1 with Start and End in range"));
+		itemWithStartAndEndTime1->setItemID(10);
+		itemWithStartAndEndTime1->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime1->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime2 = new Item(string("This is Item w/ Start & End Time #2 with Start in range, End out of range"));
+		itemWithStartAndEndTime2->setItemID(11);
+		itemWithStartAndEndTime2->setStartTime(2007, 12, 8);
+		itemWithStartAndEndTime2->setEndTime(2098, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime3 = new Item(string("This is Item w/ Start & End Time #3 with Start out of range, End in range"));
+		itemWithStartAndEndTime3->setItemID(12);
+		itemWithStartAndEndTime3->setStartTime(1990, 12, 18, 9, 0);
+		itemWithStartAndEndTime3->setEndTime(2018, 11, 21);
+
+		Item *itemWithStartAndEndTime4 = new Item(string("This is Item w/ Start & End Time #4 with Start and End OUT of range"));
+		itemWithStartAndEndTime4->setItemID(13);
+		itemWithStartAndEndTime4->setStartTime(3000, 12, 18, 9, 0);
+		itemWithStartAndEndTime4->setEndTime(3012, 11, 21, 7, 0);
+
+		DateTime dateTime1(2000, 1, 1, 0, 0);
+		DateTime dateTime2(2016, 12, 30, 23, 59);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(noDateTimeItem1->getStartTime(), noDateTimeItem1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartTime1->getStartTime(), itemWithStartTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartTime2->getStartTime(), itemWithStartTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithEndTime1->getStartTime(), itemWithEndTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithEndTime2->getStartTime(), itemWithEndTime2->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithEndTime3->getStartTime(), itemWithEndTime3->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime1->getStartTime(), itemWithStartAndEndTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime2->getStartTime(), itemWithStartAndEndTime2->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime3->getStartTime(), itemWithStartAndEndTime3->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime4->getStartTime(), itemWithStartAndEndTime4->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		delete noDateTimeItem1;
+		delete itemWithEndTime1;
+		delete itemWithEndTime2;
+		delete itemWithEndTime3;
+		delete itemWithEndTime4;
+		delete itemWithStartTime1;
+		delete itemWithStartTime2;
+		delete itemWithStartAndEndTime1;
+		delete itemWithStartAndEndTime2;
+		delete itemWithStartAndEndTime3;
+		delete itemWithStartAndEndTime4;
+
+		noDateTimeItem1 = NULL;
+		itemWithEndTime1 = NULL;
+		itemWithEndTime2 = NULL;
+		itemWithEndTime3 = NULL;
+		itemWithEndTime4 = NULL;
+		itemWithStartTime1 = NULL;
+		itemWithStartTime2 = NULL;
+		itemWithStartAndEndTime1 = NULL;
+		itemWithStartAndEndTime2 = NULL;
+		itemWithStartAndEndTime3 = NULL;
+		itemWithStartAndEndTime4 = NULL;
+	}
+
 	};
 
 	TEST_CLASS(TEST_FILTER) {
@@ -1754,6 +1864,7 @@ public:
 		delete itemWithStartAndEndTime4;
 
 		noDateTimeItem1 = NULL;
+		noDateTimeItem2 = NULL;
 		itemWithEndTime1 = NULL;
 		itemWithEndTime2 = NULL;
 		itemWithEndTime3 = NULL;
@@ -2093,6 +2204,7 @@ public:
 		delete itemWithStartAndEndTime4;
 
 		noDateTimeItem1 = NULL;
+		noDateTimeItem2 = NULL;
 		itemWithEndTime1 = NULL;
 		itemWithEndTime2 = NULL;
 		itemWithEndTime3 = NULL;
