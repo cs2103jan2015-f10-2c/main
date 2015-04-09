@@ -1,4 +1,4 @@
-//@Shri Kishen Rajendran A0105180W
+//@author A0105180W
 //	GUI
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
 //	Coder:	Shri Kishen Rajendran A0105180W
@@ -50,7 +50,7 @@ namespace iPlannerUI {
 			}
 		}
 
-	//@Shri Kishen Rajendran generated
+	//@author generated
 	private: System::Windows::Forms::TextBox^  commandInputBox;
 
 
@@ -265,7 +265,7 @@ namespace iPlannerUI {
 		}
 #pragma endregion
 
-		//@Shri Kishen Rajendran 
+		//@author A0105180W 
 		void MarshalString(String ^ s, string& os) {
 			using namespace Runtime::InteropServices;
 			const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
