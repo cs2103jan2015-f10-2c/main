@@ -63,6 +63,8 @@ namespace iPlannerUI {
 	private: System::Windows::Forms::ToolStripMenuItem^  sortingScheduleToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  miscellneousToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  dateAndTimeVariationsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  basicCommandsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  viewScheduleToolStripMenuItem;
 
 
 
@@ -99,11 +101,13 @@ namespace iPlannerUI {
 			this->HelpmenuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->addingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->basicCommandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dateAndTimeVariationsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->deletingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->sortingScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->miscellneousToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->viewScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->HelpmenuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -163,9 +167,10 @@ namespace iPlannerUI {
 			// 
 			// helpToolStripMenuItem
 			// 
-			this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
+			this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {
 				this->addingATaskToolStripMenuItem,
-					this->deletingATaskToolStripMenuItem, this->editingATaskToolStripMenuItem, this->sortingScheduleToolStripMenuItem, this->miscellneousToolStripMenuItem
+					this->deletingATaskToolStripMenuItem, this->editingATaskToolStripMenuItem, this->sortingScheduleToolStripMenuItem, this->viewScheduleToolStripMenuItem,
+					this->miscellneousToolStripMenuItem
 			});
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
 			this->helpToolStripMenuItem->Size = System::Drawing::Size(44, 20);
@@ -173,11 +178,20 @@ namespace iPlannerUI {
 			// 
 			// addingATaskToolStripMenuItem
 			// 
-			this->addingATaskToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->dateAndTimeVariationsToolStripMenuItem });
+			this->addingATaskToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->basicCommandsToolStripMenuItem,
+					this->dateAndTimeVariationsToolStripMenuItem
+			});
 			this->addingATaskToolStripMenuItem->Name = L"addingATaskToolStripMenuItem";
-			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->addingATaskToolStripMenuItem->Text = L"Adding a Task";
-			this->addingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::addingATaskToolStripMenuItem_Click);
+			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->addingATaskToolStripMenuItem->Text = L"Add a Task";
+			// 
+			// basicCommandsToolStripMenuItem
+			// 
+			this->basicCommandsToolStripMenuItem->Name = L"basicCommandsToolStripMenuItem";
+			this->basicCommandsToolStripMenuItem->Size = System::Drawing::Size(206, 22);
+			this->basicCommandsToolStripMenuItem->Text = L"Basic Commands";
+			this->basicCommandsToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::basicCommandsToolStripMenuItem_Click);
 			// 
 			// dateAndTimeVariationsToolStripMenuItem
 			// 
@@ -189,30 +203,37 @@ namespace iPlannerUI {
 			// deletingATaskToolStripMenuItem
 			// 
 			this->deletingATaskToolStripMenuItem->Name = L"deletingATaskToolStripMenuItem";
-			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->deletingATaskToolStripMenuItem->Text = L"Deleting a Task";
+			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->deletingATaskToolStripMenuItem->Text = L"Delete a Task";
 			this->deletingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::deletingATaskToolStripMenuItem_Click);
 			// 
 			// editingATaskToolStripMenuItem
 			// 
 			this->editingATaskToolStripMenuItem->Name = L"editingATaskToolStripMenuItem";
-			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->editingATaskToolStripMenuItem->Text = L"Editing a Task";
+			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->editingATaskToolStripMenuItem->Text = L"Edit a Task";
 			this->editingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::editingATaskToolStripMenuItem_Click);
 			// 
 			// sortingScheduleToolStripMenuItem
 			// 
 			this->sortingScheduleToolStripMenuItem->Name = L"sortingScheduleToolStripMenuItem";
-			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->sortingScheduleToolStripMenuItem->Text = L"Sorting Schedule";
+			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->sortingScheduleToolStripMenuItem->Text = L"Sort Schedule";
 			this->sortingScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::sortingScheduleToolStripMenuItem_Click);
 			// 
 			// miscellneousToolStripMenuItem
 			// 
 			this->miscellneousToolStripMenuItem->Name = L"miscellneousToolStripMenuItem";
-			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(163, 22);
+			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->miscellneousToolStripMenuItem->Text = L"Miscellneous";
 			this->miscellneousToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::miscellneousToolStripMenuItem_Click);
+			// 
+			// viewScheduleToolStripMenuItem
+			// 
+			this->viewScheduleToolStripMenuItem->Name = L"viewScheduleToolStripMenuItem";
+			this->viewScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->viewScheduleToolStripMenuItem->Text = L"View Schedule";
+			this->viewScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::viewScheduleToolStripMenuItem_Click);
 			// 
 			// iPlannerUI
 			// 
@@ -575,8 +596,9 @@ namespace iPlannerUI {
 
 	}
 
-	private: System::Void addingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuAdd = "\t\tAdding a Task Command List\r\n";
+	
+	private: System::Void basicCommandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+				 String^ helpMenuAdd = "\t\tAdd a Task - Command List\r\n";
 
 				 helpMenuAdd += "\r\nadd <taskName> followed by task entities\r\n\r\n";
 				 helpMenuAdd += "The task entities could be one or more of the following : \r\n";
@@ -588,8 +610,8 @@ namespace iPlannerUI {
 				 helpMenuAdd += "\r\nNote : For <DateTime> variations, Help -> Adding a Task -> Date and Time Variations";
 
 				 MessageBox::Show(helpMenuAdd);
-
 	}
+
 
 	private: System::Void dateAndTimeVariationsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuDT;
@@ -615,11 +637,11 @@ namespace iPlannerUI {
 				 MessageBox::Show(helpMenuDT);
 	}
 	private: System::Void deletingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuDel = "      Deleting a Task Command List\r\n";
+				 String^ helpMenuDel = "      Deleting a Task - Command List\r\n";
 
 				 helpMenuDel += "\r\ndelete <Display index of task to be deleted\r\n";
 				 helpMenuDel += "del <Display index of task to be deleted\r\n";
-
+				 helpMenuDel += "\r\nclear - Deletes all tasks in the Schedule\r\n";
 				 MessageBox::Show(helpMenuDel);
 	}
 	private: System::Void editingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -638,7 +660,7 @@ namespace iPlannerUI {
 	}
 
 	private: System::Void sortingScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuSort = "\t\tSorting the Schedule Command List\r\n";
+				 String^ helpMenuSort = "\t\tSort Schedule - Command List\r\n";
 
 				 helpMenuSort += "\r\nThe Schedule can be sorted by the following attributes : \r\n";
 				 helpMenuSort += "By Task Name : sort name - Sorts Tasks by Name in alphabetical order\r\n";
@@ -663,5 +685,17 @@ namespace iPlannerUI {
 
 				 MessageBox::Show(helpMenuMisc);
 	}
-	};
+	
+	private: System::Void viewScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+				 String^ helpMenuView = "\t\t\tView Schedule - Command List\r\n";
+
+				 helpMenuView += "\r\nUser can view All tasks, Completed tasks or tasks with a specific Priority\r\n";
+				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
+				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
+				 helpMenuView += "view priority <H/M/L> - Tasks which have the priority specified are displayed\r\n";
+
+				 MessageBox::Show(helpMenuView);
+	}
+	
+};
 }
