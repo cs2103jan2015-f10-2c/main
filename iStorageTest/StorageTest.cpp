@@ -1804,6 +1804,16 @@ public:
 		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(2, string("wahlau eh"));
 		Assert::AreEqual(2, int(keywordSchedule.getSizeOfDisplaySchedule()));
 		Assert::AreEqual(true, hasKeyword);
+
+		delete withKeyword1;
+		delete withKeyword2;
+		delete withoutKeyword1;
+		delete withoutKeyword2;
+
+		withKeyword1 = NULL;
+		withKeyword2 = NULL;
+		withoutKeyword1 = NULL;
+		withoutKeyword2 = NULL;
 	}
 
 	// Not done since label funcitonality is not implemented
@@ -2097,7 +2107,61 @@ public:
 	}
 
 	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByKeyword) {
-		//
+		Schedule keywordSchedule;
+		vector<Item> filteredVectorByKeyword;
+
+		Item *withKeyword1 = new Item(string("Has keyword wahlau eh"));
+		withKeyword1->setItemID(1);
+
+		Item *withKeyword2 = new Item(string("Has keyword in description"));
+		withKeyword2->setItemID(2);
+		withKeyword2->setDescription(string("the keyword wahLau eH is here"));
+
+		Item *withKeyword3 = new Item(string("Has keyword in description"));
+		withKeyword3->setItemID(3);
+		withKeyword3->setDescription(string("HAHAHAHAHEHEHEWWWWAHLAU EHHHHHHHHH"));
+
+		Item* withoutKeyword1 = new Item(string("No keyword in here wah eh"));
+		withoutKeyword1->setItemID(4);
+
+		Item* withoutKeyword2 = new Item(string("No sign of keyword here either"));
+		withoutKeyword2->setItemID(5);
+		withoutKeyword2->setDescription(string("whaskdjlaw eh"));
+
+		keywordSchedule.addItem(withKeyword1);
+		keywordSchedule.addItem(withKeyword2);
+		keywordSchedule.addItem(withKeyword3);
+		keywordSchedule.addItem(withoutKeyword1);
+		keywordSchedule.addItem(withoutKeyword2);
+
+		keywordSchedule.resetDisplaySchedule();
+		Assert::AreEqual(5, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		
+		filteredVectorByKeyword = keywordSchedule.retrieveDisplayScheduleFilteredByKeyword(string("wahlau eh"));
+		Assert::AreEqual(3, int(filteredVectorByKeyword.size()));
+		Assert::AreEqual(1, int(filteredVectorByKeyword[0].getItemID()));
+		Assert::AreEqual(2, int(filteredVectorByKeyword[1].getItemID()));
+		Assert::AreEqual(3, int(filteredVectorByKeyword[2].getItemID()));
+
+		keywordSchedule.resetDisplaySchedule();
+		filteredVectorByKeyword = keywordSchedule.retrieveDisplayScheduleFilteredByKeyword(string("Ha"));
+		Assert::AreEqual(4, int(filteredVectorByKeyword.size()));
+		Assert::AreEqual(1, int(filteredVectorByKeyword[0].getItemID()));
+		Assert::AreEqual(2, int(filteredVectorByKeyword[1].getItemID()));
+		Assert::AreEqual(3, int(filteredVectorByKeyword[2].getItemID()));
+		Assert::AreEqual(5, int(filteredVectorByKeyword[3].getItemID()));
+
+		delete withKeyword1;
+		delete withKeyword2;
+		delete withKeyword3;
+		delete withoutKeyword1;
+		delete withoutKeyword2;
+
+		withKeyword1 = NULL;
+		withKeyword2 = NULL;
+		withKeyword3 = NULL;
+		withoutKeyword1 = NULL;
+		withoutKeyword2 = NULL;
 	}
 
 	};
