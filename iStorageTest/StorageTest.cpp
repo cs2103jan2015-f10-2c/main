@@ -1972,7 +1972,128 @@ public:
 	}
 
 	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByDateTime) {
-		//
+		Schedule dateTimeSchedule;
+		vector<Item> filteredVectorByDateTime;
+
+		Item *noDateTimeItem1 = new Item(string("This is no-DateTime Item #1"));
+		noDateTimeItem1->setItemID(1);
+
+		Item *noDateTimeItem2 = new Item(string("This is no-DateTime Item #2"));
+		noDateTimeItem2->setItemID(2);
+
+		Item *itemWithStartTime1 = new Item(string("This is Item w/ Start Time #1"));
+		itemWithStartTime1->setItemID(3);
+		itemWithStartTime1->setStartTime(2005, 1, 25, 19, 0);
+
+		Item *itemWithStartTime2 = new Item(string("This is Item w/ Start Time #2"));
+		itemWithStartTime2->setItemID(4);
+		itemWithStartTime2->setStartTime(2010, 11, 2, 7, 0);
+
+		Item *itemWithStartTime3 = new Item(string("This is Item w/ Start Time #3"));
+		itemWithStartTime3->setItemID(5);
+		itemWithStartTime3->setStartTime(2015, 4, 17);
+
+		Item *itemWithEndTime1 = new Item(string("This is Item w/ End Time #1"));
+		itemWithEndTime1->setItemID(6);
+		itemWithEndTime1->setEndTime(2000, 11, 17, 8, 15);
+
+		Item *itemWithEndTime2 = new Item(string("This is Item w/ End Time #2"));
+		itemWithEndTime2->setItemID(7);
+		itemWithEndTime2->setEndTime(2020, 1, 19, 20, 15);
+
+		Item *itemWithEndTime3 = new Item(string("This is Item w/ End Time #3"));
+		itemWithEndTime3->setItemID(8);
+		itemWithEndTime3->setEndTime(2025, 11, 30);
+
+		Item *itemWithEndTime4 = new Item(string("This is Item w/ End Time #4"));
+		itemWithEndTime4->setItemID(9);
+		itemWithEndTime4->setEndTime(2050, 5, 2, 18, 18);
+
+		Item *itemWithStartAndEndTime1 = new Item(string("This is Item w/ Start & End Time #1 with Start and End in range"));
+		itemWithStartAndEndTime1->setItemID(10);
+		itemWithStartAndEndTime1->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime1->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime2 = new Item(string("This is Item w/ Start & End Time #2 with Start in range, End out of range"));
+		itemWithStartAndEndTime2->setItemID(11);
+		itemWithStartAndEndTime2->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime2->setEndTime(2098, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime3 = new Item(string("This is Item w/ Start & End Time #3 with Start out of range, End in range"));
+		itemWithStartAndEndTime3->setItemID(12);
+		itemWithStartAndEndTime3->setStartTime(1990, 12, 18, 9, 0);
+		itemWithStartAndEndTime3->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime4 = new Item(string("This is Item w/ Start & End Time #4 with Start and End OUT of range"));
+		itemWithStartAndEndTime4->setItemID(13);
+		itemWithStartAndEndTime4->setStartTime(3000, 12, 18, 9, 0);
+		itemWithStartAndEndTime4->setEndTime(3012, 11, 21, 7, 0);
+
+		dateTimeSchedule.addItem(noDateTimeItem1);
+		dateTimeSchedule.addItem(noDateTimeItem2);
+		dateTimeSchedule.addItem(itemWithStartTime1);
+		dateTimeSchedule.addItem(itemWithStartTime2);
+		dateTimeSchedule.addItem(itemWithStartTime3);
+		dateTimeSchedule.addItem(itemWithEndTime1);
+		dateTimeSchedule.addItem(itemWithEndTime2);
+		dateTimeSchedule.addItem(itemWithEndTime3);
+		dateTimeSchedule.addItem(itemWithEndTime4);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime1);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime2);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime3);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime4);
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		filteredVectorByDateTime = dateTimeSchedule.retrieveDisplayScheduleFilteredByDateTime(DateTime(2000, 1, 1, 0, 0), DateTime(2010, 12, 30, 23, 59));
+		Assert::AreEqual(4, int(filteredVectorByDateTime.size()));
+		Assert::AreEqual(3, int(filteredVectorByDateTime[0].getItemID()));
+		Assert::AreEqual(4, int(filteredVectorByDateTime[1].getItemID()));
+		Assert::AreEqual(6, int(filteredVectorByDateTime[2].getItemID()));
+		Assert::AreEqual(12, int(filteredVectorByDateTime[3].getItemID()));
+
+		// Boundary Case: itemWithStartTime3 starts on 2015/4/17 -1:-1, is not within range
+		dateTimeSchedule.resetDisplaySchedule();
+		filteredVectorByDateTime = dateTimeSchedule.retrieveDisplayScheduleFilteredByDateTime(DateTime(2015, 4, 17, 0, 0), DateTime(2017, 12, 18, 9, 0));
+		Assert::AreEqual(3, int(filteredVectorByDateTime.size()));
+		Assert::AreEqual(10, int(filteredVectorByDateTime[0].getItemID()));
+		Assert::AreEqual(11, int(filteredVectorByDateTime[1].getItemID()));
+		Assert::AreEqual(12, int(filteredVectorByDateTime[2].getItemID()));
+
+		dateTimeSchedule.resetDisplaySchedule();
+		filteredVectorByDateTime = dateTimeSchedule.retrieveDisplayScheduleFilteredByDateTime(DateTime(2050, 5, 2, 18, 18), DateTime(3013, 12, 30, 23, 59));
+		Assert::AreEqual(3, int(filteredVectorByDateTime.size()));
+		Assert::AreEqual(9, int(filteredVectorByDateTime[0].getItemID()));
+		Assert::AreEqual(11, int(filteredVectorByDateTime[1].getItemID()));
+		Assert::AreEqual(13, int(filteredVectorByDateTime[2].getItemID()));
+
+		delete noDateTimeItem1;
+		delete noDateTimeItem2;
+		delete itemWithEndTime1;
+		delete itemWithEndTime2;
+		delete itemWithEndTime3;
+		delete itemWithEndTime4;
+		delete itemWithStartTime1;
+		delete itemWithStartTime2;
+		delete itemWithStartTime3;
+		delete itemWithStartAndEndTime1;
+		delete itemWithStartAndEndTime2;
+		delete itemWithStartAndEndTime3;
+		delete itemWithStartAndEndTime4;
+
+		noDateTimeItem1 = NULL;
+		itemWithEndTime1 = NULL;
+		itemWithEndTime2 = NULL;
+		itemWithEndTime3 = NULL;
+		itemWithEndTime4 = NULL;
+		itemWithStartTime1 = NULL;
+		itemWithStartTime2 = NULL;
+		itemWithStartTime3 = NULL;
+		itemWithStartAndEndTime1 = NULL;
+		itemWithStartAndEndTime2 = NULL;
+		itemWithStartAndEndTime3 = NULL;
+		itemWithStartAndEndTime4 = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByKeyword) {
