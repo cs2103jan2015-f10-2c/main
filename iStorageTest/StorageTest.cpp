@@ -1667,7 +1667,7 @@ public:
 
 		Item *itemWithEndTime2 = new Item(string("This is Item w/ End Time #2"));
 		itemWithEndTime2->setItemID(7);
-		itemWithEndTime2->setEndTime(2010, 1, 19, 20, 15);
+		itemWithEndTime2->setEndTime(2099, 1, 19, 20, 15);
 
 		Item *itemWithEndTime3 = new Item(string("This is Item w/ End Time #3"));
 		itemWithEndTime3->setItemID(8);
@@ -1677,10 +1677,25 @@ public:
 		itemWithEndTime4->setItemID(9);
 		itemWithEndTime4->setEndTime(2014, 5, 2, 18, 18);
 
-		Item *itemWithStartAndEndTime1 = new Item(string("This is Item w/ Start & End Time #1"));
+		Item *itemWithStartAndEndTime1 = new Item(string("This is Item w/ Start & End Time #1 with Start and End in range"));
 		itemWithStartAndEndTime1->setItemID(10);
 		itemWithStartAndEndTime1->setStartTime(2017, 12, 18, 9, 0);
-		itemWithStartAndEndTime1->setEndTime(2018, 11, 21);
+		itemWithStartAndEndTime1->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime2 = new Item(string("This is Item w/ Start & End Time #2 with Start in range, End out of range"));
+		itemWithStartAndEndTime2->setItemID(11);
+		itemWithStartAndEndTime2->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime2->setEndTime(2098, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime3 = new Item(string("This is Item w/ Start & End Time #3 with Start out of range, End in range"));
+		itemWithStartAndEndTime3->setItemID(12);
+		itemWithStartAndEndTime3->setStartTime(1990, 12, 18, 9, 0);
+		itemWithStartAndEndTime3->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime4 = new Item(string("This is Item w/ Start & End Time #4 with Start and End OUT of range"));
+		itemWithStartAndEndTime4->setItemID(13);
+		itemWithStartAndEndTime4->setStartTime(3000, 12, 18, 9, 0);
+		itemWithStartAndEndTime4->setEndTime(3012, 11, 21, 7, 0);
 
 		dateTimeSchedule.addItem(noDateTimeItem1);
 		dateTimeSchedule.addItem(noDateTimeItem2);
@@ -1692,28 +1707,39 @@ public:
 		dateTimeSchedule.addItem(itemWithEndTime3);
 		dateTimeSchedule.addItem(itemWithEndTime4);
 		dateTimeSchedule.addItem(itemWithStartAndEndTime1);
-
-		////////////////////////////////////
-		//// How is this supposed to work?//
-		////////////////////////////////////
-
-		dateTimeSchedule.resetDisplaySchedule();
-		Assert::AreEqual(10, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
-		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(0, DateTime(2000, 1, 1), DateTime(2020, 12, 30));
-		Assert::AreEqual(true, isRelevantDateTime);
-		Assert::AreEqual(9, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		dateTimeSchedule.addItem(itemWithStartAndEndTime2);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime3);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime4);
 
 		dateTimeSchedule.resetDisplaySchedule();
-		Assert::AreEqual(10, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
-		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(2, DateTime(2000, 1, 1), DateTime(2020, 12, 30));
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(0, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
 		Assert::AreEqual(true, isRelevantDateTime);
-		Assert::AreEqual(9, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(12, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
 
 		dateTimeSchedule.resetDisplaySchedule();
-		Assert::AreEqual(10, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
-		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(9, DateTime(2000, 1, 1), DateTime(2020, 12, 30));
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(2, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(false, isRelevantDateTime);
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(6, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
 		Assert::AreEqual(true, isRelevantDateTime);
-		Assert::AreEqual(9, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(12, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(9, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(false, isRelevantDateTime);
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(10, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(false, isRelevantDateTime);
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(12, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(true, isRelevantDateTime);
+		Assert::AreEqual(12, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
 
 		delete noDateTimeItem1;
 		delete noDateTimeItem2;
@@ -1725,6 +1751,9 @@ public:
 		delete itemWithStartTime2;
 		delete itemWithStartTime3;
 		delete itemWithStartAndEndTime1;
+		delete itemWithStartAndEndTime2;
+		delete itemWithStartAndEndTime3;
+		delete itemWithStartAndEndTime4;
 
 		noDateTimeItem1 = NULL;
 		itemWithEndTime1 = NULL;
@@ -1735,6 +1764,9 @@ public:
 		itemWithStartTime2 = NULL;
 		itemWithStartTime3 = NULL;
 		itemWithStartAndEndTime1 = NULL;
+		itemWithStartAndEndTime2 = NULL;
+		itemWithStartAndEndTime3 = NULL;
+		itemWithStartAndEndTime4 = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestFilterDisplayScheduleByKeyword) {

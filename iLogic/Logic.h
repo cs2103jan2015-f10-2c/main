@@ -50,6 +50,7 @@ private:
 	static const string COMMAND_SEARCH;
 	static const string COMMAND_VIEW;
 	static const string COMMAND_DONE;
+	static const string COMMAND_UNDONE;
 	static const string COMMAND_SAVE;
 	static const string COMMAND_EXIT;
 	static const string COMMAND_CLEAR;
@@ -94,6 +95,8 @@ private:
 	static const string MESSAGE_SUCCESSFUL_SAVE;
 	static const string MESSAGE_SUCCESSFUL_UNDO;
 	static const string MESSAGE_SUCCESSFUL_MARK_DONE;
+	static const string MESSAGE_SUCCESSFUL_MARK_UNDONE;
+	static const string MESSAGE_SUCCESSFUL_CHANGE_COMPLETION;
 	static const string MESSAGE_CLEAR;
 	static const string MESSAGE_RETRIEVED_FROM_TEXT_FILE;
 	static const string MESSAGE_FILE_NOT_EXISTING;
@@ -110,6 +113,7 @@ private:
 	static const string MESSAGE_INVALID_FILTERTYPE;
 	static const string MESSAGE_NO_TASK_FOUND;
 	static const string MESSAGE_TASK_FOUND;
+	static const string MESSAGE_UNABLE_TO_UNDO;
 
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
@@ -246,6 +250,11 @@ public:
 	int convertToDigit(string text);
 
 
+	//Undo previous action
+	//pre : none
+	//post : returns a message whether undo is executed successfully
+	string undoPreviousAction();
+
 
 	/////////////////////////////////////
 	////*EDIT TASK RELATED FUNCTIONS*////
@@ -280,13 +289,12 @@ public:
 	//pre : takes in line index
 	//post : returns a message whether mark done is successful or not
 	string markDone(unsigned int lineIndex);
-
+	string markUndone(unsigned int lineIndex);
 
 	//valid line index given, changes the completion of the item to done
 	//pre : takes in valid line index
 	//post : returns a message of successful change
-	string changeCompletionToDone(unsigned int lineIndex);
-
+	string changeCompletion(unsigned int lineIndex, string completion);
 
 	//Parser returns a whole string of dateTime data
 	//interpreteDateTime switches the stringed input into 5 integers
