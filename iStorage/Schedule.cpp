@@ -52,9 +52,17 @@ bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompleti
 bool Schedule::isRelevantDateTime(DateTime itemStart, DateTime itemEnd, DateTime startTime, DateTime endTime) {
 	if (itemStart.displayDateTime() == "" && itemEnd.displayDateTime() == "") {
 		return false;
-	} else if (itemStart.isAfter(endTime) || itemEnd.isBefore(startTime)) {
+	} else if (itemStart.isAfter(endTime) && itemEnd.displayDateTime() == "") {
+		return false;
+	} else if (itemStart.isBefore(startTime) && itemEnd.displayDateTime() == "") {
 		return false;
 	} else if (itemStart.displayDateTime() == "" && itemEnd.isAfter(endTime)) {
+		return false;
+	} else if (itemStart.displayDateTime() == "" && itemEnd.isBefore(startTime)) {
+		return false;
+	} else if (itemStart.isBefore(startTime) && itemEnd.isBefore(startTime)) {
+		return false;
+	} else if (itemStart.isAfter(endTime) && itemEnd.isAfter(endTime)) {
 		return false;
 	} else {
 		return true;
