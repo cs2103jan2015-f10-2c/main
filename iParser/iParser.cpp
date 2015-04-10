@@ -241,7 +241,7 @@ string iParser::executeSortParsing(string sortType) {
 		setParseInfo(COMMAND_SORT, STRING_DATE);
 	} else if (sortType == STRING_NAME) {
 		setParseInfo(COMMAND_SORT, STRING_NAME);
-	} else if (sortType == STRING_PRIORITY) {
+	} else if (sortType == STRING_PRIORITY || sortType == STRING_PRIORITY_P) {
 		setParseInfo(COMMAND_SORT, STRING_PRIORITY);
 	} else if (sortType == STRING_DONE) {
 		setParseInfo(COMMAND_SORT, STRING_DONE);
