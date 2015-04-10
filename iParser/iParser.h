@@ -79,6 +79,7 @@ public:
 	static const string STRING_PRIORITY;
 	static const string STRING_PRIORITY_P;
 
+	static const string STRING_ALL;
 	static const string STRING_DONE;
 	static const string STRING_UNDONE;
 
@@ -194,10 +195,13 @@ public:
 	string executeSortParsing(string);
 	// Pre:		
 	// Post:	
-	//string executeViewParsing(string);
+	string executeViewParsing(string);
 	// Pre:		
 	// Post:	
 	string executeSearchParsing(const string);
+	// Pre:		
+	// Post:	
+	string executePriorityParsing(string);
 	// Pre:		
 	// Post:	
 	string executeRemoveParsing(string);

@@ -35,10 +35,9 @@ const string iParser::STRING_DESCRIPTION = "description";
 const string iParser::STRING_DESC = "desc";
 const string iParser::STRING_PRIORITY = "priority";
 const string iParser::STRING_PRIORITY_P = "p";
-
+const string iParser::STRING_ALL = "all";
 const string iParser::STRING_DONE = "done";
 const string iParser::STRING_UNDONE = "undone";
-
 const string iParser::STRING_HIGH = "high";
 const string iParser::STRING_MEDIUM = "medium";
 const string iParser::STRING_MED = "med";
@@ -141,7 +140,7 @@ string iParser::executeParsing(string userInput) {
 	} else if (command == COMMAND_SEARCH) {
 		executeSearchParsing(textWithoutCommand);
 	} else if (command == COMMAND_VIEW) {
-		//executeViewParsing(textWithoutCommand);
+		executeViewParsing(textWithoutCommand);
 	} else if (command == COMMAND_SAVE) {
 		executeCommandAndTextParsing(COMMAND_SAVE, textWithoutCommand);
 	} else if (command == COMMAND_DONE) {
@@ -232,10 +231,7 @@ string iParser::executeModifierAndTextParsing(const string ModifierType, string 
 }
 
 string iParser::executeSortParsing(string sortType) {
-	if (sortType != STRING_BLANK) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
-		return MESSAGE_FAILURE;
-	} 
+	assert(sortType != STRING_BLANK);
 
 	convertToLowerCase(sortType);
 
@@ -273,9 +269,44 @@ string iParser::executeSearchParsing(const string text) {
 	return MESSAGE_SUCCESS;
 }
 
-//string iParser::executeViewParsing(string) {
-//
-//}
+string iParser::executeViewParsing(string viewType) {
+	assert(viewType != STRING_BLANK);
+
+	convertToLowerCase(viewType);
+
+	if (viewType == STRING_ALL) {
+		setParseInfo(COMMAND_VIEW, STRING_ALL);
+	} else if (viewType == STRING_DONE) {
+		setParseInfo(COMMAND_VIEW, STRING_DONE);
+	} else if (viewType == STRING_UNDONE) {
+		setParseInfo(COMMAND_VIEW, STRING_UNDONE);
+	} else if (viewType == STRING_PRIORITY || viewType == STRING_PRIORITY_P) {
+		setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executePriorityParsing(string priorityType) {
+	assert(priorityType != STRING_BLANK);
+
+	convertToLowerCase(priorityType);
+
+	if (priorityType == STRING_HIGH || priorityType == STRING_H) {
+		setParseInfo(STRING_PRIORITY, STRING_HIGH);
+	} else if (priorityType == STRING_MEDIUM || priorityType == STRING_MED || priorityType == STRING_M) {
+		setParseInfo(STRING_PRIORITY, STRING_MEDIUM);
+	} else if (priorityType == STRING_LOW || priorityType == STRING_L) {
+		setParseInfo(STRING_PRIORITY, STRING_LOW);
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	return MESSAGE_SUCCESS;
+}
 
 string iParser::executeRemoveParsing(string textToRemove) {
 	if (textToRemove == STRING_BLANK) {
@@ -372,9 +403,8 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
 		} else if (modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P) {
-			if (!hasPriority) { ////
-				convertToLowerCase(textWithoutCommand);
-				executeModifierAndTextParsing(COMMAND_PRIORITY, textWithoutCommand);
+			if (!hasPriority) {
+				executePriorityParsing(textWithoutCommand);
 				hasPriority = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
