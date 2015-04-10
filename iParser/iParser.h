@@ -146,18 +146,6 @@ public:
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
 
-	// =====================================
-	// enumeration for command and modifiers
-	// =====================================
-
-	/*enum CommandType {
-		ADD, DELETE, CLEAR, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID_COMMAND
-	};
-
-	enum ModifierType {
-		ITEM, DATE, DUE, START, END, DESCRIPTION, PRIORITY, INVALID_MODIFIER
-	};*/
-
 	// =====================
 	// main parsing function
 	// =====================
@@ -165,17 +153,6 @@ public:
 	// Post:	sets command and text to _parseInfo list based on user's command
 	//			clears _parseInfo list and sets list as invalid if any invalid input is detected
 	string executeParsing(string); // unit test
-
-	// ========================================
-	// command / modifier determining functions
-	// ========================================
-	
-	// Pre:		command retrieved passed to function
-	// Post:	determines and returns the enum CommandType, returns INVALID_COMMAND if command does not match
-	//CommandType determineCommandType(string);
-	// Pre:		modifiers retrieved passed to function
-	// Post:	determines and returns the enum ModifierType, returns INVALID_MODIFIER if modifier does not match
-	//ModifierType determineModifierType(string);
 
 	// ===============================
 	// functions within executeParsing
