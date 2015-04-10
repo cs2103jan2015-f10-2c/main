@@ -82,6 +82,14 @@ public:
 	static const string STRING_DONE;
 	static const string STRING_UNDONE;
 
+	static const string STRING_HIGH;
+	static const string STRING_MEDIUM;
+	static const string STRING_MED;
+	static const string STRING_LOW;
+	static const string STRING_H;
+	static const string STRING_M;
+	static const string STRING_L;
+
 	// used to identify modifier in UserInput
 	static const string MODIFIER_NAME;
 	static const string MODIFIER_DATE;
@@ -183,7 +191,7 @@ public:
 	string executeModifierAndTextParsing(const string, string);
 	// Pre:		
 	// Post:	
-	//string executeSortParsing(string);
+	string executeSortParsing(string);
 	// Pre:		
 	// Post:	
 	//string executeViewParsing(string);

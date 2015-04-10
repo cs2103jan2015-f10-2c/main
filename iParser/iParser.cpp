@@ -39,6 +39,14 @@ const string iParser::STRING_PRIORITY_P = "p";
 const string iParser::STRING_DONE = "done";
 const string iParser::STRING_UNDONE = "undone";
 
+const string iParser::STRING_HIGH = "high";
+const string iParser::STRING_MEDIUM = "medium";
+const string iParser::STRING_MED = "med";
+const string iParser::STRING_LOW = "low";
+const string iParser::STRING_H = "h";
+const string iParser::STRING_M = "m";
+const string iParser::STRING_L = "l";
+
 const string iParser::MODIFIER_NAME = "-name";
 const string iParser::MODIFIER_DATE = "-date";
 const string iParser::MODIFIER_DUE = "-due";
@@ -129,7 +137,7 @@ string iParser::executeParsing(string userInput) {
 	} else if (command == COMMAND_UNDO) {
 		executeCommandParsing(COMMAND_UNDO, userInput);
 	} else if (command == COMMAND_SORT) {
-		//executeSortParsing(textWithoutCommand);
+		executeSortParsing(textWithoutCommand);
 	} else if (command == COMMAND_SEARCH) {
 		executeSearchParsing(textWithoutCommand);
 	} else if (command == COMMAND_VIEW) {
@@ -222,18 +230,28 @@ string iParser::executeModifierAndTextParsing(const string ModifierType, string 
 		throw MESSAGE_INVALID_INPUT;
 	}
 }
-//
-//string iParser::executeSortParsing(string sortType) {
-//	if (sortType != STRING_BLANK) {
-//		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
-//		return MESSAGE_FAILURE;
-//	} 
-//
-//	convertToLowerCase(sortType);
-//
-//	if(sortType == 
-//}
 
+string iParser::executeSortParsing(string sortType) {
+	if (sortType != STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+		return MESSAGE_FAILURE;
+	} 
+
+	convertToLowerCase(sortType);
+
+	if (sortType == STRING_HIGH || sortType == STRING_H) {
+		setParseInfo(COMMAND_SORT, STRING_HIGH);
+	} else if (sortType == STRING_MEDIUM || sortType == STRING_MED || sortType == STRING_M) {
+		setParseInfo(COMMAND_SORT, STRING_MEDIUM);
+	} else if (sortType == STRING_LOW || sortType == STRING_L) {
+		setParseInfo(COMMAND_SORT, STRING_LOW);
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+		return MESSAGE_FAILURE;
+	}
+
+	return MESSAGE_SUCCESS;
+}
 
 string iParser::executeSearchParsing(const string text) {
 	if (text == STRING_BLANK) {
