@@ -186,10 +186,6 @@ public:
 	// Post:	sets command and text/index to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeCommandParsing(const string, string);
-	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
-	// Post:	sets modifier and text to _parseInfo list
-	//			clears _parseInfo list and sets list as invalid if blank text is detected
-	string executeModifierAndTextParsing(const string, string);
 	// Pre:		
 	// Post:	
 	string executeSortParsing(string);
@@ -199,13 +195,7 @@ public:
 	// Pre:		
 	// Post:	
 	string executeSearchParsing(const string);
-	// Pre:		
-	// Post:	
-	string executePriorityParsing(string);
-	// Pre:		
-	// Post:	
-	string executeRemoveParsing(string);
-
+	
 	// ================
 	// helper functions
 	// ================
@@ -214,11 +204,21 @@ public:
 	//Post:		determines the modifiers available in vector and executes the respective modifiers
 	//			if any modifiers cannot be determined or if sub functions throw an exception, this function will stop it's execution
 	string checkAndSetTokenisedInformation(vector<string>&, const string);
+	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
+	// Post:	sets modifier and text to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeModifierAndTextParsing(const string, string);
 	// Pre:		nil
 	// Post:	determines whether dateTime string is a single dateTime or a ranged dateTime and executes
 	//			respective dateTime parsing
 	//			if dateTime is not valid, invalid date time message will be thrown as exception
 	string executeDateTimeParsing(string, const string);
+	// Pre:		
+	// Post:	
+	string executePriorityParsing(string);
+	// Pre:		ModifierType "remove" is called
+	// Post:	sets the parts to be removed to _parseInfo list
+	string executeRemoveParsing(string);
 
 	// =============================
 	// string manipulation functions

@@ -223,15 +223,6 @@ string iParser::executeCommandParsing(const string commandType, string userInput
 	}
 }
 
-string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
-	if (text != STRING_BLANK) {
-		setParseInfo(ModifierType, text);
-		return MESSAGE_SUCCESS;
-	} else {
-		throw MESSAGE_INVALID_INPUT;
-	}
-}
-
 string iParser::executeSortParsing(string sortType) {
 	assert(sortType != STRING_BLANK);
 
@@ -291,50 +282,6 @@ string iParser::executeViewParsing(string viewType) {
 	} else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
 		return MESSAGE_FAILURE;
-	}
-
-	return MESSAGE_SUCCESS;
-}
-
-string iParser::executePriorityParsing(string priorityType) {
-	assert(priorityType != STRING_BLANK);
-
-	convertToLowerCase(priorityType);
-
-	if (priorityType == STRING_HIGH || priorityType == STRING_H) {
-		setParseInfo(STRING_PRIORITY, STRING_HIGH);
-	} else if (priorityType == STRING_MEDIUM || priorityType == STRING_MED || priorityType == STRING_M) {
-		setParseInfo(STRING_PRIORITY, STRING_MEDIUM);
-	} else if (priorityType == STRING_LOW || priorityType == STRING_L) {
-		setParseInfo(STRING_PRIORITY, STRING_LOW);
-	} else {
-		throw MESSAGE_INVALID_INPUT;
-	}
-
-	return MESSAGE_SUCCESS;
-}
-
-string iParser::executeRemoveParsing(string textToRemove) {
-	assert(textToRemove != STRING_BLANK);
-
-	convertToLowerCase(textToRemove);
-
-	if (textToRemove == STRING_DATE) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_START, dateTime);
-		setParseInfo(COMMAND_END, dateTime);
-	} else if (textToRemove == STRING_START) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_START, dateTime);
-	} else if (textToRemove == STRING_END) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_END, dateTime);
-	} else if (textToRemove == STRING_DESCRIPTION || textToRemove == STRING_DESC) {
-		setParseInfo(COMMAND_DESCRIPTION, STRING_BLANK);
-	} else if (textToRemove == STRING_PRIORITY || textToRemove == STRING_PRIORITY_P) {
-		setParseInfo(COMMAND_PRIORITY, STRING_BLANK);
-	} else {
-		throw MESSAGE_INVALID_INPUT;
 	}
 
 	return MESSAGE_SUCCESS;
@@ -437,6 +384,60 @@ string iParser::executeDateTimeParsing(string dateTimeString, const string modif
 
 	return MESSAGE_SUCCESS;
 }
+
+string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
+	if (text != STRING_BLANK) {
+		setParseInfo(ModifierType, text);
+		return MESSAGE_SUCCESS;
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+}
+
+string iParser::executePriorityParsing(string priorityType) {
+	assert(priorityType != STRING_BLANK);
+
+	convertToLowerCase(priorityType);
+
+	if (priorityType == STRING_HIGH || priorityType == STRING_H) {
+		setParseInfo(STRING_PRIORITY, STRING_HIGH);
+	} else if (priorityType == STRING_MEDIUM || priorityType == STRING_MED || priorityType == STRING_M) {
+		setParseInfo(STRING_PRIORITY, STRING_MEDIUM);
+	} else if (priorityType == STRING_LOW || priorityType == STRING_L) {
+		setParseInfo(STRING_PRIORITY, STRING_LOW);
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeRemoveParsing(string textToRemove) {
+	assert(textToRemove != STRING_BLANK);
+
+	convertToLowerCase(textToRemove);
+
+	if (textToRemove == STRING_DATE) {
+		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
+		setParseInfo(COMMAND_START, dateTime);
+		setParseInfo(COMMAND_END, dateTime);
+	} else if (textToRemove == STRING_START) {
+		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
+		setParseInfo(COMMAND_START, dateTime);
+	} else if (textToRemove == STRING_END) {
+		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
+		setParseInfo(COMMAND_END, dateTime);
+	} else if (textToRemove == STRING_DESCRIPTION || textToRemove == STRING_DESC) {
+		setParseInfo(COMMAND_DESCRIPTION, STRING_BLANK);
+	} else if (textToRemove == STRING_PRIORITY || textToRemove == STRING_PRIORITY_P) {
+		setParseInfo(COMMAND_PRIORITY, STRING_BLANK);
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
 
 string iParser::retrieveCommandOrModifier(string userInput) {
 	unsigned int endIndex = userInput.find_first_of(" \t");
