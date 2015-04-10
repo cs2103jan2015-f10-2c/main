@@ -69,29 +69,32 @@ public:
 	static const string COMMAND_REMOVE;
 	static const string COMMAND_RMV;
 
-	// used to identify whether date time input is appointment or due date
-	static const string MODIFIER_DATE;
-	static const string MODIFIER_DUE;
-	static const string MODIFIER_START;
-	static const string MODIFIER_END;
-	static const string MODIFIER_DESCRIPTION;
-	static const string MODIFIER_DESC;
-	static const string MODIFIER_PRIORITY;
-	static const string MODIFIER_PRIORITY_P;
-
-	// used to identify modifiers in UserInput
-	static const string STRING_NAME;
+	// used to identify string in UserInput
 	static const string STRING_DATE;
 	static const string STRING_DUE;
 	static const string STRING_START;
 	static const string STRING_END;
 	static const string STRING_DESCRIPTION;
 	static const string STRING_DESC;
-	static const string STRING_LABEL;
 	static const string STRING_PRIORITY;
 	static const string STRING_PRIORITY_P;
-	static const string STRING_REMOVE;
-	static const string STRING_RMV;
+
+	static const string STRING_DONE;
+	static const string STRING_UNDONE;
+
+	// used to identify modifier in UserInput
+	static const string MODIFIER_NAME;
+	static const string MODIFIER_DATE;
+	static const string MODIFIER_DUE;
+	static const string MODIFIER_START;
+	static const string MODIFIER_END;
+	static const string MODIFIER_DESCRIPTION;
+	static const string MODIFIER_DESC;
+	static const string MODIFIER_LABEL;
+	static const string MODIFIER_PRIORITY;
+	static const string MODIFIER_PRIORITY_P;
+	static const string MODIFIER_REMOVE;
+	static const string MODIFIER_RMV;
 
 	// used for date time functions and checks
 	static const string STRING_DAYS[];
@@ -180,10 +183,16 @@ public:
 	string executeModifierAndTextParsing(const string, string);
 	// Pre:		
 	// Post:	
+	//string executeSortParsing(string);
+	// Pre:		
+	// Post:	
+	//string executeViewParsing(string);
+	// Pre:		
+	// Post:	
 	string executeSearchParsing(const string);
 	// Pre:		
 	// Post:	
-	string executeRemoveParsing(const string);
+	string executeRemoveParsing(string);
 
 	// ================
 	// helper functions
