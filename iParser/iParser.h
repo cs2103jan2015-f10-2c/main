@@ -78,11 +78,11 @@ public:
 	static const string STRING_DESC;
 	static const string STRING_PRIORITY;
 	static const string STRING_PRIORITY_P;
-
 	static const string STRING_ALL;
+	static const string STRING_UPDATE;
+	static const string STRING_NAME;
 	static const string STRING_DONE;
 	static const string STRING_UNDONE;
-
 	static const string STRING_HIGH;
 	static const string STRING_MEDIUM;
 	static const string STRING_MED;

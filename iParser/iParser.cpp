@@ -36,6 +36,8 @@ const string iParser::STRING_DESC = "desc";
 const string iParser::STRING_PRIORITY = "priority";
 const string iParser::STRING_PRIORITY_P = "p";
 const string iParser::STRING_ALL = "all";
+const string iParser::STRING_NAME = "name";
+const string iParser::STRING_UPDATE = "update";
 const string iParser::STRING_DONE = "done";
 const string iParser::STRING_UNDONE = "undone";
 const string iParser::STRING_HIGH = "high";
@@ -235,12 +237,16 @@ string iParser::executeSortParsing(string sortType) {
 
 	convertToLowerCase(sortType);
 
-	if (sortType == STRING_HIGH || sortType == STRING_H) {
-		setParseInfo(COMMAND_SORT, STRING_HIGH);
-	} else if (sortType == STRING_MEDIUM || sortType == STRING_MED || sortType == STRING_M) {
-		setParseInfo(COMMAND_SORT, STRING_MEDIUM);
-	} else if (sortType == STRING_LOW || sortType == STRING_L) {
-		setParseInfo(COMMAND_SORT, STRING_LOW);
+	if (sortType == STRING_DATE) {
+		setParseInfo(COMMAND_SORT, STRING_DATE);
+	} else if (sortType == STRING_NAME) {
+		setParseInfo(COMMAND_SORT, STRING_NAME);
+	} else if (sortType == STRING_PRIORITY) {
+		setParseInfo(COMMAND_SORT, STRING_PRIORITY);
+	} else if (sortType == STRING_DONE) {
+		setParseInfo(COMMAND_SORT, STRING_DONE);
+	} else if (sortType == STRING_UPDATE) {
+		setParseInfo(COMMAND_SORT, STRING_UPDATE);
 	} else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
 		return MESSAGE_FAILURE;
@@ -309,9 +315,7 @@ string iParser::executePriorityParsing(string priorityType) {
 }
 
 string iParser::executeRemoveParsing(string textToRemove) {
-	if (textToRemove == STRING_BLANK) {
-		throw MESSAGE_INVALID_INPUT;
-	}
+	assert(textToRemove != STRING_BLANK);
 
 	convertToLowerCase(textToRemove);
 
