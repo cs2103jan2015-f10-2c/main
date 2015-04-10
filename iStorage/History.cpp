@@ -70,13 +70,15 @@ string History::undoLastCommand(string& command, Item& latestItem, vector<Item>&
 		if (isNormalHistoryCommand(command)) {
 			latestItem = _itemStack.top();
 			removeUndoneCommand();
+
+			return (command + "\n" + latestItem.displayItemFullDetails());
 		} else if (isClearCommand(command)) {
 			lastestClearedSchedule = _scheduleStack.top();
 			_commandStack.pop();
 			_scheduleStack.pop();
-		}
 
-		return (command + "\n" + latestItem.displayItemFullDetails());
+			return command;
+		}
 	}
 
 	return ERROR_EMPTYSTACKS;
