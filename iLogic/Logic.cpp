@@ -10,6 +10,7 @@ const string Logic::COMMAND_SORT = "sort";
 const string Logic::COMMAND_SEARCH = "search";
 const string Logic::COMMAND_VIEW = "view";
 const string Logic::COMMAND_DONE = "done";
+const string Logic::COMMAND_UNDONE = "undone";
 const string Logic::COMMAND_SAVE = "save";
 const string Logic::COMMAND_CLEAR = "clear";
 const string Logic::COMMAND_EXIT = "exit";
@@ -35,32 +36,35 @@ const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation
 const string Logic::DEFAULT_FILENAME = "save.txt";
 const string Logic::DEFAULT_SORTING = "date";
 
-const string Logic::MESSAGE_TASK = "task ";
-const string Logic::MESSAGE_SUCCESSFUL_ADD = "task added to schedule : ";
-const string Logic::MESSAGE_SUCCESSFUL_DELETE = " is deleted from Schedule";
+const string Logic::MESSAGE_TASK = "Task ";
+const string Logic::MESSAGE_SUCCESSFUL_ADD = "Task added to schedule : ";
+const string Logic::MESSAGE_SUCCESSFUL_DELETE = "Task is deleted from schedule";
 const string Logic::MESSAGE_SUCCESSFUL_EDIT = " is edited : ";
-const string Logic::MESSAGE_SUCCESSFUL_SORT = "schedule sorted by : ";
-const string Logic::MESSAGE_SUCCESSFUL_VIEW = "schedule filtered by : ";
-const string Logic::MESSAGE_SUCCESSFUL_SAVE = "save directory changed to : ";
-const string Logic::MESSAGE_SUCCESSFUL_UNDO = "last action reversed";
+const string Logic::MESSAGE_SUCCESSFUL_SORT = "Schedule sorted by : ";
+const string Logic::MESSAGE_SUCCESSFUL_VIEW = "Schedule filtered by : ";
+const string Logic::MESSAGE_SUCCESSFUL_SAVE = "Save directory changed to : ";
+const string Logic::MESSAGE_SUCCESSFUL_UNDO = "Last action reversed";
 const string Logic::MESSAGE_SUCCESSFUL_MARK_DONE = " is completed";
-const string Logic::MESSAGE_CLEAR = "schedule cleared";
-const string Logic::MESSAGE_RETRIEVED_FROM_TEXT_FILE = "retrieved from save file";
-const string Logic::MESSAGE_FILE_NOT_EXISTING = "file not existing";
-const string Logic::MESSAGE_FAILED_ADD = "unable to add task : ";
-const string Logic::MESSAGE_FAILED_DELETE = "unable to delete task : ";
-const string Logic::MESSAGE_FAILED_EDIT = "unable to edit task : ";
-const string Logic::MESSAGE_FAILED_VIEW = "unable to filter schedule : invalid filter type";
-const string Logic::MESSAGE_FAILED_UNDO = "unable to undo last action";
-const string Logic::MESSAGE_FAILED_SORT = "unable to change sorting : ";
+const string Logic::MESSAGE_SUCCESSFUL_MARK_UNDONE = " is undone";
+const string Logic::MESSAGE_SUCCESSFUL_CHANGE_COMPLETION = "completion changed to : ";
+const string Logic::MESSAGE_CLEAR = "Schedule cleared";
+const string Logic::MESSAGE_RETRIEVED_FROM_TEXT_FILE = "Retrieved from save file";
+const string Logic::MESSAGE_FILE_NOT_EXISTING = "File not existing";
+const string Logic::MESSAGE_FAILED_ADD = "Unable to add task : ";
+const string Logic::MESSAGE_FAILED_DELETE = "Unable to delete task : ";
+const string Logic::MESSAGE_FAILED_EDIT = "Unable to edit task : ";
+const string Logic::MESSAGE_FAILED_VIEW = "Unable to filter schedule : invalid filter type";
+const string Logic::MESSAGE_FAILED_UNDO = "Unable to undo last action";
+const string Logic::MESSAGE_FAILED_SORT = "Unable to change sorting : ";
 const string Logic::MESSAGE_INVALID_PRIORITY = "Invalid Priority Type";
-const string Logic::MESSAGE_SUCCESS = "execution success";
-const string Logic::MESSAGE_INVALID_SORTTYPE = "invalid sort type";
-const string Logic::MESSAGE_INVALID_INPUT = "invalid command";
-const string Logic::MESSAGE_INVALID_INDEX = "invalid index";
-const string Logic::MESSAGE_INVALID_FILTERTYPE = "invalid filter type";
+const string Logic::MESSAGE_SUCCESS = "Execution success";
+const string Logic::MESSAGE_INVALID_SORTTYPE = "Invalid sort type";
+const string Logic::MESSAGE_INVALID_INPUT = "Invalid command";
+const string Logic::MESSAGE_INVALID_INDEX = "Invalid index";
+const string Logic::MESSAGE_INVALID_FILTERTYPE = "Invalid filter type";
 const string Logic::MESSAGE_TASK_FOUND = "Tasks containing : ";
-const string Logic::MESSAGE_NO_TASK_FOUND = "no task can be found";
+const string Logic::MESSAGE_NO_TASK_FOUND = "No task can be found";
+const string Logic::MESSAGE_UNABLE_TO_UNDO = "ERROR: Undo has reached its limit.";
 
 char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
@@ -227,7 +231,7 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
 		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
 	} else if (command == COMMAND_UNDO){
-		returnMessage = _logicSchedule.undoLastCommand();
+		returnMessage = undoPreviousAction();
 	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
 	} else if (command == COMMAND_SEARCH){
@@ -246,6 +250,9 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 	} else if (command == COMMAND_DONE){
 		unsigned int lineIndex = convertToDigit(itemInformation);
 		returnMessage = markDone(lineIndex);
+	} else if (command == COMMAND_UNDONE){
+		unsigned int lineIndex = convertToDigit(itemInformation);
+		returnMessage = markUndone(lineIndex);
 	} else {
 		printInvalidInput();
 		returnMessage = MESSAGE_INVALID_INPUT;
@@ -289,7 +296,7 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		string returnMessage = addItemToSchedule(newItemToBeAdded);
 		return returnMessage;
 	} else{
-	
+
 		string errorList = getErrorList(verifier);
 		removeItemPointer(newItemToBeAdded);
 		return MESSAGE_FAILED_ADD;
@@ -347,7 +354,7 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 string Logic::deleteItemFromSchedule(unsigned int lineIndexToBeDeleted){
 	_logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 	printDeleteTaskSuccessful(lineIndexToBeDeleted);
-	return MESSAGE_TASK + to_string(lineIndexToBeDeleted) + MESSAGE_SUCCESSFUL_DELETE;
+	return MESSAGE_SUCCESSFUL_DELETE;
 }
 
 
@@ -358,7 +365,14 @@ int Logic::convertToDigit(string text) {
 	return digit;
 }
 
-
+string Logic::undoPreviousAction(){
+	string message = _logicSchedule.undoLastCommand();
+	if (message != MESSAGE_UNABLE_TO_UNDO){
+		return MESSAGE_SUCCESSFUL_UNDO;
+	} else{
+		return MESSAGE_FAILED_UNDO;
+	}
+}
 
 /////////////////////////////////////
 ////*EDIT TASK RELATED FUNCTIONS*////
@@ -508,7 +522,7 @@ DateTime Logic::getCurrentTime(){
 
 string Logic::markDone(unsigned int lineIndex){
 	if (isValidLineIndex(lineIndex)){
-		changeCompletionToDone(lineIndex);
+		changeCompletion(lineIndex, COMMAND_DONE);
 		return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_DONE;
 	} else{
 		printInvalidLineIndex();
@@ -516,21 +530,35 @@ string Logic::markDone(unsigned int lineIndex){
 	}
 }
 
+string Logic::markUndone(unsigned int lineIndex){
+	if (isValidLineIndex(lineIndex)){
+		changeCompletion(lineIndex, COMMAND_UNDONE);
+		return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_UNDONE;
+	} else{
+		printInvalidLineIndex();
+		return INVALID_LINE_INDEX;
+	}
+}
 
-string Logic::changeCompletionToDone(unsigned int lineIndex){
+string Logic::changeCompletion(unsigned int lineIndex, string completion){
 	Item* retrievedItem;
 	retrievedItem = new Item;
 	*retrievedItem = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndex);
 
-	bool done = true;
+	bool done;
+	if (completion == COMMAND_DONE){
+		done = true;
+	} else if (completion == COMMAND_UNDONE){
+		done = false;
+	} else{
+		return MESSAGE_INVALID_INPUT;
+	}
 
 	retrievedItem->setCompletion(done);
 	_logicSchedule.replaceItemGivenDisplayVectorIndex(retrievedItem, lineIndex);
-	printMarkDoneSuccessful(lineIndex);
 	removeItemPointer(retrievedItem);
-	return MESSAGE_SUCCESSFUL_MARK_DONE;
+	return MESSAGE_SUCCESSFUL_CHANGE_COMPLETION + completion;
 }
-
 
 
 /////////////////////////////////////

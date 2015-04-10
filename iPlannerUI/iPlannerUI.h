@@ -1,3 +1,4 @@
+//@author A0105180W
 //	GUI
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
 //	Coder:	Shri Kishen Rajendran A0105180W
@@ -48,6 +49,8 @@ namespace iPlannerUI {
 				delete testLogic;
 			}
 		}
+
+	//@author generated
 	private: System::Windows::Forms::TextBox^  commandInputBox;
 
 
@@ -63,6 +66,8 @@ namespace iPlannerUI {
 	private: System::Windows::Forms::ToolStripMenuItem^  sortingScheduleToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  miscellneousToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  dateAndTimeVariationsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  basicCommandsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  viewScheduleToolStripMenuItem;
 
 
 
@@ -99,11 +104,13 @@ namespace iPlannerUI {
 			this->HelpmenuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->addingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->basicCommandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dateAndTimeVariationsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->deletingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->sortingScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->miscellneousToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->viewScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->HelpmenuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -111,9 +118,9 @@ namespace iPlannerUI {
 			// 
 			this->commandInputBox->BackColor = System::Drawing::Color::Black;
 			this->commandInputBox->ForeColor = System::Drawing::Color::Silver;
-			this->commandInputBox->Location = System::Drawing::Point(12, 359);
+			this->commandInputBox->Location = System::Drawing::Point(12, 388);
 			this->commandInputBox->Name = L"commandInputBox";
-			this->commandInputBox->Size = System::Drawing::Size(610, 20);
+			this->commandInputBox->Size = System::Drawing::Size(428, 20);
 			this->commandInputBox->TabIndex = 0;
 			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
 			// 
@@ -122,7 +129,7 @@ namespace iPlannerUI {
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold));
 			this->label1->ForeColor = System::Drawing::Color::Salmon;
-			this->label1->Location = System::Drawing::Point(271, 37);
+			this->label1->Location = System::Drawing::Point(184, 38);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(74, 20);
 			this->label1->TabIndex = 4;
@@ -133,7 +140,7 @@ namespace iPlannerUI {
 			this->commandOutcomeLabel->AutoSize = true;
 			this->commandOutcomeLabel->BackColor = System::Drawing::Color::Black;
 			this->commandOutcomeLabel->ForeColor = System::Drawing::Color::IndianRed;
-			this->commandOutcomeLabel->Location = System::Drawing::Point(12, 333);
+			this->commandOutcomeLabel->Location = System::Drawing::Point(12, 359);
 			this->commandOutcomeLabel->Name = L"commandOutcomeLabel";
 			this->commandOutcomeLabel->Size = System::Drawing::Size(122, 13);
 			this->commandOutcomeLabel->TabIndex = 5;
@@ -144,11 +151,11 @@ namespace iPlannerUI {
 			this->outputBox2->BackColor = System::Drawing::SystemColors::MenuText;
 			this->outputBox2->ForeColor = System::Drawing::Color::White;
 			this->outputBox2->HideSelection = false;
-			this->outputBox2->Location = System::Drawing::Point(14, 70);
+			this->outputBox2->Location = System::Drawing::Point(15, 70);
 			this->outputBox2->Name = L"outputBox2";
 			this->outputBox2->ReadOnly = true;
 			this->outputBox2->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
-			this->outputBox2->Size = System::Drawing::Size(610, 251);
+			this->outputBox2->Size = System::Drawing::Size(425, 272);
 			this->outputBox2->TabIndex = 7;
 			this->outputBox2->Text = L"";
 			// 
@@ -157,15 +164,16 @@ namespace iPlannerUI {
 			this->HelpmenuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->helpToolStripMenuItem });
 			this->HelpmenuStrip1->Location = System::Drawing::Point(0, 0);
 			this->HelpmenuStrip1->Name = L"HelpmenuStrip1";
-			this->HelpmenuStrip1->Size = System::Drawing::Size(636, 24);
+			this->HelpmenuStrip1->Size = System::Drawing::Size(452, 24);
 			this->HelpmenuStrip1->TabIndex = 9;
 			this->HelpmenuStrip1->Text = L"menuStrip1";
 			// 
 			// helpToolStripMenuItem
 			// 
-			this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
+			this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {
 				this->addingATaskToolStripMenuItem,
-					this->deletingATaskToolStripMenuItem, this->editingATaskToolStripMenuItem, this->sortingScheduleToolStripMenuItem, this->miscellneousToolStripMenuItem
+					this->deletingATaskToolStripMenuItem, this->editingATaskToolStripMenuItem, this->sortingScheduleToolStripMenuItem, this->viewScheduleToolStripMenuItem,
+					this->miscellneousToolStripMenuItem
 			});
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
 			this->helpToolStripMenuItem->Size = System::Drawing::Size(44, 20);
@@ -173,11 +181,20 @@ namespace iPlannerUI {
 			// 
 			// addingATaskToolStripMenuItem
 			// 
-			this->addingATaskToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->dateAndTimeVariationsToolStripMenuItem });
+			this->addingATaskToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->basicCommandsToolStripMenuItem,
+					this->dateAndTimeVariationsToolStripMenuItem
+			});
 			this->addingATaskToolStripMenuItem->Name = L"addingATaskToolStripMenuItem";
-			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->addingATaskToolStripMenuItem->Text = L"Adding a Task";
-			this->addingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::addingATaskToolStripMenuItem_Click);
+			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->addingATaskToolStripMenuItem->Text = L"Add a Task";
+			// 
+			// basicCommandsToolStripMenuItem
+			// 
+			this->basicCommandsToolStripMenuItem->Name = L"basicCommandsToolStripMenuItem";
+			this->basicCommandsToolStripMenuItem->Size = System::Drawing::Size(206, 22);
+			this->basicCommandsToolStripMenuItem->Text = L"Basic Commands";
+			this->basicCommandsToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::basicCommandsToolStripMenuItem_Click);
 			// 
 			// dateAndTimeVariationsToolStripMenuItem
 			// 
@@ -189,37 +206,44 @@ namespace iPlannerUI {
 			// deletingATaskToolStripMenuItem
 			// 
 			this->deletingATaskToolStripMenuItem->Name = L"deletingATaskToolStripMenuItem";
-			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->deletingATaskToolStripMenuItem->Text = L"Deleting a Task";
+			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->deletingATaskToolStripMenuItem->Text = L"Delete a Task";
 			this->deletingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::deletingATaskToolStripMenuItem_Click);
 			// 
 			// editingATaskToolStripMenuItem
 			// 
 			this->editingATaskToolStripMenuItem->Name = L"editingATaskToolStripMenuItem";
-			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->editingATaskToolStripMenuItem->Text = L"Editing a Task";
+			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->editingATaskToolStripMenuItem->Text = L"Edit a Task";
 			this->editingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::editingATaskToolStripMenuItem_Click);
 			// 
 			// sortingScheduleToolStripMenuItem
 			// 
 			this->sortingScheduleToolStripMenuItem->Name = L"sortingScheduleToolStripMenuItem";
-			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(163, 22);
-			this->sortingScheduleToolStripMenuItem->Text = L"Sorting Schedule";
+			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->sortingScheduleToolStripMenuItem->Text = L"Sort Schedule";
 			this->sortingScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::sortingScheduleToolStripMenuItem_Click);
 			// 
 			// miscellneousToolStripMenuItem
 			// 
 			this->miscellneousToolStripMenuItem->Name = L"miscellneousToolStripMenuItem";
-			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(163, 22);
+			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->miscellneousToolStripMenuItem->Text = L"Miscellneous";
 			this->miscellneousToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::miscellneousToolStripMenuItem_Click);
+			// 
+			// viewScheduleToolStripMenuItem
+			// 
+			this->viewScheduleToolStripMenuItem->Name = L"viewScheduleToolStripMenuItem";
+			this->viewScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->viewScheduleToolStripMenuItem->Text = L"View Schedule";
+			this->viewScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::viewScheduleToolStripMenuItem_Click);
 			// 
 			// iPlannerUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ActiveCaptionText;
-			this->ClientSize = System::Drawing::Size(636, 430);
+			this->ClientSize = System::Drawing::Size(452, 448);
 			this->Controls->Add(this->outputBox2);
 			this->Controls->Add(this->commandOutcomeLabel);
 			this->Controls->Add(this->label1);
@@ -240,6 +264,8 @@ namespace iPlannerUI {
 
 		}
 #pragma endregion
+
+		//@author A0105180W 
 		void MarshalString(String ^ s, string& os) {
 			using namespace Runtime::InteropServices;
 			const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
@@ -255,54 +281,57 @@ namespace iPlannerUI {
 				 string stdUserInput;
 				 MarshalString(userInput, stdUserInput);
 				 vector<Item> tempItem;
+
 				 if (e->KeyCode == Keys::Enter) {
 					 display = testLogic->initiateCommandAction(testParser, stdUserInput);
-
 					 outputBox2->Clear();
 
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 11, FontStyle::Bold);
-					 //					 String^ output = "\t\t\t\t\t   SCHEDULE \r\n\r\n";
 					 outputBox2->SelectionColor = Color::Beige;
-					 outputBox2->SelectedText = "\t\t\t\t\t  SCHEDULE\r\n";
+					 outputBox2->SelectedText = "\t\t\t    SCHEDULE\r\n\r\n";
 
-					 //					 outputBox2->SelectionColor = Color::Red;
-					 //					 outputBox2->SelectedText = "SCHEDULE2\r\n";
 					 tempItem = testLogic->getDisplaySchedule();
 					 vector<Item>::iterator iterItem;
-					 int i = 0;
+					 int displayIndex = 0;
 					 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
-						 String ^indexString = (++i).ToString();
+						 String ^indexString = (++displayIndex).ToString();
 						 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-						 outputBox2->SelectedText = indexString + ". " + nameString;
+						 outputBox2->SelectedText = indexString + ". ";
 
-						 char pri = iterItem->getPriority();
-
-						 if (pri == 72) {
-
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 if (iterItem->getPriority() == 72) {
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 							 outputBox2->SelectionColor = Color::Red;
-							 outputBox2->SelectedText = "\t\t\tH";
-						 }
-						 else if (pri == 77) {
+							 outputBox2->SelectedText = "\tH";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+							 outputBox2->SelectedText = "\t" + nameString;
+
+						 } else if (iterItem->getPriority() == 77) {
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 							 outputBox2->SelectionColor = Color::Yellow;
-							 outputBox2->SelectedText = "\t\t\tM";
-						 }
-						 else if (pri == 76) {
-
+							 outputBox2->SelectedText = "\tM";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-							 outputBox2->SelectionColor = Color::Green;
-							 outputBox2->SelectedText = "\t\t\tL";
+							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+							 outputBox2->SelectedText = "\t" + nameString;
 
-						 }
-						 else {
+						 } else if (iterItem->getPriority() == 76) {
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
+							 outputBox2->SelectionColor = Color::LawnGreen;
+							 outputBox2->SelectedText = "\tL";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-							 outputBox2->SelectedText = "\t\t\t";
+							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+							 outputBox2->SelectedText = "\t" + nameString;
+
+						 } else {
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
+							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+							 outputBox2->SelectedText = "\t-";
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+							 outputBox2->SelectedText = "\t" + nameString;
 						 }
-
-
 
 						 /*					 String^ labelString;
 						 if (iterItem.getLabel() == 'E') {
@@ -334,30 +363,27 @@ namespace iPlannerUI {
 						 else {
 						 labelString = gcnew String("");
 						 outputBox2->Text = "\t\t\t" + labelString;
-						 }
-						 */
-						 String^ completionString;
+						 }*/
 
+						 String^ completionString;
 						 if (iterItem->getCompletion() == true) {
 							 completionString = "Done";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::Gold;
-							 outputBox2->SelectedText = "\t\t\t  Done\r\n";
-						 }
-						 else {
+							 outputBox2->SelectedText = " (D)\r\n";
+						 } else {
 							 completionString = "Not Done";
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::Silver;
-							 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
+							 outputBox2->SelectedText = " (ND)\r\n";
 						 }
-						 						 
+
 						 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
 						 if (startString != "") {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-							 outputBox2->SelectedText = "\tStart : " + startString + "\r\n";
-						 }
-						 else {
+							 outputBox2->SelectedText = "\t\t   Start : " + startString + "\r\n";
+						 } else {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 							 outputBox2->SelectedText = "";
@@ -367,19 +393,23 @@ namespace iPlannerUI {
 						 if (endString != "") {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightSalmon;
-							 outputBox2->SelectedText = "\tEnd : " + endString + "\r\n";
-						 }
-						 else {
+							 outputBox2->SelectedText = "\t\t   End  : " + endString + "\r\n";
+						 } else {
 							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 							 outputBox2->SelectionColor = Color::LightSalmon;
 							 outputBox2->SelectedText = "";
 						 }
 
 						 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
-						 outputBox2->SelectionColor = Color::BlueViolet;
-						 outputBox2->SelectedText = "\t" + descriptionString + "\r\n";
-
+						 if (descriptionString != ""){
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
+							 outputBox2->SelectionColor = Color::BlueViolet;
+							 outputBox2->SelectedText = "\t\t   " + descriptionString + "\r\n\r\n";
+						 } else {
+							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
+							 outputBox2->SelectionColor = Color::BlueViolet;
+							 outputBox2->SelectedText = "\r\n";
+						 }
 
 					 }
 
@@ -388,19 +418,6 @@ namespace iPlannerUI {
 
 					 commandInputBox->Clear();
 				 }
-				 /*
-				 if (e->KeyCode == Keys::Alt && e->KeyCode == Keys::L) {
-				 outputBox2->BackColor = Color::White;
-				 outputBox2->ForeColor = Color::Crimson;
-				 commandInputBox->BackColor = Color::White;
-				 commandInputBox->ForeColor = Color::Crimson;
-				 }
-				 if (e->KeyCode == Keys::Alt && e->KeyCode == Keys::D) {
-				 outputBox2->BackColor = Color::Black;
-				 outputBox2->ForeColor = Color::Aqua;
-				 commandInputBox->BackColor = Color::Black;
-				 commandInputBox->ForeColor = Color::Aqua;
-				 }*/
 
 	}
 
@@ -410,51 +427,53 @@ namespace iPlannerUI {
 				 testLogic->readDataFromFile();
 				 vector<Item> tempItem;
 				 outputBox2->Clear();
-
+				 
 				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 11, FontStyle::Bold);
-				 String^ output = "\t\t\t\t\t   SCHEDULE \r\n\r\n";
 				 outputBox2->SelectionColor = Color::Beige;
-				 outputBox2->SelectedText = "\t\t\t\t\t  SCHEDULE\r\n";
-				 /*
-				 outputBox2->SelectionColor = Color::;
-				 outputBox2->SelectedText = "SCHEDULE2\r\n";
-				 */
+				 outputBox2->SelectedText = "\t\t\t    SCHEDULE\r\n\r\n";
 				 tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
-				 int i = 0;
+				 int displayIndex = 0;
+
 				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
-					 String ^indexString = (++i).ToString();
+					 
+					 String ^indexString = (++displayIndex).ToString();
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 					 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-					 outputBox2->SelectedText = indexString + ". " + nameString;
+					 outputBox2->SelectedText = indexString + ". ";
 
-					 String^ priorityString = gcnew String(iterItem->getPriority().ToString());
-					 output = priorityString;
-
-					 char pri = iterItem->getPriority();
-
-					 if (pri == 72) {
-
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+					 if (iterItem->getPriority() == 72) {
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 						 outputBox2->SelectionColor = Color::Red;
-						 outputBox2->SelectedText = "\t\t\tH";
-					 }
-					 else if (pri == 77) {
+						 outputBox2->SelectedText = "\tH";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectedText = "\t" + nameString;
+						 
+					 } else if (iterItem->getPriority() == 77) {
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 						 outputBox2->SelectionColor = Color::Yellow;
-						 outputBox2->SelectedText = "\t\t\tM";
-					 }
-					 else if (pri == 76) {
-
+						 outputBox2->SelectedText = "\tM";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-						 outputBox2->SelectionColor = Color::Green;
-						 outputBox2->SelectedText = "\t\t\tL";
+						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectedText = "\t" + nameString;
 
-					 }
-					 else {
+					 } else if (iterItem->getPriority() == 76) {
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
+						 outputBox2->SelectionColor = Color::LawnGreen;
+						 outputBox2->SelectedText = "\tL";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
-						 outputBox2->SelectedText = "\t\t\t";
+						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectedText = "\t" + nameString;
+
+					 } else {
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
+						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectedText = "\t-";
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
+						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectedText = "\t" + nameString;
 					 }
 
 
@@ -489,30 +508,27 @@ namespace iPlannerUI {
 					 else {
 					 labelString = gcnew String("");
 					 outputBox2->Text = "\t\t\t" + labelString;
-					 }
-					 */
+					 }*/
+					 
 					 String^ completionString;
-
 					 if (iterItem->getCompletion() == true) {
 						 completionString = "Done";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::Gold;
-						 outputBox2->SelectedText = "\t\t\t  Done\r\n";
-					 }
-					 else {
+						 outputBox2->SelectedText = " (D)\r\n";
+					 } else {
 						 completionString = "Not Done";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::Silver;
-						 outputBox2->SelectedText = "\t\t\tNot Done\r\n";
+						 outputBox2->SelectedText = " (ND)\r\n";
 					 }
-
+					 
 					 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
 					 if (startString != "") {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-						 outputBox2->SelectedText = "\tStart : " + startString + "\r\n";
-					 }
-					 else {
+						 outputBox2->SelectedText = "\t\t   Start : " + startString + "\r\n";
+					 } else {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
 						 outputBox2->SelectedText = "";
@@ -522,30 +538,32 @@ namespace iPlannerUI {
 					 if (endString != "") {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightSalmon;
-						 outputBox2->SelectedText = "\tEnd : " + endString + "\r\n";
-					 }
-					 else {
+						 outputBox2->SelectedText = "\t\t   End  : " + endString + "\r\n";
+					 } else {
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10);
 						 outputBox2->SelectionColor = Color::LightSalmon;
 						 outputBox2->SelectedText = "";
 					 }
 
 					 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
-					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
-					 outputBox2->SelectionColor = Color::BlueViolet;
-					 outputBox2->SelectedText = "\t" + descriptionString + "\r\n";
-
+					 if (descriptionString != ""){
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
+						 outputBox2->SelectionColor = Color::BlueViolet;
+						 outputBox2->SelectedText = "\t\t   " + descriptionString + "\r\n\r\n";
+					 } else {
+						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
+						 outputBox2->SelectionColor = Color::BlueViolet;
+						 outputBox2->SelectedText = "\r\n";
+					 }
 				 }
-
-
-				 //	 outputBox2->Text = output;
 
 				 commandOutcomeLabel->Text = "Enter the command";
 
 	}
 
-	private: System::Void addingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuAdd = "\t\tAdding a Task Command List\r\n";
+	
+	private: System::Void basicCommandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+				 String^ helpMenuAdd = "\t\tAdd a Task - Command List\r\n";
 
 				 helpMenuAdd += "\r\nadd <taskName> followed by task entities\r\n\r\n";
 				 helpMenuAdd += "The task entities could be one or more of the following : \r\n";
@@ -557,8 +575,8 @@ namespace iPlannerUI {
 				 helpMenuAdd += "\r\nNote : For <DateTime> variations, Help -> Adding a Task -> Date and Time Variations";
 
 				 MessageBox::Show(helpMenuAdd);
-
 	}
+
 
 	private: System::Void dateAndTimeVariationsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuDT;
@@ -584,11 +602,11 @@ namespace iPlannerUI {
 				 MessageBox::Show(helpMenuDT);
 	}
 	private: System::Void deletingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuDel = "      Deleting a Task Command List\r\n";
+				 String^ helpMenuDel = "      Deleting a Task - Command List\r\n";
 
 				 helpMenuDel += "\r\ndelete <Display index of task to be deleted\r\n";
 				 helpMenuDel += "del <Display index of task to be deleted\r\n";
-
+				 helpMenuDel += "\r\nclear - Deletes all tasks in the Schedule\r\n";
 				 MessageBox::Show(helpMenuDel);
 	}
 	private: System::Void editingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -607,7 +625,7 @@ namespace iPlannerUI {
 	}
 
 	private: System::Void sortingScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuSort = "\t\tSorting the Schedule Command List\r\n";
+				 String^ helpMenuSort = "\t\tSort Schedule - Command List\r\n";
 
 				 helpMenuSort += "\r\nThe Schedule can be sorted by the following attributes : \r\n";
 				 helpMenuSort += "By Task Name : sort name - Sorts Tasks by Name in alphabetical order\r\n";
@@ -632,5 +650,17 @@ namespace iPlannerUI {
 
 				 MessageBox::Show(helpMenuMisc);
 	}
-	};
+	
+	private: System::Void viewScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+				 String^ helpMenuView = "\t\t\tView Schedule - Command List\r\n";
+
+				 helpMenuView += "\r\nUser can view All tasks, Completed tasks or tasks with a specific Priority\r\n";
+				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
+				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
+				 helpMenuView += "view priority <H/M/L> - Tasks which have the priority specified are displayed\r\n";
+
+				 MessageBox::Show(helpMenuView);
+	}
+	
+};
 }

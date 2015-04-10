@@ -1451,26 +1451,831 @@ public:
 		delete item2;
 		delete item3;
 	}
+
+	TEST_METHOD(ScheduleTestIsRelevantDateTime) {
+		Schedule relevantDateTimeSchedule;
+		bool isRelevantDateTimeAccordingToSchedule;
+
+		Item *noDateTimeItem1 = new Item(string("This is no-DateTime Item #1"));
+		noDateTimeItem1->setItemID(1);
+
+		Item *itemWithStartTime1 = new Item(string("This is Item w/ Start Time #1"));
+		itemWithStartTime1->setItemID(3);
+		itemWithStartTime1->setStartTime(2005, 1, 25, 19, 0);
+
+		Item *itemWithStartTime2 = new Item(string("This is Item w/ Start Time #2"));
+		itemWithStartTime2->setItemID(4);
+		itemWithStartTime2->setStartTime(2016, 1, 1);
+
+		Item *itemWithEndTime1 = new Item(string("This is Item w/ End Time #1"));
+		itemWithEndTime1->setItemID(6);
+		itemWithEndTime1->setEndTime(2000, 11, 17, 8, 15);
+
+		Item *itemWithEndTime2 = new Item(string("This is Item w/ End Time #2"));
+		itemWithEndTime2->setItemID(7);
+		itemWithEndTime2->setEndTime(2020, 1, 19, 20, 15);
+
+		Item *itemWithEndTime3 = new Item(string("This is Item w/ End Time #3"));
+		itemWithEndTime3->setItemID(8);
+		itemWithEndTime3->setEndTime(2014, 11, 30);
+
+		Item *itemWithEndTime4 = new Item(string("This is Item w/ End Time #4"));
+		itemWithEndTime4->setItemID(9);
+		itemWithEndTime4->setEndTime(2050, 5, 2, 18, 18);
+
+		Item *itemWithStartAndEndTime1 = new Item(string("This is Item w/ Start & End Time #1 with Start and End in range"));
+		itemWithStartAndEndTime1->setItemID(10);
+		itemWithStartAndEndTime1->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime1->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime2 = new Item(string("This is Item w/ Start & End Time #2 with Start in range, End out of range"));
+		itemWithStartAndEndTime2->setItemID(11);
+		itemWithStartAndEndTime2->setStartTime(2007, 12, 8);
+		itemWithStartAndEndTime2->setEndTime(2098, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime3 = new Item(string("This is Item w/ Start & End Time #3 with Start out of range, End in range"));
+		itemWithStartAndEndTime3->setItemID(12);
+		itemWithStartAndEndTime3->setStartTime(1990, 12, 18, 9, 0);
+		itemWithStartAndEndTime3->setEndTime(2018, 11, 21);
+
+		Item *itemWithStartAndEndTime4 = new Item(string("This is Item w/ Start & End Time #4 with Start and End OUT of range"));
+		itemWithStartAndEndTime4->setItemID(13);
+		itemWithStartAndEndTime4->setStartTime(3000, 12, 18, 9, 0);
+		itemWithStartAndEndTime4->setEndTime(3012, 11, 21, 7, 0);
+
+		DateTime dateTime1(2000, 1, 1, 0, 0);
+		DateTime dateTime2(2016, 12, 30, 23, 59);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(noDateTimeItem1->getStartTime(), noDateTimeItem1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartTime1->getStartTime(), itemWithStartTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartTime2->getStartTime(), itemWithStartTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithEndTime1->getStartTime(), itemWithEndTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithEndTime2->getStartTime(), itemWithEndTime2->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithEndTime3->getStartTime(), itemWithEndTime3->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime1->getStartTime(), itemWithStartAndEndTime1->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime2->getStartTime(), itemWithStartAndEndTime2->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime3->getStartTime(), itemWithStartAndEndTime3->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(true, isRelevantDateTimeAccordingToSchedule);
+
+		isRelevantDateTimeAccordingToSchedule = relevantDateTimeSchedule.isRelevantDateTime(itemWithStartAndEndTime4->getStartTime(), itemWithStartAndEndTime4->getEndTime(), dateTime1, dateTime2);
+		Assert::AreEqual(false, isRelevantDateTimeAccordingToSchedule);
+
+		delete noDateTimeItem1;
+		delete itemWithEndTime1;
+		delete itemWithEndTime2;
+		delete itemWithEndTime3;
+		delete itemWithEndTime4;
+		delete itemWithStartTime1;
+		delete itemWithStartTime2;
+		delete itemWithStartAndEndTime1;
+		delete itemWithStartAndEndTime2;
+		delete itemWithStartAndEndTime3;
+		delete itemWithStartAndEndTime4;
+
+		noDateTimeItem1 = NULL;
+		itemWithEndTime1 = NULL;
+		itemWithEndTime2 = NULL;
+		itemWithEndTime3 = NULL;
+		itemWithEndTime4 = NULL;
+		itemWithStartTime1 = NULL;
+		itemWithStartTime2 = NULL;
+		itemWithStartAndEndTime1 = NULL;
+		itemWithStartAndEndTime2 = NULL;
+		itemWithStartAndEndTime3 = NULL;
+		itemWithStartAndEndTime4 = NULL;
+	}
+
 	};
 
 	TEST_CLASS(TEST_FILTER) {
 public:
 
-	TEST_METHOD(TestFilterByPriority) {
+	// Not done since label funcitonality is not implemented
+	TEST_METHOD(ScheduleTestFilterDisplayScheduleByLabel) {
 		// TODO: Your test code here
 	}
 
-	TEST_METHOD(TestFilterByLabel) {
-		// TODO: Your test code here
+	TEST_METHOD(ScheduleTestFilterDisplayScheduleByPriority) {
+		Schedule prioritySchedule;
+		bool isSamePriorityAsDefinedByUser;
+
+		Item *highPriorityItem1 = new Item(string("This is High #1"));
+		highPriorityItem1->setItemID(1);
+		highPriorityItem1->setPriority('H');
+
+		Item *highPriorityItem2 = new Item(string("This is High #2"));
+		highPriorityItem2->setItemID(2);
+		highPriorityItem2->setPriority('H');
+
+		Item *highPriorityItem3 = new Item(string("This is High #3"));
+		highPriorityItem3->setItemID(3);
+		highPriorityItem3->setPriority('H');
+
+		Item *highPriorityItem4 = new Item(string("This is High #4"));
+		highPriorityItem4->setItemID(4);
+		highPriorityItem4->setPriority('H');
+
+		Item *medPriorityItem1 = new Item(string("This is Medium #1"));
+		medPriorityItem1->setItemID(5);
+		medPriorityItem1->setPriority('M');
+
+		Item *medPriorityItem2 = new Item(string("This is Medium #2"));
+		medPriorityItem2->setItemID(6);
+		medPriorityItem2->setPriority('M');
+
+		Item *lowPriorityItem1 = new Item(string("This is Low #1"));
+		lowPriorityItem1->setItemID(7);
+		lowPriorityItem1->setPriority('L');
+
+		Item *lowPriorityItem2 = new Item(string("This is Low #2"));
+		lowPriorityItem2->setItemID(8);
+		lowPriorityItem2->setPriority('L');
+
+		Item *lowPriorityItem3 = new Item(string("This is Low #3"));
+		lowPriorityItem3->setItemID(9);
+		lowPriorityItem3->setPriority('L');
+
+		Item *lowPriorityItem4 = new Item(string("This is Low #4"));
+		lowPriorityItem4->setItemID(10);
+		lowPriorityItem4->setPriority('L');
+
+		Item *lowPriorityItem5 = new Item(string("This is Low #5"));
+		lowPriorityItem5->setItemID(11);
+		lowPriorityItem5->setPriority('L');
+
+		prioritySchedule.addItem(highPriorityItem1);
+		prioritySchedule.addItem(highPriorityItem2);
+		prioritySchedule.addItem(highPriorityItem3);
+		prioritySchedule.addItem(highPriorityItem4);
+		prioritySchedule.addItem(medPriorityItem1);
+		prioritySchedule.addItem(medPriorityItem2);
+		prioritySchedule.addItem(lowPriorityItem1);
+		prioritySchedule.addItem(lowPriorityItem2);
+		prioritySchedule.addItem(lowPriorityItem3);
+		prioritySchedule.addItem(lowPriorityItem4);
+		prioritySchedule.addItem(lowPriorityItem5);
+
+		prioritySchedule.resetDisplaySchedule();
+		Assert::AreEqual(11, int(prioritySchedule.getSizeOfDisplaySchedule()));
+
+		isSamePriorityAsDefinedByUser = prioritySchedule.filterDisplayScheduleByPriority(1, 'H');
+		Assert::AreEqual(false, isSamePriorityAsDefinedByUser);
+		Assert::AreEqual(11, int(prioritySchedule.getSizeOfDisplaySchedule()));
+
+		prioritySchedule.resetDisplaySchedule();
+		isSamePriorityAsDefinedByUser = prioritySchedule.filterDisplayScheduleByPriority(5, 'H');
+		Assert::AreEqual(true, isSamePriorityAsDefinedByUser);
+		Assert::AreEqual(10, int(prioritySchedule.getSizeOfDisplaySchedule()));
+
+		prioritySchedule.resetDisplaySchedule();
+		Assert::AreEqual(11, int(prioritySchedule.getSizeOfDisplaySchedule()));
+		isSamePriorityAsDefinedByUser = prioritySchedule.filterDisplayScheduleByPriority(4, 'M');
+		Assert::AreEqual(false, isSamePriorityAsDefinedByUser);
+		Assert::AreEqual(11, int(prioritySchedule.getSizeOfDisplaySchedule()));
+		isSamePriorityAsDefinedByUser = prioritySchedule.filterDisplayScheduleByPriority(10, 'M');
+		Assert::AreEqual(true, isSamePriorityAsDefinedByUser);
+		Assert::AreEqual(10, int(prioritySchedule.getSizeOfDisplaySchedule()));
+
+		delete highPriorityItem1;
+		delete highPriorityItem2;
+		delete highPriorityItem3;
+		delete highPriorityItem4;
+		delete medPriorityItem1;
+		delete medPriorityItem2;
+		delete lowPriorityItem1;
+		delete lowPriorityItem2;
+		delete lowPriorityItem3;
+		delete lowPriorityItem4;
+		delete lowPriorityItem5;
+
+		highPriorityItem1 = NULL;
+		highPriorityItem2 = NULL;
+		highPriorityItem3 = NULL;
+		highPriorityItem4 = NULL;
+		medPriorityItem1 = NULL;
+		medPriorityItem2 = NULL;
+		lowPriorityItem1 = NULL;
+		lowPriorityItem2 = NULL;
+		lowPriorityItem3 = NULL;
+		lowPriorityItem4 = NULL;
+		lowPriorityItem5 = NULL;
 	}
 
-	TEST_METHOD(TestFilterByCompletion) {
-		// TODO: Your test code here
+	TEST_METHOD(ScheduleTestFilterDisplayScheduleByCompletion) {
+		Schedule completionTestSchedule;
+		bool isSameCompletionAsSpecifiedByUser;
+
+		Item *completedItem1 = new Item(string("This is Completed #1"));
+		completedItem1->setItemID(1);
+		completedItem1->setCompletion(true);
+
+		Item *completedItem2 = new Item(string("This is Completed #2"));
+		completedItem2->setItemID(2);
+		completedItem2->setCompletion(true);
+
+		Item *completedItem3 = new Item(string("This is Completed #3"));
+		completedItem3->setItemID(3);
+		completedItem3->setCompletion(true);
+
+		Item *completedItem4 = new Item(string("This is Completed #4"));
+		completedItem4->setItemID(4);
+		completedItem4->setCompletion(true);
+
+		Item *uncompletedItem1 = new Item(string("This is Uncompleted #1"));
+		uncompletedItem1->setItemID(5);
+		uncompletedItem1->setCompletion(false);
+
+		Item *uncompletedItem2 = new Item(string("This is Uncompleted #2"));
+		uncompletedItem2->setItemID(6);
+		uncompletedItem2->setCompletion(false);
+
+		completionTestSchedule.addItem(completedItem1);
+		completionTestSchedule.addItem(completedItem2);
+		completionTestSchedule.addItem(completedItem3);
+		completionTestSchedule.addItem(completedItem4);
+		completionTestSchedule.addItem(uncompletedItem1);
+		completionTestSchedule.addItem(uncompletedItem2);
+
+		completionTestSchedule.resetDisplaySchedule();
+		Assert::AreEqual(6, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+
+		isSameCompletionAsSpecifiedByUser = completionTestSchedule.filterDisplayScheduleByCompletion(0, false);
+		Assert::AreEqual(true, isSameCompletionAsSpecifiedByUser);
+		Assert::AreEqual(5, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+
+		completionTestSchedule.resetDisplaySchedule();
+		Assert::AreEqual(6, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+
+		isSameCompletionAsSpecifiedByUser = completionTestSchedule.filterDisplayScheduleByCompletion(5, false);
+		Assert::AreEqual(false, isSameCompletionAsSpecifiedByUser);
+		Assert::AreEqual(6, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+		isSameCompletionAsSpecifiedByUser = completionTestSchedule.filterDisplayScheduleByCompletion(3, true);
+		Assert::AreEqual(false, isSameCompletionAsSpecifiedByUser);
+		Assert::AreEqual(6, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+		isSameCompletionAsSpecifiedByUser = completionTestSchedule.filterDisplayScheduleByCompletion(2, false);
+		Assert::AreEqual(true, isSameCompletionAsSpecifiedByUser);
+		Assert::AreEqual(5, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+
+		delete completedItem1;
+		delete completedItem2;
+		delete completedItem3;
+		delete completedItem4;
+		delete uncompletedItem1;
+		delete uncompletedItem2;
+
+		completedItem1 = NULL;
+		completedItem2 = NULL;
+		completedItem3 = NULL;
+		completedItem4 = NULL;
+		uncompletedItem1 = NULL;
+		uncompletedItem2 = NULL;
 	}
 
-	TEST_METHOD(TestFilterByDate) {
-		// TODO: Your test code here
+	TEST_METHOD(ScheduleTestFilterDisplayScheduleByDateTime) {
+		Schedule dateTimeSchedule;
+		bool isRelevantDateTime;
+
+		Item *noDateTimeItem1 = new Item(string("This is no-DateTime Item #1"));
+		noDateTimeItem1->setItemID(1);
+
+		Item *noDateTimeItem2 = new Item(string("This is no-DateTime Item #2"));
+		noDateTimeItem2->setItemID(2);
+
+		Item *itemWithStartTime1 = new Item(string("This is Item w/ Start Time #1"));
+		itemWithStartTime1->setItemID(3);
+		itemWithStartTime1->setStartTime(2009, 1, 25, 19, 0);
+
+		Item *itemWithStartTime2 = new Item(string("This is Item w/ Start Time #2"));
+		itemWithStartTime2->setItemID(4);
+		itemWithStartTime2->setStartTime(2015, 11, 2, 7, 0);
+
+		Item *itemWithStartTime3 = new Item(string("This is Item w/ Start Time #3"));
+		itemWithStartTime3->setItemID(5);
+		itemWithStartTime3->setStartTime(2014, 4, 17);
+
+		Item *itemWithEndTime1 = new Item(string("This is Item w/ End Time #1"));
+		itemWithEndTime1->setItemID(6);
+		itemWithEndTime1->setEndTime(2008, 11, 17, 8, 15);
+
+		Item *itemWithEndTime2 = new Item(string("This is Item w/ End Time #2"));
+		itemWithEndTime2->setItemID(7);
+		itemWithEndTime2->setEndTime(2099, 1, 19, 20, 15);
+
+		Item *itemWithEndTime3 = new Item(string("This is Item w/ End Time #3"));
+		itemWithEndTime3->setItemID(8);
+		itemWithEndTime3->setEndTime(2008, 11, 30);
+
+		Item *itemWithEndTime4 = new Item(string("This is Item w/ End Time #4"));
+		itemWithEndTime4->setItemID(9);
+		itemWithEndTime4->setEndTime(2014, 5, 2, 18, 18);
+
+		Item *itemWithStartAndEndTime1 = new Item(string("This is Item w/ Start & End Time #1 with Start and End in range"));
+		itemWithStartAndEndTime1->setItemID(10);
+		itemWithStartAndEndTime1->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime1->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime2 = new Item(string("This is Item w/ Start & End Time #2 with Start in range, End out of range"));
+		itemWithStartAndEndTime2->setItemID(11);
+		itemWithStartAndEndTime2->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime2->setEndTime(2098, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime3 = new Item(string("This is Item w/ Start & End Time #3 with Start out of range, End in range"));
+		itemWithStartAndEndTime3->setItemID(12);
+		itemWithStartAndEndTime3->setStartTime(1990, 12, 18, 9, 0);
+		itemWithStartAndEndTime3->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime4 = new Item(string("This is Item w/ Start & End Time #4 with Start and End OUT of range"));
+		itemWithStartAndEndTime4->setItemID(13);
+		itemWithStartAndEndTime4->setStartTime(3000, 12, 18, 9, 0);
+		itemWithStartAndEndTime4->setEndTime(3012, 11, 21, 7, 0);
+
+		dateTimeSchedule.addItem(noDateTimeItem1);
+		dateTimeSchedule.addItem(noDateTimeItem2);
+		dateTimeSchedule.addItem(itemWithStartTime1);
+		dateTimeSchedule.addItem(itemWithStartTime2);
+		dateTimeSchedule.addItem(itemWithStartTime3);
+		dateTimeSchedule.addItem(itemWithEndTime1);
+		dateTimeSchedule.addItem(itemWithEndTime2);
+		dateTimeSchedule.addItem(itemWithEndTime3);
+		dateTimeSchedule.addItem(itemWithEndTime4);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime1);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime2);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime3);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime4);
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(0, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(true, isRelevantDateTime);
+		Assert::AreEqual(12, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(2, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(false, isRelevantDateTime);
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(6, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(true, isRelevantDateTime);
+		Assert::AreEqual(12, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(9, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(false, isRelevantDateTime);
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(10, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(false, isRelevantDateTime);
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+		isRelevantDateTime = dateTimeSchedule.filterDisplayScheduleByDateTime(12, DateTime(2000, 1, 1, 0, 0), DateTime(2020, 12, 30, 23, 59));
+		Assert::AreEqual(true, isRelevantDateTime);
+		Assert::AreEqual(12, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		delete noDateTimeItem1;
+		delete noDateTimeItem2;
+		delete itemWithEndTime1;
+		delete itemWithEndTime2;
+		delete itemWithEndTime3;
+		delete itemWithEndTime4;
+		delete itemWithStartTime1;
+		delete itemWithStartTime2;
+		delete itemWithStartTime3;
+		delete itemWithStartAndEndTime1;
+		delete itemWithStartAndEndTime2;
+		delete itemWithStartAndEndTime3;
+		delete itemWithStartAndEndTime4;
+
+		noDateTimeItem1 = NULL;
+		noDateTimeItem2 = NULL;
+		itemWithEndTime1 = NULL;
+		itemWithEndTime2 = NULL;
+		itemWithEndTime3 = NULL;
+		itemWithEndTime4 = NULL;
+		itemWithStartTime1 = NULL;
+		itemWithStartTime2 = NULL;
+		itemWithStartTime3 = NULL;
+		itemWithStartAndEndTime1 = NULL;
+		itemWithStartAndEndTime2 = NULL;
+		itemWithStartAndEndTime3 = NULL;
+		itemWithStartAndEndTime4 = NULL;
 	}
+
+	TEST_METHOD(ScheduleTestFilterDisplayScheduleByKeyword) {
+		Schedule keywordSchedule;
+		bool hasKeyword;
+
+		Item *withKeyword1 = new Item(string("Has keyword wahlau eh"));
+		withKeyword1->setItemID(1);
+
+		Item *withKeyword2 = new Item(string("Has keyword in description"));
+		withKeyword2->setItemID(2);
+		withKeyword2->setDescription(string("the keyword wahLau eH is here"));
+
+		Item* withoutKeyword1 = new Item(string("No keyword in here wah eh"));
+		withoutKeyword1->setItemID(3);
+
+		Item* withoutKeyword2 = new Item(string("No sign of keyword here either"));
+		withoutKeyword2->setItemID(4);
+		withoutKeyword2->setDescription(string("wahskdjlaw eh"));
+
+		keywordSchedule.addItem(withKeyword1);
+		keywordSchedule.addItem(withKeyword2);
+		keywordSchedule.addItem(withoutKeyword1);
+		keywordSchedule.addItem(withoutKeyword2);
+
+		keywordSchedule.resetDisplaySchedule();
+		Assert::AreEqual(4, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(0, string("wahlau eh"));
+		Assert::AreEqual(4, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(false, hasKeyword);
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(1, string("wahlau eh"));
+		Assert::AreEqual(4, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(false, hasKeyword);
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(2, string("wahlau eh"));
+		Assert::AreEqual(3, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(true, hasKeyword);
+		hasKeyword = keywordSchedule.filterDisplayScheduleByKeyword(2, string("wahlau eh"));
+		Assert::AreEqual(2, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(true, hasKeyword);
+
+		delete withKeyword1;
+		delete withKeyword2;
+		delete withoutKeyword1;
+		delete withoutKeyword2;
+
+		withKeyword1 = NULL;
+		withKeyword2 = NULL;
+		withoutKeyword1 = NULL;
+		withoutKeyword2 = NULL;
+	}
+
+	// Not done since label funcitonality is not implemented
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByLabel) {
+		//
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByPriority) {
+		Schedule prioritySchedule;
+		vector<Item> filteredVectorByPriority;
+
+		Item *highPriorityItem1 = new Item(string("This is High #1"));
+		highPriorityItem1->setItemID(1);
+		highPriorityItem1->setPriority('H');
+
+		Item *highPriorityItem2 = new Item(string("This is High #2"));
+		highPriorityItem2->setItemID(2);
+		highPriorityItem2->setPriority('H');
+
+		Item *highPriorityItem3 = new Item(string("This is High #3"));
+		highPriorityItem3->setItemID(3);
+		highPriorityItem3->setPriority('H');
+
+		Item *highPriorityItem4 = new Item(string("This is High #4"));
+		highPriorityItem4->setItemID(4);
+		highPriorityItem4->setPriority('H');
+
+		Item *medPriorityItem1 = new Item(string("This is Medium #1"));
+		medPriorityItem1->setItemID(5);
+		medPriorityItem1->setPriority('M');
+
+		Item *medPriorityItem2 = new Item(string("This is Medium #2"));
+		medPriorityItem2->setItemID(6);
+		medPriorityItem2->setPriority('M');
+
+		Item *lowPriorityItem1 = new Item(string("This is Low #1"));
+		lowPriorityItem1->setItemID(7);
+		lowPriorityItem1->setPriority('L');
+
+		Item *lowPriorityItem2 = new Item(string("This is Low #2"));
+		lowPriorityItem2->setItemID(8);
+		lowPriorityItem2->setPriority('L');
+
+		Item *lowPriorityItem3 = new Item(string("This is Low #3"));
+		lowPriorityItem3->setItemID(9);
+		lowPriorityItem3->setPriority('L');
+
+		Item *lowPriorityItem4 = new Item(string("This is Low #4"));
+		lowPriorityItem4->setItemID(10);
+		lowPriorityItem4->setPriority('L');
+
+		Item *lowPriorityItem5 = new Item(string("This is Low #5"));
+		lowPriorityItem5->setItemID(11);
+		lowPriorityItem5->setPriority('L');
+
+		prioritySchedule.addItem(highPriorityItem1);
+		prioritySchedule.addItem(highPriorityItem2);
+		prioritySchedule.addItem(highPriorityItem3);
+		prioritySchedule.addItem(highPriorityItem4);
+		prioritySchedule.addItem(medPriorityItem1);
+		prioritySchedule.addItem(medPriorityItem2);
+		prioritySchedule.addItem(lowPriorityItem1);
+		prioritySchedule.addItem(lowPriorityItem2);
+		prioritySchedule.addItem(lowPriorityItem3);
+		prioritySchedule.addItem(lowPriorityItem4);
+		prioritySchedule.addItem(lowPriorityItem5);
+
+		prioritySchedule.resetDisplaySchedule();
+		filteredVectorByPriority = prioritySchedule.retrieveDisplayScheduleFilteredByPriority('H');
+		Assert::AreEqual(4, int(filteredVectorByPriority.size()));
+
+		prioritySchedule.resetDisplaySchedule();
+		filteredVectorByPriority = prioritySchedule.retrieveDisplayScheduleFilteredByPriority('L');
+		Assert::AreEqual(5, int(filteredVectorByPriority.size()));
+
+		prioritySchedule.resetDisplaySchedule();
+		filteredVectorByPriority = prioritySchedule.retrieveDisplayScheduleFilteredByPriority('M');
+		Assert::AreEqual(2, int(filteredVectorByPriority.size()));
+
+		delete highPriorityItem1;
+		delete highPriorityItem2;
+		delete highPriorityItem3;
+		delete highPriorityItem4;
+		delete medPriorityItem1;
+		delete medPriorityItem2;
+		delete lowPriorityItem1;
+		delete lowPriorityItem2;
+		delete lowPriorityItem3;
+		delete lowPriorityItem4;
+		delete lowPriorityItem5;
+
+		highPriorityItem1 = NULL;
+		highPriorityItem2 = NULL;
+		highPriorityItem3 = NULL;
+		highPriorityItem4 = NULL;
+		medPriorityItem1 = NULL;
+		medPriorityItem2 = NULL;
+		lowPriorityItem1 = NULL;
+		lowPriorityItem2 = NULL;
+		lowPriorityItem3 = NULL;
+		lowPriorityItem4 = NULL;
+		lowPriorityItem5 = NULL;
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByCompletion) {
+		Schedule completionTestSchedule;
+		vector<Item> filteredVectorByCompletion;
+
+		Item *completedItem1 = new Item(string("This is Completed #1"));
+		completedItem1->setItemID(1);
+		completedItem1->setCompletion(true);
+
+		Item *completedItem2 = new Item(string("This is Completed #2"));
+		completedItem2->setItemID(2);
+		completedItem2->setCompletion(true);
+
+		Item *completedItem3 = new Item(string("This is Completed #3"));
+		completedItem3->setItemID(3);
+		completedItem3->setCompletion(true);
+
+		Item *completedItem4 = new Item(string("This is Completed #4"));
+		completedItem4->setItemID(4);
+		completedItem4->setCompletion(true);
+
+		Item *uncompletedItem1 = new Item(string("This is Uncompleted #1"));
+		uncompletedItem1->setItemID(5);
+		uncompletedItem1->setCompletion(false);
+
+		Item *uncompletedItem2 = new Item(string("This is Uncompleted #2"));
+		uncompletedItem2->setItemID(6);
+		uncompletedItem2->setCompletion(false);
+
+		completionTestSchedule.addItem(completedItem1);
+		completionTestSchedule.addItem(completedItem2);
+		completionTestSchedule.addItem(completedItem3);
+		completionTestSchedule.addItem(completedItem4);
+		completionTestSchedule.addItem(uncompletedItem1);
+		completionTestSchedule.addItem(uncompletedItem2);
+
+		filteredVectorByCompletion = completionTestSchedule.retrieveDisplayScheduleFilteredByCompletion(true);
+		Assert::AreEqual(0, int(filteredVectorByCompletion.size()));
+
+		completionTestSchedule.resetDisplaySchedule();
+		Assert::AreEqual(6, int(completionTestSchedule.getSizeOfDisplaySchedule()));
+
+		filteredVectorByCompletion = completionTestSchedule.retrieveDisplayScheduleFilteredByCompletion(true);
+		Assert::AreEqual(4, int(filteredVectorByCompletion.size()));
+
+		completionTestSchedule.resetDisplaySchedule();
+		filteredVectorByCompletion = completionTestSchedule.retrieveDisplayScheduleFilteredByCompletion(false);
+		Assert::AreEqual(2, int(filteredVectorByCompletion.size()));
+
+		delete completedItem1;
+		delete completedItem2;
+		delete completedItem3;
+		delete completedItem4;
+		delete uncompletedItem1;
+		delete uncompletedItem2;
+
+		completedItem1 = NULL;
+		completedItem2 = NULL;
+		completedItem3 = NULL;
+		completedItem4 = NULL;
+		uncompletedItem1 = NULL;
+		uncompletedItem2 = NULL;
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByDateTime) {
+		Schedule dateTimeSchedule;
+		vector<Item> filteredVectorByDateTime;
+
+		Item *noDateTimeItem1 = new Item(string("This is no-DateTime Item #1"));
+		noDateTimeItem1->setItemID(1);
+
+		Item *noDateTimeItem2 = new Item(string("This is no-DateTime Item #2"));
+		noDateTimeItem2->setItemID(2);
+
+		Item *itemWithStartTime1 = new Item(string("This is Item w/ Start Time #1"));
+		itemWithStartTime1->setItemID(3);
+		itemWithStartTime1->setStartTime(2005, 1, 25, 19, 0);
+
+		Item *itemWithStartTime2 = new Item(string("This is Item w/ Start Time #2"));
+		itemWithStartTime2->setItemID(4);
+		itemWithStartTime2->setStartTime(2010, 11, 2, 7, 0);
+
+		Item *itemWithStartTime3 = new Item(string("This is Item w/ Start Time #3"));
+		itemWithStartTime3->setItemID(5);
+		itemWithStartTime3->setStartTime(2015, 4, 17);
+
+		Item *itemWithEndTime1 = new Item(string("This is Item w/ End Time #1"));
+		itemWithEndTime1->setItemID(6);
+		itemWithEndTime1->setEndTime(2000, 11, 17, 8, 15);
+
+		Item *itemWithEndTime2 = new Item(string("This is Item w/ End Time #2"));
+		itemWithEndTime2->setItemID(7);
+		itemWithEndTime2->setEndTime(2020, 1, 19, 20, 15);
+
+		Item *itemWithEndTime3 = new Item(string("This is Item w/ End Time #3"));
+		itemWithEndTime3->setItemID(8);
+		itemWithEndTime3->setEndTime(2025, 11, 30);
+
+		Item *itemWithEndTime4 = new Item(string("This is Item w/ End Time #4"));
+		itemWithEndTime4->setItemID(9);
+		itemWithEndTime4->setEndTime(2050, 5, 2, 18, 18);
+
+		Item *itemWithStartAndEndTime1 = new Item(string("This is Item w/ Start & End Time #1 with Start and End in range"));
+		itemWithStartAndEndTime1->setItemID(10);
+		itemWithStartAndEndTime1->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime1->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime2 = new Item(string("This is Item w/ Start & End Time #2 with Start in range, End out of range"));
+		itemWithStartAndEndTime2->setItemID(11);
+		itemWithStartAndEndTime2->setStartTime(2017, 12, 18, 9, 0);
+		itemWithStartAndEndTime2->setEndTime(2098, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime3 = new Item(string("This is Item w/ Start & End Time #3 with Start out of range, End in range"));
+		itemWithStartAndEndTime3->setItemID(12);
+		itemWithStartAndEndTime3->setStartTime(1990, 12, 18, 9, 0);
+		itemWithStartAndEndTime3->setEndTime(2018, 11, 21, 7, 0);
+
+		Item *itemWithStartAndEndTime4 = new Item(string("This is Item w/ Start & End Time #4 with Start and End OUT of range"));
+		itemWithStartAndEndTime4->setItemID(13);
+		itemWithStartAndEndTime4->setStartTime(3000, 12, 18, 9, 0);
+		itemWithStartAndEndTime4->setEndTime(3012, 11, 21, 7, 0);
+
+		dateTimeSchedule.addItem(noDateTimeItem1);
+		dateTimeSchedule.addItem(noDateTimeItem2);
+		dateTimeSchedule.addItem(itemWithStartTime1);
+		dateTimeSchedule.addItem(itemWithStartTime2);
+		dateTimeSchedule.addItem(itemWithStartTime3);
+		dateTimeSchedule.addItem(itemWithEndTime1);
+		dateTimeSchedule.addItem(itemWithEndTime2);
+		dateTimeSchedule.addItem(itemWithEndTime3);
+		dateTimeSchedule.addItem(itemWithEndTime4);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime1);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime2);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime3);
+		dateTimeSchedule.addItem(itemWithStartAndEndTime4);
+
+		dateTimeSchedule.resetDisplaySchedule();
+		Assert::AreEqual(13, int(dateTimeSchedule.getSizeOfDisplaySchedule()));
+
+		filteredVectorByDateTime = dateTimeSchedule.retrieveDisplayScheduleFilteredByDateTime(DateTime(2000, 1, 1, 0, 0), DateTime(2010, 12, 30, 23, 59));
+		Assert::AreEqual(4, int(filteredVectorByDateTime.size()));
+		Assert::AreEqual(3, int(filteredVectorByDateTime[0].getItemID()));
+		Assert::AreEqual(4, int(filteredVectorByDateTime[1].getItemID()));
+		Assert::AreEqual(6, int(filteredVectorByDateTime[2].getItemID()));
+		Assert::AreEqual(12, int(filteredVectorByDateTime[3].getItemID()));
+
+		// Boundary Case: itemWithStartTime3 starts on 2015/4/17 -1:-1, is not within range
+		dateTimeSchedule.resetDisplaySchedule();
+		filteredVectorByDateTime = dateTimeSchedule.retrieveDisplayScheduleFilteredByDateTime(DateTime(2015, 4, 17, 0, 0), DateTime(2017, 12, 18, 9, 0));
+		Assert::AreEqual(3, int(filteredVectorByDateTime.size()));
+		Assert::AreEqual(10, int(filteredVectorByDateTime[0].getItemID()));
+		Assert::AreEqual(11, int(filteredVectorByDateTime[1].getItemID()));
+		Assert::AreEqual(12, int(filteredVectorByDateTime[2].getItemID()));
+
+		dateTimeSchedule.resetDisplaySchedule();
+		filteredVectorByDateTime = dateTimeSchedule.retrieveDisplayScheduleFilteredByDateTime(DateTime(2050, 5, 2, 18, 18), DateTime(3013, 12, 30, 23, 59));
+		Assert::AreEqual(3, int(filteredVectorByDateTime.size()));
+		Assert::AreEqual(9, int(filteredVectorByDateTime[0].getItemID()));
+		Assert::AreEqual(11, int(filteredVectorByDateTime[1].getItemID()));
+		Assert::AreEqual(13, int(filteredVectorByDateTime[2].getItemID()));
+
+		delete noDateTimeItem1;
+		delete noDateTimeItem2;
+		delete itemWithEndTime1;
+		delete itemWithEndTime2;
+		delete itemWithEndTime3;
+		delete itemWithEndTime4;
+		delete itemWithStartTime1;
+		delete itemWithStartTime2;
+		delete itemWithStartTime3;
+		delete itemWithStartAndEndTime1;
+		delete itemWithStartAndEndTime2;
+		delete itemWithStartAndEndTime3;
+		delete itemWithStartAndEndTime4;
+
+		noDateTimeItem1 = NULL;
+		noDateTimeItem2 = NULL;
+		itemWithEndTime1 = NULL;
+		itemWithEndTime2 = NULL;
+		itemWithEndTime3 = NULL;
+		itemWithEndTime4 = NULL;
+		itemWithStartTime1 = NULL;
+		itemWithStartTime2 = NULL;
+		itemWithStartTime3 = NULL;
+		itemWithStartAndEndTime1 = NULL;
+		itemWithStartAndEndTime2 = NULL;
+		itemWithStartAndEndTime3 = NULL;
+		itemWithStartAndEndTime4 = NULL;
+	}
+
+	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByKeyword) {
+		Schedule keywordSchedule;
+		vector<Item> filteredVectorByKeyword;
+
+		Item *withKeyword1 = new Item(string("Has keyword wahlau eh"));
+		withKeyword1->setItemID(1);
+
+		Item *withKeyword2 = new Item(string("Has keyword in description"));
+		withKeyword2->setItemID(2);
+		withKeyword2->setDescription(string("the keyword wahLau eH is here"));
+
+		Item *withKeyword3 = new Item(string("Has keyword in description"));
+		withKeyword3->setItemID(3);
+		withKeyword3->setDescription(string("HAHAHAHAHEHEHEWWWWAHLAU EHHHHHHHHH"));
+
+		Item* withoutKeyword1 = new Item(string("No keyword in here wah eh"));
+		withoutKeyword1->setItemID(4);
+
+		Item* withoutKeyword2 = new Item(string("No sign of keyword here either"));
+		withoutKeyword2->setItemID(5);
+		withoutKeyword2->setDescription(string("whaskdjlaw eh"));
+
+		keywordSchedule.addItem(withKeyword1);
+		keywordSchedule.addItem(withKeyword2);
+		keywordSchedule.addItem(withKeyword3);
+		keywordSchedule.addItem(withoutKeyword1);
+		keywordSchedule.addItem(withoutKeyword2);
+
+		keywordSchedule.resetDisplaySchedule();
+		Assert::AreEqual(5, int(keywordSchedule.getSizeOfDisplaySchedule()));
+		
+		filteredVectorByKeyword = keywordSchedule.retrieveDisplayScheduleFilteredByKeyword(string("wahlau eh"));
+		Assert::AreEqual(3, int(filteredVectorByKeyword.size()));
+		Assert::AreEqual(1, int(filteredVectorByKeyword[0].getItemID()));
+		Assert::AreEqual(2, int(filteredVectorByKeyword[1].getItemID()));
+		Assert::AreEqual(3, int(filteredVectorByKeyword[2].getItemID()));
+
+		keywordSchedule.resetDisplaySchedule();
+		filteredVectorByKeyword = keywordSchedule.retrieveDisplayScheduleFilteredByKeyword(string("Ha"));
+		Assert::AreEqual(4, int(filteredVectorByKeyword.size()));
+		Assert::AreEqual(1, int(filteredVectorByKeyword[0].getItemID()));
+		Assert::AreEqual(2, int(filteredVectorByKeyword[1].getItemID()));
+		Assert::AreEqual(3, int(filteredVectorByKeyword[2].getItemID()));
+		Assert::AreEqual(5, int(filteredVectorByKeyword[3].getItemID()));
+
+		delete withKeyword1;
+		delete withKeyword2;
+		delete withKeyword3;
+		delete withoutKeyword1;
+		delete withoutKeyword2;
+
+		withKeyword1 = NULL;
+		withKeyword2 = NULL;
+		withKeyword3 = NULL;
+		withoutKeyword1 = NULL;
+		withoutKeyword2 = NULL;
+	}
+
 	};
 
 	TEST_CLASS(TEST_SORT) {
@@ -1953,110 +2758,110 @@ public:
 
 	/* Muted because functions passed test and moved back to private
 	TEST_METHOD(ScheduleTestUndoAdd) {
-		Schedule testSchedule;
-		Item *item1 = new Item(string("Item number 1 in schedule!"));
-		item1->setItemID(1);
-		Item *item2 = new Item(string("Item number 2 in schedule!"));
-		item2->setItemID(2);
+	Schedule testSchedule;
+	Item *item1 = new Item(string("Item number 1 in schedule!"));
+	item1->setItemID(1);
+	Item *item2 = new Item(string("Item number 2 in schedule!"));
+	item2->setItemID(2);
 
-		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
-		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+	Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+	Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
 
-		testSchedule.addItem(item1);
-		testSchedule.addItem(item2);
+	testSchedule.addItem(item1);
+	testSchedule.addItem(item2);
 
-		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
-		testSchedule.resetDisplaySchedule();
-		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+	Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+	testSchedule.resetDisplaySchedule();
+	Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
 
-		testSchedule.undoAdd(*item2);
+	testSchedule.undoAdd(*item2);
 
-		Assert::AreEqual(1, int(testSchedule.getSizeOfSchedule()));
-		testSchedule.resetDisplaySchedule();
-		Assert::AreEqual(1, int(testSchedule.getSizeOfDisplaySchedule()));
-		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
-		
-		delete item1;
-		delete item2;
-		item1 = NULL;
-		item2 = NULL;
+	Assert::AreEqual(1, int(testSchedule.getSizeOfSchedule()));
+	testSchedule.resetDisplaySchedule();
+	Assert::AreEqual(1, int(testSchedule.getSizeOfDisplaySchedule()));
+	Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+
+	delete item1;
+	delete item2;
+	item1 = NULL;
+	item2 = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestUndoReplace) {
-		Schedule testSchedule;
-		Item *item1 = new Item(string("Item number 1 in schedule!"));
-		item1->setItemID(1);
-		Item *item2 = new Item(string("Item number 2 in schedule!"));
-		item2->setItemID(2);
-		Item *itemToReplaceWith = new Item(string("This is the replaced Item"));
-		itemToReplaceWith->setItemID(2);
-		Item replacedItemRetrievedFromSchedule;
+	Schedule testSchedule;
+	Item *item1 = new Item(string("Item number 1 in schedule!"));
+	item1->setItemID(1);
+	Item *item2 = new Item(string("Item number 2 in schedule!"));
+	item2->setItemID(2);
+	Item *itemToReplaceWith = new Item(string("This is the replaced Item"));
+	itemToReplaceWith->setItemID(2);
+	Item replacedItemRetrievedFromSchedule;
 
-		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+	Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
 
-		testSchedule.addItem(item1);
-		testSchedule.addItem(item2);
+	testSchedule.addItem(item1);
+	testSchedule.addItem(item2);
 
-		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
-		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+	Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+	Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
 
-		testSchedule.resetDisplaySchedule();
-		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+	testSchedule.resetDisplaySchedule();
+	Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
 
-		testSchedule.replaceItemGivenDisplayVectorIndex(itemToReplaceWith, 2);
-		testSchedule.resetDisplaySchedule();
-		replacedItemRetrievedFromSchedule = testSchedule.retrieveItemGivenDisplayVectorIndex(2);
-		Assert::AreEqual(itemToReplaceWith->getItemName(), replacedItemRetrievedFromSchedule.getItemName());
+	testSchedule.replaceItemGivenDisplayVectorIndex(itemToReplaceWith, 2);
+	testSchedule.resetDisplaySchedule();
+	replacedItemRetrievedFromSchedule = testSchedule.retrieveItemGivenDisplayVectorIndex(2);
+	Assert::AreEqual(itemToReplaceWith->getItemName(), replacedItemRetrievedFromSchedule.getItemName());
 
-		testSchedule.undoReplace(*item2);
-		testSchedule.resetDisplaySchedule();
-		replacedItemRetrievedFromSchedule = testSchedule.retrieveItemGivenDisplayVectorIndex(2);
-		Assert::AreEqual(item2->getItemName(), replacedItemRetrievedFromSchedule.getItemName());
+	testSchedule.undoReplace(*item2);
+	testSchedule.resetDisplaySchedule();
+	replacedItemRetrievedFromSchedule = testSchedule.retrieveItemGivenDisplayVectorIndex(2);
+	Assert::AreEqual(item2->getItemName(), replacedItemRetrievedFromSchedule.getItemName());
 
-		delete item1;
-		delete item2;
-		delete itemToReplaceWith;
-		item1 = NULL;
-		item2 = NULL;
-		itemToReplaceWith = NULL;
+	delete item1;
+	delete item2;
+	delete itemToReplaceWith;
+	item1 = NULL;
+	item2 = NULL;
+	itemToReplaceWith = NULL;
 	}
 
 	TEST_METHOD(ScheduleTestUndoDelete) {
-		Schedule testSchedule;
-		Item *item1 = new Item(string("Item number 1 in schedule!"));
-		item1->setItemID(1);
-		Item *item2 = new Item(string("Item number 2 in schedule!"));
-		item2->setItemID(2);
+	Schedule testSchedule;
+	Item *item1 = new Item(string("Item number 1 in schedule!"));
+	item1->setItemID(1);
+	Item *item2 = new Item(string("Item number 2 in schedule!"));
+	item2->setItemID(2);
 
-		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+	Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
 
-		testSchedule.addItem(item1);
-		testSchedule.addItem(item2);
+	testSchedule.addItem(item1);
+	testSchedule.addItem(item2);
 
-		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
-		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+	Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+	Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
 
-		testSchedule.resetDisplaySchedule();
-		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+	testSchedule.resetDisplaySchedule();
+	Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
 
-		testSchedule.deleteItemGivenDisplayVectorIndex(2);
+	testSchedule.deleteItemGivenDisplayVectorIndex(2);
 
-		Assert::AreEqual(1, int(testSchedule.getSizeOfSchedule()));
-		testSchedule.resetDisplaySchedule();
-		Assert::AreEqual(1, int(testSchedule.getSizeOfDisplaySchedule()));
-		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
+	Assert::AreEqual(1, int(testSchedule.getSizeOfSchedule()));
+	testSchedule.resetDisplaySchedule();
+	Assert::AreEqual(1, int(testSchedule.getSizeOfDisplaySchedule()));
+	Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(1).getItemName());
 
-		testSchedule.undoDelete(*item2);
+	testSchedule.undoDelete(*item2);
 
-		Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
-		testSchedule.resetDisplaySchedule();
-		Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
-		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
+	Assert::AreEqual(2, int(testSchedule.getSizeOfSchedule()));
+	testSchedule.resetDisplaySchedule();
+	Assert::AreEqual(2, int(testSchedule.getSizeOfDisplaySchedule()));
+	Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
 
-		delete item1;
-		delete item2;
-		item1 = NULL;
-		item2 = NULL;
+	delete item1;
+	delete item2;
+	item1 = NULL;
+	item2 = NULL;
 	}
 
 	*/
@@ -2069,61 +2874,61 @@ namespace HistoryTest {
 public:
 	/* Tests muted because functions passed test and returned to private.
 	TEST_METHOD(HistoryTestIsNormalHistoryCommand) {
-		History testHistory;
-		bool isValidHistoryCmd;
+	History testHistory;
+	bool isValidHistoryCmd;
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADD"));
-		Assert::AreEqual(true, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADD"));
+	Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("DELETE"));
-		Assert::AreEqual(true, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("DELETE"));
+	Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("REPLACE"));
-		Assert::AreEqual(true, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("REPLACE"));
+	Assert::AreEqual(true, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Add"));
-		Assert::AreEqual(false, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Add"));
+	Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Delete"));
-		Assert::AreEqual(false, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Delete"));
+	Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Replace"));
-		Assert::AreEqual(false, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("Replace"));
+	Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("whattt"));
-		Assert::AreEqual(false, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("whattt"));
+	Assert::AreEqual(false, isValidHistoryCmd);
 
-		isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADDD"));
-		Assert::AreEqual(false, isValidHistoryCmd);
+	isValidHistoryCmd = testHistory.isNormalHistoryCommand(string("ADDD"));
+	Assert::AreEqual(false, isValidHistoryCmd);
 	}
 
 	TEST_METHOD(HistoryTestIsClearCommand) {
-		History testHistory;
-		bool isClearCmd;
+	History testHistory;
+	bool isClearCmd;
 
-		isClearCmd = testHistory.isClearCommand(string("CLEAR"));
-		Assert::AreEqual(true, isClearCmd);
+	isClearCmd = testHistory.isClearCommand(string("CLEAR"));
+	Assert::AreEqual(true, isClearCmd);
 
-		isClearCmd = testHistory.isClearCommand(string("Clear"));
-		Assert::AreEqual(false, isClearCmd);
+	isClearCmd = testHistory.isClearCommand(string("Clear"));
+	Assert::AreEqual(false, isClearCmd);
 
-		isClearCmd = testHistory.isClearCommand(string("ADD"));
-		Assert::AreEqual(false, isClearCmd);
+	isClearCmd = testHistory.isClearCommand(string("ADD"));
+	Assert::AreEqual(false, isClearCmd);
 	}
 
 	TEST_METHOD(HistoryTestIsValidUndoCall) {
-		History testHistory;
-		bool isValidCallForUndo;
+	History testHistory;
+	bool isValidCallForUndo;
 
-		isValidCallForUndo = testHistory.isValidUndoCall();
-		Assert::AreEqual(false, isValidCallForUndo);
+	isValidCallForUndo = testHistory.isValidUndoCall();
+	Assert::AreEqual(false, isValidCallForUndo);
 
-		string command1 = "ADD";
-		Item item1(string("This is the first item"));
-		testHistory.addCommand(command1, item1);
+	string command1 = "ADD";
+	Item item1(string("This is the first item"));
+	testHistory.addCommand(command1, item1);
 
-		isValidCallForUndo = testHistory.isValidUndoCall();
-		Assert::AreEqual(true, isValidCallForUndo);
+	isValidCallForUndo = testHistory.isValidUndoCall();
+	Assert::AreEqual(true, isValidCallForUndo);
 	}
 
 	*/
