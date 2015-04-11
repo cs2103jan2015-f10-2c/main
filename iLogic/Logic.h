@@ -369,6 +369,7 @@ public:
 	//post : returns whether item(s) can be found
 	string modifyKeywordVec(string keyWord);
 	string searchTask();
+	void clearKeyWordVec();
 	
 
 	/////////////////
@@ -435,7 +436,8 @@ public:
 	//pre : none
 	//post : returns directory + filename
 	string getDirectoryAndFileName();
-
+	string convertKeywordVecToString();
+	void convertStringToKeywordVec(string keywordString);
 
 	//save basic information in to basicinformation.txt file
 	//basic information include :

@@ -239,6 +239,7 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 	} else if (command == COMMAND_SEARCH){
 		returnMessage = modifyKeywordVec(itemInformation);
 	} else if (command == COMMAND_VIEW){
+		clearKeyWordVec();
 		returnMessage = filterTask(itemInformation);
 	} else if (command == COMMAND_SAVE){
 		changeSavingDirectory(itemInformation);
@@ -649,6 +650,11 @@ string Logic::filterTask(string filterToBeImplemented){
 	return MESSAGE_SUCCESSFUL_VIEW + _currentFilter;
 }
 
+void Logic::clearKeyWordVec(){
+	_keywordVec.clear();
+	return;
+}
+
 
 string Logic::filterByCompletion(bool completion){
 	_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(completion);
@@ -679,21 +685,11 @@ string Logic::removeFilter(){
 
 
 string Logic::modifyKeywordVec(string keyWord){
-	while (keyWord != ""){
-		int breakPoint = keyWord.find_first_of("+");
-		if (breakPoint != -1){
-			string tokenisedKeyword = keyWord.substr(0, breakPoint);
-			_keywordVec.push_back(tokenisedKeyword);
-			keyWord = keyWord.substr(breakPoint + 1);
-		}
-		else{
-			_keywordVec.push_back(keyWord);
-			break;
-		}
-	}
+	convertStringToKeywordVec(keyWord);
 	_currentFilter = FILTER_KEYWORD;
 	return _currentFilter;
 }
+
 
 string Logic::searchTask(){
 	for (int i = 0; i < _keywordVec.size(); i++){
@@ -765,9 +761,38 @@ void Logic::saveBasicInformationToTextFile(){
 	writeFile << getScheduleSize() << endl;
 	writeFile << _currentSorting << endl;
 	writeFile << _nextItemID << endl;
-	writeFile << _currentFilter;
+	writeFile << _currentFilter << endl;
+	writeFile << convertKeywordVecToString();
 }
 
+
+string Logic::convertKeywordVecToString(){
+	string keywordString = "";
+	if (_keywordVec.size() != 0){
+		for (int i = 0; i < _keywordVec.size(); i++){
+			if (i != _keywordVec.size() - 1){
+				keywordString = keywordString + _keywordVec[i] + "+";
+			} else{
+				keywordString = keywordString + _keywordVec[i];
+			}
+		}
+	} 
+	return keywordString;
+}
+
+void Logic::convertStringToKeywordVec(string keywordString){
+	while (keywordString != ""){
+		int breakPoint = keywordString.find_first_of("+");
+		if (breakPoint != -1){
+			string tokenisedKeyword = keywordString.substr(0, breakPoint);
+			_keywordVec.push_back(tokenisedKeyword);
+			keywordString = keywordString.substr(breakPoint + 1);
+		} else{
+			_keywordVec.push_back(keywordString);
+			break;
+		}
+	}
+}
 
 string Logic::getDirectoryAndFileName(){
 	if (_directoryToBeSaved == ""){
@@ -801,6 +826,9 @@ string Logic::retrieveBasicInformationFromTextFile(){
 	readFile >> _currentSorting;
 	readFile >> _nextItemID;
 	readFile >> _currentFilter;
+	string keywordString;
+	readFile >> keywordString;
+	convertStringToKeywordVec(keywordString);
 	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
 
 	if (_directoryToBeSaved == ""){
