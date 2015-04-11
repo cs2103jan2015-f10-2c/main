@@ -831,7 +831,28 @@ public:
 	}
 
 	TEST_METHOD(ItemTestGetLastUpdate) {
-		// Joon Fai
+		Item *item1 = new Item(string("Item #1"));
+		CTime lastUpdate;
+		bool isSameTime = false;
+
+		item1->setItemID(2);
+		lastUpdate = CTime::GetCurrentTime();
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(true, isSameTime);
+
+		int time1 = time(0);
+		int time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
+		item1->setDescription(string("edited desc"));
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(false, isSameTime);
+
+		lastUpdate = lastUpdate = CTime::GetCurrentTime();
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(true, isSameTime);
 	}
 
 	};
