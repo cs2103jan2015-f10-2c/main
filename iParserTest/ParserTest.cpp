@@ -49,11 +49,13 @@ public:
 		}*/
 
 	TEST_METHOD(parserExecuteSortParsingTest) {
-		string testInput = "test";
-		string expectedCommand = "search";
-		string expectedText = "test";
+		string testInput[] = { "Date", "NAME", "priority", "p", "DoNE", "UPdate" };
+		string expectedCommand = "sort";
+		string expectedText[] = { "date", "name", "priority", "priority", "done", "update" };
 
-		testParser.executeSearchParsing(testInput);
+		for (int i = 0; i < 6; i++) {
+			testParser.executeSortParsing(testInput[i]);
+		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter;
@@ -62,7 +64,7 @@ public:
 			string actualCommand = iter->command;
 			string actualText = iter->text;
 			Assert::AreEqual(expectedCommand, actualCommand);
-			Assert::AreEqual(expectedText, actualText);
+			Assert::AreEqual(expectedText[i], actualText);
 		}
 	}
 
