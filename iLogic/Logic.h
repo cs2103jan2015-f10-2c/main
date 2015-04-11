@@ -11,6 +11,7 @@
 #include "..\iStorage\Item.h"
 #include "..\iParser\iParser.h"
 #include "..\iLogic\ItemVerification.h"
+#include "..\iPlanner Log\Log.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -45,6 +46,7 @@ private:
 	string _currentFilter;
 	vector<string> _keywordVec;
 	START_END_TIME _startEndTime;
+	Log _logicLogger;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;

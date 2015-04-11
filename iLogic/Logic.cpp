@@ -273,6 +273,8 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 		printInvalidInput();
 		returnMessage = MESSAGE_INVALID_INPUT;
 	}
+	string loggerString = command + " : " + returnMessage;
+	_logicLogger.writeToLogFile(loggerString);
 	userDisplayInformation = returnUserDisplayInformation(returnMessage);
 	return userDisplayInformation;
 }
@@ -359,13 +361,19 @@ void Logic::removeItemPointer(Item* itemPointer){
 
 
 string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
-	if (isValidLineIndex(lineIndexToBeDeleted)){
-		string displayMessage = deleteItemFromSchedule(lineIndexToBeDeleted);
-		return displayMessage;
-	} else{
-		printDeleteTaskFailed();
-		return MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
+	try{
+		if (isValidLineIndex(lineIndexToBeDeleted)){
+			string displayMessage = deleteItemFromSchedule(lineIndexToBeDeleted);
+			return displayMessage;
+		} else{
+			printDeleteTaskFailed();
+			throw MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
+		}
 	}
+	catch (const char* msg) {
+		cerr << msg << endl;
+	}
+	return  MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
 }
 
 
@@ -978,15 +986,13 @@ string Logic::readDataFromFile() {
 			item->setCompletion(completion);
 			_logicSchedule.addItem(item);
 			removeItemPointer(item);
-			_logicSchedule.resetDisplaySchedule();
-			_logicSchedule.retrieveDisplayScheduleByDate();
+			return MESSAGE_READFILE_COMPLETE;
 		}
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
 	}
 	_logicSchedule.resetHistory();
 	cout << "Schedule retrieived" << endl;
-	resetAndGetDisplaySchedule();
 	return MESSAGE_READFILE_COMPLETE;
 }
 
