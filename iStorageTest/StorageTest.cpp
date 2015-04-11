@@ -963,6 +963,27 @@ public:
 		outputString << "Completed?\ttrue\n";
 		Assert::AreEqual(outputString.str(), item.displayItemFullDetails());
 	}
+
+	TEST_METHOD(ItemTestDisplayLastUpdatedTime) {
+		Item *item1 = new Item(string("Item #1"));
+		CTime lastUpdate;
+		string lastUpdateAsString;
+		ostringstream oss;
+
+		item1->setItemID(1);
+		lastUpdate = item1->getLastUpdate();
+		oss << setw(4) << lastUpdate.GetYear() << "/";
+		oss << setfill('0') << setw(2) << lastUpdate.GetMonth() << "/";
+		oss << setfill('0') << setw(2) << lastUpdate.GetDay() << " ";
+		oss << setfill('0') << setw(2) << lastUpdate.GetHour() << ":";
+		oss << setfill('0') << setw(2) << lastUpdate.GetMinute();
+
+		lastUpdateAsString = oss.str();
+
+		Assert::AreEqual(lastUpdateAsString, item1->displayLastUpdatedTime());
+
+	}
+
 	};
 }
 
