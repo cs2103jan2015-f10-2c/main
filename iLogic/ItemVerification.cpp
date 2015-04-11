@@ -12,6 +12,14 @@ const string ItemVerification::ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THA
 const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_ID = "Invalid ID";
 const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_PRIORITY = "Invalid Priority";
 const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_LABEL = "Invalid Label";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS = "Item Verification: Valid Name";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE = "Item Verification: Invalid Name";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS = "Item Verification: Valid Description";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_DESC_FAILURE = "Item Verification: Invalid Description";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS = "Item Verification: Valid ID";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_FAILURE = "Item Verification: Invalid ID";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS = "Item Verification: Valid Priority";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE = "Item Verification: Invalid Priority";
 
 ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 	_itemObjectToVerify = itemObject;
@@ -22,13 +30,16 @@ bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
 	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE);
 		return false;
 	} else {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS);
 		return true;
 	}
 }
 
 bool ItemVerification::isValidDescription() {
+	_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS);
 	return true;
 }
 
@@ -93,9 +104,11 @@ bool ItemVerification::isValidTimeFrame() {
 bool ItemVerification::isValidID() {
 	unsigned int itemID = _itemObjectToVerify.getItemID();
 	if (itemID <= _nextID) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS);
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_ID);
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_FAILURE);
 		return false;
 	}
 }
@@ -107,9 +120,11 @@ bool ItemVerification::isValidPriority() {
 	priorityString.push_back(priorityChar);
 	priorityFound = priorityString.find_first_of(ITEM_VERIFICATION_AVAILABLE_PRIORITIES);
 	if (priorityFound != string::npos) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS);
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE);
 		return false;
 	}
 }

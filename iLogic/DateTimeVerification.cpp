@@ -24,6 +24,10 @@ const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_4 = 4;
 const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_100 = 100;
 const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_400 = 400;
 
+const string DateTimeVerification::DATETIME_VERIFICATION_LOG_DATETIME_FAILURE = "DTVerification: Invalid Date Time Values";
+const string DateTimeVerification::DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS = "DTVerification: Valid Date Time Values";
+
+
 DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
 	_dateTimeObjectToVerify = dateTimeObject;
 	_year = _dateTimeObjectToVerify.getYear();
@@ -39,10 +43,10 @@ bool DateTimeVerification::isValidDateTimeValues() {
 		isValidDayRange() &&
 		isValidHourRange() &&
 		isValidMinuteRange()) {
-		_dateTimeVerificationLogger.writeToLogFile("---DTVerification: Valid Date Time Values");
+		_dateTimeVerificationLogger.writeToLogFile(DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS);
 		return true;
 	} else {
-		_dateTimeVerificationLogger.writeToLogFile("---DTVerification: Invalid Date Time Values");
+		_dateTimeVerificationLogger.writeToLogFile(DATETIME_VERIFICATION_LOG_DATETIME_FAILURE);
 		return false;
 	}
 }

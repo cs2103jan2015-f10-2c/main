@@ -986,13 +986,16 @@ string Logic::readDataFromFile() {
 			item->setCompletion(completion);
 			_logicSchedule.addItem(item);
 			removeItemPointer(item);
-			return MESSAGE_READFILE_COMPLETE;
 		}
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
 	}
 	_logicSchedule.resetHistory();
 	cout << "Schedule retrieived" << endl;
+	resetAndGetDisplaySchedule();
+	sortTask();
+	cout << "SORT : " << _currentSorting << endl;
+	cout << "Filter : " << _currentFilter << endl;
 	return MESSAGE_READFILE_COMPLETE;
 }
 

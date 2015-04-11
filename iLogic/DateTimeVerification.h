@@ -35,6 +35,9 @@ private:
 	static const int DATETIME_VERIFICATION_YEAR_100;
 	static const int DATETIME_VERIFICATION_YEAR_400;
 
+	static const string DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS;
+	static const string DATETIME_VERIFICATION_LOG_DATETIME_FAILURE;
+
 	Log _dateTimeVerificationLogger;
 	DateTime _dateTimeObjectToVerify;
 	int _year;
