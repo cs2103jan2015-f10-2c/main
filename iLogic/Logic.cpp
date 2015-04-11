@@ -273,6 +273,8 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 		printInvalidInput();
 		returnMessage = MESSAGE_INVALID_INPUT;
 	}
+	string loggerString = command + " : " + returnMessage;
+	_logicLogger.writeToLogFile(loggerString);
 	userDisplayInformation = returnUserDisplayInformation(returnMessage);
 	return userDisplayInformation;
 }
@@ -929,7 +931,7 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 }
 
 
-MESSAGE_AND_SCHEDULE Logic::readDataFromFile() {
+string Logic::readDataFromFile() {
 	if (isExistingFileInDirectory(getDirectoryAndFileName())){
 		ifstream readFile(getDirectoryAndFileName());
 		for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
@@ -984,23 +986,14 @@ MESSAGE_AND_SCHEDULE Logic::readDataFromFile() {
 			item->setCompletion(completion);
 			_logicSchedule.addItem(item);
 			removeItemPointer(item);
-			resetAndGetDisplaySchedule();
-			vector<Item> displayVector = sortTask();
-			MESSAGE_AND_SCHEDULE returnMessage;
-			returnMessage.message = MESSAGE_READFILE_COMPLETE;
-			returnMessage.displaySchedule = displayVector;
-			return returnMessage;
+			return MESSAGE_READFILE_COMPLETE;
 		}
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
 	}
 	_logicSchedule.resetHistory();
 	cout << "Schedule retrieived" << endl;
-	vector<Item> displayVector = resetAndGetDisplaySchedule();
-	MESSAGE_AND_SCHEDULE returnMessage;
-	returnMessage.message = MESSAGE_READFILE_COMPLETE;
-	returnMessage.displaySchedule = displayVector;
-	return returnMessage;
+	return MESSAGE_READFILE_COMPLETE;
 }
 
 
