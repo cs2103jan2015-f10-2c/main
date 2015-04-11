@@ -383,14 +383,6 @@ public:
 	// Pre:		nil
 	// Post:	clears _parseInfo list
 	string clearParseInfo();
-	
-	// ==============
-	// misc functions
-	// ==============
-
-	// Pre:		nil
-	// Post:	list of command and text displayed
-	void showParseInfo();
 
 public:
 	iParser();
