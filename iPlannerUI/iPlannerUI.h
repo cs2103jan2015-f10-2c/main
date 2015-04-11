@@ -420,7 +420,7 @@ namespace iPlannerUI {
 				 testLogic->readDataFromFile();
 				 
 				 outputBox2->Clear();			
-				 vector<Item> tempItem;
+				 vector<Item> tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
 				 int displayIndex = 0;
 				 				 				 
@@ -428,26 +428,30 @@ namespace iPlannerUI {
 					 
 					 String ^indexString = (++displayIndex).ToString();
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-					 outputBox2->SelectionColor = Color::CadetBlue;
+					 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 					 outputBox2->SelectedText = indexString + ". ";
 
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 if (iterItem->getPriority() == 72) {
-						 displayPriorityAndName("H", nameString);						 
-					 } else if (iterItem->getPriority() == 77) {
+						 displayPriorityAndName("H", nameString);
+					 }
+					 else if (iterItem->getPriority() == 77) {
 						 displayPriorityAndName("M", nameString);
-					 } else if (iterItem->getPriority() == 76) {
+					 }
+					 else if (iterItem->getPriority() == 76) {
 						 displayPriorityAndName("L", nameString);
-					 } else {
+					 }
+					 else {
 						 displayPriorityAndName("-", nameString);
 					 }
-					 
+
 					 if (iterItem->getCompletion() == true) {
 						 displayCompletion("(D)");
-					 } else {
+					 }
+					 else {
 						 displayCompletion("(ND)");
 					 }
-					 
+
 					 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
 					 displayStartTime(startString);
 
