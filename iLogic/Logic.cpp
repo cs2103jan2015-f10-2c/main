@@ -923,7 +923,7 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 }
 
 
-string Logic::readDataFromFile() {
+MESSAGE_AND_SCHEDULE Logic::readDataFromFile() {
 	if (isExistingFileInDirectory(getDirectoryAndFileName())){
 		ifstream readFile(getDirectoryAndFileName());
 		for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
@@ -979,15 +979,22 @@ string Logic::readDataFromFile() {
 			_logicSchedule.addItem(item);
 			removeItemPointer(item);
 			resetAndGetDisplaySchedule();
-			sortTask();
+			vector<Item> displayVector = sortTask();
+			MESSAGE_AND_SCHEDULE returnMessage;
+			returnMessage.message = MESSAGE_READFILE_COMPLETE;
+			returnMessage.displaySchedule = displayVector;
+			return returnMessage;
 		}
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
 	}
 	_logicSchedule.resetHistory();
 	cout << "Schedule retrieived" << endl;
-	resetAndGetDisplaySchedule();
-	return MESSAGE_READFILE_COMPLETE;
+	vector<Item> displayVector = resetAndGetDisplaySchedule();
+	MESSAGE_AND_SCHEDULE returnMessage;
+	returnMessage.message = MESSAGE_READFILE_COMPLETE;
+	returnMessage.displaySchedule = displayVector;
+	return returnMessage;
 }
 
 

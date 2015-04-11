@@ -1693,7 +1693,7 @@ public:
 		TEST_METHOD(ReadFileTest1) {
 			Logic testLogic;
 			string expectedMessage = "readfile completed";
-			string actualMessage = testLogic.readDataFromFile();
+			string actualMessage = testLogic.readDataFromFile().message;
 			Assert::AreEqual(expectedMessage, actualMessage);
 		}
 
