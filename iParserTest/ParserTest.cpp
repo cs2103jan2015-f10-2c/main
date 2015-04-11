@@ -49,11 +49,13 @@ public:
 		}*/
 
 	TEST_METHOD(parserExecuteSortParsingTest) {
-		string testInput = "test";
-		string expectedCommand = "search";
-		string expectedText = "test";
-
-		testParser.executeSearchParsing(testInput);
+		string testInput[] = { "Date", "NAME", "priority", "p", "DoNE", "UPdate" };
+		string expectedCommand = "sort";
+		string expectedText[] = { "date", "name", "priority", "priority", "done", "update" };
+		
+		for (int i = 0; i < 6; i++) {
+			testParser.executeSortParsing(testInput[i]);
+		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter;
@@ -62,7 +64,26 @@ public:
 			string actualCommand = iter->command;
 			string actualText = iter->text;
 			Assert::AreEqual(expectedCommand, actualCommand);
-			Assert::AreEqual(expectedText, actualText);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+
+		testParser.clearParseInfo();
+
+		string testInputFalse[] = { "test", " ", "" };
+		string expectedCommandFalse = "invalid";
+		string expectedTextFalse = "Invalid input";
+
+		for (int i = 0; i < 3; i++) {
+			testParser.executeSortParsing(testInputFalse[i]);
+		}
+
+		testList = testParser.getParseInfo();
+		i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommandFalse, actualCommand);
+			Assert::AreEqual(expectedTextFalse, actualText);
 		}
 	}
 
@@ -81,40 +102,6 @@ public:
 			string actualText = iter->text;
 			Assert::AreEqual(expectedCommand, actualCommand);
 			Assert::AreEqual(expectedText, actualText);
-		}
-	}
-
-	TEST_METHOD(parserExecuteSearchParsingTest) {
-		string testInput = "test";
-		string expectedCommand = "search";
-		string expectedText = "test";
-
-		testParser.executeSearchParsing(testInput);
-	
-		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-		list<COMMAND_AND_TEXT>::iterator iter;
-		int i = 0;
-		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-			string actualCommand = iter->command;
-			string actualText = iter->text;
-			Assert::AreEqual(expectedCommand, actualCommand);
-			Assert::AreEqual(expectedText, actualText);
-		}
-
-		testParser.clearParseInfo();
-
-		string testInputPlus = "test + abc + 123 + @@@";
-		string expectedTextPlus[] = { "test", "abc", "123", "@@@" };
-
-		testParser.executeSearchParsing(testInputPlus);
-
-		testList = testParser.getParseInfo();
-		i = 0;
-		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-			string actualCommand = iter->command;
-			string actualText = iter->text;
-			Assert::AreEqual(expectedCommand, actualCommand);
-			Assert::AreEqual(expectedTextPlus[i], actualText);
 		}
 	}
 
