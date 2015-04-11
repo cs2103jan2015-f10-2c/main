@@ -39,11 +39,7 @@ bool DateTimeVerification::isValidDateTimeValues() {
 		isValidDayRange() &&
 		isValidHourRange() &&
 		isValidMinuteRange()) {
-<<<<<<< HEAD
-		_dateTimeVerificationLogger.writeToLogFile(string("---DTVerification: Valid Date Time Values"));
-=======
 		_dateTimeVerificationLogger.writeToLogFile("---DTVerification: Valid Date Time Values");
->>>>>>> 01d78c74c8242e98e850d080e5a8a8b9c0b9ef0c
 		return true;
 	} else {
 		_dateTimeVerificationLogger.writeToLogFile("---DTVerification: Invalid Date Time Values");
