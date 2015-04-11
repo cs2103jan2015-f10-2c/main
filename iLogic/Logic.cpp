@@ -978,6 +978,7 @@ string Logic::readDataFromFile() {
 			item->setCompletion(completion);
 			_logicSchedule.addItem(item);
 			removeItemPointer(item);
+			resetAndGetDisplaySchedule();
 		}
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
