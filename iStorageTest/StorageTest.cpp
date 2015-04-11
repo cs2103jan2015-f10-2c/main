@@ -1040,74 +1040,6 @@ public:
 		item4 = NULL;
 	}
 
-	TEST_METHOD(ScheduleTestUndoLastCommand) {
-		Schedule scheduleToTestUndoLastCommand;
-		vector<Item> displayVectorCopy;
-
-		Item *item1 = new Item(string("Item #1"));
-		item1->setItemID(1);
-
-		Item *item2 = new Item(string("Item #2"));
-		item2->setItemID(2);
-
-		Item *item3 = new Item(string("Item #3"));
-		item3->setItemID(3);
-
-		Item *item4 = new Item(string("Item #4"));
-		item4->setItemID(4);
-
-		scheduleToTestUndoLastCommand.addItem(item1);
-		scheduleToTestUndoLastCommand.addItem(item2);
-		scheduleToTestUndoLastCommand.addItem(item3);
-		scheduleToTestUndoLastCommand.addItem(item4);
-
-		scheduleToTestUndoLastCommand.resetDisplaySchedule();
-		displayVectorCopy = scheduleToTestUndoLastCommand.retrieveDisplaySchedule();
-		Assert::AreEqual(4, int(displayVectorCopy.size()));
-		
-		scheduleToTestUndoLastCommand.undoLastCommand();
-		scheduleToTestUndoLastCommand.resetDisplaySchedule();
-		displayVectorCopy = scheduleToTestUndoLastCommand.retrieveDisplaySchedule();
-		Assert::AreEqual(3, int(displayVectorCopy.size()));
-
-		scheduleToTestUndoLastCommand.undoLastCommand();
-		scheduleToTestUndoLastCommand.resetDisplaySchedule();
-		displayVectorCopy = scheduleToTestUndoLastCommand.retrieveDisplaySchedule();
-		Assert::AreEqual(2, int(displayVectorCopy.size()));
-
-		scheduleToTestUndoLastCommand.deleteItemGivenDisplayVectorIndex(1);
-		scheduleToTestUndoLastCommand.resetDisplaySchedule();
-		displayVectorCopy = scheduleToTestUndoLastCommand.retrieveDisplaySchedule();
-		Assert::AreEqual(1, int(displayVectorCopy.size()));
-
-		scheduleToTestUndoLastCommand.undoLastCommand();
-		scheduleToTestUndoLastCommand.resetDisplaySchedule();
-		displayVectorCopy = scheduleToTestUndoLastCommand.retrieveDisplaySchedule();
-		Assert::AreEqual(2, int(displayVectorCopy.size()));
-
-		item2->setDescription(string("New description for item 2"));
-		scheduleToTestUndoLastCommand.replaceItemGivenDisplayVectorIndex(item2, 2);
-		scheduleToTestUndoLastCommand.resetDisplaySchedule();
-		displayVectorCopy = scheduleToTestUndoLastCommand.retrieveDisplaySchedule();
-		Assert::AreEqual(2, int(displayVectorCopy.size()));
-		Assert::AreEqual(string("New description for item 2"), displayVectorCopy[1].getDescription());
-
-		scheduleToTestUndoLastCommand.undoLastCommand();
-		scheduleToTestUndoLastCommand.resetDisplaySchedule();
-		Assert::AreEqual(2, int(displayVectorCopy.size()));
-		Assert::AreEqual(string(""), displayVectorCopy[1].getDescription());
-
-		delete item1;
-		delete item2;
-		delete item3;
-		delete item4;
-
-		item1 = NULL;
-		item2 = NULL;
-		item3 = NULL;
-		item4 = NULL;
-	}
-
 	};
 
 	TEST_CLASS(TEST_CONVERSION) {
@@ -2911,6 +2843,17 @@ public:
 		Assert::AreEqual(item1->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(2).getItemName());
 		Assert::AreEqual(item2->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(3).getItemName());
 		Assert::AreEqual(item4->getItemName(), testSchedule.retrieveItemGivenDisplayVectorIndex(4).getItemName());
+
+		testSchedule.clearDisplaySchedule();
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(0, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(0, int(testSchedule.getSizeOfSchedule()));
+
+		confirmationFromSchedule = testSchedule.undoLastCommand();
+		testSchedule.resetDisplaySchedule();
+		Assert::AreEqual(string("4"), confirmationFromSchedule);
+		Assert::AreEqual(4, int(testSchedule.getSizeOfDisplaySchedule()));
+		Assert::AreEqual(4, int(testSchedule.getSizeOfSchedule()));
 
 		delete item1;
 		delete item2;
