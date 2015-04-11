@@ -169,7 +169,7 @@ public:
 		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts from
 		string testInput[] = { "edit 1", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-p H" };
 		string expectedCommand[] = { "name", "description", "start", "priority" };
-		string expectedText[] = { "testName", "WEAR FORMAL", "10 11 12 22 00", "h" };
+		string expectedText[] = { "testName", "WEAR FORMAL", "10 11 12 22 00", "high" };
 		vector<string> testVector;
 
 		for (int i = 0; i < 5; i++) {

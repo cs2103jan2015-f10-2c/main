@@ -67,6 +67,7 @@ private:
 	static const string SORT_COMPLETION;
 	static const string SORT_LAST_UPDATE;
 	static const string FILTER_COMPLETION;
+	static const string FILTER_COMPLETION_UNDONE;
 	static const string FILTER_PRIORITY;
 	static const string FILTER_LABEL;
 	static const string FILTER_ALL;
@@ -356,7 +357,7 @@ public:
 	//pre : takes in a string of filter
 	//post : returns a message whether filter is successfully implemented
 	string filterTask(string filterToBeImplemented);
-	string filterByCompletion();
+	string filterByCompletion(bool completion);
 	string filterByPriority(char priority);
 	string removeFilter();
 

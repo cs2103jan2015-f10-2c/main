@@ -27,27 +27,39 @@ const string iParser::COMMAND_PRIORITY = "priority";
 const string iParser::COMMAND_REMOVE = "remove";
 const string iParser::COMMAND_RMV = "rmv";
 
-const string iParser::MODIFIER_DATE = "date";
-const string iParser::MODIFIER_DUE = "due";
-const string iParser::MODIFIER_START = "start";
-const string iParser::MODIFIER_END = "end";
-const string iParser::MODIFIER_DESCRIPTION = "description";
-const string iParser::MODIFIER_DESC = "desc";
-const string iParser::MODIFIER_PRIORITY = "priority";
-const string iParser::MODIFIER_PRIORITY_P = "p";
+const string iParser::STRING_DATE = "date";
+const string iParser::STRING_DUE = "due";
+const string iParser::STRING_START = "start";
+const string iParser::STRING_END = "end";
+const string iParser::STRING_DESCRIPTION = "description";
+const string iParser::STRING_DESC = "desc";
+const string iParser::STRING_PRIORITY = "priority";
+const string iParser::STRING_PRIORITY_P = "p";
+const string iParser::STRING_ALL = "all";
+const string iParser::STRING_NAME = "name";
+const string iParser::STRING_UPDATE = "update";
+const string iParser::STRING_DONE = "done";
+const string iParser::STRING_UNDONE = "undone";
+const string iParser::STRING_HIGH = "high";
+const string iParser::STRING_MEDIUM = "medium";
+const string iParser::STRING_MED = "med";
+const string iParser::STRING_LOW = "low";
+const string iParser::STRING_H = "h";
+const string iParser::STRING_M = "m";
+const string iParser::STRING_L = "l";
 
-const string iParser::STRING_NAME = "-name";
-const string iParser::STRING_DATE = "-date";
-const string iParser::STRING_DUE = "-due";
-const string iParser::STRING_START = "-start";
-const string iParser::STRING_END = "-end";
-const string iParser::STRING_DESCRIPTION = "-description";
-const string iParser::STRING_DESC = "-desc";
-const string iParser::STRING_LABEL = "-label";
-const string iParser::STRING_PRIORITY = "-priority";
-const string iParser::STRING_PRIORITY_P = "-p";
-const string iParser::STRING_REMOVE = "-remove";
-const string iParser::STRING_RMV = "-rmv";
+const string iParser::MODIFIER_NAME = "-name";
+const string iParser::MODIFIER_DATE = "-date";
+const string iParser::MODIFIER_DUE = "-due";
+const string iParser::MODIFIER_START = "-start";
+const string iParser::MODIFIER_END = "-end";
+const string iParser::MODIFIER_DESCRIPTION = "-description";
+const string iParser::MODIFIER_DESC = "-desc";
+const string iParser::MODIFIER_LABEL = "-label";
+const string iParser::MODIFIER_PRIORITY = "-priority";
+const string iParser::MODIFIER_PRIORITY_P = "-p";
+const string iParser::MODIFIER_REMOVE = "-remove";
+const string iParser::MODIFIER_RMV = "-rmv";
 
 const string iParser::STRING_DAYS[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
 const string iParser::STRING_DAYS_SHORT_FORM[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
@@ -113,7 +125,6 @@ string iParser::executeParsing(string userInput) {
 	trimText(userInput);
 	removeConsecutiveWhiteSpace(userInput);
 	string command = retrieveCommandOrModifier(userInput);
-	//CommandType commandType = determineCommandType(command);
 	string textWithoutCommand = removeFirstStringToken(userInput);
 
 	if (command == COMMAND_ADD) {
@@ -127,11 +138,11 @@ string iParser::executeParsing(string userInput) {
 	} else if (command == COMMAND_UNDO) {
 		executeCommandParsing(COMMAND_UNDO, userInput);
 	} else if (command == COMMAND_SORT) {
-		executeCommandAndTextParsing(COMMAND_SORT, textWithoutCommand);
+		executeSortParsing(textWithoutCommand);
 	} else if (command == COMMAND_SEARCH) {
 		executeSearchParsing(textWithoutCommand);
 	} else if (command == COMMAND_VIEW) {
-		executeCommandAndTextParsing(COMMAND_VIEW, textWithoutCommand);
+		executeViewParsing(textWithoutCommand);
 	} else if (command == COMMAND_SAVE) {
 		executeCommandAndTextParsing(COMMAND_SAVE, textWithoutCommand);
 	} else if (command == COMMAND_DONE) {
@@ -144,95 +155,8 @@ string iParser::executeParsing(string userInput) {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
 	}
 
-	/*switch (commandType) {
-	case ADD:
-	executeAddParsing(textWithoutCommand);
-	break;
-	case DELETE:
-	executeCommandAndTextParsing(COMMAND_DELETE, textWithoutCommand);
-	break;
-	case CLEAR:
-	executeCommandParsing(COMMAND_CLEAR, userInput);
-	break;
-	case EDIT:
-	executeEditParsing(textWithoutCommand);
-	break;
-	case UNDO:
-	executeCommandParsing(COMMAND_UNDO, userInput);
-	break;
-	case SORT:
-	executeCommandAndTextParsing(COMMAND_SORT, textWithoutCommand);
-	break;
-	case SEARCH:
-	executeCommandAndTextParsing(COMMAND_SEARCH, textWithoutCommand);
-	break;
-	case VIEW:
-	executeCommandAndTextParsing(COMMAND_VIEW, textWithoutCommand);
-	break;
-	case SAVE:
-	executeCommandAndTextParsing(COMMAND_SAVE, textWithoutCommand);
-	break;
-	case DONE:
-	executeCommandAndTextParsing(COMMAND_DONE, textWithoutCommand);
-	break;
-	case EXIT:
-	executeCommandParsing(COMMAND_EXIT, userInput);
-	break;
-	case INVALID_COMMAND:
-	setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
-	break;
-	default:
-	exit(EXIT_FAILURE);
-	}*/
-
 	return MESSAGE_SUCCESS;
 }
-
-//iParser::CommandType iParser::determineCommandType(string command) {
-//	if (command == COMMAND_ADD) {
-//		return CommandType::ADD;
-//	} else if (command == COMMAND_DELETE || command == COMMAND_DEL) {
-//		return CommandType::DELETE;
-//	} else if (command == COMMAND_EDIT) {
-//		return CommandType::EDIT;
-//	} else if (command == COMMAND_UNDO) {
-//		return CommandType::UNDO;
-//	} else if (command == COMMAND_SORT) {
-//		return CommandType::SORT;
-//	} else if (command == COMMAND_SEARCH) {
-//		return CommandType::SEARCH;
-//	} else if (command == COMMAND_VIEW) {
-//		return CommandType::VIEW;
-//	} else if (command == COMMAND_SAVE) {
-//		return CommandType::SAVE;
-//	} else if (command == COMMAND_DONE) {
-//		return CommandType::DONE;
-//	} else if (command == COMMAND_EXIT) {
-//		return CommandType::EXIT;
-//	} else {
-//		return CommandType::INVALID_COMMAND;
-//	}
-//}
-
-//iParser::ModifierType iParser::determineModifierType(string modifier) {
-//	if (modifier == STRING_ITEM) {
-//		return ModifierType::ITEM;
-//	} else if (modifier == STRING_DATE) {
-//		return ModifierType::DATE;
-//	} else if (modifier == STRING_DUE) {
-//		return ModifierType::DUE;
-//	} else if (modifier == STRING_START) {
-//		return ModifierType::START;
-//	} else if (modifier == STRING_END) {
-//		return ModifierType::END;
-//	} else if (modifier == STRING_DESCRIPTION || modifier == STRING_DESC) {
-//		return ModifierType::DESCRIPTION;
-//	} else if (modifier == STRING_PRIORITY || modifier == STRING_PRIORITY_EXCLAMATION) {
-//		return ModifierType::PRIORITY;
-//	} else {
-//		return ModifierType::INVALID_MODIFIER;
-//	}
-//}
 
 string iParser::executeAddParsing(string text) {
 	if (text == STRING_BLANK) {
@@ -240,8 +164,8 @@ string iParser::executeAddParsing(string text) {
 		return MESSAGE_FAILURE;
 	}
 
-	vector<string> tokenisedInformation = tokeniseText(text);
 	try {
+		vector<string> tokenisedInformation = tokeniseText(text);
 		string itemName = tokenisedInformation[INDEX_START];
 		setParseInfo(COMMAND_ADD, itemName);
 		if (tokenisedInformation.size() > 1) {
@@ -262,8 +186,8 @@ string iParser::executeEditParsing(string text) {
 		return MESSAGE_FAILURE;
 	}
 
-	vector<string> tokenisedInformation = tokeniseText(text);
 	try {
+		vector<string> tokenisedInformation = tokeniseText(text);
 		string indexToEdit = tokenisedInformation[INDEX_START];
 		setParseInfo(COMMAND_EDIT, indexToEdit);
 		if (tokenisedInformation.size() > 1) {
@@ -299,13 +223,27 @@ string iParser::executeCommandParsing(const string commandType, string userInput
 	}
 }
 
-string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
-	if (text != STRING_BLANK) {
-		setParseInfo(ModifierType, text);
-		return MESSAGE_SUCCESS;
+string iParser::executeSortParsing(string sortType) {
+	assert(sortType != STRING_BLANK);
+
+	convertToLowerCase(sortType);
+
+	if (sortType == STRING_DATE) {
+		setParseInfo(COMMAND_SORT, STRING_DATE);
+	} else if (sortType == STRING_NAME) {
+		setParseInfo(COMMAND_SORT, STRING_NAME);
+	} else if (sortType == STRING_PRIORITY || sortType == STRING_PRIORITY_P) {
+		setParseInfo(COMMAND_SORT, STRING_PRIORITY);
+	} else if (sortType == STRING_DONE) {
+		setParseInfo(COMMAND_SORT, STRING_DONE);
+	} else if (sortType == STRING_UPDATE) {
+		setParseInfo(COMMAND_SORT, STRING_UPDATE);
 	} else {
-		throw MESSAGE_INVALID_INPUT;
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+		return MESSAGE_FAILURE;
 	}
+
+	return MESSAGE_SUCCESS;
 }
 
 string iParser::executeSearchParsing(const string text) {
@@ -328,27 +266,22 @@ string iParser::executeSearchParsing(const string text) {
 	return MESSAGE_SUCCESS;
 }
 
-string iParser::executeRemoveParsing(const string textToRemove) {
-	if (textToRemove == STRING_BLANK) {
-		throw MESSAGE_INVALID_INPUT;
-	}
+string iParser::executeViewParsing(string viewType) {
+	assert(viewType != STRING_BLANK);
 
-	if (textToRemove == MODIFIER_DATE) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_START, dateTime);
-		setParseInfo(COMMAND_END, dateTime);
-	} else if (textToRemove == MODIFIER_START) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_START, dateTime);
-	} else if (textToRemove == MODIFIER_END) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_END, dateTime);
-	} else if (textToRemove == MODIFIER_DESCRIPTION || textToRemove == MODIFIER_DESC) {
-		setParseInfo(COMMAND_DESCRIPTION, STRING_BLANK);
-	} else if (textToRemove == MODIFIER_PRIORITY || textToRemove == MODIFIER_PRIORITY_P) {
-		setParseInfo(COMMAND_PRIORITY, STRING_BLANK);
+	convertToLowerCase(viewType);
+
+	if (viewType == STRING_ALL) {
+		setParseInfo(COMMAND_VIEW, STRING_ALL);
+	} else if (viewType == STRING_DONE) {
+		setParseInfo(COMMAND_VIEW, STRING_DONE);
+	} else if (viewType == STRING_UNDONE) {
+		setParseInfo(COMMAND_VIEW, STRING_UNDONE);
+	} else if (viewType == STRING_PRIORITY || viewType == STRING_PRIORITY_P) {
+		setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
 	} else {
-		throw MESSAGE_INVALID_INPUT;
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
 	}
 
 	return MESSAGE_SUCCESS;
@@ -368,14 +301,13 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 	for (unsigned int index = 1; index < tokenisedInformation.size(); index++) {
 		string singleInformation = tokenisedInformation[index];
 		string modifier = retrieveCommandOrModifier(singleInformation);
-		//ModifierType modifierType = determineModifierType(modifier);
 		string textWithoutCommand = removeFirstStringToken(singleInformation);
 
 		if (hasRemove) {
 			throw MESSAGE_INVALID_INPUT;
 		}
 
-		if (modifier == STRING_NAME) {
+		if (modifier == MODIFIER_NAME) {
 			if (command == COMMAND_EDIT && !hasItem) {
 				executeModifierAndTextParsing(COMMAND_NAME, textWithoutCommand);
 				hasItem = true;
@@ -386,53 +318,52 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 					throw MESSAGE_INVALID_NUMBER_OF_ITEM;
 				}
 			}
-		} else if (modifier == STRING_DATE) {
+		} else if (modifier == MODIFIER_DATE) {
 			if (!hasDateOrDue && !hasStart && !hasEnd) {
-				executeDateTimeParsing(textWithoutCommand, MODIFIER_DATE);
+				executeDateTimeParsing(textWithoutCommand, STRING_DATE);
 				hasDateOrDue = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
-		} else if (modifier == STRING_DUE) {
+		} else if (modifier == MODIFIER_DUE) {
 			if (!hasDateOrDue && !hasStart && !hasEnd) {
-				setDateTime(textWithoutCommand, MODIFIER_DUE);
+				setDateTime(textWithoutCommand, STRING_DUE);
 				hasDateOrDue = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
-		} else if (modifier == STRING_START) {
+		} else if (modifier == MODIFIER_START) {
 			if (!hasDateOrDue && !hasStart) {
-				setDateTime(textWithoutCommand, MODIFIER_START);
+				setDateTime(textWithoutCommand, STRING_START);
 				hasStart = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
-		} else if (modifier == STRING_END) {
+		} else if (modifier == MODIFIER_END) {
 			if (!hasDateOrDue && !hasEnd) {
-				setDateTime(textWithoutCommand, MODIFIER_END);
+				setDateTime(textWithoutCommand, STRING_END);
 				hasEnd = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
-		} else if (modifier == STRING_DESCRIPTION || modifier == STRING_DESC) {
+		} else if (modifier == MODIFIER_DESCRIPTION || modifier == MODIFIER_DESC) {
 			if (!hasDescription) {
 				executeModifierAndTextParsing(COMMAND_DESCRIPTION, textWithoutCommand);
 				hasDescription = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
-		} else if (modifier == STRING_PRIORITY || modifier == STRING_PRIORITY_P) {
+		} else if (modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P) {
 			if (!hasPriority) {
-				convertToLowerCase(textWithoutCommand);
-				executeModifierAndTextParsing(COMMAND_PRIORITY, textWithoutCommand);
+				executePriorityParsing(textWithoutCommand);
 				hasPriority = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 			}
-		} else if (modifier == STRING_REMOVE || modifier == STRING_RMV) {
+		} else if (modifier == MODIFIER_REMOVE || modifier == MODIFIER_RMV) {
 			if (command == COMMAND_EDIT && !hasItem && !hasDateOrDue && !hasStart && !hasEnd && !hasDescription) {
-				convertToLowerCase(textWithoutCommand);
 				executeRemoveParsing(textWithoutCommand);
+				hasRemove = true;
 			} else if (command == COMMAND_ADD) {
 				throw MESSAGE_INVALID_ADD_ITEM;
 			}
@@ -440,73 +371,6 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 			throw MESSAGE_INVALID_INPUT;
 		}
 	}
-
-	/*switch (modifierType) {
-	case ITEM:
-	if (command == COMMAND_EDIT && !hasItem) {
-	executeModifierAndTextParsing(COMMAND_ITEM, textWithoutCommand);
-	hasItem = true;
-	} else {
-	if (command == COMMAND_ADD) {
-	throw MESSAGE_INVALID_ADD_ITEM;
-	} else if (hasItem) {
-	throw MESSAGE_INVALID_NUMBER_OF_ITEM;
-	}
-	}
-	break;
-	case DATE:
-	if (!hasDateOrDue && !hasStart && !hasEnd) {
-	executeDateTimeParsing(textWithoutCommand, MODIFIER_DATE);
-	hasDateOrDue = true;
-	} else {
-	throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
-	}
-	break;
-	case DUE:
-	if (!hasDateOrDue && !hasStart && !hasEnd) {
-	setDateTime(textWithoutCommand, MODIFIER_DUE);
-	hasDateOrDue = true;
-	} else {
-	throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
-	}
-	break;
-	case START:
-	if (!hasDateOrDue && !hasStart) {
-	setDateTime(textWithoutCommand, MODIFIER_START);
-	hasStart = true;
-	} else {
-	throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
-	}
-	break;
-	case END:
-	if (!hasDateOrDue && !hasEnd) {
-	setDateTime(textWithoutCommand, MODIFIER_END);
-	hasEnd = true;
-	} else {
-	throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
-	}
-	break;
-	case DESCRIPTION:
-	if (!hasDescription) {
-	executeModifierAndTextParsing(COMMAND_DESCRIPTION, textWithoutCommand);
-	hasDescription = true;
-	} else {
-	throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
-	}
-	break;
-	case PRIORITY:
-	if (!hasPriority) {
-	convertToLowerCase(textWithoutCommand);
-	executeModifierAndTextParsing(COMMAND_PRIORITY, textWithoutCommand);
-	hasPriority = true;
-	} else {
-	throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
-	}
-	break;
-	default:
-	throw MESSAGE_INVALID_INPUT;
-	}
-	}*/
 
 	return MESSAGE_SUCCESS;
 }
@@ -520,6 +384,60 @@ string iParser::executeDateTimeParsing(string dateTimeString, const string modif
 
 	return MESSAGE_SUCCESS;
 }
+
+string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
+	if (text != STRING_BLANK) {
+		setParseInfo(ModifierType, text);
+		return MESSAGE_SUCCESS;
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+}
+
+string iParser::executePriorityParsing(string priorityType) {
+	assert(priorityType != STRING_BLANK);
+
+	convertToLowerCase(priorityType);
+
+	if (priorityType == STRING_HIGH || priorityType == STRING_H) {
+		setParseInfo(STRING_PRIORITY, STRING_HIGH);
+	} else if (priorityType == STRING_MEDIUM || priorityType == STRING_MED || priorityType == STRING_M) {
+		setParseInfo(STRING_PRIORITY, STRING_MEDIUM);
+	} else if (priorityType == STRING_LOW || priorityType == STRING_L) {
+		setParseInfo(STRING_PRIORITY, STRING_LOW);
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeRemoveParsing(string textToRemove) {
+	assert(textToRemove != STRING_BLANK);
+
+	convertToLowerCase(textToRemove);
+
+	if (textToRemove == STRING_DATE) {
+		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
+		setParseInfo(COMMAND_START, dateTime);
+		setParseInfo(COMMAND_END, dateTime);
+	} else if (textToRemove == STRING_START) {
+		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
+		setParseInfo(COMMAND_START, dateTime);
+	} else if (textToRemove == STRING_END) {
+		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
+		setParseInfo(COMMAND_END, dateTime);
+	} else if (textToRemove == STRING_DESCRIPTION || textToRemove == STRING_DESC) {
+		setParseInfo(COMMAND_DESCRIPTION, STRING_BLANK);
+	} else if (textToRemove == STRING_PRIORITY || textToRemove == STRING_PRIORITY_P) {
+		setParseInfo(COMMAND_PRIORITY, STRING_BLANK);
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
 
 string iParser::retrieveCommandOrModifier(string userInput) {
 	unsigned int endIndex = userInput.find_first_of(" \t");
@@ -551,6 +469,9 @@ vector<string> iParser::tokeniseText(const string text) {
 				endIndexForText = startIndexForModifier;
 				tokenisedText = text.substr(startIndexForText, endIndexForText - startIndexForText);
 				trimText(tokenisedText);
+				if (tokenisedText == STRING_BLANK) {
+					throw MESSAGE_INVALID_INPUT;
+				}
 				tokenisedInformation.push_back(tokenisedText);
 				startIndexForText = endIndexForText;
 			}
@@ -661,9 +582,9 @@ string iParser::setDateTime(string dateTimeString, const string modifierType) {
 	}
 
 	string commandType;
-	if (modifierType == MODIFIER_DATE || modifierType == MODIFIER_START) {
+	if (modifierType == STRING_DATE || modifierType == STRING_START) {
 		commandType = COMMAND_START;
-	} else if (modifierType == MODIFIER_DUE || modifierType == MODIFIER_END) {
+	} else if (modifierType == STRING_DUE || modifierType == STRING_END) {
 		commandType = COMMAND_END;
 	} else {
 		throw MESSAGE_INVALID_INPUT;
@@ -1272,11 +1193,11 @@ bool iParser::hasNoDayButHasTime(const string dateTimeString) {
 bool iParser::isModifier(string modifier) {
 	convertToLowerCase(modifier);
 
-	return (modifier == STRING_NAME || modifier == STRING_DATE ||
-		modifier == STRING_DUE || modifier == STRING_START ||
-		modifier == STRING_END || modifier == STRING_DESCRIPTION ||
-		modifier == STRING_DESC || modifier == STRING_LABEL ||
-		modifier == STRING_PRIORITY || modifier == STRING_PRIORITY_P);
+	return (modifier == MODIFIER_NAME || modifier == MODIFIER_DATE ||
+		modifier == MODIFIER_DUE || modifier == MODIFIER_START ||
+		modifier == MODIFIER_END || modifier == MODIFIER_DESCRIPTION ||
+		modifier == MODIFIER_DESC || modifier == MODIFIER_LABEL ||
+		modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P);
 }
 
 bool iParser::areDigits(const string text) {
@@ -1297,7 +1218,6 @@ bool iParser::isWhiteSpace(const char character) {
 }
 
 unsigned int iParser::retrieveCount(string text, const char character) {
-	assert(text != STRING_BLANK);
 	unsigned int count = 0;
 	unsigned int index;
 

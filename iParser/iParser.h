@@ -69,29 +69,41 @@ public:
 	static const string COMMAND_REMOVE;
 	static const string COMMAND_RMV;
 
-	// used to identify whether date time input is appointment or due date
-	static const string MODIFIER_DATE;
-	static const string MODIFIER_DUE;
-	static const string MODIFIER_START;
-	static const string MODIFIER_END;
-	static const string MODIFIER_DESCRIPTION;
-	static const string MODIFIER_DESC;
-	static const string MODIFIER_PRIORITY;
-	static const string MODIFIER_PRIORITY_P;
-
-	// used to identify modifiers in UserInput
-	static const string STRING_NAME;
+	// used to identify string in UserInput
 	static const string STRING_DATE;
 	static const string STRING_DUE;
 	static const string STRING_START;
 	static const string STRING_END;
 	static const string STRING_DESCRIPTION;
 	static const string STRING_DESC;
-	static const string STRING_LABEL;
 	static const string STRING_PRIORITY;
 	static const string STRING_PRIORITY_P;
-	static const string STRING_REMOVE;
-	static const string STRING_RMV;
+	static const string STRING_ALL;
+	static const string STRING_UPDATE;
+	static const string STRING_NAME;
+	static const string STRING_DONE;
+	static const string STRING_UNDONE;
+	static const string STRING_HIGH;
+	static const string STRING_MEDIUM;
+	static const string STRING_MED;
+	static const string STRING_LOW;
+	static const string STRING_H;
+	static const string STRING_M;
+	static const string STRING_L;
+
+	// used to identify modifier in UserInput
+	static const string MODIFIER_NAME;
+	static const string MODIFIER_DATE;
+	static const string MODIFIER_DUE;
+	static const string MODIFIER_START;
+	static const string MODIFIER_END;
+	static const string MODIFIER_DESCRIPTION;
+	static const string MODIFIER_DESC;
+	static const string MODIFIER_LABEL;
+	static const string MODIFIER_PRIORITY;
+	static const string MODIFIER_PRIORITY_P;
+	static const string MODIFIER_REMOVE;
+	static const string MODIFIER_RMV;
 
 	// used for date time functions and checks
 	static const string STRING_DAYS[];
@@ -146,18 +158,6 @@ public:
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
 
-	// =====================================
-	// enumeration for command and modifiers
-	// =====================================
-
-	/*enum CommandType {
-		ADD, DELETE, CLEAR, EDIT, UNDO, SORT, SEARCH, VIEW, SAVE, DONE, EXIT, INVALID_COMMAND
-	};
-
-	enum ModifierType {
-		ITEM, DATE, DUE, START, END, DESCRIPTION, PRIORITY, INVALID_MODIFIER
-	};*/
-
 	// =====================
 	// main parsing function
 	// =====================
@@ -165,17 +165,6 @@ public:
 	// Post:	sets command and text to _parseInfo list based on user's command
 	//			clears _parseInfo list and sets list as invalid if any invalid input is detected
 	string executeParsing(string); // unit test
-
-	// ========================================
-	// command / modifier determining functions
-	// ========================================
-	
-	// Pre:		command retrieved passed to function
-	// Post:	determines and returns the enum CommandType, returns INVALID_COMMAND if command does not match
-	//CommandType determineCommandType(string);
-	// Pre:		modifiers retrieved passed to function
-	// Post:	determines and returns the enum ModifierType, returns INVALID_MODIFIER if modifier does not match
-	//ModifierType determineModifierType(string);
 
 	// ===============================
 	// functions within executeParsing
@@ -197,17 +186,16 @@ public:
 	// Post:	sets command and text/index to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeCommandParsing(const string, string);
-	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
-	// Post:	sets modifier and text to _parseInfo list
-	//			clears _parseInfo list and sets list as invalid if blank text is detected
-	string executeModifierAndTextParsing(const string, string);
+	// Pre:		
+	// Post:	
+	string executeSortParsing(string);
+	// Pre:		
+	// Post:	
+	string executeViewParsing(string);
 	// Pre:		
 	// Post:	
 	string executeSearchParsing(const string);
-	// Pre:		
-	// Post:	
-	string executeRemoveParsing(const string);
-
+	
 	// ================
 	// helper functions
 	// ================
@@ -216,11 +204,21 @@ public:
 	//Post:		determines the modifiers available in vector and executes the respective modifiers
 	//			if any modifiers cannot be determined or if sub functions throw an exception, this function will stop it's execution
 	string checkAndSetTokenisedInformation(vector<string>&, const string);
+	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
+	// Post:	sets modifier and text to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeModifierAndTextParsing(const string, string);
 	// Pre:		nil
 	// Post:	determines whether dateTime string is a single dateTime or a ranged dateTime and executes
 	//			respective dateTime parsing
 	//			if dateTime is not valid, invalid date time message will be thrown as exception
 	string executeDateTimeParsing(string, const string);
+	// Pre:		
+	// Post:	
+	string executePriorityParsing(string);
+	// Pre:		ModifierType "remove" is called
+	// Post:	sets the parts to be removed to _parseInfo list
+	string executeRemoveParsing(string);
 
 	// =============================
 	// string manipulation functions

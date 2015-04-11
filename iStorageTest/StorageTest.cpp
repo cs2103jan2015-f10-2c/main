@@ -585,6 +585,11 @@ public:
 		outputCompletion = trueStory.setCompletion(isCompleted);
 		Assert::AreEqual(isCompleted, outputCompletion);
 	}
+
+	TEST_METHOD(ItemTestSetLastUpdate) {
+		// Joon Fai
+	}
+
 	};
 
 	TEST_CLASS(TEST_GET_ITEM) {
@@ -714,6 +719,11 @@ public:
 		outputCompletion = trueStory.getCompletion();
 		Assert::AreEqual(isCompleted, outputCompletion);
 	}
+
+	TEST_METHOD(ItemTestGetLastUpdate) {
+		// Joon Fai
+	}
+
 	};
 
 	TEST_CLASS(TEST_DISPLAY) {
@@ -2630,7 +2640,41 @@ public:
 	}
 
 	TEST_METHOD(TestSortByLastUpdate) {
-		// TODO: Your test code here
+		Schedule scheduleSortedByUpdate;
+		vector<Item> sortedVector;
+
+		Item *item1 = new Item(string("This is Item #1"));
+		item1->setItemID(1);
+		item1->setDescription(string("before editing"));
+
+		Item *item2 = new Item(string("This is Item #2"));
+		item2->setItemID(2);
+		item2->setDescription(string("before editing"));
+
+		Item *item3 = new Item(string("This is Item #3"));
+		item3->setItemID(3);
+		item3->setDescription(string("before editing"));
+
+		Item *item4 = new Item(string("This is Item #4"));
+		item4->setItemID(4);
+		item4->setDescription(string("before editing"));
+
+		item1->setStartTime(2015, 4, 10);
+		item4->setDescription(string("Has been edited!"));
+
+		scheduleSortedByUpdate.addItem(item1);
+		scheduleSortedByUpdate.addItem(item2);
+		scheduleSortedByUpdate.addItem(item3);
+		scheduleSortedByUpdate.addItem(item4);
+
+		scheduleSortedByUpdate.resetDisplaySchedule();
+		Assert::AreEqual(4, int(scheduleSortedByUpdate.getSizeOfSchedule()));
+		sortedVector = scheduleSortedByUpdate.retrieveDisplayScheduleByLastUpdate();
+		Assert::AreEqual(item4->getItemID(), sortedVector[0].getItemID());
+		Assert::AreEqual(item1->getItemID(), sortedVector[1].getItemID());
+		Assert::AreEqual(item2->getItemID(), sortedVector[2].getItemID());
+		Assert::AreEqual(item3->getItemID(), sortedVector[3].getItemID());
+
 	}
 
 	};
