@@ -1,3 +1,4 @@
+//@author A0105180W
 #ifndef LOG_H
 #define LOG_H
 
