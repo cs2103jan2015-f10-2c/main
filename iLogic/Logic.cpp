@@ -27,6 +27,7 @@ const string Logic::SORT_PRIORITY = "priority";
 const string Logic::SORT_COMPLETION = "done";
 const string Logic::SORT_LAST_UPDATE = "update";
 const string Logic::FILTER_COMPLETION = "done";
+const string Logic::FILTER_COMPLETION_UNDONE = "undone";
 const string Logic::FILTER_PRIORITY = "priority";
 const string Logic::FILTER_LABEL = "label";
 const string Logic::FILTER_ALL = "all";
@@ -263,6 +264,8 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 
 
 MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage){
+	resetAndGetDisplaySchedule();
+	
 	vector<Item> displayVector = sortTask();
 	MESSAGE_AND_SCHEDULE userDisplayInformation;
 	userDisplayInformation.message = returnMessage;
@@ -621,7 +624,11 @@ string Logic::filterTask(string filterToBeImplemented){
 	iss >> filterType >> modifierType;
 
 	if (filterType == FILTER_COMPLETION){
-		filterByCompletion();
+		bool completion = true;
+		filterByCompletion(completion);
+	} else if (filterType == FILTER_COMPLETION_UNDONE){
+		bool completion = false;
+		filterByCompletion(completion);
 	} else if (filterType == FILTER_PRIORITY){
 		char priorityType = checkPriority(modifierType);
 		string returnMessage = filterByPriority(priorityType);
@@ -640,10 +647,13 @@ string Logic::filterTask(string filterToBeImplemented){
 }
 
 
-string Logic::filterByCompletion(){
-	bool done = true;
-	_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(done);
-	_currentFilter = FILTER_COMPLETION;
+string Logic::filterByCompletion(bool completion){
+	_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(completion);
+	if (completion == true){
+		_currentFilter = FILTER_COMPLETION;
+	} else{
+		_currentFilter = FILTER_COMPLETION_UNDONE;
+	}
 	return _currentFilter;
 }
 
@@ -913,6 +923,7 @@ vector<Item> Logic::getDisplaySchedule(){
 
 vector<Item> Logic::resetAndGetDisplaySchedule(){
 	resetDisplaySchedule();
+	filterTask(_currentFilter);
 	return getDisplaySchedule();
 }
 
