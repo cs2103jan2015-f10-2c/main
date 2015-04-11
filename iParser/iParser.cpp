@@ -90,11 +90,16 @@ const string iParser::MESSAGE_FAILURE = "failure";
 const string iParser::MESSAGE_INVALID = "invalid";
 const string iParser::MESSAGE_INVALID_INPUT = "Invalid input";
 const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
+const string iParser::MESSAGE_INVALID_MODIFIER = "Invalid modifier";
+const string iParser::MESSAGE_INVALID_SORT = "Invalid sort";
+const string iParser::MESSAGE_INVALID_REMOVE = "Invalid remove";
+const string iParser::MESSAGE_INVALID_VIEW = "Invalid view";
+const string iParser::MESSAGE_INVALID_PRIORITY = "Invalid priority";
 const string iParser::MESSAGE_INVALID_DATE_TIME = "Invalid date and time";
-
-const string iParser::MESSAGE_INVALID_ADD_ITEM = "Unable to use \'-item\' modifier when using \'add\' command";
-const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM = "Unable to use \'-item\' modifier more than once";
+const string iParser::MESSAGE_INVALID_ADD_ITEM = "Unable to use \'name\' modifier when using \'add\' command";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM = "Unable to use \'name\' modifier more than once";
 const string iParser::MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER = "Unable to use multiple date time modifiers";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_REMOVE = "Unable to use \'remove\' modifier more than once";
 
 const unsigned int iParser::SIZE_OF_STRING_TO = 2;
 const unsigned int iParser::SIZE_OF_STRING_HYPHEN = 1;
@@ -140,7 +145,7 @@ string iParser::executeParsing(string userInput) {
 	} else if (command == COMMAND_SORT) {
 		executeSortParsing(textWithoutCommand);
 	} else if (command == COMMAND_SEARCH) {
-		executeSearchParsing(textWithoutCommand);
+		executeCommandAndTextParsing(COMMAND_SEARCH, textWithoutCommand);
 	} else if (command == COMMAND_VIEW) {
 		executeViewParsing(textWithoutCommand);
 	} else if (command == COMMAND_SAVE) {
@@ -216,29 +221,9 @@ string iParser::executeSortParsing(string sortType) {
 	} else if (sortType == STRING_UPDATE) {
 		setParseInfo(COMMAND_SORT, STRING_UPDATE);
 	} else {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_SORT);
 		return MESSAGE_FAILURE;
 	}
-
-	return MESSAGE_SUCCESS;
-}
-
-string iParser::executeSearchParsing(const string text) {
-	if (text == STRING_BLANK) {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
-		return MESSAGE_FAILURE;
-	}
-
-	unsigned int startIndex = INDEX_START;
-	unsigned int endIndex = INDEX_START;
-	do {
-		endIndex = text.find_first_of("+", startIndex);
-		string textToSearch = text.substr(startIndex, endIndex - startIndex);
-		trimText(textToSearch);
-		convertToLowerCase(textToSearch);
-		startIndex = endIndex + 1;
-		setParseInfo(COMMAND_SEARCH, textToSearch);
-	} while (startIndex != 0);
 
 	return MESSAGE_SUCCESS;
 }
@@ -255,7 +240,7 @@ string iParser::executeViewParsing(string viewType) {
 	} else if (viewType == STRING_PRIORITY || viewType == STRING_PRIORITY_P) {
 		setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
 	} else {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
 		return MESSAGE_FAILURE;
 	}
 
@@ -300,7 +285,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		string textWithoutCommand = removeFirstStringToken(singleInformation);
 
 		if (hasRemove) {
-			throw MESSAGE_INVALID_INPUT;
+			throw MESSAGE_INVALID_NUMBER_OF_REMOVE;
 		}
 
 		if (modifier == MODIFIER_NAME) {
@@ -364,7 +349,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 				throw MESSAGE_INVALID_ADD_ITEM;
 			}
 		} else {
-			throw MESSAGE_INVALID_INPUT;
+			throw MESSAGE_INVALID_MODIFIER;
 		}
 	}
 
@@ -406,7 +391,7 @@ string iParser::executePriorityParsing(string priorityType) {
 	} else if (priorityType == STRING_LOW || priorityType == STRING_L) {
 		setParseInfo(STRING_PRIORITY, STRING_LOW);
 	} else {
-		throw MESSAGE_INVALID_INPUT;
+		throw MESSAGE_INVALID_PRIORITY;
 	}
 
 	return MESSAGE_SUCCESS;
@@ -432,7 +417,7 @@ string iParser::executeRemoveParsing(string textToRemove) {
 	} else if (textToRemove == STRING_PRIORITY || textToRemove == STRING_PRIORITY_P) {
 		setParseInfo(COMMAND_PRIORITY, STRING_BLANK);
 	} else {
-		throw MESSAGE_INVALID_INPUT;
+		throw MESSAGE_INVALID_REMOVE;
 	}
 
 	return MESSAGE_SUCCESS;

@@ -135,11 +135,16 @@ public:
 	static const string MESSAGE_INVALID;
 	static const string MESSAGE_INVALID_INPUT;
 	static const string MESSAGE_INVALID_COMMAND;
+	static const string MESSAGE_INVALID_MODIFIER;
+	static const string MESSAGE_INVALID_SORT;
+	static const string MESSAGE_INVALID_VIEW;
+	static const string MESSAGE_INVALID_REMOVE;
+	static const string MESSAGE_INVALID_PRIORITY;
 	static const string MESSAGE_INVALID_DATE_TIME;
-
 	static const string MESSAGE_INVALID_ADD_ITEM;
 	static const string MESSAGE_INVALID_NUMBER_OF_ITEM;
 	static const string MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+	static const string MESSAGE_INVALID_NUMBER_OF_REMOVE;
 
 	// used to avoid magic numbers
 	static const unsigned int SIZE_OF_STRING_TO;
@@ -184,10 +189,7 @@ public:
 	// Pre:		
 	// Post:	
 	string executeViewParsing(string);
-	// Pre:		
-	// Post:	
-	string executeSearchParsing(const string);
-	// Pre:		commandType is "delete", "del", "save", "done" or "undone"
+	// Pre:		commandType is "delete", "del", "search", "save", "done" or "undone"
 	// Post:	sets text or index to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeCommandAndTextParsing(const string, string);
