@@ -1,12 +1,12 @@
 //@author A0105180W
 //	GUI
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
-//	Coder:	Shri Kishen Rajendran A0105180W
 
 #pragma once
 
 #include "..\iLogic\Logic.h"
 #include "..\iStorage\Item.h"
+#include "..\iPlanner Log\Log.h"
 #include <msclr\marshal_cppstd.h>
 
 using namespace std;
@@ -411,7 +411,10 @@ namespace iPlannerUI {
 	}
 			 
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
-
+				 
+				 Log newLog;
+				 newLog.writeToLogFile("\nLog file created");
+				 
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
 				 vector<Item> tempItem;

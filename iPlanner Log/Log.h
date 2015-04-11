@@ -1,3 +1,4 @@
+//@author A0105180W
 #ifndef LOG_H
 #define LOG_H
 
@@ -10,7 +11,7 @@ using namespace std;
 
 class Log {
 private:
-	static vector<string> logData;
+	
 public:
 	void writeToLogFile(string);
 

@@ -1,3 +1,7 @@
+//author A0116229J
+//Coder : Yu Young Bin
+
+
 #include "Logic.h"
 #include <exception>
 
@@ -32,6 +36,7 @@ const string Logic::FILTER_PRIORITY = "priority";
 const string Logic::FILTER_LABEL = "label";
 const string Logic::FILTER_ALL = "all";
 const string Logic:: FILTER_KEYWORD = "keyword";
+ const string Logic::FILTER_DATE = "date";
 
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation.txt";
@@ -67,6 +72,9 @@ const string Logic::MESSAGE_INVALID_FILTERTYPE = "Invalid filter type";
 const string Logic::MESSAGE_TASK_FOUND = "Tasks containing : ";
 const string Logic::MESSAGE_NO_TASK_FOUND = "No task can be found";
 const string Logic::MESSAGE_UNABLE_TO_UNDO = "ERROR: Undo has reached its limit.";
+
+const string  Logic::MESSAGE_READFILE_COMPLETE = "readfile completed";
+ const string Logic:: MESSAGE_WRITEFILE_COMPLETE = "writefile completed";
 
 char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
@@ -107,6 +115,7 @@ Logic::~Logic() {}
 /////////////////////////
 
 /*All the print functions are for Command line prompt debugging purposes*/
+
 void Logic::printSchedule(vector<Item> retrievedDisplaySchedule){
 	cout << endl;
 	cout << "-------------------------------------------------------------------------------" << endl;
@@ -637,8 +646,8 @@ string Logic::changeCurrentSortingAsUserSpecified(string sortingMethod){
 string Logic::filterTask(string filterToBeImplemented){
 	istringstream iss(filterToBeImplemented);
 	string filterType;
-	string modifierType;
-	iss >> filterType >> modifierType;
+	
+	iss >> filterType ;
 
 	if (filterType == FILTER_COMPLETION){
 		bool completion = true;
@@ -647,6 +656,8 @@ string Logic::filterTask(string filterToBeImplemented){
 		bool completion = false;
 		filterByCompletion(completion);
 	} else if (filterType == FILTER_PRIORITY){
+		string modifierType;
+		iss >> modifierType;
 		char priorityType = checkPriority(modifierType);
 		string returnMessage = filterByPriority(priorityType);
 		if (returnMessage == MESSAGE_INVALID_PRIORITY){
@@ -656,6 +667,9 @@ string Logic::filterTask(string filterToBeImplemented){
 		removeFilter();
 	} else if (filterType == FILTER_KEYWORD){
 		searchTask();
+	} else if (filterType == FILTER_DATE){
+		_startEndTime = getStartEndTime(filterToBeImplemented);
+		filterByDate(_startEndTime);
 	} else{
 		printInvalidViewOption();
 		return MESSAGE_FAILED_VIEW + MESSAGE_INVALID_FILTERTYPE;
@@ -665,6 +679,26 @@ string Logic::filterTask(string filterToBeImplemented){
 	return MESSAGE_SUCCESSFUL_VIEW + _currentFilter;
 }
 
+string Logic::filterByDate(START_END_TIME startEndTime){
+	_logicSchedule.retrieveDisplayScheduleFilteredByDateTime(startEndTime.startTime, startEndTime.endTime);
+	_currentFilter = FILTER_DATE;
+	return _currentFilter;
+}
+
+START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
+	int YYYY, MM, DD, hh, mm;
+	string junk;
+	istringstream iss(infoToBeInterpreted);
+	iss >> junk;
+	iss >> YYYY >> MM >> DD >> hh >> mm;
+	DateTime startTime(YYYY, MM, DD, hh, mm);
+	iss >> YYYY >> MM >> DD >> hh >> mm;
+	DateTime endTime(YYYY, MM, DD, hh, mm);
+	START_END_TIME startEndTime;
+	startEndTime.startTime = startTime;
+	startEndTime.endTime = endTime;
+	return startEndTime;
+}
 void Logic::clearKeyWordVec(){
 	_keywordVec.clear();
 	return;
@@ -702,7 +736,7 @@ string Logic::removeFilter(){
 string Logic::modifyKeywordVec(string keyWord){
 	convertStringToKeywordVec(keyWord);
 	_currentFilter = FILTER_KEYWORD;
-	return _currentFilter;
+	return MESSAGE_TASK_FOUND + keyWord;
 }
 
 
@@ -718,6 +752,31 @@ string Logic::searchTask(){
 	}
 }
 
+string Logic::trimText(string& text) {
+	text = trimFront(text);
+	text = trimBack(text);
+	return MESSAGE_SUCCESS;
+}
+
+string Logic::trimFront(string text) {
+	unsigned int startIndex = 0;
+
+	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
+		startIndex++;
+	}
+
+	return text.substr(startIndex);
+}
+
+string Logic::trimBack(string text) {
+	unsigned int endIndex = text.length();
+
+	while (endIndex > 0 && (text[endIndex - 1] == ' ' || text[endIndex - 1] == '\t')) {
+		endIndex--;
+	}
+
+	return text.substr(0, endIndex);
+}
 
 /////////////////////////////////////
 ////*SAVE FILE RELATED FUNCTIONS*////
@@ -774,10 +833,7 @@ void Logic::saveBasicInformationToTextFile(){
 	writeFile << _directoryToBeSaved << endl;
 	writeFile << _fileNameToBeSaved << endl;
 	writeFile << getScheduleSize() << endl;
-	writeFile << _currentSorting << endl;
 	writeFile << _nextItemID << endl;
-	writeFile << _currentFilter << endl;
-	writeFile << convertKeywordVecToString();
 }
 
 
@@ -800,6 +856,7 @@ void Logic::convertStringToKeywordVec(string keywordString){
 		int breakPoint = keywordString.find_first_of("+");
 		if (breakPoint != -1){
 			string tokenisedKeyword = keywordString.substr(0, breakPoint);
+			trimText(tokenisedKeyword);
 			_keywordVec.push_back(tokenisedKeyword);
 			keywordString = keywordString.substr(breakPoint + 1);
 		} else{
@@ -838,12 +895,8 @@ string Logic::retrieveBasicInformationFromTextFile(){
 	getline(readFile, _directoryToBeSaved);
 	getline(readFile, _fileNameToBeSaved);
 	readFile >> _scheduleSize;
-	readFile >> _currentSorting;
 	readFile >> _nextItemID;
-	readFile >> _currentFilter;
-	string keywordString;
-	readFile >> keywordString;
-	convertStringToKeywordVec(keywordString);
+
 	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
 
 	if (_directoryToBeSaved == ""){
@@ -870,7 +923,7 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 }
 
 
-void Logic::readDataFromFile() {
+string Logic::readDataFromFile() {
 	if (isExistingFileInDirectory(getDirectoryAndFileName())){
 		ifstream readFile(getDirectoryAndFileName());
 		for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
@@ -925,6 +978,8 @@ void Logic::readDataFromFile() {
 			item->setCompletion(completion);
 			_logicSchedule.addItem(item);
 			removeItemPointer(item);
+			resetAndGetDisplaySchedule();
+			sortTask();
 		}
 	} else{
 		ofstream writeFile(getDirectoryAndFileName());
@@ -932,11 +987,11 @@ void Logic::readDataFromFile() {
 	_logicSchedule.resetHistory();
 	cout << "Schedule retrieived" << endl;
 	resetAndGetDisplaySchedule();
-	return;
+	return MESSAGE_READFILE_COMPLETE;
 }
 
 
-void Logic::writeDataOntoFile(){
+string Logic::writeDataOntoFile(){
 	ofstream writeFile(getDirectoryAndFileName());
 	vector<Item> retrievedSchedule = getSchedule();
 	for (unsigned int lineNumber = 0; lineNumber < _logicSchedule.getSizeOfSchedule(); lineNumber++){
@@ -959,7 +1014,7 @@ void Logic::writeDataOntoFile(){
 		writeFile << itemToStore.getCompletion() << endl;
 	}
 	saveBasicInformationToTextFile();
-	return;
+	return MESSAGE_WRITEFILE_COMPLETE;
 }
 
 
