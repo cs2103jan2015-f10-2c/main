@@ -10,6 +10,10 @@ private:
 	iParser testParser;
 public:
 
+	/*TEST_METHOD(parserExecuteParsingTest) {
+	
+	}*/
+
 	/*TEST_METHOD(parserExecuteAddParsingTest) {
 		string text = "text";
 		string expectedCommand = "add";
@@ -44,16 +48,12 @@ public:
 		}
 		}*/
 
-	TEST_METHOD(parserExecuteCommandAndTextParsingTest) {
-		// testText[4] tests for invalid case where blank string is not allowed
-		string testCommand[] = { "del", "del", "search", "sort", "view" };
-		string testText[] = { "123", "123abc", "abc", " ", "" };
-		string expectedCommand[] = { "del", "del", "search", "sort", "invalid" };
-		string expectedText[] = { "123", "123abc", "abc", " ", "Invalid input" };
+	TEST_METHOD(parserExecuteSortParsingTest) {
+		string testInput = "test";
+		string expectedCommand = "search";
+		string expectedText = "test";
 
-		for (int i = 0; i < 5; i++) {
-			testParser.executeCommandAndTextParsing(testCommand[i], testText[i]);
-		}
+		testParser.executeSearchParsing(testInput);
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter;
@@ -61,22 +61,17 @@ public:
 		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
 			string actualCommand = iter->command;
 			string actualText = iter->text;
-			Assert::AreEqual(expectedCommand[i], actualCommand);
-			Assert::AreEqual(expectedText[i], actualText);
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText, actualText);
 		}
 	}
 
-	TEST_METHOD(parserExecuteCommandParsingTest) {
-		// testText[1] and testText[3] tests for invalid commands where there
-		// are invalid texts after the commands
-		string testCommand[] = { "undo", "undo", "exit", "exit" };
-		string testText[] = { "undo", "undo 123", "exit", "exit abc" };
-		string expectedCommand[] = { "undo", "invalid", "exit", "invalid" };
-		string expectedText[] = { "", "Invalid command", "", "Invalid command" };
+	TEST_METHOD(parserExecuteViewParsingTest) {
+		string testInput = "test";
+		string expectedCommand = "search";
+		string expectedText = "test";
 
-		for (int i = 0; i < 4; i++) {
-			testParser.executeCommandParsing(testCommand[i], testText[i]);
-		}
+		testParser.executeSearchParsing(testInput);
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter;
@@ -84,30 +79,8 @@ public:
 		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
 			string actualCommand = iter->command;
 			string actualText = iter->text;
-			Assert::AreEqual(expectedCommand[i], actualCommand);
-			Assert::AreEqual(expectedText[i], actualText);
-		}
-	}
-
-	TEST_METHOD(parserExecuteModifierAndTextParsingTest) {
-		// testText[4] tests for invalid case where blank string is not allowed
-		string testCommand[] = { "name", "desc", "priority", "desc", "priority" };
-		string testText[] = { "123", "123abc", "abc", "@@@", "high" };
-		string expectedCommand[] = { "name", "desc", "priority", "desc", "priority" };
-		string expectedText[] = { "123", "123abc", "abc", "@@@", "high" };
-
-		for (int i = 0; i < 5; i++) {
-			testParser.executeModifierAndTextParsing(testCommand[i], testText[i]);
-		}
-
-		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-		list<COMMAND_AND_TEXT>::iterator iter;
-		int i = 0;
-		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-			string actualCommand = iter->command;
-			string actualText = iter->text;
-			Assert::AreEqual(expectedCommand[i], actualCommand);
-			Assert::AreEqual(expectedText[i], actualText);
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText, actualText);
 		}
 	}
 
@@ -145,13 +118,38 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserExecuteRemoveParsingTest) {
-		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
-		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
-		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
+	TEST_METHOD(parserExecuteCommandAndTextParsingTest) {
+		// testText[4] tests for invalid case where blank string is not allowed
+		string testCommand[] = { "del", "del", "search", "sort", "view" };
+		string testText[] = { "123", "123abc", "abc", " ", "" };
+		string expectedCommand[] = { "del", "del", "search", "sort", "invalid" };
+		string expectedText[] = { "123", "123abc", "abc", " ", "Invalid input" };
 
-		for (int i = 0; i < 7; i++) {
-			testParser.executeRemoveParsing(testText[i]);
+		for (int i = 0; i < 5; i++) {
+			testParser.executeCommandAndTextParsing(testCommand[i], testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserexecuteSingularCommandParsingTest) {
+		// testText[1] and testText[3] tests for invalid commands where there
+		// are invalid texts after the commands
+		string testCommand[] = { "undo", "undo", "exit", "exit" };
+		string testText[] = { "undo", "undo 123", "exit", "exit abc" };
+		string expectedCommand[] = { "undo", "invalid", "exit", "invalid" };
+		string expectedText[] = { "", "Invalid command", "", "Invalid command" };
+
+		for (int i = 0; i < 4; i++) {
+			testParser.executeSingularCommandParsing(testCommand[i], testText[i]);
 		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
@@ -208,6 +206,89 @@ public:
 			string actualText = iter->text;
 			Assert::AreEqual(expectedCommandRemove[i], actualCommand);
 			Assert::AreEqual(expectedTextRemove, actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteModifierAndTextParsingTest) {
+		// testText[4] tests for invalid case where blank string is not allowed
+		string testCommand[] = { "name", "desc", "priority", "desc", "priority" };
+		string testText[] = { "123", "123abc", "abc", "@@@", "high" };
+		string expectedCommand[] = { "name", "desc", "priority", "desc", "priority" };
+		string expectedText[] = { "123", "123abc", "abc", "@@@", "high" };
+
+		for (int i = 0; i < 5; i++) {
+			testParser.executeModifierAndTextParsing(testCommand[i], testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteDateTimeParsingTest) {/////////
+		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
+		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
+		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
+
+		for (int i = 0; i < 7; i++) {
+			testParser.executeRemoveParsing(testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecutePriorityParsingTest) {/////////
+		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
+		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
+		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
+
+		for (int i = 0; i < 7; i++) {
+			testParser.executeRemoveParsing(testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+
+	TEST_METHOD(parserExecuteRemoveParsingTest) {
+		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
+		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
+		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
+
+		for (int i = 0; i < 7; i++) {
+			testParser.executeRemoveParsing(testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter;
+		int i = 0;
+		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
 		}
 	}
 
@@ -468,7 +549,7 @@ public:
 		}
 	}
 
-	TEST_METHOD(parsersplitAndSetTwoCommaStartEndDateTimeTest) {
+	TEST_METHOD(parsersplitAndSetOneCommaStartEndDateTimeTest) {
 		string testDates[] = { "10 Nov 12, 10am to 10PM", "930AM - 1130PM, 9/11", "monday, 13:59 - 23:59" };
 		string expectedStart[] = { "12 11 10 10 00", "-1 11 9 9 30", "-1 -1 monday 13 59" };
 		string expectedEnd[] = { "12 11 10 22 00", "-1 11 9 23 30", "-1 -1 monday 23 59" };
@@ -586,6 +667,26 @@ public:
 		}
 	}
 
+	TEST_METHOD(parserSplitAndSetTimeStringTest) {////
+		string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
+		string expectedAM[] = { "10 11", "9 10", "13 30", "23 59" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "23 59" };
+
+		for (int i = 0; i < 4; i++) {
+			string testString = testTime[i];
+
+			string actual = testParser.splitAndSetColonTimeString(testString, "");
+			string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
+			Assert::AreEqual(expectedAM[i], actual);
+			Assert::AreEqual(expectedPM[i], actualPM);
+
+			if (i < 2) {
+				string actualAM = testParser.splitAndSetColonTimeString(testString, "am");
+				Assert::AreEqual(expectedAM[i], actualAM);
+			}
+		}
+	}
+
 	TEST_METHOD(parserSplitAndSetColonTimeStringTest) {
 		string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
 		string expectedAM[] = { "10 11", "9 10", "13 30", "23 59" };
@@ -629,7 +730,7 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserIsDaySetDayTest) {
+	TEST_METHOD(parserIsDayAndSetDayTest) {
 		string testDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
 		string testDayShortForm[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
 		string testDayFalse[] = { "mondeh", "toosdeh", "weday", "thurs", "frehdeh", "satur", "sundae" };
@@ -658,7 +759,7 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserIsMonthTest) {
+	TEST_METHOD(parserIsMonthAndSetMonthTest) {
 		string testMonth[] = { "January", "february", "March", "april", "May", "june",
 			"July", "august", "September", "october", "November", "december" };
 		string testMonthShortForm[] = { "JAN", "feb", "MAR", "apr", "MAY", "jun",
