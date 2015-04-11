@@ -12,6 +12,7 @@
 using namespace std;
 using namespace System;
 
+//@author generated
 namespace iPlannerUI {
 
 	using namespace System;
@@ -50,7 +51,6 @@ namespace iPlannerUI {
 			}
 		}
 
-	//@author generated
 	private: System::Windows::Forms::TextBox^  commandInputBox;
 
 
