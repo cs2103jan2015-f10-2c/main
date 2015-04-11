@@ -109,40 +109,45 @@ namespace iPlannerUI {
 			this->deletingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->sortingScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->miscellneousToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->viewScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->miscellneousToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->HelpmenuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// commandInputBox
 			// 
 			this->commandInputBox->BackColor = System::Drawing::Color::Black;
+			this->commandInputBox->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->commandInputBox->ForeColor = System::Drawing::Color::Silver;
-			this->commandInputBox->Location = System::Drawing::Point(12, 388);
+			this->commandInputBox->Location = System::Drawing::Point(12, 532);
 			this->commandInputBox->Name = L"commandInputBox";
-			this->commandInputBox->Size = System::Drawing::Size(428, 20);
+			this->commandInputBox->Size = System::Drawing::Size(428, 25);
 			this->commandInputBox->TabIndex = 0;
 			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold));
-			this->label1->ForeColor = System::Drawing::Color::Salmon;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label1->ForeColor = System::Drawing::Color::PeachPuff;
 			this->label1->Location = System::Drawing::Point(184, 38);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(74, 20);
+			this->label1->Size = System::Drawing::Size(91, 21);
 			this->label1->TabIndex = 4;
-			this->label1->Text = L"iPlanner";
+			this->label1->Text = L"SCHEDULE";
 			// 
 			// commandOutcomeLabel
 			// 
 			this->commandOutcomeLabel->AutoSize = true;
 			this->commandOutcomeLabel->BackColor = System::Drawing::Color::Black;
+			this->commandOutcomeLabel->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->commandOutcomeLabel->ForeColor = System::Drawing::Color::IndianRed;
-			this->commandOutcomeLabel->Location = System::Drawing::Point(12, 359);
+			this->commandOutcomeLabel->Location = System::Drawing::Point(12, 493);
 			this->commandOutcomeLabel->Name = L"commandOutcomeLabel";
-			this->commandOutcomeLabel->Size = System::Drawing::Size(122, 13);
+			this->commandOutcomeLabel->Size = System::Drawing::Size(150, 17);
 			this->commandOutcomeLabel->TabIndex = 5;
 			this->commandOutcomeLabel->Text = L"commandOutcomeLabel";
 			// 
@@ -155,7 +160,7 @@ namespace iPlannerUI {
 			this->outputBox2->Name = L"outputBox2";
 			this->outputBox2->ReadOnly = true;
 			this->outputBox2->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
-			this->outputBox2->Size = System::Drawing::Size(425, 272);
+			this->outputBox2->Size = System::Drawing::Size(425, 401);
 			this->outputBox2->TabIndex = 7;
 			this->outputBox2->Text = L"";
 			// 
@@ -186,7 +191,7 @@ namespace iPlannerUI {
 					this->dateAndTimeVariationsToolStripMenuItem
 			});
 			this->addingATaskToolStripMenuItem->Name = L"addingATaskToolStripMenuItem";
-			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(150, 22);
 			this->addingATaskToolStripMenuItem->Text = L"Add a Task";
 			// 
 			// basicCommandsToolStripMenuItem
@@ -206,44 +211,44 @@ namespace iPlannerUI {
 			// deletingATaskToolStripMenuItem
 			// 
 			this->deletingATaskToolStripMenuItem->Name = L"deletingATaskToolStripMenuItem";
-			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(150, 22);
 			this->deletingATaskToolStripMenuItem->Text = L"Delete a Task";
 			this->deletingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::deletingATaskToolStripMenuItem_Click);
 			// 
 			// editingATaskToolStripMenuItem
 			// 
 			this->editingATaskToolStripMenuItem->Name = L"editingATaskToolStripMenuItem";
-			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(150, 22);
 			this->editingATaskToolStripMenuItem->Text = L"Edit a Task";
 			this->editingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::editingATaskToolStripMenuItem_Click);
 			// 
 			// sortingScheduleToolStripMenuItem
 			// 
 			this->sortingScheduleToolStripMenuItem->Name = L"sortingScheduleToolStripMenuItem";
-			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(150, 22);
 			this->sortingScheduleToolStripMenuItem->Text = L"Sort Schedule";
 			this->sortingScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::sortingScheduleToolStripMenuItem_Click);
-			// 
-			// miscellneousToolStripMenuItem
-			// 
-			this->miscellneousToolStripMenuItem->Name = L"miscellneousToolStripMenuItem";
-			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(152, 22);
-			this->miscellneousToolStripMenuItem->Text = L"Miscellneous";
-			this->miscellneousToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::miscellneousToolStripMenuItem_Click);
 			// 
 			// viewScheduleToolStripMenuItem
 			// 
 			this->viewScheduleToolStripMenuItem->Name = L"viewScheduleToolStripMenuItem";
-			this->viewScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->viewScheduleToolStripMenuItem->Size = System::Drawing::Size(150, 22);
 			this->viewScheduleToolStripMenuItem->Text = L"View Schedule";
 			this->viewScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::viewScheduleToolStripMenuItem_Click);
+			// 
+			// miscellneousToolStripMenuItem
+			// 
+			this->miscellneousToolStripMenuItem->Name = L"miscellneousToolStripMenuItem";
+			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(150, 22);
+			this->miscellneousToolStripMenuItem->Text = L"Miscellneous";
+			this->miscellneousToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::miscellneousToolStripMenuItem_Click);
 			// 
 			// iPlannerUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ActiveCaptionText;
-			this->ClientSize = System::Drawing::Size(452, 448);
+			this->ClientSize = System::Drawing::Size(452, 595);
 			this->Controls->Add(this->outputBox2);
 			this->Controls->Add(this->commandOutcomeLabel);
 			this->Controls->Add(this->label1);
@@ -255,7 +260,7 @@ namespace iPlannerUI {
 			this->MainMenuStrip = this->HelpmenuStrip1;
 			this->MaximizeBox = false;
 			this->Name = L"iPlannerUI";
-			this->Text = L"iPlannerUI";
+			this->Text = L"iPlanner";
 			this->Load += gcnew System::EventHandler(this, &iPlannerUI::iPlannerUI_Load);
 			this->HelpmenuStrip1->ResumeLayout(false);
 			this->HelpmenuStrip1->PerformLayout();
@@ -266,15 +271,85 @@ namespace iPlannerUI {
 #pragma endregion
 
 		//@author A0105180W 
-		void MarshalString(String ^ s, string& os) {
+		void MarshalString(String^ s, string& os) {
 			using namespace Runtime::InteropServices;
 			const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
 			os = chars;
 			Marshal::FreeHGlobal(IntPtr((void*)chars));
 		}
 
+		void displayPriorityAndName(String^ priority, String^ name) {
+			outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
+			if (priority == "H") {
+				outputBox2->SelectionColor = Color::Red;
+			} else if (priority == "M") {
+				outputBox2->SelectionColor = Color::Yellow;;
+			} else if (priority == "L") {
+				outputBox2->SelectionColor = Color::LawnGreen;
+			} else {
+				outputBox2->SelectionColor = Color::CadetBlue;
+			}
+			outputBox2->SelectedText = "   " + priority;
+			outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+			outputBox2->SelectionColor = Color::CadetBlue;
+			outputBox2->SelectedText = "    " + name;
+		}
+
+		void displayCompletion(String^ completion) {
+			if (completion == "(D)") {
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox2->SelectionColor = Color::Gold;
+				outputBox2->SelectedText = " " + completion + "\r\n";
+			}
+			else {
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox2->SelectionColor = Color::Silver;
+				outputBox2->SelectedText = " " + completion + "\r\n";
+			}
+		}
+
+		void displayStartTime(String^ startTime) {
+			if (startTime != "") {
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+				outputBox2->SelectedText = "\t     Start : " + startTime + "\r\n";
+			}
+			else {
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox2->SelectionColor = Color::LightGoldenrodYellow;
+				outputBox2->SelectedText = "";
+			}
+		}
+
+		void displayEndTime(String^ endTime) {
+			if (endTime != "") {
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox2->SelectionColor = Color::LightSalmon;
+				outputBox2->SelectedText = "\t     End  : " + endTime + "\r\n";
+			}
+			else {
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox2->SelectionColor = Color::LightSalmon;
+				outputBox2->SelectedText = "";
+			}
+		}
+
+		void displayDescription(String^ description) {
+			if (description != ""){
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
+				outputBox2->SelectionColor = Color::BlueViolet;
+				outputBox2->SelectedText = "\t     " + description + "\r\n\r\n";
+			}
+			else {
+				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
+				outputBox2->SelectionColor = Color::BlueViolet;
+				outputBox2->SelectedText = "\r\n";
+			}
+
+		}
+
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-				 MESSAGE_AND_SCHEDULE display;
+				 MESSAGE_AND_SCHEDULE displayMessage;
 				 iParser testParser;
 				 String^ userInput;
 				 userInput = commandInputBox->Text;
@@ -283,154 +358,63 @@ namespace iPlannerUI {
 				 vector<Item> tempItem;
 
 				 if (e->KeyCode == Keys::Enter) {
-					 display = testLogic->initiateCommandAction(testParser, stdUserInput);
+					 displayMessage = testLogic->initiateCommandAction(testParser, stdUserInput);
 					 outputBox2->Clear();
-
-					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 11, FontStyle::Bold);
-					 outputBox2->SelectionColor = Color::Beige;
-					 outputBox2->SelectedText = "\t\t\t    SCHEDULE\r\n\r\n";
-
+					 
 					 tempItem = testLogic->getDisplaySchedule();
 					 vector<Item>::iterator iterItem;
 					 int displayIndex = 0;
 					 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
+						 
 						 String ^indexString = (++displayIndex).ToString();
-						 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 						 outputBox2->SelectedText = indexString + ". ";
 
+						 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 						 if (iterItem->getPriority() == 72) {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-							 outputBox2->SelectionColor = Color::Red;
-							 outputBox2->SelectedText = "   H";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-							 outputBox2->SelectedText = "    " + nameString;
-
-						 } else if (iterItem->getPriority() == 77) {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-							 outputBox2->SelectionColor = Color::Yellow;
-							 outputBox2->SelectedText = "   M";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-							 outputBox2->SelectedText = "    " + nameString;
-
+							 displayPriorityAndName("H", nameString);
+                         } else if (iterItem->getPriority() == 77) {
+							 displayPriorityAndName("M", nameString);
 						 } else if (iterItem->getPriority() == 76) {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-							 outputBox2->SelectionColor = Color::LawnGreen;
-							 outputBox2->SelectedText = "   L";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-							 outputBox2->SelectedText = "    " + nameString;
-
+							 displayPriorityAndName("L", nameString);
 						 } else {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-							 outputBox2->SelectedText = "   -";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-							 outputBox2->SelectedText = "    " + nameString;
+							 displayPriorityAndName("-", nameString);
 						 }
-
-						 /*					 String^ labelString;
-						 if (iterItem.getLabel() == 'E') {
-						 labelString = gcnew String("");
-						 }
-						 else {
-						 string charString1(1, iterItem.getPriority());
-						 labelString = gcnew String(charString1.c_str());
-						 }
-						 if (iterItem.getLabel() == 'P') {
-						 labelString = "Personal";
-						 //						 outputBox2->SelectionFont = System::Windows::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::Purple;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
-						 }
-						 else if (iterItem.getLabel() == 'O') {
-						 labelString = "Official";
-						 //outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::LightPink;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
-						 }
-						 else if (iterItem.getLabel() == 'M') {
-						 labelString = "Milestone";
-						 //						 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-						 //						 outputBox2->SelectionColor = Color::Maroon;
-						 outputBox2->SelectedText = "\t\t\t" + labelString;
-
-						 }
-						 else {
-						 labelString = gcnew String("");
-						 outputBox2->Text = "\t\t\t" + labelString;
-						 }*/
-
+						 
 						 String^ completionString;
 						 if (iterItem->getCompletion() == true) {
-							 completionString = "Done";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = Color::Gold;
-							 outputBox2->SelectedText = " (D)\r\n";
+							 displayCompletion("(D)");
 						 } else {
-							 completionString = "Not Done";
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = Color::Silver;
-							 outputBox2->SelectedText = " (ND)\r\n";
+							 displayCompletion("(ND)");
 						 }
 
 						 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
-						 if (startString != "") {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-							 outputBox2->SelectedText = "\t     Start : " + startString + "\r\n";
-						 } else {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-							 outputBox2->SelectedText = "";
-						 }
+						 displayStartTime(startString);
 
 						 String^ endString = gcnew String(iterItem->displayEndTimeForUser().c_str());
-						 if (endString != "") {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = Color::LightSalmon;
-							 outputBox2->SelectedText = "\t     End  : " + endString + "\r\n";
-						 } else {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-							 outputBox2->SelectionColor = Color::LightSalmon;
-							 outputBox2->SelectedText = "";
-						 }
+						 displayEndTime(endString);
 
 						 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
-						 if (descriptionString != ""){
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
-							 outputBox2->SelectionColor = Color::BlueViolet;
-							 outputBox2->SelectedText = "\t     " + descriptionString + "\r\n\r\n";
-						 } else {
-							 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
-							 outputBox2->SelectionColor = Color::BlueViolet;
-							 outputBox2->SelectedText = "\r\n";
-						 }
+						 displayDescription(descriptionString);
 
 					 }
 
-					 String^ outcomeString = gcnew String(display.message.c_str());
+					 String^ outcomeString = gcnew String(displayMessage.message.c_str());
 					 commandOutcomeLabel->Text = outcomeString;
 
 					 commandInputBox->Clear();
 				 }
 
 	}
-
+			 
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
 
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
 				 vector<Item> tempItem;
-				 outputBox2->Clear();
-				 
-				 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 11, FontStyle::Bold);
-				 outputBox2->SelectionColor = Color::Beige;
-				 outputBox2->SelectedText = "\t\t\t     SCHEDULE\r\n\r\n";
+				 outputBox2->Clear();			
+
 				 tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
 				 int displayIndex = 0;
@@ -438,123 +422,35 @@ namespace iPlannerUI {
 				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
 					 
 					 String ^indexString = (++displayIndex).ToString();
-					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
 					 outputBox2->SelectionColor = Color::CadetBlue;
 					 outputBox2->SelectedText = indexString + ". ";
 
+					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 if (iterItem->getPriority() == 72) {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-						 outputBox2->SelectionColor = Color::Red;
-						 outputBox2->SelectedText = "   H";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::CadetBlue;
-						 outputBox2->SelectedText = "    " + nameString;
-						 
+						 displayPriorityAndName("H", nameString);						 
 					 } else if (iterItem->getPriority() == 77) {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-						 outputBox2->SelectionColor = Color::Yellow;
-						 outputBox2->SelectedText = "   M";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::CadetBlue;
-						 outputBox2->SelectedText = "    " + nameString;
-
+						 displayPriorityAndName("M", nameString);
 					 } else if (iterItem->getPriority() == 76) {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-						 outputBox2->SelectionColor = Color::LawnGreen;
-						 outputBox2->SelectedText = "   L";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::CadetBlue;
-						 outputBox2->SelectedText = "    " + nameString;
-
+						 displayPriorityAndName("L", nameString);
 					 } else {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
-						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-						 outputBox2->SelectedText = "   -";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::CadetBlue;
-						 outputBox2->SelectedText = "   " + nameString;
+						 displayPriorityAndName("-", nameString);
 					 }
-
-
-
-					 /*					 String^ labelString;
-					 if (iterItem.getLabel() == 'E') {
-					 labelString = gcnew String("");
-					 }
-					 else {
-					 string charString1(1, iterItem.getPriority());
-					 labelString = gcnew String(charString1.c_str());
-					 }
-					 if (iterItem.getLabel() == 'P') {
-					 labelString = "Personal";
-					 //						 outputBox2->SelectionFont = System::Windows::FontStyle::Bold;
-					 //						 outputBox2->SelectionColor = Color::Purple;
-					 outputBox2->SelectedText = "\t\t\t" + labelString;
-					 }
-					 else if (iterItem.getLabel() == 'O') {
-					 labelString = "Official";
-					 //outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-					 //						 outputBox2->SelectionColor = Color::LightPink;
-					 outputBox2->SelectedText = "\t\t\t" + labelString;
-					 }
-					 else if (iterItem.getLabel() == 'M') {
-					 labelString = "Milestone";
-					 //						 outputBox2->SelectionFont = System::Drawing::FontStyle::Bold;
-					 //						 outputBox2->SelectionColor = Color::Maroon;
-					 outputBox2->SelectedText = "\t\t\t" + labelString;
-
-					 }
-					 else {
-					 labelString = gcnew String("");
-					 outputBox2->Text = "\t\t\t" + labelString;
-					 }*/
 					 
-					 String^ completionString;
 					 if (iterItem->getCompletion() == true) {
-						 completionString = "Done";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::Gold;
-						 outputBox2->SelectedText = " (D)\r\n";
+						 displayCompletion("(D)");
 					 } else {
-						 completionString = "Not Done";
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::Silver;
-						 outputBox2->SelectedText = " (ND)\r\n";
+						 displayCompletion("(ND)");
 					 }
 					 
 					 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
-					 if (startString != "") {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-						 outputBox2->SelectedText = "\t     Start : " + startString + "\r\n";
-					 } else {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-						 outputBox2->SelectedText = "";
-					 }
+					 displayStartTime(startString);
 
 					 String^ endString = gcnew String(iterItem->displayEndTimeForUser().c_str());
-					 if (endString != "") {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::LightSalmon;
-						 outputBox2->SelectedText = "\t     End  : " + endString + "\r\n";
-					 } else {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = Color::LightSalmon;
-						 outputBox2->SelectedText = "";
-					 }
+					 displayEndTime(endString);
 
 					 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
-					 if (descriptionString != ""){
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
-						 outputBox2->SelectionColor = Color::BlueViolet;
-						 outputBox2->SelectedText = "\t     " + descriptionString + "\r\n\r\n";
-					 } else {
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
-						 outputBox2->SelectionColor = Color::BlueViolet;
-						 outputBox2->SelectedText = "\r\n";
-					 }
+					 displayDescription(descriptionString);
 				 }
 
 				 commandOutcomeLabel->Text = "Enter the command";
@@ -570,7 +466,6 @@ namespace iPlannerUI {
 				 helpMenuAdd += "Ending Time of Task :  -end <DateTime> or -due <DateTime>\r\n";
 				 helpMenuAdd += "Task Description : -desc <Description>\r\n";
 				 helpMenuAdd += "Task Priority : -priority <High/Medium/Low>  or -priority <H/M/L>\r\n";
-				 helpMenuAdd += "Task Label : -label <taskLabel>\r\n";
 				 helpMenuAdd += "\r\nNote : For <DateTime> variations, Help -> Adding a Task -> Date and Time Variations";
 
 				 MessageBox::Show(helpMenuAdd);
@@ -619,7 +514,6 @@ namespace iPlannerUI {
 				 helpMenuEdit += "Ending Time of Task :  -end <newDateTime> or -due <newDateTime>\r\n";
 				 helpMenuEdit += "Task Description : -desc <newDescription>\r\n";
 				 helpMenuEdit += "Task Priority : -priority <newPriority>\r\n";
-				 helpMenuEdit += "Task Label : -label <newLabel>\r\n";
 
 				 MessageBox::Show(helpMenuEdit);
 	}
@@ -660,9 +554,11 @@ namespace iPlannerUI {
 				 helpMenuView += "\r\nUser can view All tasks, Completed tasks or tasks with a specific Priority\r\n";
 				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
 				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
+				 helpMenuView += "view undone - Tasks which are not completed are displayed\r\n";
 				 helpMenuView += "view priority <H/M/L> - Tasks which have the priority specified are displayed\r\n";
 				 
 				 MessageBox::Show(helpMenuView);
+				 Form::BackColor = Color::NavajoWhite;
 	}
 	
 };
