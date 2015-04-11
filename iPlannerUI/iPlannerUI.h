@@ -440,7 +440,7 @@ namespace iPlannerUI {
 					 String ^indexString = (++displayIndex).ToString();
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-					 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+					 outputBox2->SelectionColor = Color::CadetBlue;
 					 outputBox2->SelectedText = indexString + ". ";
 
 					 if (iterItem->getPriority() == 72) {
@@ -448,7 +448,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionColor = Color::Red;
 						 outputBox2->SelectedText = "   H";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectionColor = Color::CadetBlue;
 						 outputBox2->SelectedText = "    " + nameString;
 						 
 					 } else if (iterItem->getPriority() == 77) {
@@ -456,7 +456,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionColor = Color::Yellow;
 						 outputBox2->SelectedText = "   M";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectionColor = Color::CadetBlue;
 						 outputBox2->SelectedText = "    " + nameString;
 
 					 } else if (iterItem->getPriority() == 76) {
@@ -464,7 +464,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionColor = Color::LawnGreen;
 						 outputBox2->SelectedText = "   L";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectionColor = Color::CadetBlue;
 						 outputBox2->SelectedText = "    " + nameString;
 
 					 } else {
@@ -472,7 +472,7 @@ namespace iPlannerUI {
 						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 						 outputBox2->SelectedText = "   -";
 						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox2->SelectionColor = Color::CadetBlue;
 						 outputBox2->SelectedText = "   " + nameString;
 					 }
 
@@ -560,7 +560,6 @@ namespace iPlannerUI {
 				 commandOutcomeLabel->Text = "Enter the command";
 
 	}
-
 	
 	private: System::Void basicCommandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuAdd = "\t\tAdd a Task - Command List\r\n";
@@ -577,10 +576,9 @@ namespace iPlannerUI {
 				 MessageBox::Show(helpMenuAdd);
 	}
 
-
 	private: System::Void dateAndTimeVariationsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuDT;
-
+				 
 				 helpMenuDT += "\t\t<DateTime> Variations\r\n";
 				 helpMenuDT += "<Date>, <Time>\r\n";
 				 helpMenuDT += "<Time>, <Date>\r\n";
@@ -601,6 +599,7 @@ namespace iPlannerUI {
 
 				 MessageBox::Show(helpMenuDT);
 	}
+
 	private: System::Void deletingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuDel = "      Deleting a Task - Command List\r\n";
 
@@ -609,6 +608,7 @@ namespace iPlannerUI {
 				 helpMenuDel += "\r\nclear - Deletes all tasks in the Schedule\r\n";
 				 MessageBox::Show(helpMenuDel);
 	}
+
 	private: System::Void editingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuEdit = "\t\tEditing a Task Command List\r\n";
 
@@ -636,6 +636,7 @@ namespace iPlannerUI {
 
 				 MessageBox::Show(helpMenuSort);
 	}
+
 	private: System::Void miscellneousToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuMisc = "\t\t\tOther Commands\r\n";
 
@@ -645,6 +646,8 @@ namespace iPlannerUI {
 				 helpMenuMisc += "done <Display index of completed task>\r\n";
 				 helpMenuMisc += "\r\nUndo Last Action\r\n";
 				 helpMenuMisc += "undo\r\n";
+				 helpMenuMisc += "\r\nChange Save Direcotry\r\n";
+				 helpMenuMisc += "save <Address of new location to store the .txt file>\r\n";
 				 helpMenuMisc += "\r\nExit Application\r\n";
 				 helpMenuMisc += "exit\r\n";
 
@@ -658,7 +661,7 @@ namespace iPlannerUI {
 				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
 				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
 				 helpMenuView += "view priority <H/M/L> - Tasks which have the priority specified are displayed\r\n";
-
+				 
 				 MessageBox::Show(helpMenuView);
 	}
 	
