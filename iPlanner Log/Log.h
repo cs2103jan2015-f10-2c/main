@@ -10,7 +10,7 @@ using namespace std;
 
 class Log {
 private:
-	static vector<string> logData;
+	
 public:
 	void writeToLogFile(string);
 

@@ -7,6 +7,7 @@
 
 #include "..\iLogic\Logic.h"
 #include "..\iStorage\Item.h"
+#include "..\iPlanner Log\Log.h"
 #include <msclr\marshal_cppstd.h>
 
 using namespace std;
@@ -411,7 +412,9 @@ namespace iPlannerUI {
 	}
 			 
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
+				 Log newLog;
 
+				 newLog.writeToLogFile("Log file created");
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
 				 vector<Item> tempItem;
