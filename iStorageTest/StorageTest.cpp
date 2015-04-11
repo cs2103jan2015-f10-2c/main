@@ -14,6 +14,10 @@ public:
 		int outputYear = dateTime.setYear(year);
 
 		Assert::AreEqual(year, outputYear);
+
+		year = -1;
+		outputYear = dateTime.setYear(year);
+		Assert::AreEqual(-2, outputYear);
 	}
 
 	TEST_METHOD(TestSetMonth) {
@@ -23,6 +27,10 @@ public:
 		int outputMonth = dateTime.setMonth(month);
 
 		Assert::AreEqual(month, outputMonth);
+
+		month = -1;
+		outputMonth = dateTime.setMonth(month);
+		Assert::AreEqual(-2, outputMonth);
 	}
 
 	TEST_METHOD(TestSetDay) {
@@ -32,6 +40,10 @@ public:
 		int outputDay = dateTime.setDay(day);
 
 		Assert::AreEqual(day, outputDay);
+
+		day = -1;
+		outputDay = dateTime.setDay(day);
+		Assert::AreEqual(-2, outputDay);
 	}
 
 	TEST_METHOD(TestSetHour) {
@@ -41,6 +53,10 @@ public:
 		int outputHour = dateTime.setHour(hour);
 
 		Assert::AreEqual(hour, outputHour);
+
+		hour = -1;
+		outputHour = dateTime.setHour(hour);
+		Assert::AreEqual(-2, outputHour);
 	}
 
 	TEST_METHOD(TestSetMinute) {
@@ -50,16 +66,33 @@ public:
 		int outputMinute = dateTime.setMinute(minute);
 
 		Assert::AreEqual(minute, outputMinute);
+
+		minute = -1;
+		outputMinute = dateTime.setMinute(minute);
+		Assert::AreEqual(-2, outputMinute);
 	}
 
 	TEST_METHOD(TestConstructor) {
 		DateTime dateTime;
-
 		Assert::AreEqual(-1, dateTime.getYear());
 		Assert::AreEqual(-1, dateTime.getMonth());
 		Assert::AreEqual(-1, dateTime.getDay());
 		Assert::AreEqual(-1, dateTime.getHour());
 		Assert::AreEqual(-1, dateTime.getMinute());
+
+		DateTime dateTime2(2015, 2, 14, 3, 14);
+		Assert::AreEqual(2015, dateTime2.getYear());
+		Assert::AreEqual(2, dateTime2.getMonth());
+		Assert::AreEqual(14, dateTime2.getDay());
+		Assert::AreEqual(3, dateTime2.getHour());
+		Assert::AreEqual(14, dateTime2.getMinute());
+
+		DateTime dateTime3(2015, 2, 14);
+		Assert::AreEqual(2015, dateTime3.getYear());
+		Assert::AreEqual(2, dateTime3.getMonth());
+		Assert::AreEqual(14, dateTime3.getDay());
+		Assert::AreEqual(-1, dateTime3.getHour());
+		Assert::AreEqual(-1, dateTime3.getMinute());
 	}
 	};
 
@@ -117,13 +150,10 @@ public:
 	}
 	};
 
-	//	Boolean functions tested before classifying them as private functions
-	/* TEST_CLASS(TEST_IS_WITHIN_RANGE)
-		{
-		public:
-
-		TEST_METHOD(TestIsValidYearRange)
-		{
+//	Muted tests for isValidRange (Year/Month/Day/Hour/Minute)
+/*	TEST_CLASS(TEST_IS_WITHIN_RANGE) {
+public:
+	TEST_METHOD(TestIsValidYearRange) {
 		DateTime dateTime;
 
 		int year = 1994;
@@ -146,10 +176,9 @@ public:
 		year = 10000;
 		outputYear = dateTime.isValidYearRange(year);
 		Assert::AreEqual(false, outputYear);
-		}
+	}
 
-		TEST_METHOD(TestIsValidMonthRange)
-		{
+	TEST_METHOD(TestIsValidMonthRange) {
 		DateTime dateTime;
 
 		int month = 9;
@@ -172,10 +201,9 @@ public:
 		month = 13;
 		outputMonth = dateTime.isValidMonthRange(month);
 		Assert::AreEqual(false, outputMonth);
-		}
+	}
 
-		TEST_METHOD(TestIsValidDayRange)
-		{
+	TEST_METHOD(TestIsValidDayRange) {
 		DateTime dateTime;
 
 		int day = 12;
@@ -198,10 +226,9 @@ public:
 		day = 32;
 		outputDay = dateTime.isValidDayRange(day);
 		Assert::AreEqual(false, outputDay);
-		}
+	}
 
-		TEST_METHOD(TestIsValidHourRange)
-		{
+	TEST_METHOD(TestIsValidHourRange) {
 		DateTime dateTime;
 
 		int hour = 12;
@@ -224,10 +251,9 @@ public:
 		hour = -1;
 		outputHour = dateTime.isValidHourRange(hour);
 		Assert::AreEqual(false, outputHour);
-		}
+	}
 
-		TEST_METHOD(TestIsValidMinuteRange)
-		{
+	TEST_METHOD(TestIsValidMinuteRange) {
 		DateTime dateTime;
 
 		int minute = 12;
@@ -250,9 +276,8 @@ public:
 		minute = 60;
 		outputMinute = dateTime.isValidMinuteRange(minute);
 		Assert::AreEqual(false, outputMinute);
-		}
-
-		}; */
+	}
+	}; */
 
 	TEST_CLASS(TEST_COMPARATORS) {
 
@@ -318,6 +343,8 @@ public:
 		primary.setYear(1992);
 		primary.setMonth(9);
 		primary.setDay(20);
+		primary.setHour(20);
+		primary.setMinute(20);
 		if (primary != secondary) {
 			outputNotEqual = true;
 		} else {
@@ -351,59 +378,95 @@ public:
 	}
 
 	TEST_METHOD(TestIsAfter) {
-		DateTime primary(1994, 12, 12);
-		DateTime secondary(1994, 12, 12);
+		DateTime primary(1994, 11, 11, 13, 13);
+		DateTime secondary(1994, 11, 11, 13, 13);
 		bool outputEqual = primary.isAfter(secondary);
 		Assert::AreEqual(false, outputEqual);
 
-		secondary.setYear(1992);
-		primary.setMonth(9);
-		primary.setDay(20);
+		secondary.setMinute(12);
 		outputEqual = primary.isAfter(secondary);
 		Assert::AreEqual(true, outputEqual);
 
-		secondary.setYear(1994);
-		primary.setMonth(12);
-		primary.setDay(12);
-		primary.setHour(20);
-		primary.setMinute(9);
-		secondary.setHour(20);
-		secondary.setMinute(9);
+		secondary.setMinute(14);
 		outputEqual = primary.isAfter(secondary);
 		Assert::AreEqual(false, outputEqual);
 
-		secondary.setYear(1992);
-		primary.setMonth(9);
-		primary.setDay(20);
+		secondary.setHour(12);
 		outputEqual = primary.isAfter(secondary);
 		Assert::AreEqual(true, outputEqual);
+
+		secondary.setHour(14);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setDay(10);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setDay(12);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setMonth(10);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setMonth(12);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setYear(1993);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setYear(1997);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
 	}
 
 	TEST_METHOD(TestIsBefore) {
-		DateTime primary(1994, 12, 12);
-		DateTime secondary(1994, 12, 12);
+		DateTime primary(1994, 11, 11, 13, 13);
+		DateTime secondary(1994, 11, 11, 13, 13);
 		bool outputEqual = primary.isBefore(secondary);
 		Assert::AreEqual(false, outputEqual);
 
-		primary.setYear(1992);
-		primary.setMonth(9);
-		primary.setDay(20);
-		outputEqual = primary.isBefore(secondary);
-		Assert::AreEqual(true, outputEqual);
-
-		primary.setYear(1994);
-		primary.setMonth(12);
-		primary.setDay(12);
-		primary.setHour(20);
-		primary.setMinute(9);
-		secondary.setHour(20);
-		secondary.setMinute(9);
+		secondary.setMinute(12);
 		outputEqual = primary.isBefore(secondary);
 		Assert::AreEqual(false, outputEqual);
 
-		primary.setYear(1992);
-		primary.setMonth(9);
-		primary.setDay(20);
+		secondary.setMinute(14);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setHour(12);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setHour(14);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setDay(10);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setDay(12);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setMonth(10);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setMonth(12);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setYear(1993);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setYear(1997);
 		outputEqual = primary.isBefore(secondary);
 		Assert::AreEqual(true, outputEqual);
 	}
@@ -415,7 +478,13 @@ public:
 	TEST_METHOD(TestDisplayDate) {
 		DateTime dateOnly(1992, 9, 20);
 		string outputString = dateOnly.displayDate();
-		Assert::AreEqual((string) "1992 09 20", outputString);
+		Assert::AreEqual((string) "1992/09/20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayDateForUser) {
+		DateTime dateOnly(1992, 9, 20);
+		string outputString = dateOnly.displayDateForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
 	}
 
 	TEST_METHOD(TestDisplayTime) {
@@ -426,14 +495,34 @@ public:
 		Assert::AreEqual((string) "09:20", outputString);
 	}
 
+	TEST_METHOD(TestDisplayDateTimeForUser) {
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		string outputString = dateTime.displayDateTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		outputString = dateOnly.displayDateTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		outputString = timeOnly.displayDateTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+
+		DateTime emptyDateTime;
+		outputString = emptyDateTime.displayDateTimeForUser();
+		Assert::AreEqual((string)"", outputString);
+	}
+
 	TEST_METHOD(TestDisplayDateTime) {
 		DateTime dateTime(1994, 12, 12, 20, 9);
 		string outputString = dateTime.displayDateTime();
-		Assert::AreEqual((string) "1994 12 12 20:09", outputString);
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
 
 		DateTime dateOnly(1992, 9, 20);
 		outputString = dateOnly.displayDateTime();
-		Assert::AreEqual((string) "1992 09 20", outputString);
+		Assert::AreEqual((string) "1992/09/20", outputString);
 
 		DateTime timeOnly;
 		timeOnly.setHour(9);
