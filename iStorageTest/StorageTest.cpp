@@ -543,7 +543,7 @@ public:
 
 	TEST_METHOD(TestSetItemName) {
 		string itemName("Project Marriage");
-		Item trueStory (itemName);
+		Item trueStory(itemName);
 		Assert::AreEqual(itemName, trueStory.getItemName());
 
 		itemName = "Love Forever";
@@ -579,7 +579,7 @@ public:
 
 	TEST_METHOD(TestSetStartTime) {
 		unsigned int itemID = 21;
-		Item trueStory (itemID);
+		Item trueStory(itemID);
 
 		DateTime dateTime(1994, 12, 12);
 		DateTime outputDateTime = trueStory.setStartTime(dateTime);
@@ -798,7 +798,7 @@ public:
 		Item trueStory;
 
 		unsigned int outputID = trueStory.getItemID();
-		Assert::AreEqual((unsigned int) 0, outputID);
+		Assert::AreEqual((unsigned int)0, outputID);
 
 		unsigned int itemID = 20091992;
 		outputID = trueStory.setItemID(itemID);
@@ -980,7 +980,7 @@ public:
 		item.setLabel('P');
 		outputString << "Label:\tP\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
-		
+
 		item.setCompletion(true);
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 	}
@@ -3317,5 +3317,48 @@ public:
 		Assert::AreEqual(clearedSchedule[0].getItemName(), latestClearedScheduleFromHistory[0].getItemName());
 	}
 
+	TEST_METHOD(TestResetHistory) {
+		History testHistory;
+		string returnMessage;
+		vector<Item> clearedSchedule;
+		Item* item0 = new Item(string("helloworld"));
+
+		string command1 = "ADD";
+		Item item1(string("This is the first item"));
+
+		string command2 = "DELETE";
+		Item item2(string("This is the second item"));
+
+		string command3 = "REPLACE";
+		Item item3(string("This is the third item"));
+
+		string command4 = "ADDD";
+		Item item4(string("This is the fourth item"));
+
+		string command5 = "SIT";
+		Item item5(string("This is the fifth item"));
+
+		returnMessage = testHistory.addCommand(command1, item1);
+		Assert::AreEqual(command1 + item1.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command2, item2);
+		Assert::AreEqual(command2 + item2.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command3, item3);
+		Assert::AreEqual(command3 + item3.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command4, item4);
+		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
+
+		returnMessage = testHistory.addCommand(command5, item5);
+		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
+
+		clearedSchedule.push_back(*item0);
+		returnMessage = testHistory.addClearCommand(clearedSchedule);
+		Assert::AreEqual(string("CLEAR"), returnMessage);
+
+		string confirmation = testHistory.reset();
+		Assert::AreEqual((string) "Reset completed.", confirmation);
+	}
 	};
 }
