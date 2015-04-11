@@ -75,6 +75,7 @@ const string iParser::STRING_HR = "hr";
 const string iParser::STRING_DATE_INITIALISE = "-1 -1 -1";
 const string iParser::STRING_TIME_INITIALISE = "-1 -1";
 const string iParser::STRING_MINUTE_INITIALISE = "00";
+const string iParser::STRING_DATE_TIME_REMOVE = "-2 -2 -2 -2 -2";
 const string iParser::STRING_BLANK = "";
 const string iParser::STRING_NEGATIVE_ONE = "-1";
 const char iParser::CHAR_SPACE = ' ';
@@ -403,15 +404,12 @@ string iParser::executeRemoveParsing(string textToRemove) {
 	convertToLowerCase(textToRemove);
 
 	if (textToRemove == STRING_DATE) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_START, dateTime);
-		setParseInfo(COMMAND_END, dateTime);
+		setParseInfo(COMMAND_START, STRING_DATE_TIME_REMOVE);
+		setParseInfo(COMMAND_END, STRING_DATE_TIME_REMOVE);
 	} else if (textToRemove == STRING_START) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_START, dateTime);
+		setParseInfo(COMMAND_START, STRING_DATE_TIME_REMOVE);
 	} else if (textToRemove == STRING_END) {
-		string dateTime = STRING_DATE_INITIALISE + CHAR_SPACE + STRING_TIME_INITIALISE;
-		setParseInfo(COMMAND_END, dateTime);
+		setParseInfo(COMMAND_END, STRING_DATE_TIME_REMOVE);
 	} else if (textToRemove == STRING_DESCRIPTION || textToRemove == STRING_DESC) {
 		setParseInfo(COMMAND_DESCRIPTION, STRING_BLANK);
 	} else if (textToRemove == STRING_PRIORITY || textToRemove == STRING_PRIORITY_P) {

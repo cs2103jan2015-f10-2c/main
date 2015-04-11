@@ -176,7 +176,7 @@ public:
 
 		string testInputRemove[] = { "edit 2", "-remove date" };
 		string expectedCommandRemove[] = { "start", "end" };
-		string expectedTextRemove = "-1 -1 -1 -1 -1";
+		string expectedTextRemove = "-2 -2 -2 -2 -2";
 
 		testVector.clear();
 		for (int i = 0; i < 2; i++) {
@@ -261,7 +261,7 @@ public:
 	TEST_METHOD(parserExecuteRemoveParsingTest) {
 		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
 		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
-		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
+		string expectedText[] = { "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "", "", "", "" };
 
 		for (int i = 0; i < 7; i++) {
 			testParser.executeRemoveParsing(testText[i]);

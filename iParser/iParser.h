@@ -118,6 +118,7 @@ public:
 	static const string STRING_DATE_INITIALISE;
 	static const string STRING_TIME_INITIALISE;
 	static const string STRING_MINUTE_INITIALISE;
+	static const string STRING_DATE_TIME_REMOVE;
 	static const string STRING_BLANK;
 	static const string STRING_NEGATIVE_ONE;
 
