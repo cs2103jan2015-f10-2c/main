@@ -417,13 +417,12 @@ namespace iPlannerUI {
 				 
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
-				 vector<Item> tempItem;
-				 outputBox2->Clear();			
 				 
-				 tempItem = testLogic->getDisplaySchedule();
+				 outputBox2->Clear();			
+				 vector<Item> tempItem;
 				 vector<Item>::iterator iterItem;
 				 int displayIndex = 0;
-
+				 				 				 
 				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
 					 
 					 String ^indexString = (++displayIndex).ToString();

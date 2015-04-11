@@ -1,4 +1,4 @@
-////@author A0105180W
+//@author A0105180W
 #include "Log.h"
 
 void Log::writeToLogFile(string stringToBeLogged) {
