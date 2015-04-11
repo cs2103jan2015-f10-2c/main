@@ -473,7 +473,7 @@ public:
 	//store schedule and retrieve schedule from text file
 	//pre : none
 	//post : none
-	string readDataFromFile();
+	MESSAGE_AND_SCHEDULE readDataFromFile();
 	string writeDataOntoFile();
 
 
