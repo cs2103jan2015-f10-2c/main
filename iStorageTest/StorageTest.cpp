@@ -999,6 +999,37 @@ public:
 		item3 = NULL;
 
 	}
+
+	TEST_METHOD(ScheduleTestClearDisplaySchedule) {
+		Schedule scheduleToTestClearDisplaySchedule;
+		vector<Item> displayScheduleCopy;
+
+		Item* item1 = new Item(string("Item #1"));
+		item1->setItemID(1);
+
+		Item* item2 = new Item(string("Item #2"));
+		item2->setItemID(2);
+
+		Item* item3 = new Item(string("Item #3"));
+		item3->setItemID(3);
+
+		Item* item4 = new Item(string("Item #4"));
+		item4->setItemID(4);
+
+		scheduleToTestClearDisplaySchedule.addItem(item1);
+		scheduleToTestClearDisplaySchedule.addItem(item2);
+		scheduleToTestClearDisplaySchedule.addItem(item3);
+		scheduleToTestClearDisplaySchedule.addItem(item4);
+
+		scheduleToTestClearDisplaySchedule.resetDisplaySchedule();
+		displayScheduleCopy = scheduleToTestClearDisplaySchedule.retrieveDisplaySchedule();
+		Assert::AreEqual(4, int(displayScheduleCopy.size()));
+
+		scheduleToTestClearDisplaySchedule.clearDisplaySchedule();
+		displayScheduleCopy = scheduleToTestClearDisplaySchedule.retrieveDisplaySchedule();
+		Assert::AreEqual(0, int(displayScheduleCopy.size()));
+	}
+
 	};
 
 	TEST_CLASS(TEST_CONVERSION) {
