@@ -359,13 +359,19 @@ void Logic::removeItemPointer(Item* itemPointer){
 
 
 string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
-	if (isValidLineIndex(lineIndexToBeDeleted)){
-		string displayMessage = deleteItemFromSchedule(lineIndexToBeDeleted);
-		return displayMessage;
-	} else{
-		printDeleteTaskFailed();
-		return MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
+	try{
+		if (isValidLineIndex(lineIndexToBeDeleted)){
+			string displayMessage = deleteItemFromSchedule(lineIndexToBeDeleted);
+			return displayMessage;
+		} else{
+			printDeleteTaskFailed();
+			throw MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
+		}
 	}
+	catch (const char* msg) {
+		cerr << msg << endl;
+	}
+	return  MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
 }
 
 

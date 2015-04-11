@@ -241,13 +241,17 @@ public:
 		string expectedDeleteMessage1 = "Task is deleted from schedule";
 		string actualDeleteMessage1 = testLogic.deleteTask(lineIndexToBeDeleted);
 		Assert::AreEqual(expectedDeleteMessage1, actualDeleteMessage1);
-
+	
 		testLogic.resetAndGetDisplaySchedule();
 		/*Delete line 5, which does not exist*/
-		string expectedDeleteMessage2 = "Unable to delete task : Invalid index";
-		string actualDeleteMessage2 = testLogic.deleteTask(lineIndexToBeDeleted);
-		Assert::AreEqual(expectedDeleteMessage2, actualDeleteMessage2);
-
+		try{
+			string expectedDeleteMessage2 = "Unable to delete task : Invalid index";
+			string actualDeleteMessage2 = testLogic.deleteTask(lineIndexToBeDeleted);
+			Assert::AreEqual(expectedDeleteMessage2, actualDeleteMessage2);
+		}
+		catch (const char* msg) {
+			cerr << msg << endl;
+		}
 	}
 
 	TEST_METHOD(DeleteTaskTest2) {
