@@ -31,6 +31,7 @@ const string Logic::FILTER_COMPLETION_UNDONE = "undone";
 const string Logic::FILTER_PRIORITY = "priority";
 const string Logic::FILTER_LABEL = "label";
 const string Logic::FILTER_ALL = "all";
+const string Logic:: FILTER_KEYWORD = "keyword";
 
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation.txt";
@@ -236,7 +237,7 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
 	} else if (command == COMMAND_SEARCH){
-		returnMessage = searchTask(itemInformation);
+		returnMessage = modifyKeywordVec(itemInformation);
 	} else if (command == COMMAND_VIEW){
 		returnMessage = filterTask(itemInformation);
 	} else if (command == COMMAND_SAVE){
@@ -637,6 +638,8 @@ string Logic::filterTask(string filterToBeImplemented){
 		}
 	} else if (filterType == FILTER_ALL){
 		removeFilter();
+	} else if (filterType == FILTER_KEYWORD){
+		searchTask();
 	} else{
 		printInvalidViewOption();
 		return MESSAGE_FAILED_VIEW + MESSAGE_INVALID_FILTERTYPE;
@@ -675,16 +678,34 @@ string Logic::removeFilter(){
 }
 
 
-string Logic::searchTask(string keyWord){
-	_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(keyWord);
+string Logic::modifyKeywordVec(string keyWord){
+	while (keyWord != ""){
+		int breakPoint = keyWord.find_first_of("+");
+		if (breakPoint != -1){
+			string tokenisedKeyword = keyWord.substr(0, breakPoint);
+			_keywordVec.push_back(tokenisedKeyword);
+			keyWord = keyWord.substr(breakPoint + 1);
+		}
+		else{
+			_keywordVec.push_back(keyWord);
+			break;
+		}
+	}
+	_currentFilter = FILTER_KEYWORD;
+	return _currentFilter;
+}
+
+string Logic::searchTask(){
+	for (int i = 0; i < _keywordVec.size(); i++){
+		_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(_keywordVec[i]);
+	}
 	if (getDisplayScheduleSize() == 0){
 		return MESSAGE_NO_TASK_FOUND;
 	} else{
-		_currentFilter = "keyword";
-		return MESSAGE_TASK_FOUND + keyWord;
+		_currentFilter = FILTER_KEYWORD;
+		return MESSAGE_TASK_FOUND;
 	}
 }
-
 
 
 /////////////////////////////////////

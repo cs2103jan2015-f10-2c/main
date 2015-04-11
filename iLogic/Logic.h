@@ -38,6 +38,7 @@ private:
 	string _fileNameToBeSaved;
 	string _currentSorting;
 	string _currentFilter;
+	vector<string> _keywordVec;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
@@ -68,6 +69,7 @@ private:
 	static const string SORT_LAST_UPDATE;
 	static const string FILTER_COMPLETION;
 	static const string FILTER_COMPLETION_UNDONE;
+	static const string FILTER_KEYWORD;
 	static const string FILTER_PRIORITY;
 	static const string FILTER_LABEL;
 	static const string FILTER_ALL;
@@ -365,8 +367,8 @@ public:
 	//searches for a keyword from item name and item description of all the items in the schedule
 	//pre : takes in a key word to search
 	//post : returns whether item(s) can be found
-	string searchTask(string keyWord);
-
+	string modifyKeywordVec(string keyWord);
+	string searchTask();
 	
 
 	/////////////////
