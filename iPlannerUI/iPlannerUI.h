@@ -155,8 +155,8 @@ namespace iPlannerUI {
 			// 
 			// outputBox2
 			// 
-			this->outputBox2->BackColor = System::Drawing::SystemColors::MenuText;
-			this->outputBox2->ForeColor = System::Drawing::Color::White;
+			this->outputBox2->BackColor = System::Drawing::Color::Black;
+			this->outputBox2->ForeColor = System::Drawing::Color::Black;
 			this->outputBox2->HideSelection = false;
 			this->outputBox2->Location = System::Drawing::Point(15, 70);
 			this->outputBox2->Name = L"outputBox2";
@@ -423,7 +423,7 @@ namespace iPlannerUI {
 				 vector<Item> tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
 				 int displayIndex = 0;
-				 				 				 
+				 
 				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
 					 
 					 String ^indexString = (++displayIndex).ToString();
