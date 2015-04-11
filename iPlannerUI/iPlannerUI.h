@@ -517,6 +517,9 @@ namespace iPlannerUI {
 				 helpMenuEdit += "Ending Time of Task :  -end <newDateTime> or -due <newDateTime>\r\n";
 				 helpMenuEdit += "Task Description : -desc <newDescription>\r\n";
 				 helpMenuEdit += "Task Priority : -priority <newPriority>\r\n";
+				 helpMenuEdit += "\r\nPreviously entered Date & Time and Description can be removed\r\n";
+				 helpMenuEdit += "edit <Display index of task to be edited> rmv <date> - Start and End Times of the task are removed\r\n";
+				 helpMenuEdit += "edit <Display index of task to be edited> rmv <desc> - Description of the task is removed\r\n";
 
 				 MessageBox::Show(helpMenuEdit);
 	}
