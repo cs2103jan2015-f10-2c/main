@@ -1,6 +1,6 @@
-//	Logic
-//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
-//	Coder:	Yu Young Bin A0116229J
+//author A0116229J
+//Coder : Yu Young Bin
+
 
 #pragma once
 
@@ -28,6 +28,11 @@ struct MESSAGE_AND_SCHEDULE {
 	vector<Item> displaySchedule;
 };
 
+struct START_END_TIME{
+	DateTime startTime;
+	DateTime endTime;
+};
+
 class Logic
 {
 private:
@@ -39,6 +44,7 @@ private:
 	string _currentSorting;
 	string _currentFilter;
 	vector<string> _keywordVec;
+	START_END_TIME _startEndTime;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
@@ -73,6 +79,7 @@ private:
 	static const string FILTER_PRIORITY;
 	static const string FILTER_LABEL;
 	static const string FILTER_ALL;
+	static const string FILTER_DATE;
 
 	static const int ZERO_INDEX = 0;
 	static const unsigned int DEFAULT_ITEM_ID = 0;
@@ -117,6 +124,8 @@ private:
 	static const string MESSAGE_NO_TASK_FOUND;
 	static const string MESSAGE_TASK_FOUND;
 	static const string MESSAGE_UNABLE_TO_UNDO;
+	static const string MESSAGE_READFILE_COMPLETE;
+	static const string MESSAGE_WRITEFILE_COMPLETE;
 
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
@@ -361,6 +370,7 @@ public:
 	string filterTask(string filterToBeImplemented);
 	string filterByCompletion(bool completion);
 	string filterByPriority(char priority);
+	string filterByDate(START_END_TIME);
 	string removeFilter();
 
 
@@ -371,6 +381,10 @@ public:
 	string searchTask();
 	void clearKeyWordVec();
 	
+	string trimText(string& text);
+	string trimBack(string text);
+	string trimFront(string text);
+
 
 	/////////////////
 	////*GETTERS*////
@@ -409,7 +423,7 @@ public:
 	//post : returns a  string that contains error lists
 	string getErrorList(ItemVerification verifier);
 
-
+	START_END_TIME getStartEndTime(string infoToBeInterpreted);
 
 	/////////////////////////////////////
 	////*SAVE FILE RELATED FUNCTIONS*////
@@ -459,8 +473,8 @@ public:
 	//store schedule and retrieve schedule from text file
 	//pre : none
 	//post : none
-	void readDataFromFile();
-	void writeDataOntoFile();
+	MESSAGE_AND_SCHEDULE readDataFromFile();
+	string writeDataOntoFile();
 
 
 

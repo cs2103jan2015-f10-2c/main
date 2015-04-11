@@ -150,132 +150,132 @@ public:
 	}
 	};
 
-//	Muted tests for isValidRange (Year/Month/Day/Hour/Minute)
-/*	TEST_CLASS(TEST_IS_WITHIN_RANGE) {
-public:
+	//	Muted tests for isValidRange (Year/Month/Day/Hour/Minute)
+	/*	TEST_CLASS(TEST_IS_WITHIN_RANGE) {
+	public:
 	TEST_METHOD(TestIsValidYearRange) {
-		DateTime dateTime;
+	DateTime dateTime;
 
-		int year = 1994;
-		bool outputYear = dateTime.isValidYearRange(year);
-		Assert::AreEqual(true, outputYear);
+	int year = 1994;
+	bool outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(true, outputYear);
 
-		year = 0;
-		outputYear = dateTime.isValidYearRange(year);
-		Assert::AreEqual(true, outputYear);
+	year = 0;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(true, outputYear);
 
-		year = 9999;
-		outputYear = dateTime.isValidYearRange(year);
-		Assert::AreEqual(true, outputYear);
+	year = 9999;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(true, outputYear);
 
-		//	Boundary Tests
-		year = -1;
-		outputYear = dateTime.isValidYearRange(year);
-		Assert::AreEqual(false, outputYear);
+	//	Boundary Tests
+	year = -1;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(false, outputYear);
 
-		year = 10000;
-		outputYear = dateTime.isValidYearRange(year);
-		Assert::AreEqual(false, outputYear);
+	year = 10000;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(false, outputYear);
 	}
 
 	TEST_METHOD(TestIsValidMonthRange) {
-		DateTime dateTime;
+	DateTime dateTime;
 
-		int month = 9;
-		bool outputMonth = dateTime.isValidMonthRange(month);
-		Assert::AreEqual(true, outputMonth);
+	int month = 9;
+	bool outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(true, outputMonth);
 
-		month = 1;
-		outputMonth = dateTime.isValidMonthRange(month);
-		Assert::AreEqual(true, outputMonth);
+	month = 1;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(true, outputMonth);
 
-		month = 12;
-		outputMonth = dateTime.isValidMonthRange(month);
-		Assert::AreEqual(true, outputMonth);
+	month = 12;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(true, outputMonth);
 
-		//	Boundary Tests
-		month = 0;
-		outputMonth = dateTime.isValidMonthRange(month);
-		Assert::AreEqual(false, outputMonth);
+	//	Boundary Tests
+	month = 0;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(false, outputMonth);
 
-		month = 13;
-		outputMonth = dateTime.isValidMonthRange(month);
-		Assert::AreEqual(false, outputMonth);
+	month = 13;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(false, outputMonth);
 	}
 
 	TEST_METHOD(TestIsValidDayRange) {
-		DateTime dateTime;
+	DateTime dateTime;
 
-		int day = 12;
-		bool outputDay = dateTime.isValidDayRange(day);
-		Assert::AreEqual(true, outputDay);
+	int day = 12;
+	bool outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(true, outputDay);
 
-		day = 1;
-		outputDay = dateTime.isValidDayRange(day);
-		Assert::AreEqual(true, outputDay);
+	day = 1;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(true, outputDay);
 
-		day = 31;
-		outputDay = dateTime.isValidDayRange(day);
-		Assert::AreEqual(true, outputDay);
+	day = 31;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(true, outputDay);
 
-		//	Boundary Tests
-		day = 0;
-		outputDay = dateTime.isValidDayRange(day);
-		Assert::AreEqual(false, outputDay);
+	//	Boundary Tests
+	day = 0;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(false, outputDay);
 
-		day = 32;
-		outputDay = dateTime.isValidDayRange(day);
-		Assert::AreEqual(false, outputDay);
+	day = 32;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(false, outputDay);
 	}
 
 	TEST_METHOD(TestIsValidHourRange) {
-		DateTime dateTime;
+	DateTime dateTime;
 
-		int hour = 12;
-		bool outputHour = dateTime.isValidHourRange(hour);
-		Assert::AreEqual(true, outputHour);
+	int hour = 12;
+	bool outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(true, outputHour);
 
-		hour = 0;
-		outputHour = dateTime.isValidHourRange(hour);
-		Assert::AreEqual(true, outputHour);
+	hour = 0;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(true, outputHour);
 
-		hour = 23;
-		outputHour = dateTime.isValidHourRange(hour);
-		Assert::AreEqual(true, outputHour);
+	hour = 23;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(true, outputHour);
 
-		//	Boundary Tests
-		hour = 24;
-		outputHour = dateTime.isValidHourRange(hour);
-		Assert::AreEqual(false, outputHour);
+	//	Boundary Tests
+	hour = 24;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(false, outputHour);
 
-		hour = -1;
-		outputHour = dateTime.isValidHourRange(hour);
-		Assert::AreEqual(false, outputHour);
+	hour = -1;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(false, outputHour);
 	}
 
 	TEST_METHOD(TestIsValidMinuteRange) {
-		DateTime dateTime;
+	DateTime dateTime;
 
-		int minute = 12;
-		bool outputMinute = dateTime.isValidMinuteRange(minute);
-		Assert::AreEqual(true, outputMinute);
+	int minute = 12;
+	bool outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(true, outputMinute);
 
-		minute = 0;
-		outputMinute = dateTime.isValidMinuteRange(minute);
-		Assert::AreEqual(true, outputMinute);
+	minute = 0;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(true, outputMinute);
 
-		minute = 59;
-		outputMinute = dateTime.isValidMinuteRange(minute);
-		Assert::AreEqual(true, outputMinute);
+	minute = 59;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(true, outputMinute);
 
-		//	Boundary Tests
-		minute = -1;
-		outputMinute = dateTime.isValidMinuteRange(minute);
-		Assert::AreEqual(false, outputMinute);
+	//	Boundary Tests
+	minute = -1;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(false, outputMinute);
 
-		minute = 60;
-		outputMinute = dateTime.isValidMinuteRange(minute);
-		Assert::AreEqual(false, outputMinute);
+	minute = 60;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(false, outputMinute);
 	}
 	}; */
 
@@ -542,9 +542,11 @@ namespace ItemTest {
 public:
 
 	TEST_METHOD(TestSetItemName) {
-		Item trueStory;
-
 		string itemName("Project Marriage");
+		Item trueStory (itemName);
+		Assert::AreEqual(itemName, trueStory.getItemName());
+
+		itemName = "Love Forever";
 		string outputName = trueStory.setItemName(itemName);
 		Assert::AreEqual(itemName, outputName);
 
@@ -558,7 +560,9 @@ public:
 	}
 
 	TEST_METHOD(TestSetDescription) {
-		Item trueStory;
+		string itemName = "Love Story";
+		unsigned int itemID = 100;
+		Item trueStory(itemName, itemID);
 
 		string description("Joon Fai and Gantian are going to get married soon.");
 		string outputDesc = trueStory.setDescription(description);
@@ -574,7 +578,8 @@ public:
 	}
 
 	TEST_METHOD(TestSetStartTime) {
-		Item trueStory;
+		unsigned int itemID = 21;
+		Item trueStory (itemID);
 
 		DateTime dateTime(1994, 12, 12);
 		DateTime outputDateTime = trueStory.setStartTime(dateTime);
@@ -676,7 +681,28 @@ public:
 	}
 
 	TEST_METHOD(ItemTestSetLastUpdate) {
-		// Joon Fai
+		Item *item1 = new Item(string("Item #1"));
+		CTime lastUpdate;
+		bool isSameTime = false;
+
+		item1->setItemID(2);
+		lastUpdate = CTime::GetCurrentTime();
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(true, isSameTime);
+
+		int time1 = time(0);
+		int time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
+		item1->setDescription(string("edited desc"));
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(false, isSameTime);
+
+		lastUpdate = lastUpdate = CTime::GetCurrentTime();
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(true, isSameTime);
 	}
 
 	};
@@ -771,9 +797,11 @@ public:
 	TEST_METHOD(TestGetItemID) {
 		Item trueStory;
 
-		unsigned int itemID = 20091992;
-		trueStory.setItemID(itemID);
 		unsigned int outputID = trueStory.getItemID();
+		Assert::AreEqual((unsigned int) 0, outputID);
+
+		unsigned int itemID = 20091992;
+		outputID = trueStory.setItemID(itemID);
 		Assert::AreEqual(itemID, outputID);
 	}
 
@@ -810,7 +838,28 @@ public:
 	}
 
 	TEST_METHOD(ItemTestGetLastUpdate) {
-		// Joon Fai
+		Item *item1 = new Item(string("Item #1"));
+		CTime lastUpdate;
+		bool isSameTime = false;
+
+		item1->setItemID(2);
+		lastUpdate = CTime::GetCurrentTime();
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(true, isSameTime);
+
+		int time1 = time(0);
+		int time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
+		item1->setDescription(string("edited desc"));
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(false, isSameTime);
+
+		lastUpdate = lastUpdate = CTime::GetCurrentTime();
+		isSameTime = (lastUpdate == item1->getLastUpdate());
+		Assert::AreEqual(true, isSameTime);
 	}
 
 	};
@@ -823,12 +872,12 @@ public:
 		DateTime dateTime(1994, 12, 12, 20, 9);
 		item.setStartTime(dateTime);
 		string outputString = item.displayStartTime();
-		Assert::AreEqual((string) "1994 12 12 20:09", outputString);
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
 
 		DateTime dateOnly(1992, 9, 20);
 		item.setStartTime(dateOnly);
 		outputString = item.displayStartTime();
-		Assert::AreEqual((string) "1992 09 20", outputString);
+		Assert::AreEqual((string) "1992/09/20", outputString);
 
 		DateTime timeOnly;
 		timeOnly.setHour(9);
@@ -844,12 +893,12 @@ public:
 		DateTime dateTime(1994, 12, 12, 20, 9);
 		item.setEndTime(dateTime);
 		string outputString = item.displayEndTime();
-		Assert::AreEqual((string) "1994 12 12 20:09", outputString);
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
 
 		DateTime dateOnly(1992, 9, 20);
 		item.setEndTime(dateOnly);
 		outputString = item.displayEndTime();
-		Assert::AreEqual((string) "1992 09 20", outputString);
+		Assert::AreEqual((string) "1992/09/20", outputString);
 
 		DateTime timeOnly;
 		timeOnly.setHour(9);
@@ -859,20 +908,62 @@ public:
 		Assert::AreEqual((string) "09:20", outputString);
 	}
 
+	TEST_METHOD(TestDisplayStartTimeForUser) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setStartTime(dateTime);
+		string outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setStartTime(dateOnly);
+		outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setStartTime(timeOnly);
+		outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayEndTimeForUser) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setEndTime(dateTime);
+		string outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setEndTime(dateOnly);
+		outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setEndTime(timeOnly);
+		outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
 	TEST_METHOD(TestDisplayItemForUser) {
 		Item item;
 		ostringstream outputString;
 
 		item.setItemName("Short Jog");
-		outputString << "Name:\tShort Jog\n";
+		outputString << "Name:\t\tShort Jog\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
 		item.setStartTime(2015, 3, 17, 6, 30);
-		outputString << "Start Time:\t2015 03 17 06:30\n";
+		outputString << "Start Time:\t17/03/2015 06:30\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
 		item.setEndTime(2015, 3, 17, 7, 0);
-		outputString << "End Time:\t2015 03 17 07:00\n";
+		outputString << "End Time:\t17/03/2015 07:00\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
 		item.setDescription("4km in 30 minutes");
@@ -882,12 +973,14 @@ public:
 		item.setItemID(1992);
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
-		item.setLabel('P');
-		Assert::AreEqual(outputString.str(), item.displayItemForUser());
-
 		item.setPriority('H');
+		outputString << "Priority:\tH\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
+		item.setLabel('P');
+		outputString << "Label:\tP\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+		
 		item.setCompletion(true);
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 	}
@@ -900,13 +993,13 @@ public:
 		outputString << "Item ID:\t1992\n";
 
 		item.setItemName("Short Jog");
-		outputString << "Name:\tShort Jog\n";
+		outputString << "Name:\t\tShort Jog\n";
 
 		item.setStartTime(2015, 3, 17, 6, 30);
-		outputString << "Start Time:\t2015 03 17 06:30\n";
+		outputString << "Start Time:\t17/03/2015 06:30\n";
 
 		item.setEndTime(2015, 3, 17, 7, 0);
-		outputString << "End Time:\t2015 03 17 07:00\n";
+		outputString << "End Time:\t17/03/2015 07:00\n";
 
 		item.setDescription("4km in 30 minutes");
 		outputString << "Description:\t4km in 30 minutes\n";
@@ -921,6 +1014,27 @@ public:
 		outputString << "Completed?\ttrue\n";
 		Assert::AreEqual(outputString.str(), item.displayItemFullDetails());
 	}
+
+	TEST_METHOD(ItemTestDisplayLastUpdatedTime) {
+		Item *item1 = new Item(string("Item #1"));
+		CTime lastUpdate;
+		string lastUpdateAsString;
+		ostringstream oss;
+
+		item1->setItemID(1);
+		lastUpdate = item1->getLastUpdate();
+		oss << setw(4) << lastUpdate.GetYear() << "/";
+		oss << setfill('0') << setw(2) << lastUpdate.GetMonth() << "/";
+		oss << setfill('0') << setw(2) << lastUpdate.GetDay() << " ";
+		oss << setfill('0') << setw(2) << lastUpdate.GetHour() << ":";
+		oss << setfill('0') << setw(2) << lastUpdate.GetMinute();
+
+		lastUpdateAsString = oss.str();
+
+		Assert::AreEqual(lastUpdateAsString, item1->displayLastUpdatedTime());
+
+	}
+
 	};
 }
 
@@ -1117,7 +1231,7 @@ public:
 		scheduleToTestClearDisplaySchedule.clearDisplaySchedule();
 		displayScheduleCopy = scheduleToTestClearDisplaySchedule.retrieveDisplaySchedule();
 		Assert::AreEqual(0, int(displayScheduleCopy.size()));
-	
+
 		delete item1;
 		delete item2;
 		delete item3;
