@@ -118,6 +118,7 @@ public:
 	static const string STRING_DATE_INITIALISE;
 	static const string STRING_TIME_INITIALISE;
 	static const string STRING_MINUTE_INITIALISE;
+	static const string STRING_DATE_TIME_REMOVE;
 	static const string STRING_BLANK;
 	static const string STRING_NEGATIVE_ONE;
 
@@ -142,9 +143,11 @@ public:
 	static const string MESSAGE_INVALID_PRIORITY;
 	static const string MESSAGE_INVALID_DATE_TIME;
 	static const string MESSAGE_INVALID_ADD_ITEM;
-	static const string MESSAGE_INVALID_NUMBER_OF_ITEM;
+	static const string MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER;
 	static const string MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
-	static const string MESSAGE_INVALID_NUMBER_OF_REMOVE;
+	static const string MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER;
+	static const string MESSAGE_INVALID_NUMBER_OF_PRIORITY_MODIFIER;
+	static const string MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER;
 
 	// used to avoid magic numbers
 	static const unsigned int SIZE_OF_STRING_TO;
@@ -383,14 +386,6 @@ public:
 	// Pre:		nil
 	// Post:	clears _parseInfo list
 	string clearParseInfo();
-	
-	// ==============
-	// misc functions
-	// ==============
-
-	// Pre:		nil
-	// Post:	list of command and text displayed
-	void showParseInfo();
 
 public:
 	iParser();

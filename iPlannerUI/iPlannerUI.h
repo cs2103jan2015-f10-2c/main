@@ -12,6 +12,7 @@
 using namespace std;
 using namespace System;
 
+//@author generated
 namespace iPlannerUI {
 
 	using namespace System;
@@ -50,7 +51,6 @@ namespace iPlannerUI {
 			}
 		}
 
-	//@author generated
 	private: System::Windows::Forms::TextBox^  commandInputBox;
 
 
@@ -68,6 +68,8 @@ namespace iPlannerUI {
 	private: System::Windows::Forms::ToolStripMenuItem^  dateAndTimeVariationsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  basicCommandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  viewScheduleToolStripMenuItem;
+
+
 
 
 
@@ -382,7 +384,6 @@ namespace iPlannerUI {
 							 displayPriorityAndName("-", nameString);
 						 }
 						 
-						 String^ completionString;
 						 if (iterItem->getCompletion() == true) {
 							 displayCompletion("(D)");
 						 } else {
@@ -402,7 +403,8 @@ namespace iPlannerUI {
 
 					 String^ outcomeString = gcnew String(displayMessage.message.c_str());
 					 commandOutcomeLabel->Text = outcomeString;
-
+					 outputBox2->SelectionStart = 0;
+					 outputBox2->ScrollToCaret();
 					 commandInputBox->Clear();
 				 }
 
@@ -414,7 +416,7 @@ namespace iPlannerUI {
 				 testLogic->readDataFromFile();
 				 vector<Item> tempItem;
 				 outputBox2->Clear();			
-
+				 
 				 tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
 				 int displayIndex = 0;
@@ -452,7 +454,8 @@ namespace iPlannerUI {
 					 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
 					 displayDescription(descriptionString);
 				 }
-
+				 outputBox2->SelectionStart = 0;
+				 outputBox2->ScrollToCaret();
 				 commandOutcomeLabel->Text = "Enter the command";
 
 	}
@@ -514,6 +517,9 @@ namespace iPlannerUI {
 				 helpMenuEdit += "Ending Time of Task :  -end <newDateTime> or -due <newDateTime>\r\n";
 				 helpMenuEdit += "Task Description : -desc <newDescription>\r\n";
 				 helpMenuEdit += "Task Priority : -priority <newPriority>\r\n";
+				 helpMenuEdit += "\r\nPreviously entered Date & Time and Description can be removed\r\n";
+				 helpMenuEdit += "edit <Display index of task to be edited> rmv <date> - Start and End Times of the task are removed\r\n";
+				 helpMenuEdit += "edit <Display index of task to be edited> rmv <desc> - Description of the task is removed\r\n";
 
 				 MessageBox::Show(helpMenuEdit);
 	}
@@ -558,7 +564,7 @@ namespace iPlannerUI {
 				 helpMenuView += "view priority <H/M/L> - Tasks which have the priority specified are displayed\r\n";
 				 
 				 MessageBox::Show(helpMenuView);
-				 Form::BackColor = Color::NavajoWhite;
+
 	}
 	
 };

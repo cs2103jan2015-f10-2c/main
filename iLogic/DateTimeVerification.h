@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include "..\iStorage\DateTime.h"
+#include "..\iPlanner Log\Log.h"
 using namespace std;
 
 class DateTimeVerification {
@@ -34,7 +35,7 @@ private:
 	static const int DATETIME_VERIFICATION_YEAR_100;
 	static const int DATETIME_VERIFICATION_YEAR_400;
 
-
+	Log _dateTimeVerificationLogger;
 	DateTime _dateTimeObjectToVerify;
 	int _year;
 	int _month;

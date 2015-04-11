@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5B4A7470-0D1D-452F-BFA7-722F5D15B0D2}</ProjectGuid>
-    <RootNamespace>iPlanner</RootNamespace>
+    <ProjectGuid>{4F485004-65D0-4788-A39B-EEE5FD9F7BA8}</ProjectGuid>
+    <RootNamespace>iPlannerLog</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -64,18 +64,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClInclude Include="Log.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\iLogic\iLogic.vcxproj">
-      <Project>{709815aa-4941-4364-a3a1-40d61151d7be}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\iParser\iParser.vcxproj">
-      <Project>{0bd891d4-882d-4b27-a8c8-b3c06dc73829}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\iStorage\iStorage.vcxproj">
-      <Project>{46c693bb-9cef-4d7c-b8ab-6489af895d25}</Project>
-    </ProjectReference>
+    <ClCompile Include="Log.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

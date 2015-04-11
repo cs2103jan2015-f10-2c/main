@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\main\iParser;..\main\iStorage;..\iPlanner;..\iPlanner\iStorage;..\iPlanner\iParser;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\main\iPlanner Log;..\main\iParser;..\main\iStorage;..\iPlanner;..\iPlanner\iStorage;..\iPlanner\iParser;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -82,6 +82,9 @@
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="..\iPlanner Log\iPlanner Log.vcxproj">
+      <Project>{4f485004-65d0-4788-a39b-eee5fd9f7ba8}</Project>
     </ProjectReference>
     <ProjectReference Include="..\iStorage\iStorage.vcxproj">
       <Project>{46c693bb-9cef-4d7c-b8ab-6489af895d25}</Project>

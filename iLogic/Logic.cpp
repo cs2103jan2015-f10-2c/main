@@ -31,6 +31,7 @@ const string Logic::FILTER_COMPLETION_UNDONE = "undone";
 const string Logic::FILTER_PRIORITY = "priority";
 const string Logic::FILTER_LABEL = "label";
 const string Logic::FILTER_ALL = "all";
+const string Logic:: FILTER_KEYWORD = "keyword";
 
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation.txt";
@@ -222,7 +223,11 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
 	MESSAGE_AND_SCHEDULE userDisplayInformation;
-
+	list<COMMAND_AND_TEXT>::iterator iter;
+	for (iter = parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
+		cout << "COMMAND : " << iter->command << endl;
+		cout << "TEXT : " << iter->text << endl;
+	}
 	if (command == COMMAND_ADD) {
 		returnMessage = addTask(parseInfoToBeProcessed);
 	} else if (command == COMMAND_DELETE) {
@@ -236,8 +241,9 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 	} else if (command == COMMAND_SORT){
 		returnMessage = changeCurrentSorting(itemInformation);
 	} else if (command == COMMAND_SEARCH){
-		returnMessage = searchTask(itemInformation);
+		returnMessage = modifyKeywordVec(itemInformation);
 	} else if (command == COMMAND_VIEW){
+		clearKeyWordVec();
 		returnMessage = filterTask(itemInformation);
 	} else if (command == COMMAND_SAVE){
 		changeSavingDirectory(itemInformation);
@@ -383,7 +389,9 @@ string Logic::undoPreviousAction(){
 
 
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
-	if (isValidLineIndex(lineIndexToBeEdited)){
+	if (parseInfoToBeProcessed.size() == 1){
+		return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INPUT;
+	} else if (isValidLineIndex(lineIndexToBeEdited)){
 		Item *editedItemToBeReplaced;
 		editedItemToBeReplaced = new Item;
 		*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
@@ -504,6 +512,15 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted, DateTime existing
 	//if user did not specify year, set current year
 	if (YYYY == -1 && YYYY2 == -1){
 		YYYY = getCurrentTime().getYear();
+	}
+
+	//if user wants to remove the datetime
+	if (YYYY2 == -2 && MM2 == -2 && DD2 == -2 && hh2 == -2 && mm2 == -2){
+		YYYY = -1;
+		MM = -1;
+		DD = -1;
+		hh = -1;
+		mm = -1;
 	}
 
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
@@ -637,6 +654,8 @@ string Logic::filterTask(string filterToBeImplemented){
 		}
 	} else if (filterType == FILTER_ALL){
 		removeFilter();
+	} else if (filterType == FILTER_KEYWORD){
+		searchTask();
 	} else{
 		printInvalidViewOption();
 		return MESSAGE_FAILED_VIEW + MESSAGE_INVALID_FILTERTYPE;
@@ -644,6 +663,11 @@ string Logic::filterTask(string filterToBeImplemented){
 
 	printViewChanged();
 	return MESSAGE_SUCCESSFUL_VIEW + _currentFilter;
+}
+
+void Logic::clearKeyWordVec(){
+	_keywordVec.clear();
+	return;
 }
 
 
@@ -675,16 +699,24 @@ string Logic::removeFilter(){
 }
 
 
-string Logic::searchTask(string keyWord){
-	_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(keyWord);
+string Logic::modifyKeywordVec(string keyWord){
+	convertStringToKeywordVec(keyWord);
+	_currentFilter = FILTER_KEYWORD;
+	return _currentFilter;
+}
+
+
+string Logic::searchTask(){
+	for (int i = 0; i < _keywordVec.size(); i++){
+		_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(_keywordVec[i]);
+	}
 	if (getDisplayScheduleSize() == 0){
 		return MESSAGE_NO_TASK_FOUND;
 	} else{
-		_currentFilter = "keyword";
-		return MESSAGE_TASK_FOUND + keyWord;
+		_currentFilter = FILTER_KEYWORD;
+		return MESSAGE_TASK_FOUND;
 	}
 }
-
 
 
 /////////////////////////////////////
@@ -744,9 +776,38 @@ void Logic::saveBasicInformationToTextFile(){
 	writeFile << getScheduleSize() << endl;
 	writeFile << _currentSorting << endl;
 	writeFile << _nextItemID << endl;
-	writeFile << _currentFilter;
+	writeFile << _currentFilter << endl;
+	writeFile << convertKeywordVecToString();
 }
 
+
+string Logic::convertKeywordVecToString(){
+	string keywordString = "";
+	if (_keywordVec.size() != 0){
+		for (int i = 0; i < _keywordVec.size(); i++){
+			if (i != _keywordVec.size() - 1){
+				keywordString = keywordString + _keywordVec[i] + "+";
+			} else{
+				keywordString = keywordString + _keywordVec[i];
+			}
+		}
+	} 
+	return keywordString;
+}
+
+void Logic::convertStringToKeywordVec(string keywordString){
+	while (keywordString != ""){
+		int breakPoint = keywordString.find_first_of("+");
+		if (breakPoint != -1){
+			string tokenisedKeyword = keywordString.substr(0, breakPoint);
+			_keywordVec.push_back(tokenisedKeyword);
+			keywordString = keywordString.substr(breakPoint + 1);
+		} else{
+			_keywordVec.push_back(keywordString);
+			break;
+		}
+	}
+}
 
 string Logic::getDirectoryAndFileName(){
 	if (_directoryToBeSaved == ""){
@@ -780,6 +841,9 @@ string Logic::retrieveBasicInformationFromTextFile(){
 	readFile >> _currentSorting;
 	readFile >> _nextItemID;
 	readFile >> _currentFilter;
+	string keywordString;
+	readFile >> keywordString;
+	convertStringToKeywordVec(keywordString);
 	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
 
 	if (_directoryToBeSaved == ""){
@@ -973,7 +1037,7 @@ bool Logic::isValidSortingMethod(string itemInformation){
 
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
-	if (getScheduleSize() >= lineIndexToBeChecked){
+	if (getDisplayScheduleSize() >= lineIndexToBeChecked && lineIndexToBeChecked > 0){
 		return true;
 	} else{
 		return false;
