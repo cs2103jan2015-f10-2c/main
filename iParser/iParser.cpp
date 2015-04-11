@@ -98,9 +98,11 @@ const string iParser::MESSAGE_INVALID_VIEW = "Invalid view";
 const string iParser::MESSAGE_INVALID_PRIORITY = "Invalid priority";
 const string iParser::MESSAGE_INVALID_DATE_TIME = "Invalid date and time";
 const string iParser::MESSAGE_INVALID_ADD_ITEM = "Unable to use \'name\' modifier when using \'add\' command";
-const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM = "Unable to use \'name\' modifier more than once";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER = "Unable to use \'name\' modifier more than once";
 const string iParser::MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER = "Unable to use multiple date time modifiers";
-const string iParser::MESSAGE_INVALID_NUMBER_OF_REMOVE = "Unable to use \'remove\' modifier more than once";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER = "Unable to use \'description\' modifier more than once";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_PRIORITY_MODIFIER = "Unable to use \'priority\' modifier more than once";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER = "Unable to use \'remove\' modifier more than once";
 
 const unsigned int iParser::SIZE_OF_STRING_TO = 2;
 const unsigned int iParser::SIZE_OF_STRING_HYPHEN = 1;
@@ -285,10 +287,6 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		string modifier = retrieveCommandOrModifier(singleInformation);
 		string textWithoutCommand = removeFirstStringToken(singleInformation);
 
-		if (hasRemove) {
-			throw MESSAGE_INVALID_NUMBER_OF_REMOVE;
-		}
-
 		if (modifier == MODIFIER_NAME) {
 			if (command == COMMAND_EDIT && !hasItem) {
 				executeModifierAndTextParsing(COMMAND_NAME, textWithoutCommand);
@@ -297,7 +295,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 				if (command == COMMAND_ADD) {
 					throw MESSAGE_INVALID_ADD_ITEM;
 				} else if (hasItem) {
-					throw MESSAGE_INVALID_NUMBER_OF_ITEM;
+					throw MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER;
 				}
 			}
 		} else if (modifier == MODIFIER_DATE) {
@@ -333,19 +331,24 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 				executeModifierAndTextParsing(COMMAND_DESCRIPTION, textWithoutCommand);
 				hasDescription = true;
 			} else {
-				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+				throw MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER;
 			}
 		} else if (modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P) {
 			if (!hasPriority) {
 				executePriorityParsing(textWithoutCommand);
 				hasPriority = true;
 			} else {
-				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+				throw MESSAGE_INVALID_NUMBER_OF_PRIORITY_MODIFIER;
 			}
 		} else if (modifier == MODIFIER_REMOVE || modifier == MODIFIER_RMV) {
 			if (command == COMMAND_EDIT && !hasItem && !hasDateOrDue && !hasStart && !hasEnd && !hasDescription) {
-				executeRemoveParsing(textWithoutCommand);
-				hasRemove = true;
+				if (!hasRemove) {
+					executeRemoveParsing(textWithoutCommand);
+					hasRemove = true;
+				}
+				else {
+					throw MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER;
+				}
 			} else if (command == COMMAND_ADD) {
 				throw MESSAGE_INVALID_ADD_ITEM;
 			}
