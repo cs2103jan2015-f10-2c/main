@@ -178,14 +178,6 @@ public:
 	// Post:	sets indexToEdit and any modifiers along with their respective information to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
 	string executeEditParsing(string);
-	// Pre:		commandType is "delete", "del", "sort", "search", "view", "save" or "done"
-	// Post:	sets text or index to _parseInfo list
-	//			clears _parseInfo list and sets list as invalid if blank text is detected
-	string executeCommandAndTextParsing(const string, string);
-	// Pre:		commandType is "delete", "del", "sort", "search", "view", "save" or "done"
-	// Post:	sets command and text/index to _parseInfo list
-	//			clears _parseInfo list and sets list as invalid if blank text is detected
-	string executeCommandParsing(const string, string);
 	// Pre:		
 	// Post:	
 	string executeSortParsing(string);
@@ -195,6 +187,14 @@ public:
 	// Pre:		
 	// Post:	
 	string executeSearchParsing(const string);
+	// Pre:		commandType is "delete", "del", "save", "done" or "undone"
+	// Post:	sets text or index to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeCommandAndTextParsing(const string, string);
+	// Pre:		commandType is "clear", "undo" or "exit"
+	// Post:	sets command and text/index to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeSingularCommandParsing(const string, string);
 	
 	// ================
 	// helper functions
@@ -212,7 +212,7 @@ public:
 	// Post:	determines whether dateTime string is a single dateTime or a ranged dateTime and executes
 	//			respective dateTime parsing
 	//			if dateTime is not valid, invalid date time message will be thrown as exception
-	string executeDateTimeParsing(string, const string);
+	string executeDateTimeParsing(const string);
 	// Pre:		
 	// Post:	
 	string executePriorityParsing(string);

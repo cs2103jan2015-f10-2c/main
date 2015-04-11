@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <atltime.h>
+#include <ctime>
 #include "DateTime.h"
 using namespace std;
 

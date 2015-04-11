@@ -132,11 +132,11 @@ string iParser::executeParsing(string userInput) {
 	} else if (command == COMMAND_DELETE || command == COMMAND_DEL) {
 		executeCommandAndTextParsing(COMMAND_DELETE, textWithoutCommand);
 	} else if (command == COMMAND_CLEAR) {
-		executeCommandParsing(COMMAND_CLEAR, userInput);
+		executeSingularCommandParsing(COMMAND_CLEAR, userInput);
 	} else if (command == COMMAND_EDIT) {
 		executeEditParsing(textWithoutCommand);
 	} else if (command == COMMAND_UNDO) {
-		executeCommandParsing(COMMAND_UNDO, userInput);
+		executeSingularCommandParsing(COMMAND_UNDO, userInput);
 	} else if (command == COMMAND_SORT) {
 		executeSortParsing(textWithoutCommand);
 	} else if (command == COMMAND_SEARCH) {
@@ -150,7 +150,7 @@ string iParser::executeParsing(string userInput) {
 	} else if (command == COMMAND_UNDONE) {
 		executeCommandAndTextParsing(COMMAND_UNDONE, textWithoutCommand);
 	} else if (command == COMMAND_EXIT) {
-		executeCommandParsing(COMMAND_EXIT, userInput);
+		executeSingularCommandParsing(COMMAND_EXIT, userInput);
 	} else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
 	}
@@ -202,30 +202,7 @@ string iParser::executeEditParsing(string text) {
 	return MESSAGE_SUCCESS;
 }
 
-string iParser::executeCommandAndTextParsing(const string commandType, string text) {
-	if (text != STRING_BLANK) {
-		convertToLowerCase(text);
-		setParseInfo(commandType, text);
-		return MESSAGE_SUCCESS;
-	} else {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
-		return MESSAGE_FAILURE;
-	}
-}
-
-string iParser::executeCommandParsing(const string commandType, string userInput) {
-	if (userInput == commandType) {
-		setParseInfo(commandType);
-		return MESSAGE_SUCCESS;
-	} else {
-		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
-		return MESSAGE_FAILURE;
-	}
-}
-
 string iParser::executeSortParsing(string sortType) {
-	assert(sortType != STRING_BLANK);
-
 	convertToLowerCase(sortType);
 
 	if (sortType == STRING_DATE) {
@@ -267,8 +244,6 @@ string iParser::executeSearchParsing(const string text) {
 }
 
 string iParser::executeViewParsing(string viewType) {
-	assert(viewType != STRING_BLANK);
-
 	convertToLowerCase(viewType);
 
 	if (viewType == STRING_ALL) {
@@ -285,6 +260,27 @@ string iParser::executeViewParsing(string viewType) {
 	}
 
 	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeCommandAndTextParsing(const string commandType, string text) {
+	if (text != STRING_BLANK) {
+		convertToLowerCase(text);
+		setParseInfo(commandType, text);
+		return MESSAGE_SUCCESS;
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+}
+
+string iParser::executeSingularCommandParsing(const string commandType, string userInput) {
+	if (userInput == commandType) {
+		setParseInfo(commandType);
+		return MESSAGE_SUCCESS;
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+		return MESSAGE_FAILURE;
+	}
 }
 
 string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInformation, const string command) {
@@ -320,7 +316,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 			}
 		} else if (modifier == MODIFIER_DATE) {
 			if (!hasDateOrDue && !hasStart && !hasEnd) {
-				executeDateTimeParsing(textWithoutCommand, STRING_DATE);
+				executeDateTimeParsing(textWithoutCommand);
 				hasDateOrDue = true;
 			} else {
 				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
@@ -375,17 +371,23 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 	return MESSAGE_SUCCESS;
 }
 
-string iParser::executeDateTimeParsing(string dateTimeString, const string modifierType) {
+string iParser::executeDateTimeParsing(const string dateTimeString) {
+	if (dateTimeString == STRING_BLANK) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
 	if (hasStartEndDateTime(dateTimeString)) {
 		splitAndSetStartEndDateTime(dateTimeString);
 	} else {
-		setDateTime(dateTimeString, modifierType);
+		setDateTime(dateTimeString, STRING_DATE);
 	}
 
 	return MESSAGE_SUCCESS;
 }
 
 string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
+	assert(ModifierType != STRING_BLANK);
+
 	if (text != STRING_BLANK) {
 		setParseInfo(ModifierType, text);
 		return MESSAGE_SUCCESS;
@@ -395,8 +397,6 @@ string iParser::executeModifierAndTextParsing(const string ModifierType, string 
 }
 
 string iParser::executePriorityParsing(string priorityType) {
-	assert(priorityType != STRING_BLANK);
-
 	convertToLowerCase(priorityType);
 
 	if (priorityType == STRING_HIGH || priorityType == STRING_H) {
@@ -447,6 +447,7 @@ string iParser::retrieveCommandOrModifier(string userInput) {
 }
 
 vector<string> iParser::tokeniseText(const string text) {
+	assert(text != STRING_BLANK);
 	vector<string> tokenisedInformation;
 	unsigned int startIndexForText = 0;
 	unsigned int endIndexForText = 0;
@@ -574,6 +575,7 @@ bool iParser::hasStartEndDateTime(string dateTimeString) {
 }
 
 string iParser::setDateTime(string dateTimeString, const string modifierType) {
+	assert(dateTimeString != STRING_BLANK);
 	assert(modifierType != STRING_BLANK);
 	unsigned int numberOfCommas = retrieveCount(dateTimeString, CHAR_COMMA);
 
@@ -609,6 +611,8 @@ string iParser::setDateTime(string dateTimeString, const string modifierType) {
 }
 
 string iParser::splitAndSetDateTime(string dateTimeString, const string commandType) {
+	assert(dateTimeString != STRING_BLANK);
+	assert(commandType != STRING_BLANK);
 	unsigned int startIndex = 0;
 	unsigned int endIndex = dateTimeString.find_first_of(",");
 
@@ -788,10 +792,7 @@ string iParser::splitAndSetTwoCommaStartEndDateTime(const string dateTimeString)
 
 
 bool iParser::isValidDate(string dateString, string& dateToBeSet) {
-	if (dateString == STRING_BLANK) {
-		return false;
-	}
-
+	assert(dateString != STRING_BLANK);
 	trimText(dateString);
 
 	try {
@@ -816,9 +817,7 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 }
 
 bool iParser::isValidTime(string timeString, string& timeToBeSet) {
-	if (timeString == STRING_BLANK) {
-		return false;
-	}
+	assert(timeString != STRING_BLANK);
 
 	removeWhiteSpace(timeString);
 
@@ -1152,6 +1151,8 @@ bool iParser::isAppropriateAMHour(const string hourString) {
 }
 
 bool iParser::isAppropriateTime(const string hour, const string minute, const string suffix) {
+	assert(hour != STRING_BLANK);
+	assert(minute != STRING_BLANK);
 	bool isValid = true;
 
 	if (!areDigits(hour) || !areDigits(minute)) {
@@ -1191,6 +1192,7 @@ bool iParser::hasNoDayButHasTime(const string dateTimeString) {
 }
 
 bool iParser::isModifier(string modifier) {
+	assert(modifier != STRING_BLANK);
 	convertToLowerCase(modifier);
 
 	return (modifier == MODIFIER_NAME || modifier == MODIFIER_DATE ||
@@ -1218,6 +1220,7 @@ bool iParser::isWhiteSpace(const char character) {
 }
 
 unsigned int iParser::retrieveCount(string text, const char character) {
+	assert(text != STRING_BLANK);
 	unsigned int count = 0;
 	unsigned int index;
 

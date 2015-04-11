@@ -585,6 +585,11 @@ public:
 		outputCompletion = trueStory.setCompletion(isCompleted);
 		Assert::AreEqual(isCompleted, outputCompletion);
 	}
+
+	TEST_METHOD(ItemTestSetLastUpdate) {
+		// Joon Fai
+	}
+
 	};
 
 	TEST_CLASS(TEST_GET_ITEM) {
@@ -714,6 +719,11 @@ public:
 		outputCompletion = trueStory.getCompletion();
 		Assert::AreEqual(isCompleted, outputCompletion);
 	}
+
+	TEST_METHOD(ItemTestGetLastUpdate) {
+		// Joon Fai
+	}
+
 	};
 
 	TEST_CLASS(TEST_DISPLAY) {
@@ -989,6 +999,37 @@ public:
 		item3 = NULL;
 
 	}
+
+	TEST_METHOD(ScheduleTestClearDisplaySchedule) {
+		Schedule scheduleToTestClearDisplaySchedule;
+		vector<Item> displayScheduleCopy;
+
+		Item* item1 = new Item(string("Item #1"));
+		item1->setItemID(1);
+
+		Item* item2 = new Item(string("Item #2"));
+		item2->setItemID(2);
+
+		Item* item3 = new Item(string("Item #3"));
+		item3->setItemID(3);
+
+		Item* item4 = new Item(string("Item #4"));
+		item4->setItemID(4);
+
+		scheduleToTestClearDisplaySchedule.addItem(item1);
+		scheduleToTestClearDisplaySchedule.addItem(item2);
+		scheduleToTestClearDisplaySchedule.addItem(item3);
+		scheduleToTestClearDisplaySchedule.addItem(item4);
+
+		scheduleToTestClearDisplaySchedule.resetDisplaySchedule();
+		displayScheduleCopy = scheduleToTestClearDisplaySchedule.retrieveDisplaySchedule();
+		Assert::AreEqual(4, int(displayScheduleCopy.size()));
+
+		scheduleToTestClearDisplaySchedule.clearDisplaySchedule();
+		displayScheduleCopy = scheduleToTestClearDisplaySchedule.retrieveDisplaySchedule();
+		Assert::AreEqual(0, int(displayScheduleCopy.size()));
+	}
+
 	};
 
 	TEST_CLASS(TEST_CONVERSION) {
@@ -2248,7 +2289,7 @@ public:
 
 		keywordSchedule.resetDisplaySchedule();
 		Assert::AreEqual(5, int(keywordSchedule.getSizeOfDisplaySchedule()));
-		
+
 		filteredVectorByKeyword = keywordSchedule.retrieveDisplayScheduleFilteredByKeyword(string("wahlau eh"));
 		Assert::AreEqual(3, int(filteredVectorByKeyword.size()));
 		Assert::AreEqual(1, int(filteredVectorByKeyword[0].getItemID()));
@@ -2630,7 +2671,56 @@ public:
 	}
 
 	TEST_METHOD(TestSortByLastUpdate) {
-		// TODO: Your test code here
+		Schedule scheduleSortedByUpdate;
+		vector<Item> sortedVector;
+
+		Item *item4 = new Item(string("This is Item #4"));
+		item4->setItemID(4);
+		item4->setDescription(string("before editing"));
+
+		int time1 = time(0);
+		int time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
+		Item *item2 = new Item(string("This is Item #2"));
+		item2->setItemID(2);
+		item2->setDescription(string("before editing"));
+
+		time1 = time(0);
+		time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
+		Item *item1 = new Item(string("This is Item #1"));
+		item1->setItemID(1);
+		item1->setDescription(string("before editing"));
+
+		time1 = time(0);
+		time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
+		Item *item3 = new Item(string("This is Item #3"));
+		item3->setItemID(3);
+		item3->setDescription(string("before editing"));
+
+		scheduleSortedByUpdate.addItem(item1);
+		scheduleSortedByUpdate.addItem(item2);
+		scheduleSortedByUpdate.addItem(item3);
+		scheduleSortedByUpdate.addItem(item4);
+
+		scheduleSortedByUpdate.resetDisplaySchedule();
+		Assert::AreEqual(4, int(scheduleSortedByUpdate.getSizeOfSchedule()));
+
+		sortedVector = scheduleSortedByUpdate.retrieveDisplayScheduleByLastUpdate();
+		Assert::AreEqual(item3->getItemID(), sortedVector[0].getItemID());
+		Assert::AreEqual(item1->getItemID(), sortedVector[1].getItemID());
+		Assert::AreEqual(item2->getItemID(), sortedVector[2].getItemID());
+		Assert::AreEqual(item4->getItemID(), sortedVector[3].getItemID());
 	}
 
 	};
