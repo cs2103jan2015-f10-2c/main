@@ -542,9 +542,11 @@ namespace ItemTest {
 public:
 
 	TEST_METHOD(TestSetItemName) {
-		Item trueStory;
-
 		string itemName("Project Marriage");
+		Item trueStory (itemName);
+		Assert::AreEqual(itemName, trueStory.getItemName());
+
+		itemName = "Love Forever";
 		string outputName = trueStory.setItemName(itemName);
 		Assert::AreEqual(itemName, outputName);
 
@@ -558,7 +560,9 @@ public:
 	}
 
 	TEST_METHOD(TestSetDescription) {
-		Item trueStory;
+		string itemName = "Love Story";
+		unsigned int itemID = 100;
+		Item trueStory(itemName, itemID);
 
 		string description("Joon Fai and Gantian are going to get married soon.");
 		string outputDesc = trueStory.setDescription(description);
@@ -574,7 +578,8 @@ public:
 	}
 
 	TEST_METHOD(TestSetStartTime) {
-		Item trueStory;
+		unsigned int itemID = 21;
+		Item trueStory (itemID);
 
 		DateTime dateTime(1994, 12, 12);
 		DateTime outputDateTime = trueStory.setStartTime(dateTime);
@@ -771,9 +776,11 @@ public:
 	TEST_METHOD(TestGetItemID) {
 		Item trueStory;
 
-		unsigned int itemID = 20091992;
-		trueStory.setItemID(itemID);
 		unsigned int outputID = trueStory.getItemID();
+		Assert::AreEqual((unsigned int) 0, outputID);
+
+		unsigned int itemID = 20091992;
+		outputID = trueStory.setItemID(itemID);
 		Assert::AreEqual(itemID, outputID);
 	}
 
@@ -823,12 +830,12 @@ public:
 		DateTime dateTime(1994, 12, 12, 20, 9);
 		item.setStartTime(dateTime);
 		string outputString = item.displayStartTime();
-		Assert::AreEqual((string) "1994 12 12 20:09", outputString);
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
 
 		DateTime dateOnly(1992, 9, 20);
 		item.setStartTime(dateOnly);
 		outputString = item.displayStartTime();
-		Assert::AreEqual((string) "1992 09 20", outputString);
+		Assert::AreEqual((string) "1992/09/20", outputString);
 
 		DateTime timeOnly;
 		timeOnly.setHour(9);
@@ -844,12 +851,12 @@ public:
 		DateTime dateTime(1994, 12, 12, 20, 9);
 		item.setEndTime(dateTime);
 		string outputString = item.displayEndTime();
-		Assert::AreEqual((string) "1994 12 12 20:09", outputString);
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
 
 		DateTime dateOnly(1992, 9, 20);
 		item.setEndTime(dateOnly);
 		outputString = item.displayEndTime();
-		Assert::AreEqual((string) "1992 09 20", outputString);
+		Assert::AreEqual((string) "1992/09/20", outputString);
 
 		DateTime timeOnly;
 		timeOnly.setHour(9);
@@ -859,20 +866,62 @@ public:
 		Assert::AreEqual((string) "09:20", outputString);
 	}
 
+	TEST_METHOD(TestDisplayStartTimeForUser) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setStartTime(dateTime);
+		string outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setStartTime(dateOnly);
+		outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setStartTime(timeOnly);
+		outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayEndTimeForUser) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setEndTime(dateTime);
+		string outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setEndTime(dateOnly);
+		outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setEndTime(timeOnly);
+		outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
 	TEST_METHOD(TestDisplayItemForUser) {
 		Item item;
 		ostringstream outputString;
 
 		item.setItemName("Short Jog");
-		outputString << "Name:\tShort Jog\n";
+		outputString << "Name:\t\tShort Jog\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
 		item.setStartTime(2015, 3, 17, 6, 30);
-		outputString << "Start Time:\t2015 03 17 06:30\n";
+		outputString << "Start Time:\t17/03/2015 06:30\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
 		item.setEndTime(2015, 3, 17, 7, 0);
-		outputString << "End Time:\t2015 03 17 07:00\n";
+		outputString << "End Time:\t17/03/2015 07:00\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
 		item.setDescription("4km in 30 minutes");
@@ -882,12 +931,14 @@ public:
 		item.setItemID(1992);
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
-		item.setLabel('P');
-		Assert::AreEqual(outputString.str(), item.displayItemForUser());
-
 		item.setPriority('H');
+		outputString << "Priority:\tH\n";
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 
+		item.setLabel('P');
+		outputString << "Label:\tP\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+		
 		item.setCompletion(true);
 		Assert::AreEqual(outputString.str(), item.displayItemForUser());
 	}
@@ -900,13 +951,13 @@ public:
 		outputString << "Item ID:\t1992\n";
 
 		item.setItemName("Short Jog");
-		outputString << "Name:\tShort Jog\n";
+		outputString << "Name:\t\tShort Jog\n";
 
 		item.setStartTime(2015, 3, 17, 6, 30);
-		outputString << "Start Time:\t2015 03 17 06:30\n";
+		outputString << "Start Time:\t17/03/2015 06:30\n";
 
 		item.setEndTime(2015, 3, 17, 7, 0);
-		outputString << "End Time:\t2015 03 17 07:00\n";
+		outputString << "End Time:\t17/03/2015 07:00\n";
 
 		item.setDescription("4km in 30 minutes");
 		outputString << "Description:\t4km in 30 minutes\n";

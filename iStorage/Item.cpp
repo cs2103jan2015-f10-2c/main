@@ -280,7 +280,7 @@ string Item::displayItemForUser() {
 
 	try {
 		if (hasValidItemStartTime()) {
-			displayOutput << "Start Time:\t" << _startTime.displayDateTime() << endl;
+			displayOutput << "Start Time:\t" << _startTime.displayDateTimeForUser() << endl;
 		}
 
 		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
@@ -293,7 +293,7 @@ string Item::displayItemForUser() {
 
 	try {
 		if (hasValidItemEndTime()) {
-			displayOutput << "End Time:\t" << _endTime.displayDateTime() << endl;
+			displayOutput << "End Time:\t" << _endTime.displayDateTimeForUser() << endl;
 		}
 
 		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
