@@ -1184,7 +1184,8 @@ bool iParser::isModifier(string modifier) {
 		modifier == MODIFIER_DUE || modifier == MODIFIER_START ||
 		modifier == MODIFIER_END || modifier == MODIFIER_DESCRIPTION ||
 		modifier == MODIFIER_DESC || modifier == MODIFIER_LABEL ||
-		modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P);
+		modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P ||
+		modifier == MODIFIER_REMOVE || modifier == MODIFIER_RMV);
 }
 
 bool iParser::areDigits(const string text) {
@@ -1234,14 +1235,4 @@ string iParser::setParseInfo(string command, string text) {
 string iParser::clearParseInfo() {
 	_parseInfo.clear();
 	return MESSAGE_SUCCESS;
-}
-
-void iParser::showParseInfo() {
-	list<COMMAND_AND_TEXT>::iterator iter;
-	int i = 0;
-
-	for (iter = _parseInfo.begin(); iter != _parseInfo.end(); i++, iter++) {
-		cout << "Command " << ": " << iter->command
-			<< " Text: " << iter->text << endl;
-	}
 }
