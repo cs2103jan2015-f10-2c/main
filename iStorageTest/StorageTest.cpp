@@ -2258,7 +2258,7 @@ public:
 
 		keywordSchedule.resetDisplaySchedule();
 		Assert::AreEqual(5, int(keywordSchedule.getSizeOfDisplaySchedule()));
-		
+
 		filteredVectorByKeyword = keywordSchedule.retrieveDisplayScheduleFilteredByKeyword(string("wahlau eh"));
 		Assert::AreEqual(3, int(filteredVectorByKeyword.size()));
 		Assert::AreEqual(1, int(filteredVectorByKeyword[0].getItemID()));
@@ -2643,24 +2643,39 @@ public:
 		Schedule scheduleSortedByUpdate;
 		vector<Item> sortedVector;
 
-		Item *item1 = new Item(string("This is Item #1"));
-		item1->setItemID(1);
-		item1->setDescription(string("before editing"));
+		Item *item4 = new Item(string("This is Item #4"));
+		item4->setItemID(4);
+		item4->setDescription(string("before editing"));
+
+		int time1 = time(0);
+		int time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
 
 		Item *item2 = new Item(string("This is Item #2"));
 		item2->setItemID(2);
 		item2->setDescription(string("before editing"));
 
+		time1 = time(0);
+		time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
+		Item *item1 = new Item(string("This is Item #1"));
+		item1->setItemID(1);
+		item1->setDescription(string("before editing"));
+
+		time1 = time(0);
+		time2 = time(0);
+		while (time2 - time1 < 2) {
+			time2 = time(0);
+		}
+
 		Item *item3 = new Item(string("This is Item #3"));
 		item3->setItemID(3);
 		item3->setDescription(string("before editing"));
-
-		Item *item4 = new Item(string("This is Item #4"));
-		item4->setItemID(4);
-		item4->setDescription(string("before editing"));
-
-		item1->setStartTime(2015, 4, 10);
-		item4->setDescription(string("Has been edited!"));
 
 		scheduleSortedByUpdate.addItem(item1);
 		scheduleSortedByUpdate.addItem(item2);
@@ -2669,12 +2684,12 @@ public:
 
 		scheduleSortedByUpdate.resetDisplaySchedule();
 		Assert::AreEqual(4, int(scheduleSortedByUpdate.getSizeOfSchedule()));
+
 		sortedVector = scheduleSortedByUpdate.retrieveDisplayScheduleByLastUpdate();
-		Assert::AreEqual(item4->getItemID(), sortedVector[0].getItemID());
+		Assert::AreEqual(item3->getItemID(), sortedVector[0].getItemID());
 		Assert::AreEqual(item1->getItemID(), sortedVector[1].getItemID());
 		Assert::AreEqual(item2->getItemID(), sortedVector[2].getItemID());
-		Assert::AreEqual(item3->getItemID(), sortedVector[3].getItemID());
-
+		Assert::AreEqual(item4->getItemID(), sortedVector[3].getItemID());
 	}
 
 	};
