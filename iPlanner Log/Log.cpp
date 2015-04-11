@@ -8,3 +8,7 @@ void Log::writeToLogFile(string stringToBeLogged) {
 
 	writeFile.close();
 }
+
+void Log::clearLogFile() {
+	ofstream writeFile("log.txt");
+}

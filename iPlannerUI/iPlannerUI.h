@@ -413,6 +413,7 @@ namespace iPlannerUI {
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
 				 
 				 Log newLog;
+				 newLog.clearLogFile();
 				 newLog.writeToLogFile("\nLog file created");
 				 
 				 testLogic->retrieveBasicInformationFromTextFile();
