@@ -21,6 +21,7 @@ const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS = "ITEM VE
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_FAILURE = "ITEM VERIFICATION:: Invalid ID";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS = "ITEM VERIFICATION:: Valid Priority";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE = "ITEM VERIFICATION:: Invalid Priority";
+const string ItemVerification::EXCEPTION_SPOILT_BOOL = "This boolean is spoilt";
 const int ItemVerification::ITEM_VERIFICATION_INT_ZERO = 0;
 const int ItemVerification::ITEM_VERIFICATION_INT_MINUS_ONE = -1;
 
@@ -172,6 +173,70 @@ bool ItemVerification::isValidItem() {
 	bool hasValidID = isValidID();
 	bool hasValidPriority = isValidPriority();
 	bool hasValidLabel = isValidLabel();
+
+	try {
+		if (hasValidName == true && hasValidName == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidDescription == true && hasValidDescription == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidStartDateTime == true && hasValidStartDateTime == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidEndDateTime == true && hasValidEndDateTime == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidTimeFrame == true && hasValidTimeFrame == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidID == true && hasValidID == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidPriority == true && hasValidPriority == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidLabel == true && hasValidLabel == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
 
 	if (hasValidName &&
 		hasValidDescription &&

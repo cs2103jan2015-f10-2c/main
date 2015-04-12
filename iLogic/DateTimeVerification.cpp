@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <exception>
 #include "DateTimeVerification.h"
 
 const int DateTimeVerification::DATETIME_VERIFICATION_MIN_YEAR = 0;
@@ -218,11 +219,7 @@ bool DateTimeVerification::isValidDateTime() {
 			return true;
 		} else if (!hasYear() && !hasMonth() && !hasDay() && !hasHour() && !hasMinute()) {
 			return true;
-		}
-		//		else if (hasMonthDay() && isValidTime()) {
-		//			return true;
-		//		}
-		else {
+		} else {
 			return false;
 		}
 	} else {

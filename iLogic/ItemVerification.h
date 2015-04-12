@@ -39,6 +39,8 @@ private:
 	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS;
 	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE;
 
+	static const string EXCEPTION_SPOILT_BOOL;
+
 	static const int ITEM_VERIFICATION_INT_ZERO;
 	static const int ITEM_VERIFICATION_INT_MINUS_ONE;
 
