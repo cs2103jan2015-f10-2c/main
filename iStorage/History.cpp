@@ -11,11 +11,23 @@ const string History::ERROR_ADD = "ERROR: Command and Item were not recorded.";
 const string History::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
 const string History::RESET_COMPLETION = "Reset completed.";
 
+const string History::LOG_CONSTRUCTHISTORY = "HISTORY::ConstructHistory";
+const string History::LOG_DESTRUCTHISTORY = "HISTORY::DestructHistory";
+const string History::LOG_ITEMCOMMAND = "HISTORY::AddItemCommand";
+const string History::LOG_CLEARCOMMAND = "HISTORY::AddClearCommand";
+const string History::LOG_UNDOITEM = "HISTORY::UndoItemCommand";
+const string History::LOG_UNDOCLEAR = "HISTORY::UndoClearCommand";
+const string History::LOG_RESETHISTORY = "HISTORY::Reset";
+
 //	Default Constructor
-History::History() {}
+History::History() {
+	_historyLogger.writeToLogFile(LOG_CONSTRUCTHISTORY);
+}
 
 //	Default Destructor
-History::~History() {}
+History::~History() {
+	_historyLogger.writeToLogFile(LOG_DESTRUCTHISTORY);
+}
 
 //	Returns true if command is add, delete, or replace
 bool History::isNormalHistoryCommand(string command) {
@@ -48,9 +60,11 @@ string History::addCommand(string command, Item item) {
 		_commandStack.push(command);
 		_itemStack.push(item);
 
+		_historyLogger.writeToLogFile(LOG_ITEMCOMMAND + command);
 		return (command + item.displayItemFullDetails());
 	}
 
+	_historyLogger.writeToLogFile(LOG_ITEMCOMMAND + ERROR_ADD);
 	return ERROR_ADD;
 }
 
@@ -59,6 +73,7 @@ string History::addClearCommand(vector<Item> clearedSchedule) {
 	_commandStack.push(COMMAND_CLEAR);
 	_scheduleStack.push(clearedSchedule);
 
+	_historyLogger.writeToLogFile(LOG_CLEARCOMMAND);
 	return COMMAND_CLEAR;
 }
 
@@ -71,16 +86,19 @@ string History::undoLastCommand(string& command, Item& latestItem, vector<Item>&
 			latestItem = _itemStack.top();
 			removeUndoneCommand();
 
+			_historyLogger.writeToLogFile(LOG_UNDOITEM + command);
 			return (command + "\n" + latestItem.displayItemFullDetails());
 		} else if (isClearCommand(command)) {
 			lastestClearedSchedule = _scheduleStack.top();
 			_commandStack.pop();
 			_scheduleStack.pop();
 
+			_historyLogger.writeToLogFile(LOG_UNDOCLEAR + command);
 			return command;
 		}
 	}
 
+	_historyLogger.writeToLogFile(LOG_UNDOITEM + ERROR_EMPTYSTACKS);
 	return ERROR_EMPTYSTACKS;
 }
 
@@ -107,5 +125,6 @@ string History::reset() {
 		_itemStack.pop();
 	}
 
+	_historyLogger.writeToLogFile(LOG_RESETHISTORY);
 	return RESET_COMPLETION;
 }

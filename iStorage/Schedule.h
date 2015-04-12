@@ -23,6 +23,7 @@ private:
 	static const string COMMAND_CLEAR;
 	static const string ERROR_ADD;
 	static const string ERROR_EMPTYSTACKS;
+
 	static const string LOG_ADDITEM;
 	static const string LOG_RETRIEVEITEM;
 	static const string LOG_REPLACEITEM;
