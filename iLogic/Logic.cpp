@@ -763,7 +763,7 @@ START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
 	iss >> YYYY >> MM >> DD >> hh >> mm;
 	DateTime startTime = interpretStartEndTime(MODIFIER_START, YYYY, MM, DD, hh, mm);
 	iss >> YYYY >> MM >> DD >> hh >> mm;
-	DateTime endTime = interpretStartEndTime(MODIFIER_START, YYYY, MM, DD, hh, mm);
+	DateTime endTime = interpretStartEndTime(MODIFIER_END, YYYY, MM, DD, hh, mm);
 	_startEndTime.startTime = startTime;
 	_startEndTime.endTime = endTime;
 	return _startEndTime;
