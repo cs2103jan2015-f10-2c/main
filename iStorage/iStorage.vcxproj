@@ -75,6 +75,11 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Schedule.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iPlanner Log\iPlanner Log.vcxproj">
+      <Project>{4f485004-65d0-4788-a39b-eee5fd9f7ba8}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
