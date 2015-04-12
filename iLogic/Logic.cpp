@@ -245,42 +245,48 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
 		cout << "TEXT : " << iter->text << endl;
 	}
 	/*Debugging Ends*/
-	if (command == COMMAND_ADD) {
-		returnMessage = addTask(parseInfoToBeProcessed);
-	} else if (command == COMMAND_DELETE) {
-		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
-		cout << "LINEINDEX : " << lineIndexToBeDeleted << endl;
-		returnMessage = deleteTask(lineIndexToBeDeleted);
-	} else if (command == COMMAND_EDIT){
-		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
-		returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
-	} else if (command == COMMAND_UNDO){
-		returnMessage = undoPreviousAction();
-	} else if (command == COMMAND_SORT){
-		returnMessage = changeCurrentSorting(itemInformation);
-	} else if (command == COMMAND_SEARCH){
-		returnMessage = modifyKeywordVec(itemInformation);
-	} else if (command == COMMAND_VIEW){
-		clearKeyWordVec();
-		returnMessage = filterTask(itemInformation);
-	} else if (command == COMMAND_SAVE){
-		changeSavingDirectory(itemInformation);
-		returnMessage = MESSAGE_SUCCESSFUL_SAVE + getDirectoryAndFileName();
-	} else if (command == COMMAND_CLEAR){
-		_logicSchedule.clearDisplaySchedule();
-		returnMessage = MESSAGE_CLEAR;
-	} else if (command == COMMAND_EXIT){
-		saveBasicInformationToTextFile();
-		exit(0);
-	} else if (command == COMMAND_DONE){
-		unsigned int lineIndex = convertToDigit(itemInformation);
-		returnMessage = markDone(lineIndex);
-	} else if (command == COMMAND_UNDONE){
-		unsigned int lineIndex = convertToDigit(itemInformation);
-		returnMessage = markUndone(lineIndex);
-	} else {
-		printInvalidInput();
-		returnMessage = MESSAGE_INVALID_INPUT;
+	try{
+		if (command == COMMAND_ADD) {
+			returnMessage = addTask(parseInfoToBeProcessed);
+		} else if (command == COMMAND_DELETE) {
+			unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
+			cout << "LINEINDEX : " << lineIndexToBeDeleted << endl;
+			returnMessage = deleteTask(lineIndexToBeDeleted);
+		} else if (command == COMMAND_EDIT){
+			unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
+			returnMessage = editTask(parseInfoToBeProcessed, lineIndexToBeEdited);
+		} else if (command == COMMAND_UNDO){
+			returnMessage = undoPreviousAction();
+		} else if (command == COMMAND_SORT){
+			returnMessage = changeCurrentSorting(itemInformation);
+		} else if (command == COMMAND_SEARCH){
+			returnMessage = modifyKeywordVec(itemInformation);
+		} else if (command == COMMAND_VIEW){
+			clearKeyWordVec();
+			returnMessage = filterTask(itemInformation);
+		} else if (command == COMMAND_SAVE){
+			changeSavingDirectory(itemInformation);
+			returnMessage = MESSAGE_SUCCESSFUL_SAVE + getDirectoryAndFileName();
+		} else if (command == COMMAND_CLEAR){
+			_logicSchedule.clearDisplaySchedule();
+			returnMessage = MESSAGE_CLEAR;
+		} else if (command == COMMAND_EXIT){
+			saveBasicInformationToTextFile();
+			exit(0);
+		} else if (command == COMMAND_DONE){
+			unsigned int lineIndex = convertToDigit(itemInformation);
+			returnMessage = markDone(lineIndex);
+		} else if (command == COMMAND_UNDONE){
+			unsigned int lineIndex = convertToDigit(itemInformation);
+			returnMessage = markUndone(lineIndex);
+		} else {
+			printInvalidInput();
+			returnMessage = MESSAGE_INVALID_INPUT;
+			throw MESSAGE_INVALID_INPUT;
+		}
+	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
 	}
 	string loggerString = command + " : " + returnMessage;
 	_logicLogger.writeToLogFile(loggerString);
@@ -429,30 +435,36 @@ string Logic::undoPreviousAction(){
 
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
 	assert(parseInfoToBeProcessed.size() > 0);
-	if (parseInfoToBeProcessed.size() == 1){
-		return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INPUT;
-	} else if (isValidLineIndex(lineIndexToBeEdited)){
+	try{
+		if (parseInfoToBeProcessed.size() == 1){
+			return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INPUT;
+		} else if (isValidLineIndex(lineIndexToBeEdited)){
 
-		Item *editedItemToBeReplaced;
-		editedItemToBeReplaced = new Item;
-		*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
-		string modifiedParts = modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
+			Item *editedItemToBeReplaced;
+			editedItemToBeReplaced = new Item;
+			*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
+			string modifiedParts = modifyItem(parseInfoToBeProcessed, editedItemToBeReplaced);
 
-		ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
-		if (verifier.isValidItem()){
-			replaceItemInSchedule(editedItemToBeReplaced, lineIndexToBeEdited);
-			return MESSAGE_TASK + to_string(lineIndexToBeEdited) + MESSAGE_SUCCESSFUL_EDIT + modifiedParts;
+			ItemVerification verifier(*editedItemToBeReplaced, editedItemToBeReplaced->getItemID());
+			if (verifier.isValidItem()){
+				replaceItemInSchedule(editedItemToBeReplaced, lineIndexToBeEdited);
+				return MESSAGE_TASK + to_string(lineIndexToBeEdited) + MESSAGE_SUCCESSFUL_EDIT + modifiedParts;
+			} else{
+				string errorList = getErrorList(verifier);
+				removeItemPointer(editedItemToBeReplaced);
+				printEditTaskInvalidItemParts(verifier);
+				return MESSAGE_FAILED_EDIT + errorList;
+			}
+
 		} else{
-			string errorList = getErrorList(verifier);
-			removeItemPointer(editedItemToBeReplaced);
-			printEditTaskInvalidItemParts(verifier);
-			return MESSAGE_FAILED_EDIT + errorList;
+			printEditTaskInvalidLineIndex();
+			throw MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INDEX;
 		}
-
-	} else{
-		printEditTaskInvalidLineIndex();
-		return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INDEX;
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INDEX;
 }
 
 
@@ -694,13 +706,19 @@ vector<Item> Logic::sortTask(){
 
 
 string Logic::changeCurrentSorting(string sortingMethod){
-	if (isValidSortingMethod(sortingMethod)){
-		changeCurrentSortingAsUserSpecified(sortingMethod);
-		return MESSAGE_SUCCESSFUL_SORT + _currentSorting;
-	} else {
-		printSortTaskFailed();
-		return MESSAGE_FAILED_SORT + MESSAGE_INVALID_SORTTYPE;
+	try{
+		if (isValidSortingMethod(sortingMethod)){
+			changeCurrentSortingAsUserSpecified(sortingMethod);
+			return MESSAGE_SUCCESSFUL_SORT + _currentSorting;
+		} else {
+			printSortTaskFailed();
+			throw MESSAGE_FAILED_SORT + MESSAGE_INVALID_SORTTYPE;
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return MESSAGE_FAILED_SORT + MESSAGE_INVALID_SORTTYPE;
 }
 
 
@@ -779,20 +797,9 @@ DateTime Logic::interpretStartEndTime(string identifier, int YYYY, int MM, int D
 	if (DD == -1){
 		DD = getCurrentTime().getDay();
 	}
-	if (identifier == "start" && hh == -1 && mm == -1){
-		hh = 0;
-		mm = 0;
-	}
 	if (identifier == "end" && hh == -1 && mm == -1){
 		hh = 23;
 		mm = 59;
-	}
-
-	if (hh == -1){
-		hh = 0;
-	}
-	if (mm == -1){
-		mm = 0;
 	}
 	cout << YYYY << " " << MM << " " << DD << " " << hh << " " << mm << endl;
 	DateTime startEndTime(YYYY, MM, DD, hh, mm);
@@ -876,12 +883,20 @@ string Logic::searchTask(){
 	for (int i = 0; i < _keywordVec.size(); i++){
 		_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(_keywordVec[i]);
 	}
-	if (getDisplayScheduleSize() == 0){
-		return MESSAGE_NO_TASK_FOUND;
-	} else{
-		_currentFilter = FILTER_KEYWORD;
-		return MESSAGE_TASK_FOUND;
+	try{
+		if (getDisplayScheduleSize() == 0){
+			return MESSAGE_NO_TASK_FOUND;
+		} else if (getDisplayScheduleSize() > 0){
+			_currentFilter = FILTER_KEYWORD;
+			return MESSAGE_TASK_FOUND;
+		} else {
+			throw MESSAGE_INVALID_INPUT;
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return MESSAGE_INVALID_INPUT;
 }
 
 string Logic::trimText(string& text) {
@@ -896,7 +911,6 @@ string Logic::trimFront(string text) {
 	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
 		startIndex++;
 	}
-
 	return text.substr(startIndex);
 }
 
@@ -1011,14 +1025,20 @@ string Logic::getDirectoryAndFileName(){
 
 
 string Logic::retrieveBasicInformation(){
-	if (isExistingFileInDirectory(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME)){
-		retrieveBasicInformationFromTextFile();
-		return MESSAGE_RETRIEVED_FROM_TEXT_FILE;
-	} else {
-		//new user or basicinformation textfile is corrupted
-		createNewTextFile();
-		return MESSAGE_FILE_NOT_EXISTING;
+	try{
+		if (isExistingFileInDirectory(TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME)){
+			retrieveBasicInformationFromTextFile();
+			return MESSAGE_RETRIEVED_FROM_TEXT_FILE;
+		} else {
+			//new user or basicinformation textfile is corrupted
+			createNewTextFile();
+			throw MESSAGE_FILE_NOT_EXISTING;
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return MESSAGE_FILE_NOT_EXISTING;
 }
 
 
