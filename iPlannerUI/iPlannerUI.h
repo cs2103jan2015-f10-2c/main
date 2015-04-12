@@ -406,7 +406,7 @@ namespace iPlannerUI {
 					 String^ outcomeString = gcnew String(displayMessage.message.c_str());
 					 commandOutcomeLabel->Text = outcomeString;
 					 outputBox2->SelectionStart = 0;
-					 newLog.writeToLogFile("\n");
+					 newLog.writeToLogFile("");
 					 commandInputBox->Clear();
 				 }
 
