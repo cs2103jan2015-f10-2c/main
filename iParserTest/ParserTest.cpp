@@ -401,45 +401,49 @@ public:
 		Assert::AreEqual(expectedBlank, actualBlank);
 	}
 
-	//TEST_METHOD(parserRemoveWhiteSpace) {
-	//	string actual = "   1 2 \t 3 \t 4 5\t\t\t";
-	//	string expected = "12345";
+	TEST_METHOD(parserRemoveWhiteSpace) {
+		string actual = "   1 2 \t 3 \t 4 5\t\t\t";
+		string expected = "12345";
+		string actualWhiteSpace = "  \t\t  ";
+		string expectedWhiteSpace = "";
 
-	//	testParser.removeWhiteSpace(actual);
-	//	Assert::AreEqual(expected, actual);
-	//}
+		testParser.removeWhiteSpace(actual);
+		Assert::AreEqual(expected, actual);
+		testParser.removeWhiteSpace(actualWhiteSpace);
+		Assert::AreEqual(expectedWhiteSpace, actualWhiteSpace);
+	}
 
-	//TEST_METHOD(parserConvertToLowerCaseTest) {
-	//	string actual = "ABCDEFGHIJKLM123456789NOPQRSTUVWXYZ";
-	//	string expected = "abcdefghijklm123456789nopqrstuvwxyz";
+	TEST_METHOD(parserConvertToLowerCaseTest) {
+		string actual = "ABCDEFGHIJKLM123456789NOPQRSTUVWXYZ";
+		string expected = "abcdefghijklm123456789nopqrstuvwxyz";
 
-	//	testParser.convertToLowerCase(actual);
-	//	Assert::AreEqual(expected, actual);
-	//}
+		testParser.convertToLowerCase(actual);
+		Assert::AreEqual(expected, actual);
+	}
 
-	//TEST_METHOD(parserTrimTextTest) {
-	//	string testText[] = { "   add text   ", "\t\t del text \t\t\t", "  exit\t\t", " ", "" };
-	//	string expected[] = { "add text", "del text", "exit", "", "" };
+	TEST_METHOD(parserTrimTextTest) {
+		string testText[] = { "   add text   ", "\t\t del text \t\t\t", "  exit\t\t", " ", "" };
+		string expected[] = { "add text", "del text", "exit", "", "" };
 
-	//	for (int i = 0; i < 5; i++) {
-	//		testParser.trimText(testText[i]);
-	//		string actual = testText[i];
-	//		Assert::AreEqual(expected[i], actual);
-	//	}
-	//}
+		for (int i = 0; i < 5; i++) {
+			testParser.trimText(testText[i]);
+			string actual = testText[i];
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
 
-	//TEST_METHOD(parserHasStartEndTest) {
-	//	string testDateTime[] = { "10/11/12 to 12/11/12", "10 November 12-12 November 2012", "10 Nov 2012, 12Pm", "1030, 11 Sep 2015" };
+	TEST_METHOD(parserHasStartEndTest) {
+		string testDateTime[] = { "10/11/12 to 12/11/12", "10 November 12-12 November 2012", "10 Nov 2012, 12Pm", "1030, 11 Sep 2015" };
 
-	//	for (int i = 0; i < 4; i++) {
-	//		bool actual = testParser.hasStartEndDateTime(testDateTime[i]);
-	//		if (i < 2) {
-	//			Assert::IsTrue(actual);
-	//		} else {
-	//			Assert::IsFalse(actual);
-	//		}
-	//	}
-	//}
+		for (int i = 0; i < 4; i++) {
+			bool actual = testParser.hasStartEndDateTime(testDateTime[i]);
+			if (i < 2) {
+				Assert::IsTrue(actual);
+			} else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
 
 	//TEST_METHOD(parserSetDateTimeTest) {
 	//	string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030hr, 10/11/12", "930PM, 10 Dec 2015", "1pm" };

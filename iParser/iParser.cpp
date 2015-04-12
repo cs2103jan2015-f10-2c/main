@@ -513,7 +513,7 @@ string iParser::removeConsecutiveWhiteSpace(string& text) {
 string iParser::removeWhiteSpace(string& text) {
 	assert(text != STRING_BLANK);
 	unsigned int index;
-
+	
 	for (index = 0; index < text.length(); index++) {
 		if (isWhiteSpace(text[index])) {
 			text.erase(index, 1);
