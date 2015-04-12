@@ -38,6 +38,7 @@ class Logic
 {
 private:
 	Schedule _logicSchedule;
+	iParser _logicParser;
 	unsigned int _nextItemID;
 	unsigned int _scheduleSize;
 	string _directoryToBeSaved;
@@ -189,7 +190,7 @@ public:
 	//specified by the user
 	//Pre : takes in a parser, and a whole line of user input
 	//Post : returns a message whether each command was executed successfully and the display vector to pass to UI
-	MESSAGE_AND_SCHEDULE initiateCommandAction(iParser parser, string input);
+	MESSAGE_AND_SCHEDULE initiateCommandAction(string input);
 
 
 	//create a structure that consists of message of success or failure of each command
@@ -430,7 +431,7 @@ public:
 	string getErrorList(ItemVerification verifier);
 
 	START_END_TIME getStartEndTime(string infoToBeInterpreted);
-
+	DateTime interpretStartEndTime(int YYYY, int MM, int DD, int hh, int mm);
 	/////////////////////////////////////
 	////*SAVE FILE RELATED FUNCTIONS*////
 	/////////////////////////////////////

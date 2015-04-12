@@ -27,7 +27,6 @@ void main() {
 	}*/
 
 
-	iParser testParser;
 	Logic testLogic;
 	string userInput;
 	list<COMMAND_AND_TEXT> parseInfo;
@@ -38,7 +37,7 @@ void main() {
 
 	cout << "command : ";
 	while (getline(cin, userInput)){
-	testLogic.initiateCommandAction(testParser, userInput);
+	testLogic.initiateCommandAction(userInput);
 	cout << "command : ";
 	}
 

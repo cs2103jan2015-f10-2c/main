@@ -1479,36 +1479,36 @@ public:
 public:
 	TEST_METHOD(InitiateCommandActionTest1) {
 		Logic testLogic;
-		iParser testParser;
+
 
 		/*Add Item 1*/
 		string testInput = "add test item";
 		string expectedMessage = "Task added to schedule : test item";
-		MESSAGE_AND_SCHEDULE actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		MESSAGE_AND_SCHEDULE actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Add Item 2*/
 		testInput = "add dinner with young bin";
 		expectedMessage = "Task added to schedule : dinner with young bin";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Add Item 3*/
 		testInput = "add dinner with joon fai";
 		expectedMessage = "Task added to schedule : dinner with joon fai";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*delete item*/
 		testInput = "Delete 2";
 		expectedMessage = "Task is deleted from schedule";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*delete item*/
 		testInput = "Delete 4";
 		try{
-			testLogic.initiateCommandAction(testParser, testInput);
+			testLogic.initiateCommandAction(testInput);
 		}
 		catch (string actualDeleteMessage) {
 			string expectedDeleteMessage = "Unable to delete task : Invalid index";
@@ -1518,139 +1518,139 @@ public:
 		/*add item*/
 		testInput = "add go dinner with sophie -date 23:59";
 		expectedMessage = "Task added to schedule : go dinner with sophie";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*edit item*/
 		testInput = "edit 1";
 		expectedMessage = "Unable to edit task : Invalid command";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*edit item*/
 		testInput = "edit 1 -desc HAHA";
 		expectedMessage = "Task 1 is edited : description ";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*edit item*/
 		testInput = "edit 2 -end 12:34";
 		expectedMessage = "Task 2 is edited : end ";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*edit item*/
 		testInput = "edit 2 -start 13:34";
 		expectedMessage = "Unable to edit task : Start Date/Time is later than End Date/Time ";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*sort schedule*/
 		testInput = "sort date";
 		expectedMessage = "Schedule sorted by : date";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*sort schedule*/
 		testInput = "sort update";
 		expectedMessage = "Schedule sorted by : update";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*sort schedule*/
 		testInput = "sort priority";
 		expectedMessage = "Schedule sorted by : priority";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*sort schedule*/
 		testInput = "sort name";
 		expectedMessage = "Schedule sorted by : name";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction( testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*sort schedule*/
 		testInput = "sort werwefsd";
 		expectedMessage = "Invalid command";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*filter schedule*/
 		testInput = "view done";
 		expectedMessage = "Schedule filtered by : done";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*filter schedule*/
 		testInput = "view undone";
 		expectedMessage = "Schedule filtered by : undone";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*filter schedule*/
 		testInput = "view all";
 		expectedMessage = "Schedule filtered by : all";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction( testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*search task*/
 		testInput = "search dinner";
 		expectedMessage = "Tasks containing : dinner";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*search task*/
 		testInput = "search sophie";
 		expectedMessage = "Tasks containing : sophie";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*undo*/
 		testInput = "undo";
 		expectedMessage = "Last action reversed";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*undo*/
 		testInput = "undo 234234";
 		expectedMessage = "Invalid command";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*change save file*/
 		testInput = "save c:/testFile/testtest";
 		expectedMessage = "Save directory changed to : c:/testfile/testtest/save.txt";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Mark done*/
 		testInput = "done 1";
 		expectedMessage = "Task 1 is completed";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Mark done*/
 		testInput = "done 4";
 		expectedMessage = "invalid line index";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Mark undone*/
 		testInput = "undone 1";
 		expectedMessage = "Task 1 is undone";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Mark undone*/
 		testInput = "undone 4";
 		expectedMessage = "invalid line index";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction( testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Clear*/
 		testInput = "clear";
 		expectedMessage = "Schedule cleared";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
+		actualMessage = testLogic.initiateCommandAction( testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 	}
 	};

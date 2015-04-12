@@ -228,8 +228,8 @@ void Logic::printViewChanged(){
 ////////////////////////
 
 
-MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) {
-	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(parser, input);
+MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
+	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(_logicParser, input);
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
@@ -724,6 +724,16 @@ START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
 	startEndTime.endTime = endTime;
 	return startEndTime;
 }
+/*
+DateTime Logic::interpretStartEndTime(int YYYY, int MM, int DD, int hh, int mm){
+	if (YYYY == -1){
+		YYYY = getCurrentTime().getYear();
+	}
+	if (MM == -1) {
+		MM = getCurrentTime().getMonth();
+	}
+}*/
+
 void Logic::clearKeyWordVec(){
 	_keywordVec.clear();
 	return;
