@@ -31,7 +31,6 @@ private:
 	static const char DISPLAY_SEPARATOR_DATETIME;
 	static const char DISPLAY_FILLER;
 
-	static const string ERROR_DISPLAYEMPTYDATETIME;
 	static const string ERROR_DATETIMERANGE;
 
 	int _year;
