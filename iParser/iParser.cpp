@@ -248,7 +248,7 @@ string iParser::executeViewParsing(string viewType) {
 		} else if (viewType == STRING_MEDIUM || viewType == STRING_MED || viewType == STRING_M) {
 			setParseInfo(COMMAND_VIEW, STRING_MEDIUM);
 		} else if (viewType == STRING_LOW || viewType == STRING_L) {
-			setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
+			setParseInfo(COMMAND_VIEW, STRING_LOW);
 		} else if (hasStartEndDateTime(viewType)) {
 			splitAndSetViewDateRange(viewType);
 		} else {
