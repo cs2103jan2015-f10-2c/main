@@ -34,6 +34,7 @@ bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
 	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
+		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE);
 		return false;
 	} else {
@@ -54,7 +55,7 @@ bool ItemVerification::isValidStartDateTime() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME);
-		int year = startDateTime.getYear();
+		assert(!_itemVerificationErrors.empty());
 		return false;
 	}
 }
@@ -66,6 +67,7 @@ bool ItemVerification::isValidEndDateTime() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME);
+		assert(!_itemVerificationErrors.empty());
 		return false;
 	}
 }
@@ -80,9 +82,11 @@ bool ItemVerification::isValidTimeFrame() {
 		if (startDateTimeVerification.hasHourMinute() && endDateTimeVerification.hasHourMinute()) {
 			if (startDateTime == endDateTime) {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
 				return false;
 			} else if (startDateTime.isAfter(endDateTime)) {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
 				return false;
 			} else {
 				return true;
@@ -98,6 +102,7 @@ bool ItemVerification::isValidTimeFrame() {
 				return true;
 			} else {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
 				return false;
 			}
 		}
@@ -113,6 +118,7 @@ bool ItemVerification::isValidID() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_ID);
+		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_FAILURE);
 		return false;
 	}
@@ -129,6 +135,7 @@ bool ItemVerification::isValidPriority() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
+		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE);
 		return false;
 	}
@@ -144,6 +151,7 @@ bool ItemVerification::isValidLabel() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_LABEL);
+		assert(!_itemVerificationErrors.empty());
 		return false;
 	}
 }
