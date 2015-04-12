@@ -153,7 +153,7 @@ public:
 		testParseInfo.push_back(testCommandAndText);
 
 		string message = testLogic.addTask(testParseInfo);
-		string expectedMessage = "Unable to add task : ";
+		string expectedMessage = "Unable to add task : Invalid End Date/TIME ";
 		Assert::AreEqual(expectedMessage, message);
 	}
 	};
@@ -1982,8 +1982,8 @@ public:
 			
 			DateTime interpretedDateTime = testLogic.interpretStartEndTime("start",YYYY, MM, DD, hh, mm);
 			Assert::AreEqual(interpretedDateTime.getYear(), 2015);
-			Assert::AreEqual(interpretedDateTime.getHour(), 0);
-			Assert::AreEqual(interpretedDateTime.getMinute(), 0);
+			Assert::AreEqual(interpretedDateTime.getHour(), -1);
+			Assert::AreEqual(interpretedDateTime.getMinute(), -1);
 			
 			DateTime interpretedDateTime2 = testLogic.interpretStartEndTime("end", YYYY, MM, DD, hh, mm);
 			Assert::AreEqual(interpretedDateTime2.getYear(), 2015);
