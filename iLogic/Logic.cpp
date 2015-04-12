@@ -76,8 +76,8 @@ const string Logic::MESSAGE_INVALID_COMPLETION = "invalid completion";
 const string Logic::MESSAGE_TASK_FOUND = "Tasks containing : ";
 const string Logic::MESSAGE_NO_TASK_FOUND = "No task can be found";
 const string Logic::MESSAGE_UNABLE_TO_UNDO = "ERROR: Undo has reached its limit.";
-
-const string  Logic::MESSAGE_READFILE_COMPLETE = "readfile completed";
+const string Logic::MESSAGE_LOGIC = "Logic:: ";
+const string Logic::MESSAGE_READFILE_COMPLETE = "readfile completed";
 const string Logic::MESSAGE_WRITEFILE_COMPLETE = "writefile completed";
 
 char Logic::buffer[300];
@@ -282,7 +282,7 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
 		} else {
 			printInvalidInput();
 			returnMessage = MESSAGE_INVALID_INPUT;
-			throw MESSAGE_INVALID_INPUT;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_INPUT;
 		}
 	}
 	catch (string errorMessage){
@@ -319,6 +319,7 @@ list<COMMAND_AND_TEXT> Logic::getParseInfo(iParser parser, string input){
 
 
 string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
+	assert(parseInfoToBeProcessed.size() > 0);
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
 
@@ -331,7 +332,7 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 			string returnMessage = addItemToSchedule(newItemToBeAdded);
 			return returnMessage;
 		} else{
-			throw MESSAGE_FAILED_ADD;
+			throw MESSAGE_LOGIC + MESSAGE_FAILED_ADD;
 		}
 	}
 	catch (string errorMessage){
@@ -355,6 +356,7 @@ string Logic::addItemToSchedule(Item* newItemToBeAdded){
 
 
 void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
+	assert(parseInfoToBeProcessed.size() > 0);
 	newItem->setItemName(parseInfoToBeProcessed.begin()->text);
 	newItem->setItemID(_nextItemID);
 }
@@ -368,6 +370,7 @@ unsigned int Logic::increaseItemID(){
 
 
 void Logic::removeItemPointer(Item* itemPointer){
+	assert(itemPointer != NULL);
 	itemPointer = NULL;
 	delete itemPointer;
 }
@@ -388,7 +391,7 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 			return displayMessage;
 		} else{
 			printDeleteTaskFailed();
-			throw INVALID_LINE_INDEX;
+			throw MESSAGE_LOGIC + INVALID_LINE_INDEX;
 		}
 	}
 	catch (string errorMessage2){
@@ -419,7 +422,7 @@ string Logic::undoPreviousAction(){
 		if (message != MESSAGE_UNABLE_TO_UNDO){
 			return MESSAGE_SUCCESSFUL_UNDO;
 		} else{
-			throw MESSAGE_UNABLE_TO_UNDO;
+			throw MESSAGE_LOGIC + MESSAGE_UNABLE_TO_UNDO;
 		}
 	}
 	catch (string errorMessage){
@@ -427,6 +430,7 @@ string Logic::undoPreviousAction(){
 	}
 	return MESSAGE_FAILED_UNDO;
 }
+
 
 /////////////////////////////////////
 ////*EDIT TASK RELATED FUNCTIONS*////
@@ -458,7 +462,7 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 
 		} else{
 			printEditTaskInvalidLineIndex();
-			throw MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INDEX;
+			throw MESSAGE_LOGIC + MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INDEX;
 		}
 	}
 	catch (string errorMessage){
@@ -512,7 +516,7 @@ string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemT
 			bool done = true;
 			itemToBeModified->setCompletion(done);
 		} else{
-			throw MESSAGE_INVALID_MODIFIER;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_MODIFIER;
 		}
 	}
 	catch (string errorMessage){
@@ -531,7 +535,7 @@ char Logic::checkPriority(string priorityToBeModified){
 		} else if (priorityToBeModified == "low" || priorityToBeModified == "l" || priorityToBeModified == "L"){
 			return 'L';
 		} else{
-			throw MESSAGE_INVALID_PRIORITY;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_PRIORITY;
 		}
 	}
 	catch (string errorMessage) {
@@ -616,7 +620,7 @@ string Logic::markDone(unsigned int lineIndex){
 			return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_DONE;
 		} else{
 			printInvalidLineIndex();
-			throw INVALID_LINE_INDEX;
+			throw MESSAGE_LOGIC + INVALID_LINE_INDEX;
 		}
 	}
 	catch (string errorMessage){
@@ -632,7 +636,7 @@ string Logic::markUndone(unsigned int lineIndex){
 			return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_UNDONE;
 		} else{
 			printInvalidLineIndex();
-			throw INVALID_LINE_INDEX;
+			throw MESSAGE_LOGIC + INVALID_LINE_INDEX;
 
 		}
 	}
@@ -655,12 +659,13 @@ string Logic::changeCompletion(unsigned int lineIndex, string completion){
 		} else if (completion == COMMAND_UNDONE){
 			done = false;
 		} else{
-			throw MESSAGE_INVALID_COMPLETION;
-			return MESSAGE_INVALID_COMPLETION;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_COMPLETION;
+
 		}
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		return MESSAGE_INVALID_COMPLETION;
 	}
 
 	retrievedItem->setCompletion(done);
@@ -694,7 +699,7 @@ vector<Item> Logic::sortTask(){
 		} else if (_currentSorting == SORT_LAST_UPDATE){
 			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
 		} else{
-			throw MESSAGE_INVALID_SORTTYPE;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_SORTTYPE;
 		}
 	}
 	catch (string errorMessage){
@@ -712,7 +717,7 @@ string Logic::changeCurrentSorting(string sortingMethod){
 			return MESSAGE_SUCCESSFUL_SORT + _currentSorting;
 		} else {
 			printSortTaskFailed();
-			throw MESSAGE_FAILED_SORT + MESSAGE_INVALID_SORTTYPE;
+			throw MESSAGE_LOGIC + MESSAGE_FAILED_SORT + MESSAGE_INVALID_SORTTYPE;
 		}
 	}
 	catch (string errorMessage){
@@ -820,7 +825,7 @@ string Logic::filterByCompletion(bool completion){
 		} else if (completion == false){
 			_currentFilter = FILTER_COMPLETION_UNDONE;
 		} else{
-			throw MESSAGE_INVALID_COMPLETION;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_COMPLETION;
 		}
 	}
 	catch (string errorMessage){
@@ -840,7 +845,7 @@ char Logic::stringConvertToPriorityChar(string priority){
 		} else if (priority == FILTER_PRIORITY_LOW){
 			return 'L';
 		} else {
-			throw MESSAGE_INVALID_PRIORITY;
+			throw MESSAGE_LOGIC+ MESSAGE_INVALID_PRIORITY;
 		}
 	}
 	catch (string errorMessage){
@@ -856,7 +861,7 @@ string Logic::filterByPriority(char priority){
 			_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priority);
 			return _currentFilter;
 		} else {
-			throw MESSAGE_INVALID_PRIORITY;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_PRIORITY;
 		}
 	}
 	catch (string errorMessage){
@@ -890,7 +895,7 @@ string Logic::searchTask(){
 			_currentFilter = FILTER_KEYWORD;
 			return MESSAGE_TASK_FOUND;
 		} else {
-			throw MESSAGE_INVALID_INPUT;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_INPUT;
 		}
 	}
 	catch (string errorMessage){
@@ -1032,7 +1037,7 @@ string Logic::retrieveBasicInformation(){
 		} else {
 			//new user or basicinformation textfile is corrupted
 			createNewTextFile();
-			throw MESSAGE_FILE_NOT_EXISTING;
+			throw MESSAGE_LOGIC + MESSAGE_FILE_NOT_EXISTING;
 		}
 	}
 	catch (string errorMessage){

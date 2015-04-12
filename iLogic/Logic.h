@@ -133,6 +133,7 @@ private:
 	static const string MESSAGE_UNABLE_TO_UNDO;
 	static const string MESSAGE_READFILE_COMPLETE;
 	static const string MESSAGE_WRITEFILE_COMPLETE;
+	static const string MESSAGE_LOGIC;
 
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
