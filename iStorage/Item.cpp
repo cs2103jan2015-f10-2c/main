@@ -103,6 +103,8 @@ Item::Item() {
 
 //	Overloaded Constructor with itemName
 Item::Item(string itemName) {
+	assert(itemName != "");
+	
 	_itemName = itemName;
 	_description = EMPTYFIELD_DESCRIPTION;
 	_itemID = EMPTYFIELD_ITEMID;
@@ -114,6 +116,8 @@ Item::Item(string itemName) {
 
 //	Overloaded Constructor with itemID
 Item::Item(unsigned int itemID) {
+	assert(itemID >= 0);
+
 	_itemID = itemID;
 	_itemName = EMPTYFIELD_ITEMNAME;
 	_description = EMPTYFIELD_DESCRIPTION;
@@ -125,6 +129,9 @@ Item::Item(unsigned int itemID) {
 
 //	Overloaded Constructor with itemName and itemID
 Item::Item(string itemName, unsigned int itemID) {
+	assert(itemName != "");
+	assert(itemID >= 0);
+	
 	_itemID = itemID;
 	_itemName = itemName;
 	_description = EMPTYFIELD_DESCRIPTION;
@@ -199,6 +206,8 @@ DateTime Item::setEndTime(int year, int month, int day, int hour, int minute) {
 
 //	Sets the item ID
 unsigned int Item::setItemID(unsigned int itemID) {
+	assert(itemID >= 0);
+	
 	_itemID = itemID;
 	setLastUpdate();
 	return _itemID;
@@ -227,6 +236,7 @@ bool Item::setCompletion(bool isCompleted) {
 
 //	Retrieves the item name
 string Item::getItemName() {
+	assert(_itemName != "");
 	return _itemName;
 }
 
@@ -251,6 +261,7 @@ CTime Item::getLastUpdate() {
 
 //	Retrieves the item ID
 unsigned int Item::getItemID() {
+	assert(_itemID >= 0);
 	return _itemID;
 }
 
@@ -274,6 +285,7 @@ string Item::displayItemForUser() {
 	ostringstream displayOutput;
 
 	if (hasValidItemName()) {
+		assert(_itemName != "");
 		displayOutput << "Name:\t\t" << _itemName << endl;
 	}
 
@@ -305,14 +317,17 @@ string Item::displayItemForUser() {
 
 
 	if (hasValidItemDescription()) {
+		assert(_description != "");
 		displayOutput << "Description:\t" << _description << endl;
 	}
 
 	if (hasValidItemPriority()) {
+		assert(_priority != 'E');
 		displayOutput << "Priority:\t" << _priority << endl;
 	}
 
 	if (hasValidItemLabel()) {
+		assert(_label != 'E');
 		displayOutput << "Label:\t" << _label << endl;
 	}
 
@@ -324,12 +339,11 @@ string Item::displayItemFullDetails() {
 	ostringstream displayOutput;
 
 	if (hasValidItemID()) {
+		assert(_itemID >= 0);
 		displayOutput << "Item ID:\t" << _itemID << endl;
 	}
 
 	displayOutput << displayItemForUser();
-
-
 
 	displayOutput << "Completed?\t" << boolalpha << _isCompleted << endl;
 
@@ -349,6 +363,13 @@ string Item::displayEndTime() {
 //	Retrieves the item last updated time (string)
 string Item::displayLastUpdatedTime() {
 	DateTime lastUpdateTime(_lastUpdate.GetYear(), _lastUpdate.GetMonth(), _lastUpdate.GetDay(), _lastUpdate.GetHour(), _lastUpdate.GetMinute());
+	
+	assert(lastUpdateTime.getYear() >= 0);
+	assert(lastUpdateTime.getMonth() >= 0);
+	assert(lastUpdateTime.getDay() >= 0);
+	assert(lastUpdateTime.getHour() >= 0);
+	assert(lastUpdateTime.getMinute() >= 0);
+
 	return lastUpdateTime.displayDateTime();
 }
 
