@@ -345,8 +345,7 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 				if (!hasRemove) {
 					executeRemoveParsing(textWithoutCommand);
 					hasRemove = true;
-				}
-				else {
+				} else {
 					throw MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER;
 				}
 			} else if (command == COMMAND_ADD) {
@@ -884,18 +883,10 @@ string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigne
 	unsigned int keywordIndex = INDEX_INVALID;
 
 	if (numberOfSpaces == 0) {
-		bool hasDay = false;
 		if (isDay(dateString)) {
 			day = setDay(dateString);
-			hasDay = true;
-		}
-
-		if (!hasDay) {
-			if (isMonth(dateString)) {
-				month = setMonth(dateString);
-			} else {
-				throw false;
-			}
+		} else {
+			throw false;
 		}
 	} else {
 		unsigned int startIndex = 0;
