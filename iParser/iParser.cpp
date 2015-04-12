@@ -97,7 +97,8 @@ const string iParser::MESSAGE_INVALID_REMOVE = "Invalid remove";
 const string iParser::MESSAGE_INVALID_VIEW = "Invalid view";
 const string iParser::MESSAGE_INVALID_PRIORITY = "Invalid priority";
 const string iParser::MESSAGE_INVALID_DATE_TIME = "Invalid date and time";
-const string iParser::MESSAGE_INVALID_ADD_ITEM = "Unable to use \'name\' modifier when using \'add\' command";
+const string iParser::MESSAGE_INVALID_ADD_NAME = "Unable to use \'name\' modifier when using \'add\' command";
+const string iParser::MESSAGE_INVALID_ADD_REMOVE = "Unable to use \'remove\' modifier when using \'add\' command";
 const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER = "Unable to use \'name\' modifier more than once";
 const string iParser::MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER = "Unable to use multiple date time modifiers";
 const string iParser::MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER = "Unable to use \'description\' modifier more than once";
@@ -172,8 +173,8 @@ string iParser::executeAddParsing(string text) {
 		return MESSAGE_FAILURE;
 	}
 
+	vector<string> tokenisedInformation = tokeniseText(text);
 	try {
-		vector<string> tokenisedInformation = tokeniseText(text);
 		string itemName = tokenisedInformation[INDEX_START];
 		setParseInfo(COMMAND_ADD, itemName);
 		if (tokenisedInformation.size() > 1) {
@@ -194,8 +195,8 @@ string iParser::executeEditParsing(string text) {
 		return MESSAGE_FAILURE;
 	}
 
+	vector<string> tokenisedInformation = tokeniseText(text);
 	try {
-		vector<string> tokenisedInformation = tokeniseText(text);
 		string indexToEdit = tokenisedInformation[INDEX_START];
 		setParseInfo(COMMAND_EDIT, indexToEdit);
 		if (tokenisedInformation.size() > 1) {
@@ -300,13 +301,17 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 		string modifier = retrieveCommandOrModifier(singleInformation);
 		string textWithoutCommand = removeFirstStringToken(singleInformation);
 
+		if (textWithoutCommand == STRING_BLANK) {
+			throw MESSAGE_INVALID_INPUT;
+		}
+
 		if (modifier == MODIFIER_NAME) {
 			if (command == COMMAND_EDIT && !hasItem) {
 				executeModifierAndTextParsing(COMMAND_NAME, textWithoutCommand);
 				hasItem = true;
 			} else {
 				if (command == COMMAND_ADD) {
-					throw MESSAGE_INVALID_ADD_ITEM;
+					throw MESSAGE_INVALID_ADD_NAME;
 				} else if (hasItem) {
 					throw MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER;
 				}
@@ -362,25 +367,11 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 					throw MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER;
 				}
 			} else if (command == COMMAND_ADD) {
-				throw MESSAGE_INVALID_ADD_ITEM;
+				throw MESSAGE_INVALID_ADD_REMOVE;
 			}
 		} else {
 			throw MESSAGE_INVALID_MODIFIER;
 		}
-	}
-
-	return MESSAGE_SUCCESS;
-}
-
-string iParser::executeDateTimeParsing(const string dateTimeString) {
-	if (dateTimeString == STRING_BLANK) {
-		throw MESSAGE_INVALID_DATE_TIME;
-	}
-
-	if (hasStartEndDateTime(dateTimeString)) {
-		splitAndSetStartEndDateTime(dateTimeString);
-	} else {
-		setDateTime(dateTimeString, STRING_DATE);
 	}
 
 	return MESSAGE_SUCCESS;
@@ -395,6 +386,20 @@ string iParser::executeModifierAndTextParsing(const string ModifierType, string 
 	} else {
 		throw MESSAGE_INVALID_INPUT;
 	}
+}
+
+string iParser::executeDateTimeParsing(const string dateTimeString) {
+	if (dateTimeString == STRING_BLANK) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	if (hasStartEndDateTime(dateTimeString)) {
+		splitAndSetStartEndDateTime(dateTimeString);
+	} else {
+		setDateTime(dateTimeString, STRING_DATE);
+	}
+
+	return MESSAGE_SUCCESS;
 }
 
 string iParser::executePriorityParsing(string priorityType) {
@@ -467,9 +472,6 @@ vector<string> iParser::tokeniseText(const string text) {
 				endIndexForText = startIndexForModifier;
 				tokenisedText = text.substr(startIndexForText, endIndexForText - startIndexForText);
 				trimText(tokenisedText);
-				if (tokenisedText == STRING_BLANK) {
-					throw MESSAGE_INVALID_INPUT;
-				}
 				tokenisedInformation.push_back(tokenisedText);
 				startIndexForText = endIndexForText;
 			}
@@ -511,7 +513,7 @@ string iParser::removeConsecutiveWhiteSpace(string& text) {
 string iParser::removeWhiteSpace(string& text) {
 	assert(text != STRING_BLANK);
 	unsigned int index;
-
+	
 	for (index = 0; index < text.length(); index++) {
 		if (isWhiteSpace(text[index])) {
 			text.erase(index, 1);
@@ -576,7 +578,7 @@ string iParser::setDateTime(const string& dateTimeString, const string modifierT
 	assert(modifierType != STRING_BLANK);
 	unsigned int numberOfCommas = retrieveCount(dateTimeString, CHAR_COMMA);
 
-	if (dateTimeString == STRING_BLANK || numberOfCommas > 1) {
+	if (numberOfCommas > 1) {
 		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
