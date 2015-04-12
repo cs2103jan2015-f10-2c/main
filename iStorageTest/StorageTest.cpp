@@ -1238,7 +1238,7 @@ public:
 		delete item4;
 
 		item1 = NULL;
-		item2 - NULL;
+		item2 = NULL;
 		item3 = NULL;
 		item4 = NULL;
 	}
@@ -1706,7 +1706,8 @@ public:
 		delete item3;
 	}
 
-	TEST_METHOD(ScheduleTestIsRelevantDateTime) {
+//	Testing of private function muted.
+/*	TEST_METHOD(ScheduleTestIsRelevantDateTime) {
 		Schedule relevantDateTimeSchedule;
 		bool isRelevantDateTimeAccordingToSchedule;
 
@@ -1813,16 +1814,16 @@ public:
 		itemWithStartAndEndTime2 = NULL;
 		itemWithStartAndEndTime3 = NULL;
 		itemWithStartAndEndTime4 = NULL;
-	}
+	}*/
 
 	};
 
 	TEST_CLASS(TEST_FILTER) {
 public:
 
-	// Not done since label funcitonality is not implemented
+//	Label functionality not implemented in production release
 	TEST_METHOD(ScheduleTestFilterDisplayScheduleByLabel) {
-		// TODO: Your test code here
+		//	Test code here
 	}
 
 	TEST_METHOD(ScheduleTestFilterDisplayScheduleByPriority) {
@@ -2181,9 +2182,9 @@ public:
 		withoutKeyword2 = NULL;
 	}
 
-	// Not done since label funcitonality is not implemented
+//	Label functionality not implemented in production release
 	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByLabel) {
-		//
+		//	Test code here
 	}
 
 	TEST_METHOD(ScheduleTestRetrieveDisplayScheduleFilteredByPriority) {
@@ -3070,8 +3071,8 @@ public:
 		itemToReplace = NULL;
 	}
 
-	/* Muted because functions passed test and moved back to private
-	TEST_METHOD(ScheduleTestUndoAdd) {
+//	Testing of private function muted.
+/*	TEST_METHOD(ScheduleTestUndoAdd) {
 	Schedule testSchedule;
 	Item *item1 = new Item(string("Item number 1 in schedule!"));
 	item1->setItemID(1);
@@ -3186,8 +3187,8 @@ public:
 namespace HistoryTest {
 	TEST_CLASS(TEST_HISTORY) {
 public:
-	/* Tests muted because functions passed test and returned to private.
-	TEST_METHOD(HistoryTestIsNormalHistoryCommand) {
+//	Testing of private function muted.
+/*	TEST_METHOD(HistoryTestIsNormalHistoryCommand) {
 	History testHistory;
 	bool isValidHistoryCmd;
 

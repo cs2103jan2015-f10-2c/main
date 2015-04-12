@@ -353,6 +353,7 @@ namespace iPlannerUI {
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 MESSAGE_AND_SCHEDULE displayMessage;
 				 iParser testParser;
+				 Log newLog;
 				 String^ userInput;
 				 userInput = commandInputBox->Text;
 				 string stdUserInput;
@@ -360,6 +361,7 @@ namespace iPlannerUI {
 				 vector<Item> tempItem;
 
 				 if (e->KeyCode == Keys::Enter) {
+					 newLog.writeToLogFile(stdUserInput);
 					 displayMessage = testLogic->initiateCommandAction(testParser, stdUserInput);
 					 outputBox2->Clear();
 					 
@@ -414,7 +416,7 @@ namespace iPlannerUI {
 				 
 				 Log newLog;
 				 newLog.clearLogFile();
-				 newLog.writeToLogFile("\nLog file created");
+				 newLog.writeToLogFile("Log file created");
 				 
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
@@ -562,13 +564,14 @@ namespace iPlannerUI {
 	}
 	
 	private: System::Void viewScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuView = "\t\t\tView Schedule - Command List\r\n";
+				 String^ helpMenuView = "\t\t   View Schedule - Command List\r\n";
 
-				 helpMenuView += "\r\nUser can view All tasks, Completed tasks or tasks with a specific Priority\r\n";
+				 helpMenuView += "\r\nUser can view All tasks, Tasks within a given range of dates, Completed tasks or tasks with a specific Priority\r\n";
 				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
+				 helpMenuView += "view <date1> <date2> - All tasks in the specified date range are displayed\r\n";
 				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
 				 helpMenuView += "view undone - Tasks which are not completed are displayed\r\n";
-				 helpMenuView += "view priority <H/M/L> - Tasks which have the priority specified are displayed\r\n";
+				 helpMenuView += "view <H/M/L> - Tasks which have the priority specified are displayed\r\n";
 				 
 				 MessageBox::Show(helpMenuView);
 
