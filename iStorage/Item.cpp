@@ -43,7 +43,7 @@ bool Item::hasValidItemStartTime() {
 	catch (string err_msg) {
 		cerr << err_msg << endl;
 	}
-	
+
 	return false;
 }
 
@@ -59,7 +59,7 @@ bool Item::hasValidItemEndTime() {
 	catch (string err_msg) {
 		cerr << err_msg << endl;
 	}
-	
+
 	return false;
 }
 
@@ -129,8 +129,6 @@ Item::Item() {
 
 //	Overloaded Constructor with itemName
 Item::Item(string itemName) {
-	assert(itemName != "");
-	
 	_itemName = itemName;
 	_description = EMPTYFIELD_DESCRIPTION;
 	_itemID = EMPTYFIELD_ITEMID;
@@ -157,7 +155,7 @@ Item::Item(unsigned int itemID) {
 Item::Item(string itemName, unsigned int itemID) {
 	assert(itemName != "");
 	assert(itemID >= 0);
-	
+
 	_itemID = itemID;
 	_itemName = itemName;
 	_description = EMPTYFIELD_DESCRIPTION;
@@ -233,7 +231,7 @@ DateTime Item::setEndTime(int year, int month, int day, int hour, int minute) {
 //	Sets the item ID
 unsigned int Item::setItemID(unsigned int itemID) {
 	assert(itemID >= 0);
-	
+
 	_itemID = itemID;
 	setLastUpdate();
 	return _itemID;
@@ -262,7 +260,6 @@ bool Item::setCompletion(bool isCompleted) {
 
 //	Retrieves the item name
 string Item::getItemName() {
-	assert(_itemName != "");
 	return _itemName;
 }
 
@@ -321,11 +318,11 @@ string Item::displayItemForUser() {
 		}
 
 		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
-			throw "Printing of of field in Start Time that does not exist!";
+			throw ERROR_INVALIDDATETIME;
 		}
 	}
-	catch (const char* msg) {
-		cerr << msg << endl;
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 
 	try {
@@ -334,11 +331,11 @@ string Item::displayItemForUser() {
 		}
 
 		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
-			throw "Printing of of field in End Time that does not exist!";
+			throw ERROR_INVALIDDATETIME;
 		}
 	}
-	catch (const char* msg) {
-		cerr << msg << endl;
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 
 
@@ -389,7 +386,7 @@ string Item::displayEndTime() {
 //	Retrieves the item last updated time (string)
 string Item::displayLastUpdatedTime() {
 	DateTime lastUpdateTime(_lastUpdate.GetYear(), _lastUpdate.GetMonth(), _lastUpdate.GetDay(), _lastUpdate.GetHour(), _lastUpdate.GetMinute());
-	
+
 	assert(lastUpdateTime.getYear() >= 0);
 	assert(lastUpdateTime.getMonth() >= 0);
 	assert(lastUpdateTime.getDay() >= 0);

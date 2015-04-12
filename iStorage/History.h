@@ -16,9 +16,11 @@ private:
 	static const string COMMAND_DELETE;
 	static const string COMMAND_REPLACE;
 	static const string COMMAND_CLEAR;
+	static const string RESET_COMPLETION;
 	static const string ERROR_ADD;
 	static const string ERROR_EMPTYSTACKS;
-	static const string RESET_COMPLETION;
+	
+	static const string ERROR_INVALIDCOMMAND;
 
 	static const string LOG_CONSTRUCTHISTORY;
 	static const string LOG_DESTRUCTHISTORY;
