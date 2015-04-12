@@ -5,6 +5,7 @@
 #define DATETIME_H
 
 #include <string>
+#include <iostream>
 #include <vector>
 #include <sstream>
 #include <iomanip>
@@ -29,6 +30,9 @@ private:
 	static const char DISPLAY_SEPARATOR_TIME;
 	static const char DISPLAY_SEPARATOR_DATETIME;
 	static const char DISPLAY_FILLER;
+
+	static const string ERROR_DISPLAYEMPTYDATETIME;
+	static const string ERROR_DATETIMERANGE;
 
 	int _year;
 	int _month;

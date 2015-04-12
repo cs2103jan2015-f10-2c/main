@@ -5,6 +5,7 @@
 #define ITEM_H
 
 #include <string>
+#include <iostream>
 #include <vector>
 #include <atltime.h>
 #include <ctime>

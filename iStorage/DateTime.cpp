@@ -20,6 +20,9 @@ const char DateTime::DISPLAY_SEPARATOR_TIME = ':';
 const char DateTime::DISPLAY_SEPARATOR_DATETIME = ' ';
 const char DateTime::DISPLAY_FILLER = '0';
 
+const string DateTime::ERROR_DISPLAYEMPTYDATETIME = "DATETIME:: Empty date/time display";
+const string DateTime::ERROR_DATETIMERANGE = "DATETIME:: Date/Time out of range.";
+
 //	Constructor
 DateTime::DateTime() {
 	_year = EMPTYFIELD_DATETIME;
@@ -132,28 +135,49 @@ int DateTime::getMinute() {
 
 //	Checks if year ranges from 0 to 9999
 bool DateTime::isValidYearRange(int year) {
-	if (year >= MIN_YEAR && year <= MAX_YEAR) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (year >= MIN_YEAR && year <= MAX_YEAR) {
+			return true;
+		} else if (year >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 }
 
 //	Checks if month ranges from 1 to 12
 bool DateTime::isValidMonthRange(int month) {
-	if (month >= MIN_MONTH && month <= MAX_MONTH) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (month >= MIN_MONTH && month <= MAX_MONTH) {
+			return true;
+		} else if (month >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 }
 
 //	Checks if day ranges from 1 to 31
 bool DateTime::isValidDayRange(int day) {
-	if (day >= MIN_DAY && day <= MAX_DAY) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (day >= MIN_DAY && day <= MAX_DAY) {
+			return true;
+		} else if (day >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 }
 
@@ -180,19 +204,33 @@ bool DateTime::isValidDate(int year, int month, int day) {
 
 //	Checks if hour ranges from 0 to 23
 bool DateTime::isValidHourRange(int hour) {
-	if (hour >= MIN_HOUR && hour <= MAX_HOUR) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (hour >= MIN_HOUR && hour <= MAX_HOUR) {
+			return true;
+		} else if (hour >= INDICATOR_FAILEDSETATTEMPT){
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 }
 
 //	Checks if minute ranges from 0 to 59
 bool DateTime::isValidMinuteRange(int minute) {
-	if (minute >= MIN_MINUTE && minute <= MAX_MINUTE) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (minute >= MIN_MINUTE && minute <= MAX_MINUTE) {
+			return true;
+		} else if (minute >= INDICATOR_FAILEDSETATTEMPT){
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 }
 
@@ -290,18 +328,23 @@ string DateTime::displayTime() {
 //	Returns date in YYYY MM DD, time in HH:MM, and both in YYYY MM DD HH:MM
 string DateTime::displayDateTime() {
 	ostringstream displayOutput;
+	try {
+		if (isValidDate(_year, _month, _day)) {
+			displayOutput << displayDate();
 
-	if (isValidDate(_year, _month, _day)) {
-		displayOutput << displayDate();
-
-		if (isValidTime(_hour, _minute)) {
-			displayOutput << DISPLAY_SEPARATOR_DATETIME;
+			if (isValidTime(_hour, _minute)) {
+				displayOutput << DISPLAY_SEPARATOR_DATETIME;
+				displayOutput << displayTime();
+			}
+		} else if (isValidTime(_hour, _minute)) {
 			displayOutput << displayTime();
+		} else {
+			throw ERROR_DISPLAYEMPTYDATETIME;
 		}
-	} else if (isValidTime(_hour, _minute)) {
-		displayOutput << displayTime();
 	}
-
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
 	return displayOutput.str();
 }
 
@@ -324,17 +367,22 @@ string DateTime::displayDateForUser() {
 //	Returns date in DD/MM/YYYY, time in HH:MM, and both in DD/MM/YYYY HH:MM
 string DateTime::displayDateTimeForUser() {
 	ostringstream displayOutput;
+	try {
+		if (isValidDate(_year, _month, _day)) {
+			displayOutput << displayDateForUser();
 
-	if (isValidDate(_year, _month, _day)) {
-		displayOutput << displayDateForUser();
-
-		if (isValidTime(_hour, _minute)) {
-			displayOutput << DISPLAY_SEPARATOR_DATETIME;
+			if (isValidTime(_hour, _minute)) {
+				displayOutput << DISPLAY_SEPARATOR_DATETIME;
+				displayOutput << displayTime();
+			}
+		} else if (isValidTime(_hour, _minute)) {
 			displayOutput << displayTime();
+		} else {
+			throw ERROR_DISPLAYEMPTYDATETIME;
 		}
-	} else if (isValidTime(_hour, _minute)) {
-		displayOutput << displayTime();
 	}
-
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
 	return displayOutput.str();
 }
