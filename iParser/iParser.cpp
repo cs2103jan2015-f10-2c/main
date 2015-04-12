@@ -518,7 +518,7 @@ string iParser::removeConsecutiveWhiteSpace(string& text) {
 string iParser::removeWhiteSpace(string& text) {
 	assert(text != STRING_BLANK);
 	unsigned int index;
-	
+
 	for (index = 0; index < text.length(); index++) {
 		if (isWhiteSpace(text[index])) {
 			text.erase(index, 1);
@@ -935,45 +935,37 @@ string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigne
 	string year = STRING_NEGATIVE_ONE;
 	unsigned int keywordIndex = INDEX_INVALID;
 
-	if (numberOfSpaces == 0) {
-		if (isDay(dateString)) {
-			day = setDay(dateString);
+	unsigned int startIndex = 0;
+	unsigned int endIndex = 0;
+
+	endIndex = dateString.find_first_of(" ");
+	day = dateString.substr(startIndex, endIndex - startIndex);
+
+	if (!areDigits(day)) {
+		throw false;
+	}
+	startIndex = endIndex + 1;
+
+	string tempMonth;
+	if (numberOfSpaces == 1) {
+		tempMonth = dateString.substr(startIndex);
+		if (isMonth(tempMonth)) {
+			month = setMonth(tempMonth);
 		} else {
 			throw false;
 		}
-	} else {
-		unsigned int startIndex = 0;
-		unsigned int endIndex = 0;
-
-		endIndex = dateString.find_first_of(" ");
-		day = dateString.substr(startIndex, endIndex - startIndex);
-
-		if (!areDigits(day)) {
+	} else if (numberOfSpaces == 2) {
+		endIndex = dateString.find_first_of(" ", startIndex);
+		tempMonth = dateString.substr(startIndex, endIndex - startIndex);
+		if (isMonth(tempMonth)) {
+			month = setMonth(tempMonth);
+		} else {
 			throw false;
 		}
 		startIndex = endIndex + 1;
-
-		string tempMonth;
-		if (numberOfSpaces == 1) {
-			tempMonth = dateString.substr(startIndex);
-			if (isMonth(tempMonth)) {
-				month = setMonth(tempMonth);
-			} else {
-				throw false;
-			}
-		} else if (numberOfSpaces == 2) {
-			endIndex = dateString.find_first_of(" ", startIndex);
-			tempMonth = dateString.substr(startIndex, endIndex - startIndex);
-			if (isMonth(tempMonth)) {
-				month = setMonth(tempMonth);
-			} else {
-				throw false;
-			}
-			startIndex = endIndex + 1;
-			year = dateString.substr(startIndex);
-			if (!areDigits(year)) {
-				throw false;
-			}
+		year = dateString.substr(startIndex);
+		if (!areDigits(year)) {
+			throw false;
 		}
 	}
 

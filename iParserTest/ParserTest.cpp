@@ -702,23 +702,23 @@ public:
 	//	}
 	//}
 
-	//TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
-	//	string testDate[] = { "10/11/12", "10/11" };
-	//	unsigned int numberOfOblique[] = { 2, 1 };
-	//	string expected[] = { "12 11 10", "-1 11 10" };
+	TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
+		string testDate[] = { "10/11/12", "10/11" };
+		unsigned int numberOfOblique[] = { 2, 1 };
+		string expected[] = { "12 11 10", "-1 11 10" };
 
-	//	for (int i = 0; i < 2; i++) {
-	//		string actual = testParser.splitAndSetObliqueDateInformation(testDate[i], numberOfOblique[i]);
-	//		Assert::AreEqual(expected[i], actual);
-	//	}
-	//}
+		for (int i = 0; i < 2; i++) {
+			string actual = testParser.splitAndSetObliqueDateInformation(testDate[i], numberOfOblique[i]);
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
 
 	TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
-		string testDate[] = { "JAN", "10 nOv 2015", "9 OcT", "MoN" };
-		unsigned int numberOfSpace[] = { 0, 2, 1, 0 };
-		string expected[] = { "-1 -1 -1", "2015 11 10", "-1 10 9", "-1 -1 monday" };
+		string testDate[] = { "10 nOv 2015", "9 OcT", "12 abc", "abc apr", "abc mar 2015", "12 12 12", "12 mar abc" };
+		unsigned int numberOfSpace[] = { 2, 1, 1, 1, 2, 2, 2, };
+		string expected[] = { "2015 11 10", "-1 10 9", "-1 -1 monday" };
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 7; i++) {
 			try {
 				string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
 				Assert::AreEqual(expected[i], actualOne);
