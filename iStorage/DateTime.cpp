@@ -20,7 +20,6 @@ const char DateTime::DISPLAY_SEPARATOR_TIME = ':';
 const char DateTime::DISPLAY_SEPARATOR_DATETIME = ' ';
 const char DateTime::DISPLAY_FILLER = '0';
 
-const string DateTime::ERROR_DISPLAYEMPTYDATETIME = "DATETIME:: Empty date/time display";
 const string DateTime::ERROR_DATETIMERANGE = "DATETIME:: Date/Time out of range.";
 
 //	Constructor
@@ -207,7 +206,7 @@ bool DateTime::isValidHourRange(int hour) {
 	try {
 		if (hour >= MIN_HOUR && hour <= MAX_HOUR) {
 			return true;
-		} else if (hour >= INDICATOR_FAILEDSETATTEMPT){
+		} else if (hour >= INDICATOR_FAILEDSETATTEMPT) {
 			return false;
 		} else {
 			throw ERROR_DATETIMERANGE;
@@ -223,7 +222,7 @@ bool DateTime::isValidMinuteRange(int minute) {
 	try {
 		if (minute >= MIN_MINUTE && minute <= MAX_MINUTE) {
 			return true;
-		} else if (minute >= INDICATOR_FAILEDSETATTEMPT){
+		} else if (minute >= INDICATOR_FAILEDSETATTEMPT) {
 			return false;
 		} else {
 			throw ERROR_DATETIMERANGE;
@@ -328,23 +327,17 @@ string DateTime::displayTime() {
 //	Returns date in YYYY MM DD, time in HH:MM, and both in YYYY MM DD HH:MM
 string DateTime::displayDateTime() {
 	ostringstream displayOutput;
-	try {
-		if (isValidDate(_year, _month, _day)) {
-			displayOutput << displayDate();
+	if (isValidDate(_year, _month, _day)) {
+		displayOutput << displayDate();
 
-			if (isValidTime(_hour, _minute)) {
-				displayOutput << DISPLAY_SEPARATOR_DATETIME;
-				displayOutput << displayTime();
-			}
-		} else if (isValidTime(_hour, _minute)) {
+		if (isValidTime(_hour, _minute)) {
+			displayOutput << DISPLAY_SEPARATOR_DATETIME;
 			displayOutput << displayTime();
-		} else {
-			throw ERROR_DISPLAYEMPTYDATETIME;
 		}
+	} else if (isValidTime(_hour, _minute)) {
+		displayOutput << displayTime();
 	}
-	catch (string err_msg) {
-		cerr << err_msg << endl;
-	}
+
 	return displayOutput.str();
 }
 
@@ -367,22 +360,16 @@ string DateTime::displayDateForUser() {
 //	Returns date in DD/MM/YYYY, time in HH:MM, and both in DD/MM/YYYY HH:MM
 string DateTime::displayDateTimeForUser() {
 	ostringstream displayOutput;
-	try {
-		if (isValidDate(_year, _month, _day)) {
-			displayOutput << displayDateForUser();
+	if (isValidDate(_year, _month, _day)) {
+		displayOutput << displayDateForUser();
 
-			if (isValidTime(_hour, _minute)) {
-				displayOutput << DISPLAY_SEPARATOR_DATETIME;
-				displayOutput << displayTime();
-			}
-		} else if (isValidTime(_hour, _minute)) {
+		if (isValidTime(_hour, _minute)) {
+			displayOutput << DISPLAY_SEPARATOR_DATETIME;
 			displayOutput << displayTime();
-		} else {
-			throw ERROR_DISPLAYEMPTYDATETIME;
 		}
+	} else if (isValidTime(_hour, _minute)) {
+		displayOutput << displayTime();
 	}
-	catch (string err_msg) {
-		cerr << err_msg << endl;
-	}
+
 	return displayOutput.str();
 }

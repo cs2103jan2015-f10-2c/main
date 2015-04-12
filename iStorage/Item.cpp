@@ -33,32 +33,18 @@ bool Item::hasValidItemName() {
 
 //	Checks if item has a valid start time
 bool Item::hasValidItemStartTime() {
-	try {
-		if (_startTime.displayDateTime() != EMPTYFIELD_TIME) {
+	if (_startTime.displayDateTime() != EMPTYFIELD_TIME) {
 			return true;
-		} else {
-			throw ERROR_INVALIDDATETIME;
 		}
-	}
-	catch (string err_msg) {
-		cerr << err_msg << endl;
-	}
 
 	return false;
 }
 
 //	Checks if item has a valid end time
 bool Item::hasValidItemEndTime() {
-	try {
 		if (_endTime.displayDateTime() != EMPTYFIELD_TIME) {
 			return true;
-		} else {
-			throw ERROR_INVALIDDATETIME;
 		}
-	}
-	catch (string err_msg) {
-		cerr << err_msg << endl;
-	}
 
 	return false;
 }
