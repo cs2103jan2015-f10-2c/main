@@ -254,7 +254,8 @@ string iParser::executeViewParsing(string viewType) {
 		} else if (hasStartEndDateTime(viewType)) {
 			splitAndSetViewDateRange(viewType);
 		} else if (isValidDate(viewType, tempDate)) {
-			string viewInfo = STRING_DATE + CHAR_SPACE + tempDate + CHAR_SPACE + tempDate;
+			string viewInfo = tempDate + CHAR_SPACE + STRING_TIME_INITIALISE;
+			viewInfo = viewInfo + CHAR_SPACE + viewInfo;
 			setParseInfo(COMMAND_VIEW, viewInfo);
 		} else {
 			setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
