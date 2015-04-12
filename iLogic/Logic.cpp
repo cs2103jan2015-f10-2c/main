@@ -37,8 +37,8 @@ const string Logic::FILTER_PRIORITY_MEDIUM = "medium";
 const string Logic::FILTER_PRIORITY_LOW = "low";
 const string Logic::FILTER_LABEL = "label";
 const string Logic::FILTER_ALL = "all";
-const string Logic:: FILTER_KEYWORD = "keyword";
- const string Logic::FILTER_DATE = "date";
+const string Logic::FILTER_KEYWORD = "keyword";
+const string Logic::FILTER_DATE = "date";
 
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation.txt";
@@ -76,7 +76,7 @@ const string Logic::MESSAGE_NO_TASK_FOUND = "No task can be found";
 const string Logic::MESSAGE_UNABLE_TO_UNDO = "ERROR: Undo has reached its limit.";
 
 const string  Logic::MESSAGE_READFILE_COMPLETE = "readfile completed";
- const string Logic:: MESSAGE_WRITEFILE_COMPLETE = "writefile completed";
+const string Logic::MESSAGE_WRITEFILE_COMPLETE = "writefile completed";
 
 char Logic::buffer[300];
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
@@ -284,7 +284,7 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(iParser parser, string input) 
 
 MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage){
 	resetAndGetDisplaySchedule();
-	
+
 	vector<Item> displayVector = sortTask();
 	MESSAGE_AND_SCHEDULE userDisplayInformation;
 	userDisplayInformation.message = returnMessage;
@@ -412,7 +412,7 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 	if (parseInfoToBeProcessed.size() == 1){
 		return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INPUT;
 	} else if (isValidLineIndex(lineIndexToBeEdited)){
-		
+
 		Item *editedItemToBeReplaced;
 		editedItemToBeReplaced = new Item;
 		*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
@@ -673,8 +673,8 @@ string Logic::changeCurrentSortingAsUserSpecified(string sortingMethod){
 string Logic::filterTask(string filterToBeImplemented){
 	istringstream iss(filterToBeImplemented);
 	string filterType;
-	
-	iss >> filterType ;
+
+	iss >> filterType;
 
 	if (filterType == FILTER_COMPLETION){
 		bool completion = true;
@@ -711,8 +711,8 @@ string Logic::filterByDate(START_END_TIME startEndTime){
 }
 
 START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
-	int YYYY, MM, DD, hh, mm;
 	string junk;
+	int YYYY, MM, DD, hh, mm;
 	istringstream iss(infoToBeInterpreted);
 	iss >> junk;
 	iss >> YYYY >> MM >> DD >> hh >> mm;
@@ -741,33 +741,46 @@ string Logic::filterByCompletion(bool completion){
 			throw "invalid completion type";
 		}
 	}
-		catch (string errorMessage){
-			cerr << errorMessage << endl;
-		}
-	
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+
 	return _currentFilter;
 }
 
 char Logic::stringConvertToPriorityChar(string priority){
 	_currentFilter = priority;
-	if (priority == FILTER_PRIORITY_HIGH){
-		return 'H';
-	} else if (priority == FILTER_PRIORITY_MEDIUM){
-		return 'M';
-	} else if (priority == FILTER_PRIORITY_LOW){
-		return 'L';
-	} else {
-		return 'I';
+	try{
+		if (priority == FILTER_PRIORITY_HIGH){
+			return 'H';
+		} else if (priority == FILTER_PRIORITY_MEDIUM){
+			return 'M';
+		} else if (priority == FILTER_PRIORITY_LOW){
+			return 'L';
+		} else {
+			throw "INVALID PRIORITY TYPE";
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return 'I';
+
 }
 
 string Logic::filterByPriority(char priority){
-	if (priority != 'E'){
-		_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priority);
-		return _currentFilter;
-	} else {
-		return MESSAGE_INVALID_PRIORITY;
+	try{
+		if (priority != 'E'){
+			_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priority);
+			return _currentFilter;
+		} else {
+			throw "INVALID PRIORITY";
+		}
 	}
+		catch (string errorMessage){
+			cerr << errorMessage << endl;
+		}
+	return MESSAGE_INVALID_PRIORITY;
 }
 
 
@@ -831,7 +844,7 @@ string Logic::changeSavingDirectory(string userInputDirectory){
 	string directoryToMake = "";
 	int truncatePosition;
 	if (userInputDirectory == "default"){
-		userInputDirectory == "";
+		userInputDirectory = "";
 	}
 
 	while (userInputDirectory != ""){
@@ -891,7 +904,7 @@ string Logic::convertKeywordVecToString(){
 				keywordString = keywordString + _keywordVec[i];
 			}
 		}
-	} 
+	}
 	return keywordString;
 }
 

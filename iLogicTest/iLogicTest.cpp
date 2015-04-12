@@ -84,7 +84,7 @@ public:
 		testCommandAndText.text = "1222 12 12 -1 -1";
 		testParseInfo.push_back(testCommandAndText);
 		testLogic.addTask(testParseInfo);
-	
+
 		string message = testLogic.addTask(testParseInfo);
 		string expectedMessage = "Task added to schedule : Young Bin is testing";
 		Assert::AreEqual(expectedMessage, message);
@@ -221,7 +221,7 @@ public:
 		string expectedDeleteMessage1 = "Task is deleted from schedule";
 		string actualDeleteMessage1 = testLogic.deleteTask(lineIndexToBeDeleted);
 		Assert::AreEqual(expectedDeleteMessage1, actualDeleteMessage1);
-	
+
 		testLogic.resetAndGetDisplaySchedule();
 		/*Delete line 5, which does not exist*/
 		try{
@@ -1514,7 +1514,7 @@ public:
 			string expectedDeleteMessage = "Unable to delete task : Invalid index";
 			Assert::AreEqual(expectedDeleteMessage, actualDeleteMessage);
 		}
-		
+
 		/*add item*/
 		testInput = "add go dinner with sophie -date 23:59";
 		expectedMessage = "Task added to schedule : go dinner with sophie";
@@ -1550,7 +1550,7 @@ public:
 		expectedMessage = "Schedule sorted by : date";
 		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
-		
+
 		/*sort schedule*/
 		testInput = "sort update";
 		expectedMessage = "Schedule sorted by : update";
@@ -1657,142 +1657,165 @@ public:
 
 
 	TEST_CLASS(TrimTextTest) {
-	public:
-		TEST_METHOD(TrimTextTest1) {
-			string testText[] = { "   add text   ", "\t\t del text \t\t\t", "  exit\t\t", " ", "" };
-			string expected[] = { "add text", "del text", "exit", "", "" };
+public:
+	TEST_METHOD(TrimTextTest1) {
+		string testText[] = { "   add text   ", "\t\t del text \t\t\t", "  exit\t\t", " ", "" };
+		string expected[] = { "add text", "del text", "exit", "", "" };
 
-			Logic testLogic;
-			for (int i = 0; i < 5; i++) {
-				testLogic.trimText(testText[i]);
-				string actual = testText[i];
-				Assert::AreEqual(expected[i], actual);
-			}
+		Logic testLogic;
+		for (int i = 0; i < 5; i++) {
+			testLogic.trimText(testText[i]);
+			string actual = testText[i];
+			Assert::AreEqual(expected[i], actual);
 		}
+	}
 	};
 
 	TEST_CLASS(RetrieveBasicInformationTest) {
-	public:
-		TEST_METHOD(TrimTextTest1) {
-			Logic testLogic;
-			string expectedMessage = "Retrieved from save file";
-			string actualMessage = testLogic.retrieveBasicInformation();
-			Assert::AreEqual(expectedMessage, actualMessage);
-		}
+public:
+	TEST_METHOD(TrimTextTest1) {
+		Logic testLogic;
+		string expectedMessage = "Retrieved from save file";
+		string actualMessage = testLogic.retrieveBasicInformation();
+		Assert::AreEqual(expectedMessage, actualMessage);
+	}
 	};
 
 
 	TEST_CLASS(ReadFileWriteFileTest) {
-	public:
-		TEST_METHOD(ReadFileTest1) {
-			Logic testLogic;
-			string expectedMessage = "readfile completed";
-			string actualMessage = testLogic.readDataFromFile();
-			Assert::AreEqual(expectedMessage, actualMessage);
-		}
+public:
+	TEST_METHOD(ReadFileTest1) {
+		Logic testLogic;
+		string expectedMessage = "readfile completed";
+		string actualMessage = testLogic.readDataFromFile();
+		Assert::AreEqual(expectedMessage, actualMessage);
+	}
 
-		TEST_METHOD(WriteFileTest1) {
-			Logic testLogic;
-			string expectedMessage = "writefile completed";
-			string actualMessage = testLogic.writeDataOntoFile();
-			Assert::AreEqual(expectedMessage, actualMessage);
-		}
+	TEST_METHOD(WriteFileTest1) {
+		Logic testLogic;
+		string expectedMessage = "writefile completed";
+		string actualMessage = testLogic.writeDataOntoFile();
+		Assert::AreEqual(expectedMessage, actualMessage);
+	}
 	};
 
 	TEST_CLASS(GetScheduleSizeTest) {
-	public:
-		TEST_METHOD(GetScheduleSizeTest1) {
-			Logic testLogic;
-			string testItemName;
-			COMMAND_AND_TEXT testCommandAndText;
-			list<COMMAND_AND_TEXT> testParseInfo;
+public:
+	TEST_METHOD(GetScheduleSizeTest1) {
+		Logic testLogic;
+		string testItemName;
+		COMMAND_AND_TEXT testCommandAndText;
+		list<COMMAND_AND_TEXT> testParseInfo;
 
-			/*Add Item 1*/
-			testCommandAndText.command = "add";
-			testCommandAndText.text = "Young Bin";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "priority";
-			testCommandAndText.text = "H";
-			testParseInfo.push_back(testCommandAndText);
-			testLogic.addTask(testParseInfo);
-			testParseInfo.clear();
+		/*Add Item 1*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "Young Bin";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "H";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
 
-			/*Add Item 2*/
-			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "start";
-			testCommandAndText.text = "1222 12 12 12 12";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "priority";
-			testCommandAndText.text = "M";
-			testParseInfo.push_back(testCommandAndText);
-			testLogic.addTask(testParseInfo);
-			testParseInfo.clear();
+		/*Add Item 2*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "start";
+		testCommandAndText.text = "1222 12 12 12 12";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "M";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
 
-			/*Add Item 3*/
-			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST2";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "end";
-			testCommandAndText.text = "1333 11 11 -1 -1";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "priority";
-			testCommandAndText.text = "M";
-			testParseInfo.push_back(testCommandAndText);
-			testLogic.addTask(testParseInfo);
-			testParseInfo.clear();
+		/*Add Item 3*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST2";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "end";
+		testCommandAndText.text = "1333 11 11 -1 -1";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "M";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
 
-			/*Add Item 4*/
-			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST3";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "start";
-			testCommandAndText.text = "1344 11 11 -1 -1";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "priority";
-			testCommandAndText.text = "L";
-			testParseInfo.push_back(testCommandAndText);
-			testLogic.addTask(testParseInfo);
-			testParseInfo.clear();
+		/*Add Item 4*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST3";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "start";
+		testCommandAndText.text = "1344 11 11 -1 -1";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "L";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
 
-			/*Add Item 5*/
-			testCommandAndText.command = "add";
-			testCommandAndText.text = "TEST4";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "description";
-			testCommandAndText.text = "UNITTESTING";
-			testParseInfo.push_back(testCommandAndText);
-			testCommandAndText.command = "priority";
-			testCommandAndText.text = "H";
-			testParseInfo.push_back(testCommandAndText);
-			testLogic.addTask(testParseInfo);
-			testParseInfo.clear();
+		/*Add Item 5*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST4";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "description";
+		testCommandAndText.text = "UNITTESTING";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "H";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
 
-			testLogic.resetAndGetDisplaySchedule();
+		testLogic.resetAndGetDisplaySchedule();
 
-			unsigned int expectedSize = 5;
-			unsigned int actualSize = testLogic.getScheduleSize();
-			Assert::AreEqual(expectedSize, actualSize);
+		unsigned int expectedSize = 5;
+		unsigned int actualSize = testLogic.getScheduleSize();
+		Assert::AreEqual(expectedSize, actualSize);
 
-			expectedSize = 5;
-			actualSize = testLogic.getDisplayScheduleSize();
-			Assert::AreEqual(expectedSize, actualSize);
-		}
+		expectedSize = 5;
+		actualSize = testLogic.getDisplayScheduleSize();
+		Assert::AreEqual(expectedSize, actualSize);
+	}
 	};
 
 
 	TEST_CLASS(KeywordVecTest) {
-	public:
-		TEST_METHOD(ConvertKeywordVecToStringTest1) {
-			Logic testLogic;
-			string keyword = "hello+hi+test";
-		
-			testLogic.convertStringToKeywordVec(keyword);
-			string actualMessage = testLogic.convertKeywordVecToString();
+public:
+	TEST_METHOD(ConvertKeywordVecToStringTest1) {
+		Logic testLogic;
+		string keyword = "hello+hi+test";
 
-			Assert::AreEqual(keyword, actualMessage);
-		}
+		testLogic.convertStringToKeywordVec(keyword);
+		string actualMessage = testLogic.convertKeywordVecToString();
+
+		Assert::AreEqual(keyword, actualMessage);
+	}
 	};
 
+
+	TEST_CLASS(PriorityTest) {
+public:
+	TEST_METHOD(PriorityTest1) {
+		Logic testLogic;
+		string priority = "high";
+
+		char expectedMessage = 'H';
+		char actualMessage = testLogic.stringConvertToPriorityChar(priority);
+		Assert::AreEqual(expectedMessage, actualMessage);
+
+		priority = "medium";
+		expectedMessage = 'M';
+		actualMessage = testLogic.stringConvertToPriorityChar(priority);
+		Assert::AreEqual(expectedMessage, actualMessage);
+
+		priority = "low";
+		expectedMessage = 'L';
+		actualMessage = testLogic.stringConvertToPriorityChar(priority);
+		Assert::AreEqual(expectedMessage, actualMessage);
+		
+	}
+	};
 }
