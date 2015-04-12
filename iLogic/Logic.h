@@ -431,7 +431,7 @@ public:
 	string getErrorList(ItemVerification verifier);
 
 	START_END_TIME getStartEndTime(string infoToBeInterpreted);
-	DateTime interpretStartEndTime(int YYYY, int MM, int DD, int hh, int mm);
+	DateTime interpretStartEndTime(string identifier, int YYYY, int MM, int DD, int hh, int mm);
 	/////////////////////////////////////
 	////*SAVE FILE RELATED FUNCTIONS*////
 	/////////////////////////////////////
@@ -496,6 +496,7 @@ public:
 	bool isValidSortingMethod(string itemInformation);
 	bool isValidLineIndex(unsigned int lineIndexToBeChecked);
 	bool isExistingFileInDirectory(string directoryAndFileName);
+	bool isEmptyStartAndEndTime();
 
 };
 

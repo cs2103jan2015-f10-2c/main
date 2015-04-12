@@ -694,6 +694,7 @@ string Logic::filterTask(string filterToBeImplemented){
 		searchTask();
 	} else if (filterType == FILTER_DATE){
 		_startEndTime = getStartEndTime(filterToBeImplemented);
+		_currentFilter = filterToBeImplemented;
 		filterByDate(_startEndTime);
 	} else{
 		printInvalidViewOption();
@@ -705,8 +706,7 @@ string Logic::filterTask(string filterToBeImplemented){
 }
 
 string Logic::filterByDate(START_END_TIME startEndTime){
-	_logicSchedule.retrieveDisplayScheduleFilteredByDateTime(startEndTime.startTime, startEndTime.endTime);
-	_currentFilter = FILTER_DATE;
+	_logicSchedule.retrieveDisplayScheduleFilteredByDateTime(_startEndTime.startTime, _startEndTime.endTime);
 	return _currentFilter;
 }
 
@@ -716,23 +716,43 @@ START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
 	istringstream iss(infoToBeInterpreted);
 	iss >> junk;
 	iss >> YYYY >> MM >> DD >> hh >> mm;
-	DateTime startTime(YYYY, MM, DD, hh, mm);
+	DateTime startTime = interpretStartEndTime("start",YYYY, MM, DD, hh, mm);
 	iss >> YYYY >> MM >> DD >> hh >> mm;
-	DateTime endTime(YYYY, MM, DD, hh, mm);
-	START_END_TIME startEndTime;
-	startEndTime.startTime = startTime;
-	startEndTime.endTime = endTime;
-	return startEndTime;
+	DateTime endTime = interpretStartEndTime("end",YYYY, MM, DD, hh, mm);
+	_startEndTime.startTime = startTime;
+	_startEndTime.endTime = endTime;
+	return _startEndTime;
 }
-/*
-DateTime Logic::interpretStartEndTime(int YYYY, int MM, int DD, int hh, int mm){
+
+DateTime Logic::interpretStartEndTime(string identifier, int YYYY, int MM, int DD, int hh, int mm){
 	if (YYYY == -1){
 		YYYY = getCurrentTime().getYear();
 	}
 	if (MM == -1) {
 		MM = getCurrentTime().getMonth();
 	}
-}*/
+	if (DD == -1){
+		DD = getCurrentTime().getDay();
+	}
+	if (identifier == "start" && hh == -1 && mm == -1){
+		hh = 0;
+		mm = 0;
+	}
+	if (identifier == "end" && hh == -1 && mm == -1){
+		hh = 23;
+		mm = 59;
+	}
+
+	if (hh == -1){
+		hh = 0;
+	}
+	if (mm == -1){
+		mm = 0;
+	}
+	cout << YYYY << " " << MM << " " << DD << " " << hh << " " << mm << endl;
+	DateTime startEndTime(YYYY, MM, DD, hh, mm);
+	return startEndTime;
+}
 
 void Logic::clearKeyWordVec(){
 	_keywordVec.clear();
