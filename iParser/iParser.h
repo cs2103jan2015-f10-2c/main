@@ -266,35 +266,38 @@ public:
 	// Pre:		nil
 	// Post:	returns true if "to" or "-" are found
 	//			else, returns false
-	bool hasStartEndDateTime(string);
+	bool hasStartEndDateTime(const string&);
 	// Pre:		nil
 	// Post:	determines the dateTime which user inputs and sets dateTime information to _parseInfo
 	//			if invalid dateTime is input, invalid input message will be thrown as exception
-	string setDateTime(string, const string);
+	string setDateTime(const string&, const string);
 	// Pre:		one comma detected in dateTime string
 	// Post:	determines the dateTime which user inputs and sets start OR end dateTime to _parseInfo
 	//			if invalid dateTime is input, invalid input message will be thrown as exception
-	string splitAndSetDateTime(string, const string);
+	string splitAndSetDateTime(const string&, const string);
 	// Pre:		hasStartEndDateTime is true
 	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
 	//			if invalid dateTime range is input, invalid input message will be thrown as exception
-	string splitAndSetStartEndDateTime(const string);
+	string splitAndSetStartEndDateTime(const string&);
+	// Pre:		
+	// Post:
+	string splitAndSetViewDateRange(const string&);
 	// Pre:		startEndDateTime has no commas detected
 	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
 	//			the range may be [date to date] or [time to time] range
 	//			if invalid dateTime range is input, invalid input message will be thrown as exception
-	string splitAndSetNoCommaStartEndDateTime(const string);
+	string splitAndSetNoCommaStartEndDateTime(const string&);
 	// Pre:		startEndDateTime has 1 comma detected
 	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
 	//			the range may be [date, time to time] or [time to time, date] range
 	//			if invalid dateTime range is input, invalid input message will be thrown as exception
-	string splitAndSetOneCommaStartEndDateTime(const string);
+	string splitAndSetOneCommaStartEndDateTime(const string&);
 	// Pre:		startEndDateTime has 2 commas detected
 	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
 	//			the range may be [date, time to date, time], [time, date to time, date],
 	//			[date, time to time, date] or [time, date to date, time] range
 	//			if invalid dateTime range is input, invalid input message will be thrown as exception
-	string splitAndSetTwoCommaStartEndDateTime(const string);
+	string splitAndSetTwoCommaStartEndDateTime(const string&);
 	// Pre:		nil
 	// Post:	if date is valid, set date to _parseInfo and return true
 	bool isValidDate(string, string&);
