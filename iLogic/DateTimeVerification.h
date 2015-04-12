@@ -71,9 +71,9 @@ public:
 	////// LEVEL 2 of SLAP /////
 	////////////////////////////
 
-	// This group of functions goes on to check if the
-	// individual year/month/day values come together as
-	// a valid date format.
+	// This group of functions checks if the
+	// individual year/month/day values come
+	// together as a valid date format.
 	// i.e. DD MM YYYY or DD MM -1
 	bool hasYearMonthDay();
 	bool hasMonthDay();
@@ -81,9 +81,9 @@ public:
 	bool hasMonth();
 	bool hasDay();
 
-	// This group of functions goes on to check if the
-	// individual year/month/day values come together as
-	// a valid time format.
+	// This group of functions checks if the
+	// individual year/month/day values come
+	// together as a valid time format.
 	// i.e. HH MM or -1 -1
 	bool hasHourMinute();
 	bool hasHour();
