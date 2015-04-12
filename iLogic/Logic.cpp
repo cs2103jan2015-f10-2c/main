@@ -32,7 +32,9 @@ const string Logic::SORT_COMPLETION = "done";
 const string Logic::SORT_LAST_UPDATE = "update";
 const string Logic::FILTER_COMPLETION = "done";
 const string Logic::FILTER_COMPLETION_UNDONE = "undone";
-const string Logic::FILTER_PRIORITY = "priority";
+const string Logic::FILTER_PRIORITY_HIGH = "high";
+const string Logic::FILTER_PRIORITY_MEDIUM = "medium";
+const string Logic::FILTER_PRIORITY_LOW = "low";
 const string Logic::FILTER_LABEL = "label";
 const string Logic::FILTER_ALL = "all";
 const string Logic:: FILTER_KEYWORD = "keyword";
@@ -406,9 +408,11 @@ string Logic::undoPreviousAction(){
 
 
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
+	assert(parseInfoToBeProcessed.size() > 0);
 	if (parseInfoToBeProcessed.size() == 1){
 		return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INPUT;
 	} else if (isValidLineIndex(lineIndexToBeEdited)){
+		
 		Item *editedItemToBeReplaced;
 		editedItemToBeReplaced = new Item;
 		*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
@@ -433,6 +437,7 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 
 
 string Logic::replaceItemInSchedule(Item* editedItemToBeReplaced, unsigned int lineIndexToBeEdited){
+	assert(lineIndexToBeEdited > 0);
 	_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
 	removeItemPointer(editedItemToBeReplaced);
 	return MESSAGE_SUCCESSFUL_EDIT;
@@ -452,26 +457,34 @@ string Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* it
 
 string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified, string& modifiedItemPartsForDisplay){
 	string modifier = iter->command;
+	assert(modifier != "");
 	modifiedItemPartsForDisplay = modifiedItemPartsForDisplay + modifier + " ";
-	if (modifier == MODIFIER_NAME){
-		itemToBeModified->setItemName(iter->text);
-	} else if (modifier == MODIFIER_DESCRIPTION){
-		string descriptionToBeAdded = iter->text;
-		itemToBeModified->setDescription(descriptionToBeAdded);
-	} else if (modifier == MODIFIER_START){
-		DateTime startTimeToBeModified = itemToBeModified->getStartTime();
-		itemToBeModified->setStartTime(interpreteDateTime(iter->text, itemToBeModified->getStartTime()));
-	} else if (modifier == MODIFIER_END){
-		itemToBeModified->setEndTime(interpreteDateTime(iter->text, itemToBeModified->getEndTime()));
-	} else if (modifier == MODIFIER_LABEL){
-		char labelToBeModified = iter->text[0];
-		itemToBeModified->setLabel(labelToBeModified);
-	} else if (modifier == MODIFIER_PRIORITY){
-		char priorityToBeModified = checkPriority(iter->text);
-		itemToBeModified->setPriority(priorityToBeModified);
-	} else if (modifier == MODIFIER_COMPLETION){
-		bool done = true;
-		itemToBeModified->setCompletion(done);
+	try{
+		if (modifier == MODIFIER_NAME){
+			itemToBeModified->setItemName(iter->text);
+		} else if (modifier == MODIFIER_DESCRIPTION){
+			string descriptionToBeAdded = iter->text;
+			itemToBeModified->setDescription(descriptionToBeAdded);
+		} else if (modifier == MODIFIER_START){
+			DateTime startTimeToBeModified = itemToBeModified->getStartTime();
+			itemToBeModified->setStartTime(interpreteDateTime(iter->text, itemToBeModified->getStartTime()));
+		} else if (modifier == MODIFIER_END){
+			itemToBeModified->setEndTime(interpreteDateTime(iter->text, itemToBeModified->getEndTime()));
+		} else if (modifier == MODIFIER_LABEL){
+			char labelToBeModified = iter->text[0];
+			itemToBeModified->setLabel(labelToBeModified);
+		} else if (modifier == MODIFIER_PRIORITY){
+			char priorityToBeModified = checkPriority(iter->text);
+			itemToBeModified->setPriority(priorityToBeModified);
+		} else if (modifier == MODIFIER_COMPLETION){
+			bool done = true;
+			itemToBeModified->setCompletion(done);
+		} else{
+			throw "invalid modifier type";
+		}
+	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
 	}
 	return modifiedItemPartsForDisplay;
 }
@@ -578,6 +591,7 @@ string Logic::markUndone(unsigned int lineIndex){
 }
 
 string Logic::changeCompletion(unsigned int lineIndex, string completion){
+	assert(lineIndex > 0);
 	Item* retrievedItem;
 	retrievedItem = new Item;
 	*retrievedItem = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndex);
@@ -610,18 +624,23 @@ vector<Item> Logic::sortTask(){
 	} else{
 		sortedDisplaySchedule = getDisplaySchedule();
 	}
-	if (_currentSorting == SORT_NAME){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
-	} else if (_currentSorting == SORT_PRIORITY){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
-	} else if (_currentSorting == SORT_COMPLETION){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
-	} else if (_currentSorting == SORT_DATE){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
-	} else if (_currentSorting == SORT_LAST_UPDATE){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-	} else{
-		return sortedDisplaySchedule;
+	try{
+		if (_currentSorting == SORT_NAME){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
+		} else if (_currentSorting == SORT_PRIORITY){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
+		} else if (_currentSorting == SORT_COMPLETION){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
+		} else if (_currentSorting == SORT_DATE){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
+		} else if (_currentSorting == SORT_LAST_UPDATE){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
+		} else{
+			throw "invalid sorting method";
+		}
+	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
 	}
 	printSchedule(sortedDisplaySchedule);
 	return sortedDisplaySchedule;
@@ -663,10 +682,8 @@ string Logic::filterTask(string filterToBeImplemented){
 	} else if (filterType == FILTER_COMPLETION_UNDONE){
 		bool completion = false;
 		filterByCompletion(completion);
-	} else if (filterType == FILTER_PRIORITY){
-		string modifierType;
-		iss >> modifierType;
-		char priorityType = checkPriority(modifierType);
+	} else if (filterType == FILTER_PRIORITY_HIGH || filterType == FILTER_PRIORITY_MEDIUM || filterType == FILTER_PRIORITY_LOW){
+		char priorityType = stringConvertToPriorityChar(filterType);
 		string returnMessage = filterByPriority(priorityType);
 		if (returnMessage == MESSAGE_INVALID_PRIORITY){
 			return MESSAGE_FAILED_VIEW + MESSAGE_INVALID_PRIORITY;
@@ -715,19 +732,38 @@ void Logic::clearKeyWordVec(){
 
 string Logic::filterByCompletion(bool completion){
 	_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(completion);
-	if (completion == true){
-		_currentFilter = FILTER_COMPLETION;
-	} else{
-		_currentFilter = FILTER_COMPLETION_UNDONE;
+	try {
+		if (completion == true){
+			_currentFilter = FILTER_COMPLETION;
+		} else if (completion == false){
+			_currentFilter = FILTER_COMPLETION_UNDONE;
+		} else{
+			throw "invalid completion type";
+		}
 	}
+		catch (string errorMessage){
+			cerr << errorMessage << endl;
+		}
+	
 	return _currentFilter;
 }
 
+char Logic::stringConvertToPriorityChar(string priority){
+	_currentFilter = priority;
+	if (priority == FILTER_PRIORITY_HIGH){
+		return 'H';
+	} else if (priority == FILTER_PRIORITY_MEDIUM){
+		return 'M';
+	} else if (priority == FILTER_PRIORITY_LOW){
+		return 'L';
+	} else {
+		return 'I';
+	}
+}
 
 string Logic::filterByPriority(char priority){
 	if (priority != 'E'){
 		_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priority);
-		_currentFilter = FILTER_PRIORITY;
 		return _currentFilter;
 	} else {
 		return MESSAGE_INVALID_PRIORITY;
