@@ -21,8 +21,9 @@ const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS = "ITEM VE
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_FAILURE = "ITEM VERIFICATION:: Invalid ID";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS = "ITEM VERIFICATION:: Valid Priority";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE = "ITEM VERIFICATION:: Invalid Priority";
+const string ItemVerification::EXCEPTION_SPOILT_BOOL = "This boolean is spoilt";
 const int ItemVerification::ITEM_VERIFICATION_INT_ZERO = 0;
-const int ItemVerification::ITEM_VERIFICATION_INT_MINUS_ONE = -1;
+const int ItemVerification::ITEM_VERIFICATION_INT_MINUS_TWO = -20000;
 
 ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 	_itemObjectToVerify = itemObject;
@@ -33,8 +34,8 @@ bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
 	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
+		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE);
-		assert(name == ITEM_VERIFICATION_EMPTY_STRING);
 		return false;
 	} else {
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS);
@@ -54,11 +55,7 @@ bool ItemVerification::isValidStartDateTime() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME);
-		assert(startDateTime.getYear() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(startDateTime.getMonth() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(startDateTime.getDay() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(startDateTime.getHour() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(startDateTime.getMinute() < ITEM_VERIFICATION_INT_MINUS_ONE);
+		assert(!_itemVerificationErrors.empty());
 		return false;
 	}
 }
@@ -70,11 +67,7 @@ bool ItemVerification::isValidEndDateTime() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME);
-		assert(endDateTime.getYear() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(endDateTime.getMonth() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(endDateTime.getDay() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(endDateTime.getHour() < ITEM_VERIFICATION_INT_MINUS_ONE);
-		assert(endDateTime.getMinute() < ITEM_VERIFICATION_INT_MINUS_ONE);
+		assert(!_itemVerificationErrors.empty());
 		return false;
 	}
 }
@@ -89,9 +82,11 @@ bool ItemVerification::isValidTimeFrame() {
 		if (startDateTimeVerification.hasHourMinute() && endDateTimeVerification.hasHourMinute()) {
 			if (startDateTime == endDateTime) {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
 				return false;
 			} else if (startDateTime.isAfter(endDateTime)) {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
 				return false;
 			} else {
 				return true;
@@ -107,6 +102,7 @@ bool ItemVerification::isValidTimeFrame() {
 				return true;
 			} else {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
 				return false;
 			}
 		}
@@ -122,8 +118,8 @@ bool ItemVerification::isValidID() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_ID);
+		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_FAILURE);
-		assert(itemID < ITEM_VERIFICATION_INT_ZERO);
 		return false;
 	}
 }
@@ -139,8 +135,8 @@ bool ItemVerification::isValidPriority() {
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
+		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE);
-		assert(priorityFound == string::npos);
 		return false;
 	}
 }
@@ -154,8 +150,8 @@ bool ItemVerification::isValidLabel() {
 	if (labelFound != string::npos) {
 		return true;
 	} else {
-		assert(labelFound == string::npos);
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_LABEL);
+		assert(!_itemVerificationErrors.empty());
 		return false;
 	}
 }
@@ -172,6 +168,70 @@ bool ItemVerification::isValidItem() {
 	bool hasValidID = isValidID();
 	bool hasValidPriority = isValidPriority();
 	bool hasValidLabel = isValidLabel();
+
+	try {
+		if (hasValidName == true && hasValidName == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidDescription == true && hasValidDescription == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidStartDateTime == true && hasValidStartDateTime == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidEndDateTime == true && hasValidEndDateTime == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidTimeFrame == true && hasValidTimeFrame == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidID == true && hasValidID == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidPriority == true && hasValidPriority == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+
+	try {
+		if (hasValidLabel == true && hasValidLabel == false) {
+			throw EXCEPTION_SPOILT_BOOL;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
 
 	if (hasValidName &&
 		hasValidDescription &&

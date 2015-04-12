@@ -284,7 +284,7 @@ namespace VerificationTests
 		{
 			bool isValidName;
 
-			Item item;
+			Item item(string(""));
 			ItemVerification verify(item, 100);
 			isValidName = verify.isValidName();
 			Assert::AreEqual(false, isValidName);
@@ -300,35 +300,35 @@ namespace VerificationTests
 			bool isValidStartDateTime;
 
 			Item item;
-			DateTime startTime1(2014, 03, 10, 17, 00);
+			DateTime startTime1(2014, 3, 10, 17, 0);
 			item.setStartTime(startTime1);
 			ItemVerification verify(item, 100);
 			isValidStartDateTime = verify.isValidStartDateTime();
 			Assert::AreEqual(true, isValidStartDateTime);
 			
 			Item item2;
-			DateTime startTime2(2014, 03, 10);
+			DateTime startTime2(2014, 3, 10);
 			item2.setStartTime(startTime2);
 			ItemVerification verify2(item2, 100);
 			isValidStartDateTime = verify2.isValidStartDateTime();
 			Assert::AreEqual(true, isValidStartDateTime);
 			
 			Item item3;
-			DateTime startTime3(99999, 03, 10, 17, 00);
+			DateTime startTime3(9999, 3, 10, 17, 0);
 			item3.setStartTime(startTime3);
 			ItemVerification verify3(item3, 100);
 			isValidStartDateTime = verify3.isValidStartDateTime();
-			Assert::AreEqual(false, isValidStartDateTime);
+			Assert::AreEqual(true, isValidStartDateTime);
 			
 			Item item4;
-			DateTime startTime4(2000, 2, 30, 17, 00);
+			DateTime startTime4(2000, 2, 30, 17, 0);
 			item4.setStartTime(startTime4);
 			ItemVerification verify4(item4, 100);
 			isValidStartDateTime = verify4.isValidStartDateTime();
 			Assert::AreEqual(false, isValidStartDateTime);
 			
 			Item item5;
-			DateTime startTime5(2000, 2, 29, 17, 00);
+			DateTime startTime5(2000, 2, 29, 17, 0);
 			item5.setStartTime(startTime5);
 			ItemVerification verify5(item5, 100);
 			isValidStartDateTime = verify5.isValidStartDateTime();
@@ -354,21 +354,21 @@ namespace VerificationTests
 			bool isValidEndDateTime;
 
 			Item item;
-			DateTime endTime1(2014, 03, 10, 17, 00);
+			DateTime endTime1(2014, 3, 10, 17, 0);
 			item.setEndTime(endTime1);
 			ItemVerification verify(item, 100);
 			isValidEndDateTime = verify.isValidEndDateTime();
 			Assert::AreEqual(true, isValidEndDateTime);
 			
 			Item item2;
-			DateTime endTime2(2014, 03, 10);
+			DateTime endTime2(2014, 3, 10);
 			item2.setEndTime(endTime2);
 			ItemVerification verify2(item2, 100);
 			isValidEndDateTime = verify2.isValidEndDateTime();
 			Assert::AreEqual(true, isValidEndDateTime);
 
 			Item item3;
-			DateTime endTime3(99999, 03, 10, 17, 00);
+			DateTime endTime3(99999, 3, 10, 17, 00);
 			item3.setEndTime(endTime3);
 			ItemVerification verify3(item3, 100);
 			isValidEndDateTime = verify3.isValidEndDateTime();
@@ -394,7 +394,7 @@ namespace VerificationTests
 		{
 			bool isValidTimeFrame;
 			
-			DateTime startTime1(2014, 03, 10, 17, 00);
+			DateTime startTime1(2014, 3, 10, 17, 00);
 			DateTime endTime1(2014, 10, 15, 0, 01);
 			Item item1;
 			item1.setStartTime(startTime1);
@@ -403,8 +403,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify1.isValidTimeFrame();
 			Assert::AreEqual(true, isValidTimeFrame);
 			
-			DateTime startTime2(2014, 03, 10, -1, -1);
-			DateTime endTime2(2014, 03, 15, 0, 01);
+			DateTime startTime2(2014, 3, 10, -1, -1);
+			DateTime endTime2(2014, 3, 15, 0, 01);
 			Item item2;
 			item2.setStartTime(startTime2);
 			item2.setEndTime(endTime2);
@@ -412,8 +412,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify2.isValidTimeFrame();
 			Assert::AreEqual(true, isValidTimeFrame);
 			
-			DateTime startTime3(2014, 03, 10, -1, -1);
-			DateTime endTime3(2014, 03, 10, 10, 30);
+			DateTime startTime3(2014, 3, 10, -1, -1);
+			DateTime endTime3(2014, 3, 10, 10, 30);
 			Item item3;
 			item3.setStartTime(startTime3);
 			item3.setEndTime(endTime3);
@@ -421,8 +421,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify3.isValidTimeFrame();
 			Assert::AreEqual(true, isValidTimeFrame);
 			
-			DateTime startTime4(2014, 03, 10, 10, 30);
-			DateTime endTime4(2014, 03, 10, -1, -1);
+			DateTime startTime4(2014, 3, 10, 10, 30);
+			DateTime endTime4(2014, 3, 10, -1, -1);
 			Item item4;
 			item4.setStartTime(startTime4);
 			item4.setEndTime(endTime4);
@@ -430,8 +430,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify4.isValidTimeFrame();
 			Assert::AreEqual(true, isValidTimeFrame);
 			
-			DateTime startTime5(2014, 03, 10, 10, 30);
-			DateTime endTime5(2014, 03, 10, 10, 30);
+			DateTime startTime5(2014, 3, 10, 10, 30);
+			DateTime endTime5(2014, 3, 10, 10, 30);
 			Item item5;
 			item5.setStartTime(startTime5);
 			item5.setEndTime(endTime5);
@@ -439,8 +439,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify5.isValidTimeFrame();
 			Assert::AreEqual(false, isValidTimeFrame);
 			
-			DateTime startTime6(2014, 03, 15, -1, -1);
-			DateTime endTime6(2014, 03, 10, 10, 30);
+			DateTime startTime6(2014, 3, 15, -1, -1);
+			DateTime endTime6(2014, 3, 10, 10, 30);
 			Item item6;
 			item6.setStartTime(startTime6);
 			item6.setEndTime(endTime6);
@@ -448,8 +448,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify6.isValidTimeFrame();
 			Assert::AreEqual(false, isValidTimeFrame);
 			
-			DateTime startTime7(2014, 03, 15, 10, 00);
-			DateTime endTime7(2014, 03, 10, 10, 30);
+			DateTime startTime7(2014, 3, 15, 10, 00);
+			DateTime endTime7(2014, 3, 10, 10, 30);
 			Item item7;
 			item7.setStartTime(startTime7);
 			item7.setEndTime(endTime7);
@@ -457,8 +457,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify7.isValidTimeFrame();
 			Assert::AreEqual(false, isValidTimeFrame);
 			
-			DateTime startTime8(2014, 03, 15, -1, -1);
-			DateTime endTime8(2014, 03, 10, -1, -1);
+			DateTime startTime8(2014, 3, 15, -1, -1);
+			DateTime endTime8(2014, 3, 10, -1, -1);
 			Item item8;
 			item8.setStartTime(startTime8);
 			item8.setEndTime(endTime8);
@@ -466,8 +466,8 @@ namespace VerificationTests
 			isValidTimeFrame = verify8.isValidTimeFrame();
 			Assert::AreEqual(false, isValidTimeFrame);
 			
-			DateTime startTime9(2014, 03, 15, 10, 00);
-			DateTime endTime9(2014, 03, 10, -1, -1);
+			DateTime startTime9(2014, 3, 15, 10, 00);
+			DateTime endTime9(2014, 3, 10, -1, -1);
 			Item item9;
 			item9.setStartTime(startTime9);
 			item9.setEndTime(endTime9);
@@ -478,7 +478,7 @@ namespace VerificationTests
 
 		TEST_METHOD(VerificationTestIsValidItem)
 		{
-			DateTime startTime(2014, 03, 10, 17, 00);
+			DateTime startTime(2014, 3, 10, 17, 00);
 			DateTime endTime(2014, 10, 15, 0, 01);
 			Item item;
 			bool isValid;
