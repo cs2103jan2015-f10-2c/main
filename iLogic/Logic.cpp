@@ -320,16 +320,21 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
 
 	ItemVerification verifier(*newItemToBeAdded, _nextItemID);
-
-	if (verifier.isValidItem()) {
-		string returnMessage = addItemToSchedule(newItemToBeAdded);
-		return returnMessage;
-	} else{
-
-		string errorList = getErrorList(verifier);
-		removeItemPointer(newItemToBeAdded);
-		return MESSAGE_FAILED_ADD;
+	try{
+		if (verifier.isValidItem()) {
+			string returnMessage = addItemToSchedule(newItemToBeAdded);
+			return returnMessage;
+		} else{
+			throw MESSAGE_FAILED_ADD;
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	string errorList = getErrorList(verifier);
+	cout << "errorList : " << errorList << endl;
+	removeItemPointer(newItemToBeAdded);
+	return MESSAGE_FAILED_ADD + errorList;
 }
 
 
@@ -460,11 +465,11 @@ string Logic::replaceItemInSchedule(Item* editedItemToBeReplaced, unsigned int l
 
 
 string Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* itemToBeModified){
+	assert(parseInfoToBeProcessed.size() > 0);
 	list<COMMAND_AND_TEXT>::iterator iter;
 	string modifiedItemParts = "";
 	for (iter = ++parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
 		modifyItemParts(iter, itemToBeModified, modifiedItemParts);
-
 	}
 	return modifiedItemParts;
 }
@@ -506,14 +511,21 @@ string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemT
 
 
 char Logic::checkPriority(string priorityToBeModified){
-	if (priorityToBeModified == "high" || priorityToBeModified == "h" || priorityToBeModified == "H"){
-		return 'H';
-	} else if (priorityToBeModified == "medium" || priorityToBeModified == "m" || priorityToBeModified == "M"){
-		return 'M';
-	} else if (priorityToBeModified == "low" || priorityToBeModified == "l" || priorityToBeModified == "L"){
-		return 'L';
-	} else
-		return 'E';
+	try{
+		if (priorityToBeModified == "high" || priorityToBeModified == "h" || priorityToBeModified == "H"){
+			return 'H';
+		} else if (priorityToBeModified == "medium" || priorityToBeModified == "m" || priorityToBeModified == "M"){
+			return 'M';
+		} else if (priorityToBeModified == "low" || priorityToBeModified == "l" || priorityToBeModified == "L"){
+			return 'L';
+		} else{
+			throw MESSAGE_INVALID_PRIORITY;
+		}
+	}
+	catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+	return 'E';
 }
 
 
@@ -609,7 +621,7 @@ string Logic::markUndone(unsigned int lineIndex){
 		} else{
 			printInvalidLineIndex();
 			throw INVALID_LINE_INDEX;
-			
+
 		}
 	}
 	catch (string errorMessage){
