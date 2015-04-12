@@ -30,6 +30,9 @@ Schedule::~Schedule() {
 
 //	Checks if an itemID matches the itemID of an item in a given vector cell
 bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
+	assert(itemID >= 0);
+	assert(vectorIndex >= 0);
+	
 	if (_schedule[vectorIndex].getItemID() == itemID) {
 		return true;
 	}
@@ -105,6 +108,8 @@ unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
 
 //	Retrieves item ID given display vector index
 unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	
 	return _displaySchedule[displayVectorIndex - 1].getItemID();
 }
 
@@ -128,6 +133,8 @@ unsigned int Schedule::resetDisplaySchedule() {
 string Schedule::addItem(Item* item) {
 	_scheduleHistory.addCommand(COMMAND_ADD, *item);
 	_schedule.push_back(*item);
+
+	assert(_schedule.size() > 0);
 	_storageLogger.writeToLogFile(LOG_ADDITEM);
 
 	return _schedule.back().displayItemFullDetails();
@@ -135,12 +142,17 @@ string Schedule::addItem(Item* item) {
 
 //	Retrieves a copy of an existing item in the schedule give Item ID
 Item Schedule::retrieveItemGivenItemID(unsigned int itemID) {
+	assert(itemID >= 0);
+	
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
 	return _schedule[vectorIndex];
 }
 
 //	Retrieves a copy of an existing item in the schedule given the item's display vector index
 Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	assert(_schedule.size() > 0);
+	assert(_displaySchedule.size() > 0);
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
 	_storageLogger.writeToLogFile(LOG_RETRIEVEITEM);
 	return retrieveItemGivenItemID(itemID);
@@ -148,6 +160,8 @@ Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorInd
 
 //	Replaces an existing item in the schedule, returns full details of the item (string)
 string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int itemID) {
+	assert(itemID >= 0);
+	assert(_schedule.size() > 0);
 	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
 
 	_scheduleHistory.addCommand(COMMAND_REPLACE, _schedule[vectorIndex]);
@@ -158,6 +172,9 @@ string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int item
 
 //	Replaces an existing item in the schedule given the item's display vector index
 string Schedule::replaceItemGivenDisplayVectorIndex(Item* replacementItem, unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	assert(_schedule.size() > 0);
+	assert(_displaySchedule.size() > 0);
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
 	_storageLogger.writeToLogFile(LOG_REPLACEITEM);
 	return replaceItemGivenItemID(replacementItem, itemID);
@@ -165,6 +182,8 @@ string Schedule::replaceItemGivenDisplayVectorIndex(Item* replacementItem, unsig
 
 //	Deletes an item from the schedule, returns full details of the item (string)
 string Schedule::deleteItemGivenItemID(unsigned int itemID) {
+	assert(itemID >= 0);
+	assert(_schedule.size() > 0);
 	unsigned int index = findVectorIndexGivenItemID(itemID);
 	Item itemToBeDeleted = _schedule[index];
 
@@ -176,6 +195,9 @@ string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 
 //	Deletes an item from the schedule given item's display vector index
 string Schedule::deleteItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	assert(_schedule.size() > 0);
+	assert(_displaySchedule.size() > 0);
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
 	_storageLogger.writeToLogFile(LOG_DELETEITEM);
 	return deleteItemGivenItemID(itemID);
@@ -193,6 +215,8 @@ string Schedule::clearDisplaySchedule() {
 		_schedule.erase(_schedule.begin() + vectorIndex);
 		_displaySchedule.erase(_displaySchedule.begin());
 	}
+	
+	assert(_displaySchedule.empty());
 
 	_storageLogger.writeToLogFile(LOG_CLEAR);
 	return COMMAND_CLEAR;

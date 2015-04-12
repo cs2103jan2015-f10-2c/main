@@ -17,7 +17,7 @@ const string History::LOG_ITEMCOMMAND = "HISTORY::AddItemCommand";
 const string History::LOG_CLEARCOMMAND = "HISTORY::AddClearCommand";
 const string History::LOG_UNDOITEM = "HISTORY::UndoItemCommand";
 const string History::LOG_UNDOCLEAR = "HISTORY::UndoClearCommand";
-const string History::LOG_RESETHISTORY = "HISTORY::Reset";
+const string History::LOG_RESETHISTORY = "HISTORY::Reset\n";
 
 //	Default Constructor
 History::History() {

@@ -102,26 +102,31 @@ int DateTime::setMinute(int minute) {
 
 //	Retrieves the year
 int DateTime::getYear() {
+	assert(_year >= INDICATOR_FAILEDSETATTEMPT);
 	return _year;
 }
 
 //	Retrieves the month
 int DateTime::getMonth() {
+	assert(_month >= INDICATOR_FAILEDSETATTEMPT);
 	return _month;
 }
 
 //	Retrieves the day of the month
 int DateTime::getDay() {
+	assert(_day >= INDICATOR_FAILEDSETATTEMPT);
 	return _day;
 }
 
 //	Retrieves the hour of the day (24-hour format)
 int DateTime::getHour() {
+	assert(_hour >= INDICATOR_FAILEDSETATTEMPT);
 	return _hour;
 }
 
 //	Retrieves the minute
 int DateTime::getMinute() {
+	assert(_minute >= INDICATOR_FAILEDSETATTEMPT);
 	return _minute;
 }
 
@@ -256,6 +261,10 @@ bool DateTime::isBefore(DateTime secondaryDateTime) {
 string DateTime::displayDate() {
 	ostringstream displayOutput;
 
+	assert(_year >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_month >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_day >= INDICATOR_FAILEDSETATTEMPT);
+
 	displayOutput
 		<< setw(4) << _year
 		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _month
@@ -267,6 +276,9 @@ string DateTime::displayDate() {
 //	Returns string with HH:MM
 string DateTime::displayTime() {
 	ostringstream displayOutput;
+
+	assert(_hour >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_minute >= INDICATOR_FAILEDSETATTEMPT);
 
 	displayOutput
 		<< setfill(DISPLAY_FILLER) << setw(2) << _hour
@@ -296,6 +308,10 @@ string DateTime::displayDateTime() {
 //	Returns string with DD/MM/YYYY
 string DateTime::displayDateForUser() {
 	ostringstream displayOutput;
+
+	assert(_year >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_month >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_day >= INDICATOR_FAILEDSETATTEMPT);
 
 	displayOutput
 		<< setw(2) << _day

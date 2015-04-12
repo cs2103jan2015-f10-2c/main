@@ -142,7 +142,8 @@ public:
 	static const string MESSAGE_INVALID_REMOVE;
 	static const string MESSAGE_INVALID_PRIORITY;
 	static const string MESSAGE_INVALID_DATE_TIME;
-	static const string MESSAGE_INVALID_ADD_ITEM;
+	static const string MESSAGE_INVALID_ADD_NAME;
+	static const string MESSAGE_INVALID_ADD_REMOVE;
 	static const string MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER;
 	static const string MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
 	static const string MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER;
