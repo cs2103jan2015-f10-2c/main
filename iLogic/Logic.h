@@ -11,6 +11,7 @@
 #include "..\iStorage\Item.h"
 #include "..\iParser\iParser.h"
 #include "..\iLogic\ItemVerification.h"
+#include "..\iPlanner Log\Log.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -45,6 +46,7 @@ private:
 	string _currentFilter;
 	vector<string> _keywordVec;
 	START_END_TIME _startEndTime;
+	Log _logicLogger;
 
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
@@ -76,7 +78,9 @@ private:
 	static const string FILTER_COMPLETION;
 	static const string FILTER_COMPLETION_UNDONE;
 	static const string FILTER_KEYWORD;
-	static const string FILTER_PRIORITY;
+	static const string FILTER_PRIORITY_HIGH;
+	static const string FILTER_PRIORITY_MEDIUM;
+	static const string FILTER_PRIORITY_LOW;
 	static const string FILTER_LABEL;
 	static const string FILTER_ALL;
 	static const string FILTER_DATE;
@@ -381,6 +385,8 @@ public:
 	string searchTask();
 	void clearKeyWordVec();
 	
+
+	char stringConvertToPriorityChar(string priority);
 	string trimText(string& text);
 	string trimBack(string text);
 	string trimFront(string text);
@@ -473,7 +479,7 @@ public:
 	//store schedule and retrieve schedule from text file
 	//pre : none
 	//post : none
-	MESSAGE_AND_SCHEDULE readDataFromFile();
+	string readDataFromFile();
 	string writeDataOntoFile();
 
 

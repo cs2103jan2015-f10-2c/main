@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "DateTimeVerification.h"
 
 const int DateTimeVerification::DATETIME_VERIFICATION_MIN_YEAR = 0;
@@ -24,6 +25,10 @@ const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_4 = 4;
 const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_100 = 100;
 const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_400 = 400;
 
+const string DateTimeVerification::DATETIME_VERIFICATION_LOG_DATETIME_FAILURE = "DT VERIFICATION:: Invalid Date Time Values";
+const string DateTimeVerification::DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS = "DT VERIFICATION:: Valid Date Time Values";
+
+
 DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
 	_dateTimeObjectToVerify = dateTimeObject;
 	_year = _dateTimeObjectToVerify.getYear();
@@ -39,10 +44,10 @@ bool DateTimeVerification::isValidDateTimeValues() {
 		isValidDayRange() &&
 		isValidHourRange() &&
 		isValidMinuteRange()) {
-		_dateTimeVerificationLogger.writeToLogFile("---DTVerification: Valid Date Time Values");
+		_dateTimeVerificationLogger.writeToLogFile(DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS);
 		return true;
 	} else {
-		_dateTimeVerificationLogger.writeToLogFile("---DTVerification: Invalid Date Time Values");
+		_dateTimeVerificationLogger.writeToLogFile(DATETIME_VERIFICATION_LOG_DATETIME_FAILURE);
 		return false;
 	}
 }
@@ -53,6 +58,7 @@ bool DateTimeVerification::isValidYearRange() {
 	} else if (_year == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
 		return true;
 	} else {
+		assert(_year > DATETIME_VERIFICATION_MAX_YEAR || _year < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
 		return false;
 	}
 }
@@ -63,6 +69,7 @@ bool DateTimeVerification::isValidMonthRange() {
 	} else if (_month == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
 		return true;
 	} else {
+		assert(_month > DATETIME_VERIFICATION_MAX_MONTH || _month < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
 		return false;
 	}
 }
@@ -73,6 +80,7 @@ bool DateTimeVerification::isValidDayRange() {
 	} else if (_day == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
 		return true;
 	} else {
+		assert(_day > DATETIME_VERIFICATION_MAX_DAY || _day < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
 		return false;
 	}
 }
@@ -83,6 +91,7 @@ bool DateTimeVerification::isValidHourRange() {
 	} else if (_hour == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
 		return true;
 	} else {
+		assert(_hour > DATETIME_VERIFICATION_MAX_HOUR || _hour < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
 		return false;
 	}
 }
@@ -93,6 +102,7 @@ bool DateTimeVerification::isValidMinuteRange() {
 	} else if (_minute == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
 		return true;
 	} else {
+		assert(_minute > DATETIME_VERIFICATION_MAX_HOUR || _minute < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
 		return false;
 	}
 }

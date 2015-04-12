@@ -84,10 +84,11 @@ public:
 		testCommandAndText.text = "1222 12 12 -1 -1";
 		testParseInfo.push_back(testCommandAndText);
 		testLogic.addTask(testParseInfo);
-
+	
 		string message = testLogic.addTask(testParseInfo);
 		string expectedMessage = "Task added to schedule : Young Bin is testing";
 		Assert::AreEqual(expectedMessage, message);
+		testParseInfo.clear();
 
 		/*add one item with invalid start time*/
 		testCommandAndText.command = "add";
@@ -97,39 +98,18 @@ public:
 		testCommandAndText.text = "999999 99 992 9999 999";
 		testParseInfo.push_back(testCommandAndText);
 		string expectedAddMessage = "failed_add";
-		string actualAddMessage = testLogic.addTask(testParseInfo);
+		try{
+			testLogic.addTask(testParseInfo);
+		}
+		catch (string actualMessage){
+			Assert::AreEqual(expectedMessage, actualMessage);
+		}
 
-		message = testLogic.addTask(testParseInfo);
-		expectedMessage = "Unable to add task : ";
-		Assert::AreEqual(expectedMessage, message);
-	}
-
-
-	TEST_METHOD(AddTaskTest5) {
-		Logic testLogic;
-		string testItemName;
-		COMMAND_AND_TEXT testCommandAndText;
-		list<COMMAND_AND_TEXT> testParseInfo;
-
-		/*add one item with valid end time,desc but invalid priority*/
-		testCommandAndText.command = "add";
-		testCommandAndText.text = "Young Bin";
-		testParseInfo.push_back(testCommandAndText);
-		testCommandAndText.command = "end";
-		testCommandAndText.text = "1222 12 12 -1 -1";
-		testParseInfo.push_back(testCommandAndText);
-		testCommandAndText.command = "desc";
-		testCommandAndText.text = "test description";
-		testParseInfo.push_back(testCommandAndText);
-		testCommandAndText.command = "priority";
-		testCommandAndText.text = "YYYYYYY";
-		testParseInfo.push_back(testCommandAndText);
-
-		string message = testLogic.addTask(testParseInfo);
-		string expectedMessage = "Task added to schedule : Young Bin";
-		Assert::AreEqual(expectedMessage, message);
 
 	}
+
+
+
 
 	TEST_METHOD(AddTaskTest6) {
 		Logic testLogic;
@@ -241,13 +221,16 @@ public:
 		string expectedDeleteMessage1 = "Task is deleted from schedule";
 		string actualDeleteMessage1 = testLogic.deleteTask(lineIndexToBeDeleted);
 		Assert::AreEqual(expectedDeleteMessage1, actualDeleteMessage1);
-
+	
 		testLogic.resetAndGetDisplaySchedule();
 		/*Delete line 5, which does not exist*/
-		string expectedDeleteMessage2 = "Unable to delete task : Invalid index";
-		string actualDeleteMessage2 = testLogic.deleteTask(lineIndexToBeDeleted);
-		Assert::AreEqual(expectedDeleteMessage2, actualDeleteMessage2);
-
+		try{
+			testLogic.deleteTask(lineIndexToBeDeleted);
+		}
+		catch (string actualDeleteMessage2) {
+			string expectedDeleteMessage2 = "Unable to delete task : Invalid index";
+			Assert::AreEqual(expectedDeleteMessage2, actualDeleteMessage2);
+		}
 	}
 
 	TEST_METHOD(DeleteTaskTest2) {
@@ -389,10 +372,13 @@ public:
 
 		testLogic.resetAndGetDisplaySchedule();
 		/*delete line index greater than schedulesize*/
-		lineIndexToBeDeleted = 5;
-		string expectedDeleteMessage3 = "Unable to delete task : Invalid index";
-		string actualDeleteMessage3 = testLogic.deleteTask(lineIndexToBeDeleted);
-		Assert::AreEqual(expectedDeleteMessage3, actualDeleteMessage3);
+		try{
+			testLogic.deleteTask(lineIndexToBeDeleted);
+		}
+		catch (string actualDeleteMessage3) {
+			string expectedDeleteMessage3 = "Unable to delete task : Invalid index";
+			Assert::AreEqual(expectedDeleteMessage3, actualDeleteMessage3);
+		}
 	}
 
 	TEST_METHOD(DeleteTaskTest4) {
@@ -453,9 +439,13 @@ public:
 
 		testLogic.resetAndGetDisplaySchedule();
 		/*delete line index greater than schedulesize*/
-		string expectedDeleteMessage3 = "Unable to delete task : Invalid index";
-		string actualDeleteMessage3 = testLogic.deleteTask(lineIndexToBeDeleted);
-		Assert::AreEqual(expectedDeleteMessage3, actualDeleteMessage3);
+		try{
+			testLogic.deleteTask(lineIndexToBeDeleted);
+		}
+		catch (string actualDeleteMessage3) {
+			string expectedDeleteMessage3 = "Unable to delete task : Invalid index";
+			Assert::AreEqual(expectedDeleteMessage3, actualDeleteMessage3);
+		}
 	}
 	};
 
@@ -1517,10 +1507,14 @@ public:
 
 		/*delete item*/
 		testInput = "Delete 4";
-		expectedMessage = "Unable to delete task : Invalid index";
-		actualMessage = testLogic.initiateCommandAction(testParser, testInput);
-		Assert::AreEqual(expectedMessage, actualMessage.message);
-
+		try{
+			testLogic.initiateCommandAction(testParser, testInput);
+		}
+		catch (string actualDeleteMessage) {
+			string expectedDeleteMessage = "Unable to delete task : Invalid index";
+			Assert::AreEqual(expectedDeleteMessage, actualDeleteMessage);
+		}
+		
 		/*add item*/
 		testInput = "add go dinner with sophie -date 23:59";
 		expectedMessage = "Task added to schedule : go dinner with sophie";
@@ -1693,7 +1687,7 @@ public:
 		TEST_METHOD(ReadFileTest1) {
 			Logic testLogic;
 			string expectedMessage = "readfile completed";
-			string actualMessage = testLogic.readDataFromFile().message;
+			string actualMessage = testLogic.readDataFromFile();
 			Assert::AreEqual(expectedMessage, actualMessage);
 		}
 

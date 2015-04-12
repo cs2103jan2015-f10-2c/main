@@ -155,8 +155,8 @@ namespace iPlannerUI {
 			// 
 			// outputBox2
 			// 
-			this->outputBox2->BackColor = System::Drawing::SystemColors::MenuText;
-			this->outputBox2->ForeColor = System::Drawing::Color::White;
+			this->outputBox2->BackColor = System::Drawing::Color::Black;
+			this->outputBox2->ForeColor = System::Drawing::Color::Black;
 			this->outputBox2->HideSelection = false;
 			this->outputBox2->Location = System::Drawing::Point(15, 70);
 			this->outputBox2->Name = L"outputBox2";
@@ -353,6 +353,7 @@ namespace iPlannerUI {
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 MESSAGE_AND_SCHEDULE displayMessage;
 				 iParser testParser;
+				 Log newLog;
 				 String^ userInput;
 				 userInput = commandInputBox->Text;
 				 string stdUserInput;
@@ -360,6 +361,7 @@ namespace iPlannerUI {
 				 vector<Item> tempItem;
 
 				 if (e->KeyCode == Keys::Enter) {
+					 newLog.writeToLogFile(stdUserInput);
 					 displayMessage = testLogic->initiateCommandAction(testParser, stdUserInput);
 					 outputBox2->Clear();
 					 
@@ -413,41 +415,45 @@ namespace iPlannerUI {
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
 				 
 				 Log newLog;
-				 newLog.writeToLogFile("\nLog file created");
+				 newLog.clearLogFile();
+				 newLog.writeToLogFile("Log file created");
 				 
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
-				 vector<Item> tempItem;
-				 outputBox2->Clear();			
 				 
-				 tempItem = testLogic->getDisplaySchedule();
+				 outputBox2->Clear();			
+				 vector<Item> tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
 				 int displayIndex = 0;
-
+				 
 				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
 					 
 					 String ^indexString = (++displayIndex).ToString();
 					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-					 outputBox2->SelectionColor = Color::CadetBlue;
+					 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
 					 outputBox2->SelectedText = indexString + ". ";
 
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 if (iterItem->getPriority() == 72) {
-						 displayPriorityAndName("H", nameString);						 
-					 } else if (iterItem->getPriority() == 77) {
+						 displayPriorityAndName("H", nameString);
+					 }
+					 else if (iterItem->getPriority() == 77) {
 						 displayPriorityAndName("M", nameString);
-					 } else if (iterItem->getPriority() == 76) {
+					 }
+					 else if (iterItem->getPriority() == 76) {
 						 displayPriorityAndName("L", nameString);
-					 } else {
+					 }
+					 else {
 						 displayPriorityAndName("-", nameString);
 					 }
-					 
+
 					 if (iterItem->getCompletion() == true) {
 						 displayCompletion("(D)");
-					 } else {
+					 }
+					 else {
 						 displayCompletion("(ND)");
 					 }
-					 
+
 					 String^ startString = gcnew String(iterItem->displayStartTimeForUser().c_str());
 					 displayStartTime(startString);
 
@@ -558,13 +564,14 @@ namespace iPlannerUI {
 	}
 	
 	private: System::Void viewScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuView = "\t\t\tView Schedule - Command List\r\n";
+				 String^ helpMenuView = "\t\t   View Schedule - Command List\r\n";
 
-				 helpMenuView += "\r\nUser can view All tasks, Completed tasks or tasks with a specific Priority\r\n";
+				 helpMenuView += "\r\nUser can view All tasks, Tasks within a given range of dates, Completed tasks or tasks with a specific Priority\r\n";
 				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
+				 helpMenuView += "view <date1> <date2> - All tasks in the specified date range are displayed\r\n";
 				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
 				 helpMenuView += "view undone - Tasks which are not completed are displayed\r\n";
-				 helpMenuView += "view priority <H/M/L> - Tasks which have the priority specified are displayed\r\n";
+				 helpMenuView += "view <H/M/L> - Tasks which have the priority specified are displayed\r\n";
 				 
 				 MessageBox::Show(helpMenuView);
 

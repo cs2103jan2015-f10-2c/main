@@ -6,11 +6,14 @@
 #include <iostream>
 #include "DateTimeVerification.h"
 #include "..\iStorage\Item.h"
+#include "..\iPlanner Log\Log.h"
+
 using namespace std;
 
 class ItemVerification {
 
 private:
+	Log _itemVerificationLogger;
 	Item _itemObjectToVerify;
 	list<string> _itemVerificationErrors;
 	unsigned int _nextID;
@@ -28,12 +31,26 @@ private:
 	static const string ITEM_VERIFICATION_ERROR_INVALID_PRIORITY;
 	static const string ITEM_VERIFICATION_ERROR_INVALID_LABEL;
 
+	static const string ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE;
+	static const string ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_ID_FAILURE;
+	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE;
+
+	static const int ITEM_VERIFICATION_INT_ZERO;
+	static const int ITEM_VERIFICATION_INT_MINUS_ONE;
+
 /* #ifndef TESTMODE
 private:
 #else
 public:
 #endif */
 public:
+
+	// Conducts the validity checks on the individual
+	// fields within the item
 	bool isValidName();
 	bool isValidDescription();
 	bool isValidStartDateTime();
