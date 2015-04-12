@@ -35,6 +35,10 @@ bool History::isNormalHistoryCommand(string command) {
 		return true;
 	}
 
+	assert(command != COMMAND_ADD);
+	assert(command != COMMAND_DELETE);
+	assert(command != COMMAND_REPLACE);
+
 	return false;
 }
 
@@ -43,14 +47,19 @@ bool History::isClearCommand(string command) {
 		return true;
 	}
 
+	assert(command != COMMAND_CLEAR);
+
 	return false;
 }
 
-//	Returns true if command and item stacks are both not empty
+//	Returns true if command stack is not empty
 bool History::isValidUndoCall() {
 	if (_commandStack.empty()) {
 		return false;
 	}
+	
+	assert(_commandStack.top() == COMMAND_ADD || _commandStack.top() == COMMAND_CLEAR || _commandStack.top() == COMMAND_REPLACE || _commandStack.top() == COMMAND_DELETE);
+
 	return true;
 }
 
@@ -59,6 +68,9 @@ string History::addCommand(string command, Item item) {
 	if (isNormalHistoryCommand(command)) {
 		_commandStack.push(command);
 		_itemStack.push(item);
+
+		assert(!_commandStack.empty());
+		assert(!_itemStack.empty());
 
 		_historyLogger.writeToLogFile(LOG_ITEMCOMMAND + command);
 		return (command + item.displayItemFullDetails());
@@ -73,6 +85,9 @@ string History::addClearCommand(vector<Item> clearedSchedule) {
 	_commandStack.push(COMMAND_CLEAR);
 	_scheduleStack.push(clearedSchedule);
 
+	assert(!_commandStack.empty());
+	assert(!_scheduleStack.empty());
+
 	_historyLogger.writeToLogFile(LOG_CLEARCOMMAND);
 	return COMMAND_CLEAR;
 }
@@ -80,15 +95,20 @@ string History::addClearCommand(vector<Item> clearedSchedule) {
 //	Removes commands from the item and command stack; returns item and command (both via reference)
 string History::undoLastCommand(string& command, Item& latestItem, vector<Item>& lastestClearedSchedule) {
 	if (isValidUndoCall()) {
+		assert(!_commandStack.empty());
 		command = _commandStack.top();
 
 		if (isNormalHistoryCommand(command)) {
+			assert(command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_REPLACE);
+			assert(!_itemStack.empty());
 			latestItem = _itemStack.top();
 			removeUndoneCommand();
 
 			_historyLogger.writeToLogFile(LOG_UNDOITEM + command);
 			return (command + "\n" + latestItem.displayItemFullDetails());
 		} else if (isClearCommand(command)) {
+			assert(command == COMMAND_CLEAR);
+			assert(!_scheduleStack.empty());
 			lastestClearedSchedule = _scheduleStack.top();
 			_commandStack.pop();
 			_scheduleStack.pop();
@@ -105,6 +125,8 @@ string History::undoLastCommand(string& command, Item& latestItem, vector<Item>&
 bool History::removeUndoneCommand() {
 	bool commandCompleted = false;
 
+	assert(!_commandStack.empty());
+	assert(!_itemStack.empty());
 	_commandStack.pop();
 	_itemStack.pop();
 	commandCompleted = true;
@@ -124,6 +146,10 @@ string History::reset() {
 	while (!_itemStack.empty()) {
 		_itemStack.pop();
 	}
+
+	assert(_commandStack.empty());
+	assert(_itemStack.empty());
+	assert(_scheduleStack.empty());
 
 	_historyLogger.writeToLogFile(LOG_RESETHISTORY);
 	return RESET_COMPLETION;
