@@ -686,7 +686,7 @@ string iParser::splitAndSetViewDateRange(const string& dateTimeString) {
 		throw MESSAGE_INVALID_DATE_TIME;
 	}
 
-	string viewInfo = startInfo + CHAR_SPACE + endInfo;
+	string viewInfo = STRING_DATE + CHAR_SPACE + startInfo + CHAR_SPACE + endInfo;
 	setParseInfo(COMMAND_VIEW, viewInfo);
 
 	return MESSAGE_SUCCESS;
