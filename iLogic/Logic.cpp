@@ -71,6 +71,8 @@ const string Logic::MESSAGE_INVALID_SORTTYPE = "Invalid sort type";
 const string Logic::MESSAGE_INVALID_INPUT = "Invalid command";
 const string Logic::MESSAGE_INVALID_INDEX = "Invalid index";
 const string Logic::MESSAGE_INVALID_FILTERTYPE = "Invalid filter type";
+const string Logic::MESSAGE_INVALID_MODIFIER = "Invalid modifier";
+const string Logic::MESSAGE_INVALID_COMPLETION = "invalid completion";
 const string Logic::MESSAGE_TASK_FOUND = "Tasks containing : ";
 const string Logic::MESSAGE_NO_TASK_FOUND = "No task can be found";
 const string Logic::MESSAGE_UNABLE_TO_UNDO = "ERROR: Undo has reached its limit.";
@@ -230,19 +232,24 @@ void Logic::printViewChanged(){
 
 MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(_logicParser, input);
+	assert(parseInfoToBeProcessed.size() > 0);
+
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
 	MESSAGE_AND_SCHEDULE userDisplayInformation;
 	list<COMMAND_AND_TEXT>::iterator iter;
+	/*For debugging purpose on CLI*/
 	for (iter = parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
 		cout << "COMMAND : " << iter->command << endl;
 		cout << "TEXT : " << iter->text << endl;
 	}
+	/*Debugging Ends*/
 	if (command == COMMAND_ADD) {
 		returnMessage = addTask(parseInfoToBeProcessed);
 	} else if (command == COMMAND_DELETE) {
 		unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
+		cout << "LINEINDEX : " << lineIndexToBeDeleted << endl;
 		returnMessage = deleteTask(lineIndexToBeDeleted);
 	} else if (command == COMMAND_EDIT){
 		unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
@@ -343,6 +350,7 @@ void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> par
 
 
 unsigned int Logic::increaseItemID(){
+	assert(_nextItemID >= 0);
 	_nextItemID++;
 	return _nextItemID;
 }
@@ -369,17 +377,18 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 			return displayMessage;
 		} else{
 			printDeleteTaskFailed();
-			throw MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
+			throw INVALID_LINE_INDEX;
 		}
 	}
-	catch (const char* msg) {
-		cerr << msg << endl;
+	catch (string errorMessage2){
+		cerr << errorMessage2 << endl;
 	}
 	return  MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
 }
 
 
 string Logic::deleteItemFromSchedule(unsigned int lineIndexToBeDeleted){
+	assert(lineIndexToBeDeleted > 0);
 	_logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 	printDeleteTaskSuccessful(lineIndexToBeDeleted);
 	return MESSAGE_SUCCESSFUL_DELETE;
@@ -395,11 +404,17 @@ int Logic::convertToDigit(string text) {
 
 string Logic::undoPreviousAction(){
 	string message = _logicSchedule.undoLastCommand();
-	if (message != MESSAGE_UNABLE_TO_UNDO){
-		return MESSAGE_SUCCESSFUL_UNDO;
-	} else{
-		return MESSAGE_FAILED_UNDO;
+	try{
+		if (message != MESSAGE_UNABLE_TO_UNDO){
+			return MESSAGE_SUCCESSFUL_UNDO;
+		} else{
+			throw MESSAGE_UNABLE_TO_UNDO;
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return MESSAGE_FAILED_UNDO;
 }
 
 /////////////////////////////////////
@@ -480,7 +495,7 @@ string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemT
 			bool done = true;
 			itemToBeModified->setCompletion(done);
 		} else{
-			throw "invalid modifier type";
+			throw MESSAGE_INVALID_MODIFIER;
 		}
 	}
 	catch (string errorMessage){
@@ -571,23 +586,36 @@ DateTime Logic::getCurrentTime(){
 
 
 string Logic::markDone(unsigned int lineIndex){
-	if (isValidLineIndex(lineIndex)){
-		changeCompletion(lineIndex, COMMAND_DONE);
-		return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_DONE;
-	} else{
-		printInvalidLineIndex();
-		return INVALID_LINE_INDEX;
+	try{
+		if (isValidLineIndex(lineIndex)){
+			changeCompletion(lineIndex, COMMAND_DONE);
+			return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_DONE;
+		} else{
+			printInvalidLineIndex();
+			throw INVALID_LINE_INDEX;
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return INVALID_LINE_INDEX;
 }
 
 string Logic::markUndone(unsigned int lineIndex){
-	if (isValidLineIndex(lineIndex)){
-		changeCompletion(lineIndex, COMMAND_UNDONE);
-		return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_UNDONE;
-	} else{
-		printInvalidLineIndex();
-		return INVALID_LINE_INDEX;
+	try{
+		if (isValidLineIndex(lineIndex)){
+			changeCompletion(lineIndex, COMMAND_UNDONE);
+			return MESSAGE_TASK + to_string(lineIndex) + MESSAGE_SUCCESSFUL_MARK_UNDONE;
+		} else{
+			printInvalidLineIndex();
+			throw INVALID_LINE_INDEX;
+			
+		}
 	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
+	return INVALID_LINE_INDEX;
 }
 
 string Logic::changeCompletion(unsigned int lineIndex, string completion){
@@ -597,12 +625,18 @@ string Logic::changeCompletion(unsigned int lineIndex, string completion){
 	*retrievedItem = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndex);
 
 	bool done;
-	if (completion == COMMAND_DONE){
-		done = true;
-	} else if (completion == COMMAND_UNDONE){
-		done = false;
-	} else{
-		return MESSAGE_INVALID_INPUT;
+	try{
+		if (completion == COMMAND_DONE){
+			done = true;
+		} else if (completion == COMMAND_UNDONE){
+			done = false;
+		} else{
+			throw MESSAGE_INVALID_COMPLETION;
+			return MESSAGE_INVALID_COMPLETION;
+		}
+	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
 	}
 
 	retrievedItem->setCompletion(done);
@@ -636,7 +670,7 @@ vector<Item> Logic::sortTask(){
 		} else if (_currentSorting == SORT_LAST_UPDATE){
 			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
 		} else{
-			throw "invalid sorting method";
+			throw MESSAGE_INVALID_SORTTYPE;
 		}
 	}
 	catch (string errorMessage){
@@ -675,7 +709,6 @@ string Logic::filterTask(string filterToBeImplemented){
 	string filterType;
 
 	iss >> filterType;
-
 	if (filterType == FILTER_COMPLETION){
 		bool completion = true;
 		filterByCompletion(completion);
@@ -696,18 +729,18 @@ string Logic::filterTask(string filterToBeImplemented){
 		_startEndTime = getStartEndTime(filterToBeImplemented);
 		_currentFilter = filterToBeImplemented;
 		filterByDate(_startEndTime);
+		return MESSAGE_SUCCESSFUL_VIEW + FILTER_DATE;
 	} else{
 		printInvalidViewOption();
 		return MESSAGE_FAILED_VIEW + MESSAGE_INVALID_FILTERTYPE;
 	}
-
 	printViewChanged();
 	return MESSAGE_SUCCESSFUL_VIEW + _currentFilter;
 }
 
 string Logic::filterByDate(START_END_TIME startEndTime){
 	_logicSchedule.retrieveDisplayScheduleFilteredByDateTime(_startEndTime.startTime, _startEndTime.endTime);
-	return _currentFilter;
+	return FILTER_DATE;
 }
 
 START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
@@ -716,9 +749,9 @@ START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
 	istringstream iss(infoToBeInterpreted);
 	iss >> junk;
 	iss >> YYYY >> MM >> DD >> hh >> mm;
-	DateTime startTime = interpretStartEndTime("start",YYYY, MM, DD, hh, mm);
+	DateTime startTime = interpretStartEndTime(MODIFIER_START, YYYY, MM, DD, hh, mm);
 	iss >> YYYY >> MM >> DD >> hh >> mm;
-	DateTime endTime = interpretStartEndTime("end",YYYY, MM, DD, hh, mm);
+	DateTime endTime = interpretStartEndTime(MODIFIER_START, YYYY, MM, DD, hh, mm);
 	_startEndTime.startTime = startTime;
 	_startEndTime.endTime = endTime;
 	return _startEndTime;
@@ -768,7 +801,7 @@ string Logic::filterByCompletion(bool completion){
 		} else if (completion == false){
 			_currentFilter = FILTER_COMPLETION_UNDONE;
 		} else{
-			throw "invalid completion type";
+			throw MESSAGE_INVALID_COMPLETION;
 		}
 	}
 	catch (string errorMessage){
@@ -788,7 +821,7 @@ char Logic::stringConvertToPriorityChar(string priority){
 		} else if (priority == FILTER_PRIORITY_LOW){
 			return 'L';
 		} else {
-			throw "INVALID PRIORITY TYPE";
+			throw MESSAGE_INVALID_PRIORITY;
 		}
 	}
 	catch (string errorMessage){
@@ -804,12 +837,12 @@ string Logic::filterByPriority(char priority){
 			_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priority);
 			return _currentFilter;
 		} else {
-			throw "INVALID PRIORITY";
+			throw MESSAGE_INVALID_PRIORITY;
 		}
 	}
-		catch (string errorMessage){
-			cerr << errorMessage << endl;
-		}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+	}
 	return MESSAGE_INVALID_PRIORITY;
 }
 
