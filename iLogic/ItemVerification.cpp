@@ -34,9 +34,9 @@ bool ItemVerification::isValidName() {
 	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE);
+		assert(name == ITEM_VERIFICATION_EMPTY_STRING);
 		return false;
 	} else {
-		assert(name == ITEM_VERIFICATION_EMPTY_STRING);
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS);
 		return true;
 	}
