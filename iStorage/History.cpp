@@ -11,6 +11,8 @@ const string History::ERROR_ADD = "ERROR: Command and Item were not recorded.";
 const string History::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
 const string History::RESET_COMPLETION = "Reset completed.";
 
+const string History::ERROR_INVALIDCOMMAND = "HISTORY::Invalid Command";
+
 const string History::LOG_CONSTRUCTHISTORY = "HISTORY::ConstructHistory";
 const string History::LOG_DESTRUCTHISTORY = "HISTORY::DestructHistory";
 const string History::LOG_ITEMCOMMAND = "HISTORY::AddItemCommand";
@@ -31,10 +33,16 @@ History::~History() {
 
 //	Returns true if command is add, delete, or replace
 bool History::isNormalHistoryCommand(string command) {
-	if (command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_REPLACE) {
-		return true;
+	try {
+		if (command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_REPLACE) {
+			return true;
+		} else if (command != COMMAND_CLEAR) {
+			throw ERROR_INVALIDCOMMAND;
+		}
 	}
-
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
 	assert(command != COMMAND_ADD);
 	assert(command != COMMAND_DELETE);
 	assert(command != COMMAND_REPLACE);
@@ -43,10 +51,16 @@ bool History::isNormalHistoryCommand(string command) {
 }
 
 bool History::isClearCommand(string command) {
-	if (command == COMMAND_CLEAR) {
-		return true;
+	try {
+		if (command == COMMAND_CLEAR) {
+			return true;
+		} else if (command != COMMAND_ADD && command != COMMAND_DELETE && command != COMMAND_REPLACE) {
+			throw ERROR_INVALIDCOMMAND;
+		}
 	}
-
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
 	assert(command != COMMAND_CLEAR);
 
 	return false;
@@ -94,28 +108,35 @@ string History::addClearCommand(vector<Item> clearedSchedule) {
 
 //	Removes commands from the item and command stack; returns item and command (both via reference)
 string History::undoLastCommand(string& command, Item& latestItem, vector<Item>& lastestClearedSchedule) {
-	if (isValidUndoCall()) {
-		assert(!_commandStack.empty());
-		command = _commandStack.top();
+	try{
+		if (isValidUndoCall()) {
+			assert(!_commandStack.empty());
+			command = _commandStack.top();
 
-		if (isNormalHistoryCommand(command)) {
-			assert(command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_REPLACE);
-			assert(!_itemStack.empty());
-			latestItem = _itemStack.top();
-			removeUndoneCommand();
+			if (isNormalHistoryCommand(command)) {
+				assert(command == COMMAND_ADD || command == COMMAND_DELETE || command == COMMAND_REPLACE);
+				assert(!_itemStack.empty());
+				latestItem = _itemStack.top();
+				removeUndoneCommand();
 
-			_historyLogger.writeToLogFile(LOG_UNDOITEM + command);
-			return (command + "\n" + latestItem.displayItemFullDetails());
-		} else if (isClearCommand(command)) {
-			assert(command == COMMAND_CLEAR);
-			assert(!_scheduleStack.empty());
-			lastestClearedSchedule = _scheduleStack.top();
-			_commandStack.pop();
-			_scheduleStack.pop();
+				_historyLogger.writeToLogFile(LOG_UNDOITEM + command);
+				return (command + "\n" + latestItem.displayItemFullDetails());
+			} else if (isClearCommand(command)) {
+				assert(command == COMMAND_CLEAR);
+				assert(!_scheduleStack.empty());
+				lastestClearedSchedule = _scheduleStack.top();
+				_commandStack.pop();
+				_scheduleStack.pop();
 
-			_historyLogger.writeToLogFile(LOG_UNDOCLEAR + command);
-			return command;
+				_historyLogger.writeToLogFile(LOG_UNDOCLEAR + command);
+				return command;
+			} else {
+				throw ERROR_INVALIDCOMMAND;
+			}
 		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
 	}
 
 	_historyLogger.writeToLogFile(LOG_UNDOITEM + ERROR_EMPTYSTACKS);

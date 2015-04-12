@@ -22,6 +22,7 @@ private:
 	static const int DATETIME_VERIFICATION_MIN_MINUTE;
 	static const int DATETIME_VERIFICATION_MAX_MINUTE;
 	static const int DATETIME_VERIFICATION_EMPTYFIELD_DATETIME;
+	static const int DATETIME_VERIFICATION_INT_MINUS_TWO;
 
 	static const int DATETIME_VERIFICATION_DAY_29;
 	static const int DATETIME_VERIFICATION_DAY_30;
@@ -35,8 +36,7 @@ private:
 	static const int DATETIME_VERIFICATION_YEAR_100;
 	static const int DATETIME_VERIFICATION_YEAR_400;
 
-	static const string DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS;
-	static const string DATETIME_VERIFICATION_LOG_DATETIME_FAILURE;
+	static const string DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
 
 	Log _dateTimeVerificationLogger;
 	DateTime _dateTimeObjectToVerify;
