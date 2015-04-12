@@ -242,6 +242,12 @@ string iParser::executeViewParsing(string viewType) {
 		setParseInfo(COMMAND_VIEW, STRING_UNDONE);
 	} else if (viewType == STRING_PRIORITY || viewType == STRING_PRIORITY_P) {
 		setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
+	} else if (viewType == STRING_HIGH || viewType == STRING_H) {
+		setParseInfo(COMMAND_VIEW, STRING_HIGH);
+	} else if (viewType == STRING_MEDIUM || viewType == STRING_MED || viewType == STRING_M) {
+		setParseInfo(COMMAND_VIEW, STRING_MEDIUM);
+	} else if (viewType == STRING_LOW || viewType == STRING_L) {
+		setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
 	} else {
 		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
 		return MESSAGE_FAILURE;
