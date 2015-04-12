@@ -187,8 +187,9 @@ public:
 	// Post:	sets indexToEdit and any modifiers along with their respective information to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
 	string executeEditParsing(string);
-	// Pre:		
-	// Post:	
+	// Pre:		commandType is 'sort'
+	// Post:	sets sortType to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if invalid sortType is input
 	string executeSortParsing(string);
 	// Pre:		
 	// Post:	
@@ -219,8 +220,9 @@ public:
 	//			respective dateTime parsing
 	//			if dateTime is not valid, invalid date time message will be thrown as exception
 	string executeDateTimeParsing(const string);
-	// Pre:		
-	// Post:	
+	// Pre:		ModifierType is 'priority'
+	// Post:	sets priority to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if invalid priorityType is input
 	string executePriorityParsing(string);
 	// Pre:		ModifierType "remove" is called
 	// Post:	sets the parts to be removed to _parseInfo list
