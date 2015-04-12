@@ -578,7 +578,7 @@ string iParser::setDateTime(const string& dateTimeString, const string modifierT
 	assert(modifierType != STRING_BLANK);
 	unsigned int numberOfCommas = retrieveCount(dateTimeString, CHAR_COMMA);
 
-	if (dateTimeString == STRING_BLANK || numberOfCommas > 1) {
+	if (numberOfCommas > 1) {
 		throw MESSAGE_INVALID_DATE_TIME;
 	}
 

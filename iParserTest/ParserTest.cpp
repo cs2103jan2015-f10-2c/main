@@ -445,39 +445,41 @@ public:
 		}
 	}
 
-	//TEST_METHOD(parserSetDateTimeTest) {
-	//	string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030hr, 10/11/12", "930PM, 10 Dec 2015", "1pm" };
-	//	string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30", "-1 -1 -1 13 00" };
-	//	string expectedCommand[] = { "start", "end" };
+	/*TEST_METHOD(parserSetDateTimeTest) {
+		string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030hr, 10/11/12", "930PM, 10 Dec 2015", "1pm" };
+		string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30", "-1 -1 -1 13 00" };
+		string expectedCommand[] = { "start", "end" };
 
-	//	for (int i = 0; i < 7; i++) {
-	//		testParser.setDateTime(testDateTime[i], "date");
-	//	}
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "date");
+		}
 
-	//	list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-	//	list<COMMAND_AND_TEXT>::iterator iter;
-	//	int i = 0;
-	//	for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-	//		string actualCommand = iter->command;
-	//		string actualDateTime = iter->text;
-	//		Assert::AreEqual(expectedDateTime[i], actualDateTime);
-	//		Assert::AreEqual(expectedCommand[0], actualCommand);
-	//	}
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
 
-	//	testParser.clearParseInfo();
-	//	for (int i = 0; i < 7; i++) {
-	//		testParser.setDateTime(testDateTime[i], "due");
-	//	}
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[0], actualCommand);
+		}
 
-	//	testList = testParser.getParseInfo();
-	//	i = 0;
-	//	for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-	//		string actualCommand = iter->command;
-	//		string actualDateTime = iter->text;
-	//		Assert::AreEqual(expectedDateTime[i], actualDateTime);
-	//		Assert::AreEqual(expectedCommand[1], actualCommand);
-	//	}
-	//}
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "due");
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[1], actualCommand);
+		}
+	}*/
 
 	//TEST_METHOD(parserSplitAndSetDateTimeTest) {
 	//	string testDateTime[] = { "10/11/12, 6pm", "2200hr, 10 Nov 12", "8/9, 1pm", "2am, 10/11", "monday, 1pm" };
@@ -903,71 +905,74 @@ public:
 	//	}
 	//}
 
-	//TEST_METHOD(parserHasNoDayButHasTimeTest) {
-	//	string testDateTimeString[] = { "-1 -1 monday 23 59", "2015 10 10 23 59", "2015 10 -1 23 59" };
+	TEST_METHOD(parserHasNoDayButHasTimeTest) {
+		// testDateTimeString[2] is true as it has no date (3rd set of string) and has time (last 2 set of string)
+		string testDateTimeString[] = { "-1 -1 monday 23 59", "2015 10 10 23 59", "2015 10 -1 23 59" };
 
-	//	for (int i = 0; i < 3; i++) {
-	//		bool actual = testParser.hasNoDayButHasTime(testDateTimeString[i]);
-	//		if (i < 2) {
-	//			Assert::IsFalse(actual);
-	//		} else {
-	//			Assert::IsTrue(actual);
-	//		}
-	//	}
-	//}
+		for (int i = 0; i < 3; i++) {
+			bool actual = testParser.hasNoDayButHasTime(testDateTimeString[i]);
+			if (i < 2) {
+				Assert::IsFalse(actual);
+			} else {
+				Assert::IsTrue(actual);
+			}
+		}
+	}
 
-	//TEST_METHOD(parserIsModifierTest) {
-	//	string testString[] = { "-NAME", "-DaTe", "-dUe", "-start", "-end", "-Desc", "-dESCRIPTION", "-pRiORiTy" };
-	//	string testStringfalse[] = { "-names", "-descrb", "-123", "-abc", "-", " " };
+	TEST_METHOD(parserIsModifierTest) {
+		string testString[] = { "-NAME", "-DaTe", "-dUe", "-start", "-end", "-Desc", "-dESCRIPTION", "-pRiORiTy", "-P", "-remove", "-RmV" };
+		string testStringfalse[] = { "-names", "-descrb", "-123", "-abc", "-", " " };
 
-	//	for (int i = 0; i < 8; i++) {
-	//		bool actual = testParser.isModifier(testString[i]);
-	//		Assert::IsTrue(actual);
-	//	}
+		for (int i = 0; i < 11; i++) {
+			bool actual = testParser.isModifier(testString[i]);
+			Assert::IsTrue(actual);
+		}
 
-	//	for (int i = 0; i < 6; i++) {
-	//		bool actualFalse = testParser.areDigits(testStringfalse[i]);
-	//		Assert::IsFalse(actualFalse);
-	//	}
+		for (int i = 0; i < 6; i++) {
+			bool actualFalse = testParser.areDigits(testStringfalse[i]);
+			Assert::IsFalse(actualFalse);
+		}
 
-	//}
+	}
 
-	//TEST_METHOD(parserAreDigitsTest) {
-	//	string testString = "123456789";
-	//	string testStringfalse[] = { "123a456b789c", "123 456 789", " " };
+	TEST_METHOD(parserAreDigitsTest) {
+		string testString = "123456789";
+		string testStringfalse[] = { "123a456b789c", "123 456 789", " " };
 
-	//	bool actual = testParser.areDigits(testString);
-	//	Assert::IsTrue(actual);
+		bool actual = testParser.areDigits(testString);
+		Assert::IsTrue(actual);
 
-	//	for (int i = 0; i < 3; i++) {
-	//		bool actualFalse = testParser.areDigits(testStringfalse[i]);
-	//		Assert::IsFalse(actualFalse);
-	//	}
+		for (int i = 0; i < 3; i++) {
+			bool actualFalse = testParser.areDigits(testStringfalse[i]);
+			Assert::IsFalse(actualFalse);
+		}
 
-	//}
+	}
 
-	//TEST_METHOD(parserIsWhiteSpaceTest) {
-	//	char testChar[] = { ' ', '\t' };
-	//	char testCharFalse[] = { 'a', '1', '/' };
+	TEST_METHOD(parserIsWhiteSpaceTest) {
+		char testChar[] = { ' ', '\t' };
+		char testCharFalse[] = { 'a', '1', '/' };
 
-	//	for (int i = 0; i < 2; i++) {
-	//		bool actual = testParser.isWhiteSpace(testChar[i]);
-	//		Assert::IsTrue(actual);
-	//	}
+		for (int i = 0; i < 2; i++) {
+			bool actual = testParser.isWhiteSpace(testChar[i]);
+			Assert::IsTrue(actual);
+		}
 
-	//	for (int i = 0; i < 3; i++) {
-	//		bool actual = testParser.isWhiteSpace(testCharFalse[i]);
-	//		Assert::IsFalse(actual);
-	//	}
-	//}
+		for (int i = 0; i < 3; i++) {
+			bool actual = testParser.isWhiteSpace(testCharFalse[i]);
+			Assert::IsFalse(actual);
+		}
+	}
 
-	//TEST_METHOD(parserRetrieveCountTest) {
-	//	string testString = ",one,two,three,four,five,";
-	//	unsigned int expected = 6;
+	TEST_METHOD(parserRetrieveCountTest) {
+		string testString[] = { ",one,two,three,four,five,", "   " };
+		unsigned int expected[] = { 6, 0 };
 
-	//	unsigned int actual = testParser.retrieveCount(testString, ',');
-	//	Assert::AreEqual(expected, actual);
-	//}
+		for (int i = 0; i < 2; i++) {
+			unsigned int actual = testParser.retrieveCount(testString[i], ',');
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
 
 	};
 }
