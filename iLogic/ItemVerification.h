@@ -42,7 +42,7 @@ private:
 	static const string EXCEPTION_SPOILT_BOOL;
 
 	static const int ITEM_VERIFICATION_INT_ZERO;
-	static const int ITEM_VERIFICATION_INT_MINUS_ONE;
+	static const int ITEM_VERIFICATION_INT_MINUS_TWO;
 
 /* #ifndef TESTMODE
 private:

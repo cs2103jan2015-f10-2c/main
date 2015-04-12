@@ -362,7 +362,7 @@ namespace iPlannerUI {
 
 				 if (e->KeyCode == Keys::Enter) {
 					 newLog.writeToLogFile(stdUserInput);
-					 displayMessage = testLogic->initiateCommandAction(testParser, stdUserInput);
+					 displayMessage = testLogic->initiateCommandAction(stdUserInput);
 					 outputBox2->Clear();
 					 
 					 tempItem = testLogic->getDisplaySchedule();
