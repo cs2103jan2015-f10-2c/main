@@ -5,10 +5,13 @@
 #define HISTORY_H
 
 #include <stack>
+#include "..\iPlanner Log\Log.h"
 #include "Item.h"
 
 class History {
 private:
+	Log _historyLogger;
+
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_REPLACE;
@@ -16,6 +19,14 @@ private:
 	static const string ERROR_ADD;
 	static const string ERROR_EMPTYSTACKS;
 	static const string RESET_COMPLETION;
+
+	static const string LOG_CONSTRUCTHISTORY;
+	static const string LOG_DESTRUCTHISTORY;
+	static const string LOG_ITEMCOMMAND;
+	static const string LOG_CLEARCOMMAND;
+	static const string LOG_UNDOITEM;
+	static const string LOG_UNDOCLEAR;
+	static const string LOG_RESETHISTORY;
 
 	stack <string> _commandStack;
 	stack <vector <Item>> _scheduleStack;
