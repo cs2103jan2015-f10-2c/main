@@ -263,6 +263,7 @@ namespace iPlannerUI {
 			this->MaximizeBox = false;
 			this->Name = L"iPlannerUI";
 			this->Text = L"iPlanner";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &iPlannerUI::iPlannerUI_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &iPlannerUI::iPlannerUI_Load);
 			this->HelpmenuStrip1->ResumeLayout(false);
 			this->HelpmenuStrip1->PerformLayout();
@@ -405,7 +406,7 @@ namespace iPlannerUI {
 					 String^ outcomeString = gcnew String(displayMessage.message.c_str());
 					 commandOutcomeLabel->Text = outcomeString;
 					 outputBox2->SelectionStart = 0;
-					 outputBox2->ScrollToCaret();
+					 newLog.writeToLogFile("\n");
 					 commandInputBox->Clear();
 				 }
 
@@ -580,5 +581,9 @@ namespace iPlannerUI {
 
 	}
 	
+	private: System::Void iPlannerUI_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
+				 Log closeLog;
+				 closeLog.writeToLogFile("exit");
+	}
 };
 }
