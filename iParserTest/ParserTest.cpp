@@ -713,20 +713,20 @@ public:
 	//	}
 	//}
 
-	//TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
-	//	string testDate[] = { "JAN", "10 nOv 2015", "9 OcT", "MoN" };
-	//	unsigned int numberOfSpace[] = { 0, 2, 1, 0 };
-	//	string expected[] = { "-1 1 -1", "2015 11 10", "-1 10 9", "-1 -1 monday" };
+	TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
+		string testDate[] = { "JAN", "10 nOv 2015", "9 OcT", "MoN" };
+		unsigned int numberOfSpace[] = { 0, 2, 1, 0 };
+		string expected[] = { "-1 -1 -1", "2015 11 10", "-1 10 9", "-1 -1 monday" };
 
-	//	for (int i = 0; i < 4; i++) {
-	//		try {
-	//			string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
-	//			Assert::AreEqual(expected[i], actualOne);
-	//		} catch (bool& exception) {
-	//			Assert::IsFalse(exception);
-	//		}
-	//	}
-	//}
+		for (int i = 0; i < 4; i++) {
+			try {
+				string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
+				Assert::AreEqual(expected[i], actualOne);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
 
 	TEST_METHOD(parserSplitAndSetTimeStringTest) {
 		string testTimeColonAM[] = { "10:11", "09:10", "2:30", "11:59", "11", "1" };
