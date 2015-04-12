@@ -78,7 +78,9 @@ private:
 	static const string FILTER_COMPLETION;
 	static const string FILTER_COMPLETION_UNDONE;
 	static const string FILTER_KEYWORD;
-	static const string FILTER_PRIORITY;
+	static const string FILTER_PRIORITY_HIGH;
+	static const string FILTER_PRIORITY_MEDIUM;
+	static const string FILTER_PRIORITY_LOW;
 	static const string FILTER_LABEL;
 	static const string FILTER_ALL;
 	static const string FILTER_DATE;
@@ -383,6 +385,8 @@ public:
 	string searchTask();
 	void clearKeyWordVec();
 	
+
+	char stringConvertToPriorityChar(string priority);
 	string trimText(string& text);
 	string trimBack(string text);
 	string trimFront(string text);

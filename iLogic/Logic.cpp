@@ -32,7 +32,9 @@ const string Logic::SORT_COMPLETION = "done";
 const string Logic::SORT_LAST_UPDATE = "update";
 const string Logic::FILTER_COMPLETION = "done";
 const string Logic::FILTER_COMPLETION_UNDONE = "undone";
-const string Logic::FILTER_PRIORITY = "priority";
+const string Logic::FILTER_PRIORITY_HIGH = "high";
+const string Logic::FILTER_PRIORITY_MEDIUM = "medium";
+const string Logic::FILTER_PRIORITY_LOW = "low";
 const string Logic::FILTER_LABEL = "label";
 const string Logic::FILTER_ALL = "all";
 const string Logic:: FILTER_KEYWORD = "keyword";
@@ -680,10 +682,8 @@ string Logic::filterTask(string filterToBeImplemented){
 	} else if (filterType == FILTER_COMPLETION_UNDONE){
 		bool completion = false;
 		filterByCompletion(completion);
-	} else if (filterType == FILTER_PRIORITY){
-		string modifierType;
-		iss >> modifierType;
-		char priorityType = checkPriority(modifierType);
+	} else if (filterType == FILTER_PRIORITY_HIGH || filterType == FILTER_PRIORITY_MEDIUM || filterType == FILTER_PRIORITY_LOW){
+		char priorityType = stringConvertToPriorityChar(filterType);
 		string returnMessage = filterByPriority(priorityType);
 		if (returnMessage == MESSAGE_INVALID_PRIORITY){
 			return MESSAGE_FAILED_VIEW + MESSAGE_INVALID_PRIORITY;
@@ -732,19 +732,38 @@ void Logic::clearKeyWordVec(){
 
 string Logic::filterByCompletion(bool completion){
 	_logicSchedule.retrieveDisplayScheduleFilteredByCompletion(completion);
-	if (completion == true){
-		_currentFilter = FILTER_COMPLETION;
-	} else{
-		_currentFilter = FILTER_COMPLETION_UNDONE;
+	try {
+		if (completion == true){
+			_currentFilter = FILTER_COMPLETION;
+		} else if (completion == false){
+			_currentFilter = FILTER_COMPLETION_UNDONE;
+		} else{
+			throw "invalid completion type";
+		}
 	}
+		catch (string errorMessage){
+			cerr << errorMessage << endl;
+		}
+	
 	return _currentFilter;
 }
 
+char Logic::stringConvertToPriorityChar(string priority){
+	_currentFilter = priority;
+	if (priority == FILTER_PRIORITY_HIGH){
+		return 'H';
+	} else if (priority == FILTER_PRIORITY_MEDIUM){
+		return 'M';
+	} else if (priority == FILTER_PRIORITY_LOW){
+		return 'L';
+	} else {
+		return 'I';
+	}
+}
 
 string Logic::filterByPriority(char priority){
 	if (priority != 'E'){
 		_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priority);
-		_currentFilter = FILTER_PRIORITY;
 		return _currentFilter;
 	} else {
 		return MESSAGE_INVALID_PRIORITY;
