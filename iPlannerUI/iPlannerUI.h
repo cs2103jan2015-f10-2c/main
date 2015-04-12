@@ -352,7 +352,6 @@ namespace iPlannerUI {
 
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 MESSAGE_AND_SCHEDULE displayMessage;
-				 iParser testParser;
 				 Log newLog;
 				 String^ userInput;
 				 userInput = commandInputBox->Text;
@@ -362,7 +361,7 @@ namespace iPlannerUI {
 
 				 if (e->KeyCode == Keys::Enter) {
 					 newLog.writeToLogFile(stdUserInput);
-					 displayMessage = testLogic->initiateCommandAction(testParser, stdUserInput);
+					 displayMessage = testLogic->initiateCommandAction(stdUserInput);
 					 outputBox2->Clear();
 					 
 					 tempItem = testLogic->getDisplaySchedule();
@@ -513,6 +512,7 @@ namespace iPlannerUI {
 				 helpMenuDel += "\r\ndelete <Display index of task to be deleted\r\n";
 				 helpMenuDel += "del <Display index of task to be deleted\r\n";
 				 helpMenuDel += "\r\nclear - Deletes all tasks in the Schedule\r\n";
+				 
 				 MessageBox::Show(helpMenuDel);
 	}
 
@@ -529,6 +529,7 @@ namespace iPlannerUI {
 				 helpMenuEdit += "\r\nPreviously entered Date & Time and Description can be removed\r\n";
 				 helpMenuEdit += "edit <Display index of task to be edited> rmv <date> - Start and End Times of the task are removed\r\n";
 				 helpMenuEdit += "edit <Display index of task to be edited> rmv <desc> - Description of the task is removed\r\n";
+				 
 				 MessageBox::Show(helpMenuEdit);
 	}
 
