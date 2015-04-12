@@ -29,8 +29,8 @@ namespace iPlannerUI {
 	private:
 		Logic* testLogic;
 	public:
-		iPlannerUI(void)
-		{
+		iPlannerUI(void) {
+			
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
@@ -42,8 +42,8 @@ namespace iPlannerUI {
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~iPlannerUI()
-		{
+		~iPlannerUI() {
+
 			if (components)
 			{
 				delete components;
@@ -52,11 +52,13 @@ namespace iPlannerUI {
 		}
 
 	private: System::Windows::Forms::TextBox^  commandInputBox;
+	private: System::Windows::Forms::Label^  scheduleLabel;
 
 
-	private: System::Windows::Forms::Label^  label1;
+
 	private: System::Windows::Forms::Label^  commandOutcomeLabel;
-	private: System::Windows::Forms::RichTextBox^  outputBox2;
+	private: System::Windows::Forms::RichTextBox^  outputBox;
+
 
 	private: System::Windows::Forms::MenuStrip^  HelpmenuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
@@ -96,13 +98,13 @@ namespace iPlannerUI {
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		void InitializeComponent(void)
-		{
+		void InitializeComponent(void) {
+
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(iPlannerUI::typeid));
 			this->commandInputBox = (gcnew System::Windows::Forms::TextBox());
-			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->scheduleLabel = (gcnew System::Windows::Forms::Label());
 			this->commandOutcomeLabel = (gcnew System::Windows::Forms::Label());
-			this->outputBox2 = (gcnew System::Windows::Forms::RichTextBox());
+			this->outputBox = (gcnew System::Windows::Forms::RichTextBox());
 			this->HelpmenuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->addingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -128,17 +130,17 @@ namespace iPlannerUI {
 			this->commandInputBox->TabIndex = 0;
 			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
 			// 
-			// label1
+			// scheduleLabel
 			// 
-			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->scheduleLabel->AutoSize = true;
+			this->scheduleLabel->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label1->ForeColor = System::Drawing::Color::PeachPuff;
-			this->label1->Location = System::Drawing::Point(184, 38);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(91, 21);
-			this->label1->TabIndex = 4;
-			this->label1->Text = L"SCHEDULE";
+			this->scheduleLabel->ForeColor = System::Drawing::Color::PeachPuff;
+			this->scheduleLabel->Location = System::Drawing::Point(184, 38);
+			this->scheduleLabel->Name = L"scheduleLabel";
+			this->scheduleLabel->Size = System::Drawing::Size(91, 21);
+			this->scheduleLabel->TabIndex = 4;
+			this->scheduleLabel->Text = L"SCHEDULE";
 			// 
 			// commandOutcomeLabel
 			// 
@@ -153,18 +155,18 @@ namespace iPlannerUI {
 			this->commandOutcomeLabel->TabIndex = 5;
 			this->commandOutcomeLabel->Text = L"commandOutcomeLabel";
 			// 
-			// outputBox2
+			// outputBox
 			// 
-			this->outputBox2->BackColor = System::Drawing::Color::Black;
-			this->outputBox2->ForeColor = System::Drawing::Color::Black;
-			this->outputBox2->HideSelection = false;
-			this->outputBox2->Location = System::Drawing::Point(15, 70);
-			this->outputBox2->Name = L"outputBox2";
-			this->outputBox2->ReadOnly = true;
-			this->outputBox2->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
-			this->outputBox2->Size = System::Drawing::Size(425, 401);
-			this->outputBox2->TabIndex = 7;
-			this->outputBox2->Text = L"";
+			this->outputBox->BackColor = System::Drawing::Color::Black;
+			this->outputBox->ForeColor = System::Drawing::Color::Black;
+			this->outputBox->HideSelection = false;
+			this->outputBox->Location = System::Drawing::Point(15, 70);
+			this->outputBox->Name = L"outputBox";
+			this->outputBox->ReadOnly = true;
+			this->outputBox->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
+			this->outputBox->Size = System::Drawing::Size(425, 401);
+			this->outputBox->TabIndex = 7;
+			this->outputBox->Text = L"";
 			// 
 			// HelpmenuStrip1
 			// 
@@ -251,9 +253,9 @@ namespace iPlannerUI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ActiveCaptionText;
 			this->ClientSize = System::Drawing::Size(452, 595);
-			this->Controls->Add(this->outputBox2);
+			this->Controls->Add(this->outputBox);
 			this->Controls->Add(this->commandOutcomeLabel);
-			this->Controls->Add(this->label1);
+			this->Controls->Add(this->scheduleLabel);
 			this->Controls->Add(this->commandInputBox);
 			this->Controls->Add(this->HelpmenuStrip1);
 			this->ForeColor = System::Drawing::SystemColors::ControlText;
@@ -274,6 +276,7 @@ namespace iPlannerUI {
 #pragma endregion
 
 		//@author A0105180W 
+		// Function to convert System string entered by user to std string for Logic to process
 		void MarshalString(String^ s, string& os) {
 			using namespace Runtime::InteropServices;
 			const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
@@ -282,75 +285,72 @@ namespace iPlannerUI {
 		}
 
 		void displayPriorityAndName(String^ priority, String^ name) {
-			outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
+			outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
 			if (priority == "H") {
-				outputBox2->SelectionColor = Color::Red;
+				outputBox->SelectionColor = Color::Red;
 			} else if (priority == "M") {
-				outputBox2->SelectionColor = Color::Yellow;;
+				outputBox->SelectionColor = Color::Yellow;;
 			} else if (priority == "L") {
-				outputBox2->SelectionColor = Color::LawnGreen;
+				outputBox->SelectionColor = Color::LawnGreen;
 			} else {
-				outputBox2->SelectionColor = Color::CadetBlue;
+				outputBox->SelectionColor = Color::CadetBlue;
 			}
-			outputBox2->SelectedText = "   " + priority;
-			outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-			outputBox2->SelectionColor = Color::CadetBlue;
-			outputBox2->SelectedText = "    " + name;
+			outputBox->SelectedText = "   " + priority;
+			outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+			outputBox->SelectionColor = Color::CadetBlue;
+			outputBox->SelectedText = "    " + name;
 		}
 
 		void displayCompletion(String^ completion) {
 			if (completion == "(D)") {
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-				outputBox2->SelectionColor = Color::Gold;
-				outputBox2->SelectedText = " " + completion + "\r\n";
-			}
-			else {
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-				outputBox2->SelectionColor = Color::Silver;
-				outputBox2->SelectedText = " " + completion + "\r\n";
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox->SelectionColor = Color::Gold;
+				outputBox->SelectedText = " " + completion + "\r\n";
+			} else {
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox->SelectionColor = Color::Silver;
+				outputBox->SelectedText = " " + completion + "\r\n";
 			}
 		}
 
 		void displayStartTime(String^ startTime) {
 			if (startTime != "") {
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-				outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-				outputBox2->SelectedText = "\t     Start : " + startTime + "\r\n";
-			}
-			else {
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-				outputBox2->SelectionColor = Color::LightGoldenrodYellow;
-				outputBox2->SelectedText = "";
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox->SelectionColor = Color::LightGoldenrodYellow;
+				outputBox->SelectedText = "\t     Start : " + startTime + "\r\n";
+			} else {
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox->SelectionColor = Color::LightGoldenrodYellow;
+				outputBox->SelectedText = "";
 			}
 		}
 
 		void displayEndTime(String^ endTime) {
 			if (endTime != "") {
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-				outputBox2->SelectionColor = Color::LightSalmon;
-				outputBox2->SelectedText = "\t     End  : " + endTime + "\r\n";
-			}
-			else {
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-				outputBox2->SelectionColor = Color::LightSalmon;
-				outputBox2->SelectedText = "";
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox->SelectionColor = Color::LightSalmon;
+				outputBox->SelectedText = "\t     End  : " + endTime + "\r\n";
+			} else {
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+				outputBox->SelectionColor = Color::LightSalmon;
+				outputBox->SelectedText = "";
 			}
 		}
 
 		void displayDescription(String^ description) {
 			if (description != ""){
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
-				outputBox2->SelectionColor = Color::BlueViolet;
-				outputBox2->SelectedText = "\t     " + description + "\r\n\r\n";
-			}
-			else {
-				outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
-				outputBox2->SelectionColor = Color::BlueViolet;
-				outputBox2->SelectedText = "\r\n";
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
+				outputBox->SelectionColor = Color::BlueViolet;
+				outputBox->SelectedText = "\t     " + description + "\r\n\r\n";
+			} else {
+				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
+				outputBox->SelectionColor = Color::BlueViolet;
+				outputBox->SelectedText = "\r\n";
 			}
 
 		}
 
+    // Function to display the Schedule when the user inputs a command
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 MESSAGE_AND_SCHEDULE displayMessage;
 				 Log newLog;
@@ -360,10 +360,11 @@ namespace iPlannerUI {
 				 MarshalString(userInput, stdUserInput);
 				 vector<Item> tempItem;
 
+				 //Command entered by user is passed to Logic only when the Enter key is pressed
 				 if (e->KeyCode == Keys::Enter) {
 					 newLog.writeToLogFile(stdUserInput);
 					 displayMessage = testLogic->initiateCommandAction(stdUserInput);
-					 outputBox2->Clear();
+					 outputBox->Clear();
 					 
 					 tempItem = testLogic->getDisplaySchedule();
 					 vector<Item>::iterator iterItem;
@@ -371,9 +372,9 @@ namespace iPlannerUI {
 					 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
 						 
 						 String ^indexString = (++displayIndex).ToString();
-						 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-						 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-						 outputBox2->SelectedText = indexString + ". ";
+						 outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+						 outputBox->SelectionColor = System::Drawing::Color::CadetBlue;
+						 outputBox->SelectedText = indexString + ". ";
 
 						 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 						 if (iterItem->getPriority() == 72) {
@@ -405,13 +406,14 @@ namespace iPlannerUI {
 
 					 String^ outcomeString = gcnew String(displayMessage.message.c_str());
 					 commandOutcomeLabel->Text = outcomeString;
-					 outputBox2->SelectionStart = 0;
+					 outputBox->SelectionStart = 0;
 					 newLog.writeToLogFile("");
 					 commandInputBox->Clear();
 				 }
 
 	}
-			 
+	
+    // Function to display Schedule when the program is opened
 	private: System::Void iPlannerUI_Load(System::Object^  sender, System::EventArgs^  e) {
 				 
 				 Log newLog;
@@ -421,7 +423,7 @@ namespace iPlannerUI {
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
 				 
-				 outputBox2->Clear();			
+				 outputBox->Clear();			
 				 vector<Item> tempItem = testLogic->getDisplaySchedule();
 				 vector<Item>::iterator iterItem;
 				 int displayIndex = 0;
@@ -429,9 +431,9 @@ namespace iPlannerUI {
 				 for (iterItem = tempItem.begin(); iterItem != tempItem.end(); iterItem++) {
 					 
 					 String ^indexString = (++displayIndex).ToString();
-					 outputBox2->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
-					 outputBox2->SelectionColor = System::Drawing::Color::CadetBlue;
-					 outputBox2->SelectedText = indexString + ". ";
+					 outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10);
+					 outputBox->SelectionColor = System::Drawing::Color::CadetBlue;
+					 outputBox->SelectedText = indexString + ". ";
 
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 if (iterItem->getPriority() == 72) {
@@ -463,12 +465,12 @@ namespace iPlannerUI {
 					 String^ descriptionString = gcnew String(iterItem->getDescription().c_str());
 					 displayDescription(descriptionString);
 				 }
-				 outputBox2->SelectionStart = 0;
-				 outputBox2->ScrollToCaret();
+				 outputBox->SelectionStart = 0;
 				 commandOutcomeLabel->Text = "Enter the command";
 
 	}
-	
+
+	// Below functions display the list of commands for the user's reference
 	private: System::Void basicCommandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuAdd = "\t\t   Add a Task - Command List\r\n";
 
@@ -580,7 +582,8 @@ namespace iPlannerUI {
 				 MessageBox::Show(helpMenuView);
 
 	}
-	
+
+	// Function to write to log file that that the user has exited if the user closes using the close button
 	private: System::Void iPlannerUI_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
 				 Log closeLog;
 				 closeLog.writeToLogFile("exit");
