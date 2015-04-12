@@ -1,4 +1,4 @@
-////@author A0105180W
+//@author A0105180W
 #include "Log.h"
 
 void Log::writeToLogFile(string stringToBeLogged) {
@@ -7,4 +7,8 @@ void Log::writeToLogFile(string stringToBeLogged) {
 	writeFile << stringToBeLogged << endl;
 
 	writeFile.close();
+}
+
+void Log::clearLogFile() {
+	ofstream writeFile("log.txt");
 }

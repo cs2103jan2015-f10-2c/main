@@ -14,6 +14,6 @@ private:
 	
 public:
 	void writeToLogFile(string);
-
+	void clearLogFile();
 };
 #endif
