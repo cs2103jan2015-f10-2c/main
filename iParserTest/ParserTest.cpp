@@ -715,7 +715,7 @@ public:
 
 	TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
 		string testDate[] = { "10 nOv 2015", "9 OcT", "12 abc", "abc apr", "abc mar 2015", "12 12 12", "12 mar abc" };
-		unsigned int numberOfSpace[] = { 2, 1, 1, 1, 2, 2, 2, };
+		unsigned int numberOfSpace[] = { 2, 2, 1, 1, 2, 2, 2, };
 		string expected[] = { "2015 11 10", "-1 10 9", "-1 -1 monday" };
 
 		for (int i = 0; i < 7; i++) {

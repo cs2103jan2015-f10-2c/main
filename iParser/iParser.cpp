@@ -841,7 +841,7 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 			dateToBeSet = splitAndSetObliqueDateInformation(dateString, numberOfObliques);
 		} else {
 			unsigned int numberOfSpaces = retrieveCount(dateString, CHAR_SPACE);
-			if (numberOfSpaces > 2 || numberOfSpaces < 0) {
+			if (numberOfSpaces > 2 || numberOfSpaces < 1) {
 				return false;
 			} else {
 				dateToBeSet = splitAndSetSpaceDateInformation(dateString, numberOfSpaces);
@@ -929,7 +929,7 @@ string iParser::splitAndSetObliqueDateInformation(string dateString, const unsig
 
 string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigned int numberOfSpaces) {
 	assert(dateString != STRING_BLANK);
-	assert(numberOfSpaces >= 0 && numberOfSpaces <= 2);
+	assert(numberOfSpaces >= 1 && numberOfSpaces <= 2);
 	string day = STRING_NEGATIVE_ONE;
 	string month = STRING_NEGATIVE_ONE;
 	string year = STRING_NEGATIVE_ONE;
