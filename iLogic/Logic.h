@@ -126,6 +126,8 @@ private:
 	static const string MESSAGE_INVALID_PRIORITY;
 	static const string MESSAGE_INVALID_SORTTYPE;
 	static const string MESSAGE_INVALID_FILTERTYPE;
+	static const string MESSAGE_INVALID_MODIFIER;
+	static const string MESSAGE_INVALID_COMPLETION;
 	static const string MESSAGE_NO_TASK_FOUND;
 	static const string MESSAGE_TASK_FOUND;
 	static const string MESSAGE_UNABLE_TO_UNDO;
@@ -186,9 +188,9 @@ public:
 	////////////////////////
 
 
-	//takes in a parser to interpret the user input and initiate the action according to the command
+	//takes in the user input and initiate the action according to the command
 	//specified by the user
-	//Pre : takes in a parser, and a whole line of user input
+	//Pre : takes in a whole line of user input
 	//Post : returns a message whether each command was executed successfully and the display vector to pass to UI
 	MESSAGE_AND_SCHEDULE initiateCommandAction(string input);
 

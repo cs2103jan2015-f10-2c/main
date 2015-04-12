@@ -1472,6 +1472,103 @@ public:
 		actualMessage = testLogic.removeFilter();
 
 	}
+
+	TEST_METHOD(FilterTest2) {
+		Logic testLogic;
+		string testItemName;
+		COMMAND_AND_TEXT testCommandAndText;
+		list<COMMAND_AND_TEXT> testParseInfo;
+
+		/*Add Item 1*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "Young Bin";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "H";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
+
+		/*Add Item 2*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "start";
+		testCommandAndText.text = "1222 12 12 12 12";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "M";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
+
+		/*Add Item 3*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST2";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "end";
+		testCommandAndText.text = "1333 11 11 -1 -1";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "M";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
+
+		/*Add Item 4*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST3";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "start";
+		testCommandAndText.text = "1344 11 11 -1 -1";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "L";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
+
+		/*Add Item 5*/
+		testCommandAndText.command = "add";
+		testCommandAndText.text = "TEST4";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "description";
+		testCommandAndText.text = "UNITTESTING";
+		testParseInfo.push_back(testCommandAndText);
+		testCommandAndText.command = "priority";
+		testCommandAndText.text = "H";
+		testParseInfo.push_back(testCommandAndText);
+		testLogic.addTask(testParseInfo);
+		testParseInfo.clear();
+
+		testLogic.resetAndGetDisplaySchedule();
+
+		/*filter by date*/
+		string date = "date 11 11 2015 00 00 12 12 2015 00 00";
+		START_END_TIME testStartEnd = testLogic.getStartEndTime(date);
+		string expectedMessage = "date";
+		string actualMessage = testLogic.filterByDate(testStartEnd);
+		Assert::AreEqual(expectedMessage, actualMessage);
+
+		/*filter by priority*/
+		string priority = "high";
+		char testPriority = testLogic.stringConvertToPriorityChar(priority);
+		expectedMessage = "high";
+		actualMessage = testLogic.filterByPriority(testPriority);
+		Assert::AreEqual(expectedMessage, actualMessage);
+		
+		 priority = "medium";
+		 testPriority = testLogic.stringConvertToPriorityChar(priority);
+		expectedMessage = "medium";
+		actualMessage = testLogic.filterByPriority(testPriority);
+		Assert::AreEqual(expectedMessage, actualMessage);
+
+		priority = "low";
+		testPriority = testLogic.stringConvertToPriorityChar(priority);
+		expectedMessage = "low";
+		actualMessage = testLogic.filterByPriority(testPriority);
+		Assert::AreEqual(expectedMessage, actualMessage);
+	}
 	};
 
 
@@ -1586,6 +1683,30 @@ public:
 		expectedMessage = "Schedule filtered by : undone";
 		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
+		
+		/*filter schedule*/
+		testInput = "view high";
+		expectedMessage = "Schedule filtered by : high";
+		actualMessage = testLogic.initiateCommandAction(testInput);
+		Assert::AreEqual(expectedMessage, actualMessage.message);
+
+		/*filter schedule*/
+		testInput = "view med";
+		expectedMessage = "Schedule filtered by : medium";
+		actualMessage = testLogic.initiateCommandAction(testInput);
+		Assert::AreEqual(expectedMessage, actualMessage.message);
+
+		/*filter schedule*/
+		testInput = "view low";
+		expectedMessage = "Schedule filtered by : low";
+		actualMessage = testLogic.initiateCommandAction(testInput);
+		Assert::AreEqual(expectedMessage, actualMessage.message);
+
+		/*filter schedule*/
+		testInput = "view 12 apr to 13 apr";
+		expectedMessage = "Schedule filtered by : date";
+		actualMessage = testLogic.initiateCommandAction(testInput);
+		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*filter schedule*/
 		testInput = "view all";
@@ -1645,6 +1766,19 @@ public:
 		testInput = "undone 4";
 		expectedMessage = "invalid line index";
 		actualMessage = testLogic.initiateCommandAction( testInput);
+		Assert::AreEqual(expectedMessage, actualMessage.message);
+
+
+		/*change Save directory*/
+		testInput = "save c:/TEST";
+		expectedMessage = "Save directory changed to : c:/test/save.txt";
+		actualMessage = testLogic.initiateCommandAction(testInput);
+		Assert::AreEqual(expectedMessage, actualMessage.message);
+
+		/*change Save directory*/
+		testInput = "save default";
+		expectedMessage = "Save directory changed to : save.txt";
+		actualMessage = testLogic.initiateCommandAction(testInput);
 		Assert::AreEqual(expectedMessage, actualMessage.message);
 
 		/*Clear*/
@@ -1817,5 +1951,67 @@ public:
 		Assert::AreEqual(expectedMessage, actualMessage);
 		
 	}
+	};
+
+
+	TEST_CLASS(GetStartEndTimeTest) {
+	public:
+		TEST_METHOD(GetStartEndTimeTest1) {
+			Logic testLogic;
+			string testDate = "date 2015 11 11 00 00 2015 12 12 00 00";
+			START_END_TIME testStartEnd = testLogic.getStartEndTime(testDate);
+			Assert::AreEqual(testStartEnd.startTime.getYear(), 2015);
+			Assert::AreEqual(testStartEnd.startTime.getMonth(), 11);
+			Assert::AreEqual(testStartEnd.startTime.getDay(), 11);
+			Assert::AreEqual(testStartEnd.startTime.getHour(), 0);
+			Assert::AreEqual(testStartEnd.startTime.getMinute(), 0);
+			Assert::AreEqual(testStartEnd.endTime.getYear(), 2015);
+			Assert::AreEqual(testStartEnd.endTime.getMonth(), 12);
+			Assert::AreEqual(testStartEnd.endTime.getDay(), 12);
+			Assert::AreEqual(testStartEnd.endTime.getHour(), 0);
+			Assert::AreEqual(testStartEnd.endTime.getMinute(), 0);
+		}
+
+		TEST_METHOD(InterpretStartEndTimeTest1) {
+			Logic testLogic;
+			int YYYY = -1;
+			int MM = -1;
+			int DD = -1;
+			int hh = -1;
+			int mm = -1;
+			
+			DateTime interpretedDateTime = testLogic.interpretStartEndTime("start",YYYY, MM, DD, hh, mm);
+			Assert::AreEqual(interpretedDateTime.getYear(), 2015);
+			Assert::AreEqual(interpretedDateTime.getHour(), 0);
+			Assert::AreEqual(interpretedDateTime.getMinute(), 0);
+			
+			DateTime interpretedDateTime2 = testLogic.interpretStartEndTime("end", YYYY, MM, DD, hh, mm);
+			Assert::AreEqual(interpretedDateTime2.getYear(), 2015);
+			Assert::AreEqual(interpretedDateTime2.getHour(), 23);
+			Assert::AreEqual(interpretedDateTime2.getMinute(), 59);
+		}
+
+		TEST_METHOD(InterpretStartEndTimeTest2) {
+			Logic testLogic;
+			int YYYY = 2015;
+			int MM = 11;
+			int DD = 12;
+			int hh = 13;
+			int mm = 14;
+
+			DateTime interpretedDateTime = testLogic.interpretStartEndTime("start", YYYY, MM, DD, hh, mm);
+			Assert::AreEqual(interpretedDateTime.getYear(), 2015);
+			Assert::AreEqual(interpretedDateTime.getMonth(), 11);
+			Assert::AreEqual(interpretedDateTime.getDay(), 12);
+			Assert::AreEqual(interpretedDateTime.getHour(), 13);
+			Assert::AreEqual(interpretedDateTime.getMinute(), 14);
+
+			DateTime interpretedDateTime2 = testLogic.interpretStartEndTime("end", YYYY, MM, DD, hh, mm);
+			Assert::AreEqual(interpretedDateTime2.getYear(), 2015);
+			Assert::AreEqual(interpretedDateTime2.getMonth(), 11);
+			Assert::AreEqual(interpretedDateTime2.getDay(), 12);
+			Assert::AreEqual(interpretedDateTime2.getHour(), 13);
+			Assert::AreEqual(interpretedDateTime2.getMinute(), 14);
+		}
 	};
 }

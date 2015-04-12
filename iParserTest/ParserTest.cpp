@@ -702,208 +702,277 @@ public:
 	//	}
 	//}
 
-	//TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
-	//	string testDate[] = { "10/11/12", "10/11" };
-	//	unsigned int numberOfOblique[] = { 2, 1 };
-	//	string expected[] = { "12 11 10", "-1 11 10" };
+	TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
+		string testDate[] = { "10/11/12", "10/11" };
+		unsigned int numberOfOblique[] = { 2, 1 };
+		string expected[] = { "12 11 10", "-1 11 10" };
 
-	//	for (int i = 0; i < 2; i++) {
-	//		string actual = testParser.splitAndSetObliqueDateInformation(testDate[i], numberOfOblique[i]);
-	//		Assert::AreEqual(expected[i], actual);
-	//	}
-	//}
+		for (int i = 0; i < 2; i++) {
+			string actual = testParser.splitAndSetObliqueDateInformation(testDate[i], numberOfOblique[i]);
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
 
-	//TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
-	//	string testDate[] = { "JAN", "10 nOv 2015", "9 OcT", "MoN" };
-	//	unsigned int numberOfSpace[] = { 0, 2, 1, 0 };
-	//	string expected[] = { "-1 1 -1", "2015 11 10", "-1 10 9", "-1 -1 monday" };
+	TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
+		string testDate[] = { "10 nOv 2015", "9 OcT", "12 abc", "abc apr", "abc mar 2015", "12 12 12", "12 mar abc" };
+		unsigned int numberOfSpace[] = { 2, 2, 1, 1, 2, 2, 2, };
+		string expected[] = { "2015 11 10", "-1 10 9", "-1 -1 monday" };
 
-	//	for (int i = 0; i < 4; i++) {
-	//		try {
-	//			string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
-	//			Assert::AreEqual(expected[i], actualOne);
-	//		} catch (bool& exception) {
-	//			Assert::IsFalse(exception);
-	//		}
-	//	}
-	//}
+		for (int i = 0; i < 7; i++) {
+			try {
+				string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
+				Assert::AreEqual(expected[i], actualOne);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
 
-	///*TEST_METHOD(parserSplitAndSetTimeStringTest) {
-	//	string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
-	//	string expectedAM[] = { "10 11", "9 10", "13 30", "23 59" };
-	//	string expectedPM[] = { "22 11", "21 10", "13 30", "23 59" };
+	TEST_METHOD(parserSplitAndSetTimeStringTest) {
+		string testTimeColonAM[] = { "10:11", "09:10", "2:30", "11:59", "11", "1" };
+		string testTimeColonPM[] = { "10:11", "09:10", "13:30", "2:30", "11", "1" };
+		string testTimeColonHR[] = { "10:11", "09:10", "13:30", "02:30", "23:59", "00:00" };
+		string testTimeSpaceAM[] = { "1011", "0910", "230", "1159", "11", "1" };
+		string testTimeSpacePM[] = { "1011", "0910", "1330", "230", "11", "1" };
+		string testTimeSpaceHR[] = { "1011", "0910", "1330", "0230", "2359", "0000" };
+		string expectedAM[] = { "10 11", "09 10", "2 30", "11 59", "11 00", "1 00" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "14 30", "23 00", "13 00" };
+		string expectedHR[] = { "10 11", "09 10", "13 30", "02 30", "23 59", "00 00" };
 
-	//	for (int i = 0; i < 4; i++) {
-	//		string testString = testTime[i];
+		for (int i = 0; i < 1; i++) {
+			string actualColonAM = testParser.splitAndSetTimeString(testTimeColonAM[i], "am");
+			string actualColonPM = testParser.splitAndSetTimeString(testTimeColonPM[i], "pm");
+			string actualColonHR = testParser.splitAndSetTimeString(testTimeColonHR[i], "hr");
+			string actualSpaceAM = testParser.splitAndSetTimeString(testTimeSpaceAM[i], "am");
+			string actualSpacePM = testParser.splitAndSetTimeString(testTimeSpacePM[i], "pm");
+			string actualSpaceHR = testParser.splitAndSetTimeString(testTimeSpaceHR[i], "hr");
+			Assert::AreEqual(expectedAM[i], actualColonAM);
+			Assert::AreEqual(expectedPM[i], actualColonPM);
+			Assert::AreEqual(expectedAM[i], actualColonHR);
+			Assert::AreEqual(expectedAM[i], actualSpaceAM);
+			Assert::AreEqual(expectedPM[i], actualSpacePM);
+			Assert::AreEqual(expectedAM[i], actualSpaceHR);
+		}
+	}
 
-	//		string actual = testParser.splitAndSetColonTimeString(testString, "");
-	//		string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
-	//		Assert::AreEqual(expectedAM[i], actual);
-	//		Assert::AreEqual(expectedPM[i], actualPM);
+	TEST_METHOD(parserSplitAndSetColonTimeStringTest) {
+		string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
+		string expectedAM[] = { "10 11", "9 10" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "23 59" };
+		string expectedHR[] = { "10 11", "9 10", "13 30", "23 59" };
 
-	//		if (i < 2) {
-	//			string actualAM = testParser.splitAndSetColonTimeString(testString, "am");
-	//			Assert::AreEqual(expectedAM[i], actualAM);
-	//		}
-	//	}
-	//}*/
+		for (int i = 0; i < 1; i++) {
+			string testString = testTime[i];
 
-	//TEST_METHOD(parserSplitAndSetColonTimeStringTest) {
-	//	string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
-	//	string expectedAM[] = { "10 11", "9 10", "13 30", "23 59" };
-	//	string expectedPM[] = { "22 11", "21 10", "13 30", "23 59" };
+			string actual = testParser.splitAndSetColonTimeString(testString, "");
+			string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
+			string actualHR = testParser.splitAndSetColonTimeString(testString, "hr");
+			Assert::AreEqual(expectedAM[i], actual);
+			Assert::AreEqual(expectedPM[i], actualPM);
+			Assert::AreEqual(expectedAM[i], actualHR);
 
-	//	for (int i = 0; i < 4; i++) {
-	//		string testString = testTime[i];
+			if (i < 2) {
+				string actualAM = testParser.splitAndSetColonTimeString(testString, "am");
+				Assert::AreEqual(expectedAM[i], actualAM);
+			}
+		}
 
-	//		string actual = testParser.splitAndSetColonTimeString(testString, "");
-	//		string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
-	//		Assert::AreEqual(expectedAM[i], actual);
-	//		Assert::AreEqual(expectedPM[i], actualPM);
+		string testTimeFalse[] = { "1:1", "12:1", "123:23", "ab:cd", "123:123" };
 
-	//		if (i < 2) {
-	//			string actualAM = testParser.splitAndSetColonTimeString(testString, "am");
-	//			Assert::AreEqual(expectedAM[i], actualAM);
-	//		}
-	//	}
-	//}
+		for (int i = 0; i < 5; i++) {
+			try {
+				string actual = testParser.splitAndSetColonTimeString(testTimeFalse[i], "");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actual);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
 
-	//TEST_METHOD(parserSplitAndSetNoColonTimeStringTest) {
-	//	string testTime[] = { "1011", "0910", "1330", "230", "11", "1" };
-	//	string expectedAM[] = { "10 11", "09 10", "13 30", "2 30", "11 0", "1 0" };
-	//	string expectedPM[] = { "22 11", "21 10", "13 30", "14 30", "23 00", "13 00" };
+	TEST_METHOD(parserSplitAndSetNoColonTimeStringTest) {
+		string testTimeAM[] = { "1011", "0910", "230", "1159", "11", "1" };
+		string testTimePM[] = { "1011", "0910", "1330", "230", "11", "1" };
+		string testTimeHR[] = { "1011", "0910", "1330", "0230", "2359", "0000" };
+		string expectedAM[] = { "10 11", "09 10", "2 30", "11 59", "11 00", "1 00" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "14 30", "23 00", "13 00" };
+		string expectedHR[] = { "10 11", "09 10", "13 30", "02 30", "23 59", "00 00" };
 
-	//	for (int i = 0; i < 6; i++) {
-	//		string testString = testTime[i];
+		for (int i = 0; i < 6; i++) {
+			string actualAM = testParser.splitAndSetNoColonTimeString(testTimeAM[i], "am");
+			Assert::AreEqual(expectedAM[i], actualAM);
+			string actualPM = testParser.splitAndSetNoColonTimeString(testTimePM[i], "pm");
+			Assert::AreEqual(expectedPM[i], actualPM);
+			string actualHR = testParser.splitAndSetNoColonTimeString(testTimeHR[i], "hr");
+			Assert::AreEqual(expectedHR[i], actualHR);
+		}
 
-	//		if (i < 2) {
-	//			string actualAM = testParser.splitAndSetNoColonTimeString(testString, "am");
-	//			Assert::AreEqual(expectedAM[i], actualAM);
-	//		}
+		string testTimeAMFail[] = { "2359", "abcd", "12345", "a" };
+		string testTimePMFail[] = { "0", "0030", "abcd", "12345" };
+		string testTimeHRFail[] = { "1", "12", "123", "12345"};
 
-	//		if (i < 3) {
-	//			string actual = testParser.splitAndSetNoColonTimeString(testString, "hr");
-	//			Assert::AreEqual(expectedAM[i], actual);
-	//		}
+		for (int i = 0; i < 4; i++) {
+			try {
+				string actualAM = testParser.splitAndSetNoColonTimeString(testTimeAMFail[i], "am");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualAM);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
 
-	//		string actualPM = testParser.splitAndSetNoColonTimeString(testString, "pm");
-	//		Assert::AreEqual(expectedPM[i], actualPM);
-	//	}
-	//}
+			try {
+				string actualPM = testParser.splitAndSetNoColonTimeString(testTimePMFail[i], "pm");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualPM);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
 
-	//TEST_METHOD(parserIsDayAndSetDayTest) {
-	//	string testDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
-	//	string testDayShortForm[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
-	//	string testDayFalse[] = { "mondeh", "toosdeh", "weday", "thurs", "frehdeh", "satur", "sundae" };
-	//	string expectedDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
+			try {
+				string actualHR = testParser.splitAndSetNoColonTimeString(testTimeHRFail[i], "hr");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualHR);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
 
-	//	for (int i = 0; i < 7; i++) {
-	//		bool actualBoolean = testParser.isDay(testDay[i]);
-	//		string actualDay = testParser.setDay(testDay[i]);
-	//		Assert::IsTrue(actualBoolean);
-	//		Assert::AreEqual(expectedDay[i], actualDay);
-	//	}
+			try {
+				string actualHR = testParser.splitAndSetNoColonTimeString(testTimeHRFail[i], "");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualHR);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
 
-	//	for (int i = 0; i < 7; i++) {
-	//		bool actualBoolean = testParser.isDay(testDayShortForm[i]);
-	//		string actualDay = testParser.setDay(testDayShortForm[i]);
-	//		Assert::IsTrue(actualBoolean);
-	//		Assert::AreEqual(expectedDay[i], actualDay);
-	//	}
+	TEST_METHOD(parserIsDayAndSetDayTest) {
+		string testDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
+		string testDayShortForm[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
+		string testDayFalse[] = { "mondeh", "toosdeh", "weday", "thurs", "frehdeh", "satur", "sundae" };
+		string expectedDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
 
-	//	for (int i = 0; i < 7; i++) {
-	//		string expected = "";
-	//		bool actualBoolean = testParser.isDay(testDayFalse[i]);
-	//		string actualDay = testParser.setDay(testDayFalse[i]);
-	//		Assert::IsFalse(actualBoolean);
-	//		Assert::AreEqual(expected, actualDay);
-	//	}
-	//}
+		for (int i = 0; i < 7; i++) {
+			bool actualBoolean = testParser.isDay(testDay[i]);
+			string actualDay = testParser.setDay(testDay[i]);
+			Assert::IsTrue(actualBoolean);
+			Assert::AreEqual(expectedDay[i], actualDay);
+		}
 
-	//TEST_METHOD(parserIsMonthAndSetMonthTest) {
-	//	string testMonth[] = { "January", "february", "March", "april", "May", "june",
-	//		"July", "august", "September", "october", "November", "december" };
-	//	string testMonthShortForm[] = { "JAN", "feb", "MAR", "apr", "MAY", "jun",
-	//		"JUL", "aug", "SEP", "oct", "NOV", "dec" };
-	//	string testMonthFalse[] = { "janr", "febr", "mach", "aprl", "my", "jn",
-	//		"jool", "augst", "sept", "octbr", "novmbr", "decmbr" };
-	//	string expectedMonth[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
+		for (int i = 0; i < 7; i++) {
+			bool actualBoolean = testParser.isDay(testDayShortForm[i]);
+			string actualDay = testParser.setDay(testDayShortForm[i]);
+			Assert::IsTrue(actualBoolean);
+			Assert::AreEqual(expectedDay[i], actualDay);
+		}
 
-	//	for (int i = 0; i < 12; i++) {
-	//		bool actualBoolean = testParser.isMonth(testMonth[i]);
-	//		string actualMonth = testParser.setMonth(testMonth[i]);
-	//		Assert::IsTrue(actualBoolean);
-	//		Assert::AreEqual(expectedMonth[i], actualMonth);
-	//	}
+		for (int i = 0; i < 7; i++) {
+			string expected = "";
+			bool actualBoolean = testParser.isDay(testDayFalse[i]);
+			string actualDay = testParser.setDay(testDayFalse[i]);
+			Assert::IsFalse(actualBoolean);
+			Assert::AreEqual(expected, actualDay);
+		}
+	}
 
-	//	for (int i = 0; i < 12; i++) {
-	//		bool actualBoolean = testParser.isMonth(testMonthShortForm[i]);
-	//		string actualMonth = testParser.setMonth(testMonthShortForm[i]);
-	//		Assert::IsTrue(actualBoolean);
-	//		Assert::AreEqual(expectedMonth[i], actualMonth);
-	//	}
+	TEST_METHOD(parserIsMonthAndSetMonthTest) {
+		string testMonth[] = { "January", "february", "March", "april", "May", "june",
+			"July", "august", "September", "october", "November", "december" };
+		string testMonthShortForm[] = { "JAN", "feb", "MAR", "apr", "MAY", "jun",
+			"JUL", "aug", "SEP", "oct", "NOV", "dec" };
+		string testMonthFalse[] = { "janr", "febr", "mach", "aprl", "my", "jn",
+			"jool", "augst", "sept", "octbr", "novmbr", "decmbr" };
+		string expectedMonth[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
 
-	//	for (int i = 0; i < 12; i++) {
-	//		string expected = "";
-	//		bool actualBoolean = testParser.isMonth(testMonthFalse[i]);
-	//		string actualMonth = testParser.setMonth(testMonthFalse[i]);
-	//		Assert::IsFalse(actualBoolean);
-	//		Assert::AreEqual(expected, actualMonth);
-	//	}
-	//}
+		for (int i = 0; i < 12; i++) {
+			bool actualBoolean = testParser.isMonth(testMonth[i]);
+			string actualMonth = testParser.setMonth(testMonth[i]);
+			Assert::IsTrue(actualBoolean);
+			Assert::AreEqual(expectedMonth[i], actualMonth);
+		}
 
-	//TEST_METHOD(parserHasTimePeriodSuffixTest) {
-	//	string testTime[] = { "1010AM", "1010PM", "1010aM", "1010Pm", "1010am", "1010pm" };
-	//	string testTimeFalse[] = { "1010", "1010mp", "1010ma", "1010cs", "PM", "AM" };
+		for (int i = 0; i < 12; i++) {
+			bool actualBoolean = testParser.isMonth(testMonthShortForm[i]);
+			string actualMonth = testParser.setMonth(testMonthShortForm[i]);
+			Assert::IsTrue(actualBoolean);
+			Assert::AreEqual(expectedMonth[i], actualMonth);
+		}
 
-	//	for (int i = 0; i < 6; i++) {
-	//		bool actual = testParser.hasTimePeriodSuffix(testTime[i]);
-	//		Assert::IsTrue(actual);
-	//	}
+		for (int i = 0; i < 12; i++) {
+			string expected = "";
+			bool actualBoolean = testParser.isMonth(testMonthFalse[i]);
+			string actualMonth = testParser.setMonth(testMonthFalse[i]);
+			Assert::IsFalse(actualBoolean);
+			Assert::AreEqual(expected, actualMonth);
+		}
+	}
 
-	//	for (int i = 0; i < 6; i++) {
-	//		bool actual = testParser.hasTimePeriodSuffix(testTimeFalse[i]);
-	//		Assert::IsFalse(actual);
-	//	}
-	//}
+	TEST_METHOD(parserHasTimePeriodSuffixTest) {
+		string testTime[] = { "1010AM", "1010PM", "1010aM", "1010Pm", "1010am", "1010pm" };
+		string testTimeFalse[] = { "1010", "1010mp", "1010ma", "1010cs", "PM", "AM" };
 
-	//TEST_METHOD(parserAddTwelveToHoursTest) {
-	//	string testHour[] = { "1", "6", "11", "12", "18", "23", "09" };
-	//	string expected[] = { "13", "18", "23", "12", "18", "23", "21" };
+		for (int i = 0; i < 6; i++) {
+			bool actual = testParser.hasTimePeriodSuffix(testTime[i]);
+			Assert::IsTrue(actual);
+		}
 
-	//	for (int i = 0; i < 7; i++) {
-	//		string actual = testParser.addTwelveToHours(testHour[i]);
-	//		Assert::AreEqual(expected[i], actual);
-	//	}
-	//}
+		for (int i = 0; i < 6; i++) {
+			bool actual = testParser.hasTimePeriodSuffix(testTimeFalse[i]);
+			Assert::IsFalse(actual);
+		}
+	}
 
-	//TEST_METHOD(parserIsAppropriateHourTest) {
-	//	string testHour[] = { "1", "6", "11", "06", "12", "18", "23" };
+	TEST_METHOD(parserAddTwelveToHoursTest) {
+		// test cases after testHour[6] are false as hour is either 0 or non-digit
+		string testHour[] = { "1", "6", "11", "12", "18", "23", "09", "0", "abc", "@@@" };
+		string expected[] = { "13", "18", "23", "12", "18", "23", "21" };
 
-	//	for (int i = 0; i < 7; i++) {
-	//		bool actual = testParser.isAppropriateAMHour(testHour[i]);
-	//		if (i < 5) {
-	//			Assert::IsTrue(actual);
-	//		} else {
-	//			Assert::IsFalse(actual);
-	//		}
-	//	}
-	//}
+		for (int i = 0; i < 10; i++) {
+			try {
+				string actual = testParser.addTwelveToHours(testHour[i]);
+				Assert::AreEqual(expected[i], actual);
+			} catch (bool& exception) {
+				bool expected = false;
+				Assert::IsFalse(exception);
+			}
+		}
+	}
 
-	//TEST_METHOD(parserIsAppropriateTimeTest) {
-	//	string testHour[] = { "1", "6", "11", "12", "18", "23", "09", "abc", "10", "123", "10", "23" };
-	//	string testMinute[] = { "00", "10", "20", "30", "40", "50", "59", "00", "abc", "00", "123", "59" };
-	//	string testSuffix[] = { "pm", "am", "pm", "am", "pm", "pm", "pm", "pm", "pm", "pm", "pm", "am" };
+	TEST_METHOD(parserIsAppropriateAMHourTest) {
+		// test cases after testHour[4] are false as it is not within the acceptable range for hours in AM
+		string testHour[] = { "1", "6", "11", "06", "12", "18", "23" };
 
-	//	for (int i = 0; i < 12; i++) {
-	//		bool actual = testParser.isAppropriateTime(testHour[i], testMinute[i], testSuffix[i]);
-	//		if (i < 7) {
-	//			Assert::IsTrue(actual);
-	//		} else {
-	//			Assert::IsFalse(actual);
-	//		}
-	//	}
-	//}
+		for (int i = 0; i < 7; i++) {
+			bool actual = testParser.isAppropriateAMHour(testHour[i]);
+			if (i < 5) {
+				Assert::IsTrue(actual);
+			} else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
+
+	TEST_METHOD(parserIsAppropriateTimeTest) {
+		// testCases after index 6 are false as one of the strings are violated
+		// [7] and [8] have alphabetical strings, [9] and [10] have non-2-digit string, and [11] has 2359 set as AM
+		string testHour[] = { "1", "6", "11", "12", "18", "23", "09", "abc", "10", "123", "10", "23" };
+		string testMinute[] = { "00", "10", "20", "30", "40", "50", "59", "00", "abc", "00", "123", "59" };
+		string testSuffix[] = { "pm", "am", "pm", "am", "pm", "pm", "pm", "pm", "pm", "pm", "pm", "am" };
+
+		for (int i = 0; i < 12; i++) {
+			bool actual = testParser.isAppropriateTime(testHour[i], testMinute[i], testSuffix[i]);
+			if (i < 7) {
+				Assert::IsTrue(actual);
+			} else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
 
 	TEST_METHOD(parserHasNoDayButHasTimeTest) {
 		// testDateTimeString[2] is true as it has no date (3rd set of string) and has time (last 2 set of string)

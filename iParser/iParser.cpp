@@ -234,6 +234,7 @@ string iParser::executeSortParsing(string sortType) {
 
 string iParser::executeViewParsing(string viewType) {
 	convertToLowerCase(viewType);
+	string tempDate = STRING_BLANK;
 
 	try {
 		if (viewType == STRING_ALL) {
@@ -252,6 +253,10 @@ string iParser::executeViewParsing(string viewType) {
 			setParseInfo(COMMAND_VIEW, STRING_LOW);
 		} else if (hasStartEndDateTime(viewType)) {
 			splitAndSetViewDateRange(viewType);
+		} else if (isValidDate(viewType, tempDate)) {
+			string viewInfo = tempDate + CHAR_SPACE + STRING_TIME_INITIALISE;
+			viewInfo = STRING_DATE + CHAR_SPACE + viewInfo + CHAR_SPACE + viewInfo;
+			setParseInfo(COMMAND_VIEW, viewInfo);
 		} else {
 			setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
 			return MESSAGE_FAILURE;
@@ -513,7 +518,7 @@ string iParser::removeConsecutiveWhiteSpace(string& text) {
 string iParser::removeWhiteSpace(string& text) {
 	assert(text != STRING_BLANK);
 	unsigned int index;
-	
+
 	for (index = 0; index < text.length(); index++) {
 		if (isWhiteSpace(text[index])) {
 			text.erase(index, 1);
@@ -836,7 +841,7 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 			dateToBeSet = splitAndSetObliqueDateInformation(dateString, numberOfObliques);
 		} else {
 			unsigned int numberOfSpaces = retrieveCount(dateString, CHAR_SPACE);
-			if (numberOfSpaces > 2 || numberOfSpaces < 0) {
+			if (numberOfSpaces > 2 || numberOfSpaces < 1) {
 				return false;
 			} else {
 				dateToBeSet = splitAndSetSpaceDateInformation(dateString, numberOfSpaces);
@@ -924,51 +929,43 @@ string iParser::splitAndSetObliqueDateInformation(string dateString, const unsig
 
 string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigned int numberOfSpaces) {
 	assert(dateString != STRING_BLANK);
-	assert(numberOfSpaces >= 0 && numberOfSpaces <= 2);
+	assert(numberOfSpaces >= 1 && numberOfSpaces <= 2);
 	string day = STRING_NEGATIVE_ONE;
 	string month = STRING_NEGATIVE_ONE;
 	string year = STRING_NEGATIVE_ONE;
 	unsigned int keywordIndex = INDEX_INVALID;
 
-	if (numberOfSpaces == 0) {
-		if (isDay(dateString)) {
-			day = setDay(dateString);
+	unsigned int startIndex = 0;
+	unsigned int endIndex = 0;
+
+	endIndex = dateString.find_first_of(" ");
+	day = dateString.substr(startIndex, endIndex - startIndex);
+
+	if (!areDigits(day)) {
+		throw false;
+	}
+	startIndex = endIndex + 1;
+
+	string tempMonth;
+	if (numberOfSpaces == 1) {
+		tempMonth = dateString.substr(startIndex);
+		if (isMonth(tempMonth)) {
+			month = setMonth(tempMonth);
 		} else {
 			throw false;
 		}
-	} else {
-		unsigned int startIndex = 0;
-		unsigned int endIndex = 0;
-
-		endIndex = dateString.find_first_of(" ");
-		day = dateString.substr(startIndex, endIndex - startIndex);
-
-		if (!areDigits(day)) {
+	} else if (numberOfSpaces == 2) {
+		endIndex = dateString.find_first_of(" ", startIndex);
+		tempMonth = dateString.substr(startIndex, endIndex - startIndex);
+		if (isMonth(tempMonth)) {
+			month = setMonth(tempMonth);
+		} else {
 			throw false;
 		}
 		startIndex = endIndex + 1;
-
-		string tempMonth;
-		if (numberOfSpaces == 1) {
-			tempMonth = dateString.substr(startIndex);
-			if (isMonth(tempMonth)) {
-				month = setMonth(tempMonth);
-			} else {
-				throw false;
-			}
-		} else if (numberOfSpaces == 2) {
-			endIndex = dateString.find_first_of(" ", startIndex);
-			tempMonth = dateString.substr(startIndex, endIndex - startIndex);
-			if (isMonth(tempMonth)) {
-				month = setMonth(tempMonth);
-			} else {
-				throw false;
-			}
-			startIndex = endIndex + 1;
-			year = dateString.substr(startIndex);
-			if (!areDigits(year)) {
-				throw false;
-			}
+		year = dateString.substr(startIndex);
+		if (!areDigits(year)) {
+			throw false;
 		}
 	}
 
@@ -1165,7 +1162,7 @@ bool iParser::isAppropriateAMHour(const string hourString) {
 
 	if (areDigits(hourString)) {
 		int hourInInt = stoi(hourString);
-		if (hourInInt > NUMBER_OF_HOURS) {
+		if (hourInInt <= HOURS_ZERO || hourInInt > NUMBER_OF_HOURS) {
 			return false;
 		} else {
 			return true;
