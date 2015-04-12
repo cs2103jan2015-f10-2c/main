@@ -34,11 +34,13 @@ private:
 	static const string ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS;
 	static const string ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE;
 	static const string ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS;
-	static const string ITEM_VERIFICATION_LOG_VALID_DESC_FAILURE;
 	static const string ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS;
 	static const string ITEM_VERIFICATION_LOG_VALID_ID_FAILURE;
 	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS;
 	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE;
+
+	static const int ITEM_VERIFICATION_INT_ZERO;
+	static const int ITEM_VERIFICATION_INT_MINUS_ONE;
 
 /* #ifndef TESTMODE
 private:
@@ -46,6 +48,9 @@ private:
 public:
 #endif */
 public:
+
+	// Conducts the validity checks on the individual
+	// fields within the item
 	bool isValidName();
 	bool isValidDescription();
 	bool isValidStartDateTime();
