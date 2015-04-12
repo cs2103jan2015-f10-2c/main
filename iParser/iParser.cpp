@@ -234,6 +234,7 @@ string iParser::executeSortParsing(string sortType) {
 
 string iParser::executeViewParsing(string viewType) {
 	convertToLowerCase(viewType);
+	string tempDate = STRING_BLANK;
 
 	try {
 		if (viewType == STRING_ALL) {
@@ -252,6 +253,9 @@ string iParser::executeViewParsing(string viewType) {
 			setParseInfo(COMMAND_VIEW, STRING_LOW);
 		} else if (hasStartEndDateTime(viewType)) {
 			splitAndSetViewDateRange(viewType);
+		} else if (isValidDate(viewType, tempDate)) {
+			string viewInfo = STRING_DATE + CHAR_SPACE + tempDate + CHAR_SPACE + tempDate;
+			setParseInfo(COMMAND_VIEW, viewInfo);
 		} else {
 			setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
 			return MESSAGE_FAILURE;
@@ -1165,7 +1169,7 @@ bool iParser::isAppropriateAMHour(const string hourString) {
 
 	if (areDigits(hourString)) {
 		int hourInInt = stoi(hourString);
-		if (hourInInt > NUMBER_OF_HOURS) {
+		if (hourInInt <= HOURS_ZERO || hourInInt > NUMBER_OF_HOURS) {
 			return false;
 		} else {
 			return true;
