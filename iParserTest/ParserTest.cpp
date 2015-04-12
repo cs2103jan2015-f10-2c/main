@@ -728,54 +728,32 @@ public:
 	//	}
 	//}
 
-	/*TEST_METHOD(parserSplitAndSetTimeStringTest) {
-		string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
-		string expectedAM[] = { "10 11", "9 10" };
-		string expectedPM[] = { "22 11", "21 10", "13 30", "23 59" };
-		string expectedHR[] = { "10 11", "9 10", "13 30", "23 59" };
-
-		for (int i = 0; i < 1; i++) {
-			string testString = testTime[i];
-
-			string actual = testParser.splitAndSetTimeString(testString, "hr");
-			string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
-			string actualHR = testParser.splitAndSetColonTimeString(testString, "hr");
-			Assert::AreEqual(expectedAM[i], actual);
-			Assert::AreEqual(expectedPM[i], actualPM);
-			Assert::AreEqual(expectedAM[i], actualHR);
-
-			if (i < 2) {
-				string actualAM = testParser.splitAndSetColonTimeString(testString, "am");
-				Assert::AreEqual(expectedAM[i], actualAM);
-			}
-		}
-
-		string testTimeAM[] = { "1011", "0910", "230", "1159", "11", "1" };
-		string testTimePM[] = { "1011", "0910", "1330", "230", "11", "1" };
-		string testTimeHR[] = { "1011", "0910", "1330", "0230", "2359", "0000" };
+	TEST_METHOD(parserSplitAndSetTimeStringTest) {
+		string testTimeColonAM[] = { "10:11", "09:10", "2:30", "11:59", "11", "1" };
+		string testTimeColonPM[] = { "10:11", "09:10", "13:30", "2:30", "11", "1" };
+		string testTimeColonHR[] = { "10:11", "09:10", "13:30", "02:30", "23:59", "00:00" };
+		string testTimeSpaceAM[] = { "1011", "0910", "230", "1159", "11", "1" };
+		string testTimeSpacePM[] = { "1011", "0910", "1330", "230", "11", "1" };
+		string testTimeSpaceHR[] = { "1011", "0910", "1330", "0230", "2359", "0000" };
 		string expectedAM[] = { "10 11", "09 10", "2 30", "11 59", "11 00", "1 00" };
 		string expectedPM[] = { "22 11", "21 10", "13 30", "14 30", "23 00", "13 00" };
 		string expectedHR[] = { "10 11", "09 10", "13 30", "02 30", "23 59", "00 00" };
 
-
-		string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
-		string expectedAM[] = { "10 11", "9 10", "13 30", "23 59" };
-		string expectedPM[] = { "22 11", "21 10", "13 30", "23 59" };
-
-		for (int i = 0; i < 4; i++) {
-			string testString = testTime[i];
-
-			string actual = testParser.splitAndSetColonTimeString(testString, "");
-			string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
-			Assert::AreEqual(expectedAM[i], actual);
-			Assert::AreEqual(expectedPM[i], actualPM);
-
-			if (i < 2) {
-				string actualAM = testParser.splitAndSetColonTimeString(testString, "am");
-				Assert::AreEqual(expectedAM[i], actualAM);
-			}
+		for (int i = 0; i < 1; i++) {
+			string actualColonAM = testParser.splitAndSetTimeString(testTimeColonAM[i], "am");
+			string actualColonPM = testParser.splitAndSetTimeString(testTimeColonPM[i], "pm");
+			string actualColonHR = testParser.splitAndSetTimeString(testTimeColonHR[i], "hr");
+			string actualSpaceAM = testParser.splitAndSetTimeString(testTimeSpaceAM[i], "am");
+			string actualSpacePM = testParser.splitAndSetTimeString(testTimeSpacePM[i], "pm");
+			string actualSpaceHR = testParser.splitAndSetTimeString(testTimeSpaceHR[i], "hr");
+			Assert::AreEqual(expectedAM[i], actualColonAM);
+			Assert::AreEqual(expectedPM[i], actualColonPM);
+			Assert::AreEqual(expectedAM[i], actualColonHR);
+			Assert::AreEqual(expectedAM[i], actualSpaceAM);
+			Assert::AreEqual(expectedPM[i], actualSpacePM);
+			Assert::AreEqual(expectedAM[i], actualSpaceHR);
 		}
-	}*/
+	}
 
 	TEST_METHOD(parserSplitAndSetColonTimeStringTest) {
 		string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
@@ -786,7 +764,7 @@ public:
 		for (int i = 0; i < 1; i++) {
 			string testString = testTime[i];
 
-			string actual = testParser.splitAndSetColonTimeString(testString, "hr");
+			string actual = testParser.splitAndSetColonTimeString(testString, "");
 			string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
 			string actualHR = testParser.splitAndSetColonTimeString(testString, "hr");
 			Assert::AreEqual(expectedAM[i], actual);
