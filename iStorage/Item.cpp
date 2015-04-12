@@ -1,7 +1,6 @@
 //	Item (Tasks, Deadlines, Events)
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
 
-#include <iostream>
 #include "Item.h"
 
 const string Item::EMPTYFIELD_ITEMNAME = "";
@@ -13,33 +12,54 @@ const unsigned int Item::EMPTYFIELD_ITEMID = 0;
 const char Item::EMPTYFIELD_PRIORITY = 'E';
 const char Item::EMPTYFIELD_LABEL = 'E';
 
+const string Item::ERROR_INVALIDITEMNAME = "ITEM::Invalid Item Name";
+const string Item::ERROR_INVALIDDATETIME = "ITEM::Invalid Date/Time";
+const string Item::ERROR_INVALIDITEMID = "ITEM::Invalid Item ID";
 //	Checks if item has a valid item name
 bool Item::hasValidItemName() {
-	if (_itemName != EMPTYFIELD_ITEMNAME) {
-		return true;
+	try {
+		if (_itemName != EMPTYFIELD_ITEMNAME) {
+			return true;
+		} else {
+			throw ERROR_INVALIDITEMNAME;
+		}
+	}
+	catch (string err_msg) {
+		cerr << ERROR_INVALIDITEMNAME << endl;
 	}
 
-	assert(_itemName == EMPTYFIELD_ITEMNAME);
 	return false;
 }
 
 //	Checks if item has a valid start time
 bool Item::hasValidItemStartTime() {
-	if (_startTime.displayDateTime() != EMPTYFIELD_TIME) {
-		return true;
+	try {
+		if (_startTime.displayDateTime() != EMPTYFIELD_TIME) {
+			return true;
+		} else {
+			throw ERROR_INVALIDDATETIME;
+		}
 	}
-
-	assert(_startTime.displayDateTime() == EMPTYFIELD_TIME);
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+	
 	return false;
 }
 
 //	Checks if item has a valid end time
 bool Item::hasValidItemEndTime() {
-	if (_endTime.displayDateTime() != EMPTYFIELD_TIME) {
-		return true;
+	try {
+		if (_endTime.displayDateTime() != EMPTYFIELD_TIME) {
+			return true;
+		} else {
+			throw ERROR_INVALIDDATETIME;
+		}
 	}
-
-	assert(_endTime.displayDateTime() == EMPTYFIELD_TIME);
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+	
 	return false;
 }
 
@@ -55,10 +75,16 @@ bool Item::hasValidItemDescription() {
 
 //	Checks if item has a valid item ID
 bool Item::hasValidItemID() {
-	if (_itemID > EMPTYFIELD_ITEMID) {
-		return true;
+	try {
+		if (_itemID > EMPTYFIELD_ITEMID) {
+			return true;
+		} else {
+			throw ERROR_INVALIDITEMID;
+		}
 	}
-
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
 	assert(_itemID <= EMPTYFIELD_ITEMID);
 	return false;
 }

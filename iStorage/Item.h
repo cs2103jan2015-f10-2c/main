@@ -23,6 +23,10 @@ private:
 	static const char EMPTYFIELD_PRIORITY;
 	static const char EMPTYFIELD_LABEL;
 
+	static const string ERROR_INVALIDITEMNAME;
+	static const string ERROR_INVALIDDATETIME;
+	static const string ERROR_INVALIDITEMID;
+
 	string _itemName;
 	DateTime _startTime;
 	DateTime _endTime;
