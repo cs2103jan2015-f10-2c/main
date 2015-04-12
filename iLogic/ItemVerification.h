@@ -17,6 +17,14 @@ private:
 	Item _itemObjectToVerify;
 	list<string> _itemVerificationErrors;
 	unsigned int _nextID;
+	string _name;
+	string _description;
+	unsigned int _itemID;
+	DateTime _startTime;
+	DateTime _endTime;
+	char _priority;
+	char _label;
+	bool _isCompleted;
 
 	static const string ITEM_VERIFICATION_EMPTY_STRING;
 	static const string ITEM_VERIFICATION_AVAILABLE_PRIORITIES;
@@ -34,15 +42,18 @@ private:
 	static const string ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS;
 	static const string ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE;
 	static const string ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_START_TIME;
+	static const string ITEM_VERIFICATION_LOG_INVALID_START_TIME;
+	static const string ITEM_VERIFICATION_LOG_VALID_END_TIME;
+	static const string ITEM_VERIFICATION_LOG_INVALID_END_TIME;
+	static const string ITEM_VERIFICATION_LOG_VALID_TIME_FRAME;
+	static const string ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME;
 	static const string ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS;
 	static const string ITEM_VERIFICATION_LOG_VALID_ID_FAILURE;
 	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS;
 	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE;
 
-	static const string EXCEPTION_SPOILT_BOOL;
-
 	static const int ITEM_VERIFICATION_INT_ZERO;
-	static const int ITEM_VERIFICATION_INT_MINUS_TWO;
 
 /* #ifndef TESTMODE
 private:

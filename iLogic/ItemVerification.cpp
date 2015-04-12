@@ -14,19 +14,33 @@ const string ItemVerification::ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THA
 const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_ID = "Invalid ID";
 const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_PRIORITY = "Invalid Priority";
 const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_LABEL = "Invalid Label";
+
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS = "ITEM VERIFICATION:: Valid Name";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE = "ITEM VERIFICATION:: Invalid Name";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS = "ITEM VERIFICATION:: Valid Description";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_START_TIME = "ITEM VERIFICATION:: Valid Start Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_START_TIME = "ITEM VERIFICATION:: Invalid Start Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_END_TIME = "ITEM VERIFICATION:: Valid End Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_END_TIME = "ITEM VERIFICATION:: Invalid End Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_TIME_FRAME = "ITEM VERIFICATION:: Valid Time Frame";
+const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME = "ITEM VERIFICATION:: Invalid Time Frame";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS = "ITEM VERIFICATION:: Valid ID";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_FAILURE = "ITEM VERIFICATION:: Invalid ID";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS = "ITEM VERIFICATION:: Valid Priority";
 const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE = "ITEM VERIFICATION:: Invalid Priority";
-const string ItemVerification::EXCEPTION_SPOILT_BOOL = "This boolean is spoilt";
+
 const int ItemVerification::ITEM_VERIFICATION_INT_ZERO = 0;
-const int ItemVerification::ITEM_VERIFICATION_INT_MINUS_TWO = -20000;
 
 ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
 	_itemObjectToVerify = itemObject;
+	_name = _itemObjectToVerify.getItemName();
+	_description = _itemObjectToVerify.getDescription();
+	_itemID = _itemObjectToVerify.getItemID();
+	_startTime = _itemObjectToVerify.getStartTime();
+	_endTime = _itemObjectToVerify.getEndTime();
+	_priority = _itemObjectToVerify.getPriority();
+	_label = _itemObjectToVerify.getLabel();
+	_isCompleted = _itemObjectToVerify.getCompletion();
 	_nextID = nextItemID;
 }
 
@@ -34,8 +48,8 @@ bool ItemVerification::isValidName() {
 	string name = _itemObjectToVerify.getItemName();
 	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
-		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE);
+		assert(!_itemVerificationErrors.empty());
 		return false;
 	} else {
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS);
@@ -52,10 +66,12 @@ bool ItemVerification::isValidStartDateTime() {
 	DateTime startDateTime = _itemObjectToVerify.getStartTime();
 	DateTimeVerification startDateTimeVerification(startDateTime);
 	if (startDateTimeVerification.isValidDateTime()) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_START_TIME);
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME);
 		assert(!_itemVerificationErrors.empty());
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_START_TIME);
 		return false;
 	}
 }
@@ -64,10 +80,12 @@ bool ItemVerification::isValidEndDateTime() {
 	DateTime endDateTime = _itemObjectToVerify.getEndTime();
 	DateTimeVerification endDateTimeVerification(endDateTime);
 	if (endDateTimeVerification.isValidDateTime()) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_END_TIME);
 		return true;
 	} else {
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME);
 		assert(!_itemVerificationErrors.empty());
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_END_TIME);
 		return false;
 	}
 }
@@ -83,12 +101,15 @@ bool ItemVerification::isValidTimeFrame() {
 			if (startDateTime == endDateTime) {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME);
 				assert(!_itemVerificationErrors.empty());
+				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME);
 				return false;
 			} else if (startDateTime.isAfter(endDateTime)) {
 				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
 				assert(!_itemVerificationErrors.empty());
+				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME);
 				return false;
 			} else {
+				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_TIME_FRAME);
 				return true;
 			}
 		} else {
@@ -134,6 +155,7 @@ bool ItemVerification::isValidPriority() {
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS);
 		return true;
 	} else {
+		assert(_priority != 'H' && _priority != 'M' && _priority != 'L' && _priority != 'E');
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
 		assert(!_itemVerificationErrors.empty());
 		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE);
@@ -150,6 +172,7 @@ bool ItemVerification::isValidLabel() {
 	if (labelFound != string::npos) {
 		return true;
 	} else {
+		assert(_label != 'P' && _label != 'M' && _label != 'O' && _label != 'E');
 		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_LABEL);
 		assert(!_itemVerificationErrors.empty());
 		return false;
@@ -169,70 +192,6 @@ bool ItemVerification::isValidItem() {
 	bool hasValidPriority = isValidPriority();
 	bool hasValidLabel = isValidLabel();
 
-	try {
-		if (hasValidName == true && hasValidName == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
-	try {
-		if (hasValidDescription == true && hasValidDescription == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
-	try {
-		if (hasValidStartDateTime == true && hasValidStartDateTime == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
-	try {
-		if (hasValidEndDateTime == true && hasValidEndDateTime == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
-	try {
-		if (hasValidTimeFrame == true && hasValidTimeFrame == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
-	try {
-		if (hasValidID == true && hasValidID == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
-	try {
-		if (hasValidPriority == true && hasValidPriority == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
-	try {
-		if (hasValidLabel == true && hasValidLabel == false) {
-			throw EXCEPTION_SPOILT_BOOL;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-
 	if (hasValidName &&
 		hasValidDescription &&
 		hasValidStartDateTime &&
@@ -241,6 +200,10 @@ bool ItemVerification::isValidItem() {
 		hasValidID &&
 		hasValidPriority &&
 		hasValidLabel) {
+		assert(_name != ITEM_VERIFICATION_EMPTY_STRING);
+		assert(_priority == 'H' || _priority == 'M' || _priority == 'L' || _priority == 'E');
+		assert(_label == 'P' || _label == 'M' || _label == 'O' || _label == 'E');
+		assert(_itemID > ITEM_VERIFICATION_INT_ZERO);
 		return true;
 	} else {
 		return false;
