@@ -416,7 +416,7 @@ namespace iPlannerUI {
 				 
 				 Log newLog;
 				 newLog.clearLogFile();
-				 newLog.writeToLogFile("Log file created");
+				 newLog.writeToLogFile("Log file opened");
 				 
 				 testLogic->retrieveBasicInformationFromTextFile();
 				 testLogic->readDataFromFile();
@@ -470,7 +470,7 @@ namespace iPlannerUI {
 	}
 	
 	private: System::Void basicCommandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuAdd = "\t\tAdd a Task - Command List\r\n";
+				 String^ helpMenuAdd = "\t\t   Add a Task - Command List\r\n";
 
 				 helpMenuAdd += "\r\nadd <taskName> followed by task entities\r\n\r\n";
 				 helpMenuAdd += "The task entities could be one or more of the following : \r\n";
@@ -486,7 +486,7 @@ namespace iPlannerUI {
 	private: System::Void dateAndTimeVariationsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuDT;
 				 
-				 helpMenuDT += "\t\t<DateTime> Variations\r\n";
+				 helpMenuDT += "\t\t      <DateTime> Variations\r\n";
 				 helpMenuDT += "<Date>, <Time>\r\n";
 				 helpMenuDT += "<Time>, <Date>\r\n";
 				 helpMenuDT += "<Date>\r\n";
@@ -508,7 +508,7 @@ namespace iPlannerUI {
 	}
 
 	private: System::Void deletingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuDel = "      Deleting a Task - Command List\r\n";
+				 String^ helpMenuDel = "         Deleting a Task - Command List\r\n";
 
 				 helpMenuDel += "\r\ndelete <Display index of task to be deleted\r\n";
 				 helpMenuDel += "del <Display index of task to be deleted\r\n";
@@ -517,7 +517,7 @@ namespace iPlannerUI {
 	}
 
 	private: System::Void editingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuEdit = "\t\tEditing a Task Command List\r\n";
+				 String^ helpMenuEdit = "\t\t    Editing a Task Command List\r\n";
 
 				 helpMenuEdit += "\r\nedit <Display index of task to be edited> <Task entity to be edited>";
 				 helpMenuEdit += "Task entities can be edited with the same commands as Add\r\n";
@@ -529,12 +529,11 @@ namespace iPlannerUI {
 				 helpMenuEdit += "\r\nPreviously entered Date & Time and Description can be removed\r\n";
 				 helpMenuEdit += "edit <Display index of task to be edited> rmv <date> - Start and End Times of the task are removed\r\n";
 				 helpMenuEdit += "edit <Display index of task to be edited> rmv <desc> - Description of the task is removed\r\n";
-
 				 MessageBox::Show(helpMenuEdit);
 	}
 
 	private: System::Void sortingScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuSort = "\t\tSort Schedule - Command List\r\n";
+				 String^ helpMenuSort = "\t\t    Sort Schedule - Command List\r\n";
 
 				 helpMenuSort += "\r\nThe Schedule can be sorted by the following attributes : \r\n";
 				 helpMenuSort += "By Task Name : sort name - Sorts Tasks by Name in alphabetical order\r\n";
@@ -551,11 +550,14 @@ namespace iPlannerUI {
 
 				 helpMenuMisc += "\r\nSearch\r\n";
 				 helpMenuMisc += "search <keyword to be searched> - Keyword can be either a Task Name or Task Description\r\n";
-				 helpMenuMisc += "\r\nIndicate Task Completion\r\n";
+				 helpMenuMisc += "search <keyword1> + <keyword2> + ... - To search multiple keywords\r\n";
+				 helpMenuMisc += "\r\nIndicate Task Completed\r\n";
 				 helpMenuMisc += "done <Display index of completed task>\r\n";
+				 helpMenuMisc += "\r\nIndicate Task Not Completed\r\n";
+				 helpMenuMisc += "undone <Display index of completed task>\r\n";
 				 helpMenuMisc += "\r\nUndo Last Action\r\n";
 				 helpMenuMisc += "undo\r\n";
-				 helpMenuMisc += "\r\nChange Save Direcotry\r\n";
+				 helpMenuMisc += "\r\nChange Save Directory\r\n";
 				 helpMenuMisc += "save <Address of new location to store the .txt file>\r\n";
 				 helpMenuMisc += "\r\nExit Application\r\n";
 				 helpMenuMisc += "exit\r\n";
