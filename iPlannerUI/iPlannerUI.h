@@ -70,6 +70,8 @@ namespace iPlannerUI {
 	private: System::Windows::Forms::ToolStripMenuItem^  dateAndTimeVariationsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  basicCommandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  viewScheduleToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  addModifyATaskEntityToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  removeATaskEntityToolStripMenuItem;
 
 
 
@@ -99,7 +101,6 @@ namespace iPlannerUI {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		void InitializeComponent(void) {
-
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(iPlannerUI::typeid));
 			this->commandInputBox = (gcnew System::Windows::Forms::TextBox());
 			this->scheduleLabel = (gcnew System::Windows::Forms::Label());
@@ -112,6 +113,8 @@ namespace iPlannerUI {
 			this->dateAndTimeVariationsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->deletingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->addModifyATaskEntityToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->removeATaskEntityToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->sortingScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->viewScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->miscellneousToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -195,7 +198,7 @@ namespace iPlannerUI {
 					this->dateAndTimeVariationsToolStripMenuItem
 			});
 			this->addingATaskToolStripMenuItem->Name = L"addingATaskToolStripMenuItem";
-			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(150, 22);
+			this->addingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->addingATaskToolStripMenuItem->Text = L"Add a Task";
 			// 
 			// basicCommandsToolStripMenuItem
@@ -215,35 +218,52 @@ namespace iPlannerUI {
 			// deletingATaskToolStripMenuItem
 			// 
 			this->deletingATaskToolStripMenuItem->Name = L"deletingATaskToolStripMenuItem";
-			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(150, 22);
+			this->deletingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->deletingATaskToolStripMenuItem->Text = L"Delete a Task";
 			this->deletingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::deletingATaskToolStripMenuItem_Click);
 			// 
 			// editingATaskToolStripMenuItem
 			// 
+			this->editingATaskToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->addModifyATaskEntityToolStripMenuItem,
+					this->removeATaskEntityToolStripMenuItem
+			});
 			this->editingATaskToolStripMenuItem->Name = L"editingATaskToolStripMenuItem";
-			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(150, 22);
+			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->editingATaskToolStripMenuItem->Text = L"Edit a Task";
-			this->editingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::editingATaskToolStripMenuItem_Click);
+			// 
+			// addModifyATaskEntityToolStripMenuItem
+			// 
+			this->addModifyATaskEntityToolStripMenuItem->Name = L"addModifyATaskEntityToolStripMenuItem";
+			this->addModifyATaskEntityToolStripMenuItem->Size = System::Drawing::Size(208, 22);
+			this->addModifyATaskEntityToolStripMenuItem->Text = L"Add/Modify a Task entity";
+			this->addModifyATaskEntityToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::addModifyATaskEntityToolStripMenuItem_Click);
+			// 
+			// removeATaskEntityToolStripMenuItem
+			// 
+			this->removeATaskEntityToolStripMenuItem->Name = L"removeATaskEntityToolStripMenuItem";
+			this->removeATaskEntityToolStripMenuItem->Size = System::Drawing::Size(208, 22);
+			this->removeATaskEntityToolStripMenuItem->Text = L"Remove a task entity";
+			this->removeATaskEntityToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::removeATaskEntityToolStripMenuItem_Click);
 			// 
 			// sortingScheduleToolStripMenuItem
 			// 
 			this->sortingScheduleToolStripMenuItem->Name = L"sortingScheduleToolStripMenuItem";
-			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(150, 22);
+			this->sortingScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->sortingScheduleToolStripMenuItem->Text = L"Sort Schedule";
 			this->sortingScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::sortingScheduleToolStripMenuItem_Click);
 			// 
 			// viewScheduleToolStripMenuItem
 			// 
 			this->viewScheduleToolStripMenuItem->Name = L"viewScheduleToolStripMenuItem";
-			this->viewScheduleToolStripMenuItem->Size = System::Drawing::Size(150, 22);
+			this->viewScheduleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->viewScheduleToolStripMenuItem->Text = L"View Schedule";
 			this->viewScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::viewScheduleToolStripMenuItem_Click);
 			// 
 			// miscellneousToolStripMenuItem
 			// 
 			this->miscellneousToolStripMenuItem->Name = L"miscellneousToolStripMenuItem";
-			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(150, 22);
+			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->miscellneousToolStripMenuItem->Text = L"Miscellneous";
 			this->miscellneousToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::miscellneousToolStripMenuItem_Click);
 			// 
@@ -472,15 +492,16 @@ namespace iPlannerUI {
 
 	// Below functions display the list of commands for the user's reference
 	private: System::Void basicCommandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuAdd = "\t\t   Add a Task - Command List\r\n";
+				 String^ helpMenuAdd = "\t\t            Add a Task Commands\r\n";
 
 				 helpMenuAdd += "\r\nadd <taskName> followed by task entities\r\n\r\n";
-				 helpMenuAdd += "The task entities could be one or more of the following : \r\n";
+				 helpMenuAdd += "The task entities could be entered with the following sub-commands : \r\n";
 				 helpMenuAdd += "Starting Time of Task : -start <DateTime> or -date <DateTime>\r\n";
 				 helpMenuAdd += "Ending Time of Task :  -end <DateTime> or -due <DateTime>\r\n";
 				 helpMenuAdd += "Task Description : -desc <Description>\r\n";
 				 helpMenuAdd += "Task Priority : -priority <High/Medium/Low>  or -priority <H/M/L>\r\n";
-				 helpMenuAdd += "\r\nNote : For <DateTime> variations, Help -> Adding a Task -> Date and Time Variations";
+				 helpMenuAdd += "\r\nNote : For adding or editing start and end times simultaneously, only -start and -end can be used together\r\n";
+				 helpMenuAdd += "\r\nTo refer possible <DateTime> variations, Help -> Adding a Task -> Date and Time Variations";
 
 				 MessageBox::Show(helpMenuAdd);
 	}
@@ -488,7 +509,7 @@ namespace iPlannerUI {
 	private: System::Void dateAndTimeVariationsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuDT;
 				 
-				 helpMenuDT += "\t\t      <DateTime> Variations\r\n";
+				 helpMenuDT += "\t\t           <DateTime> Variations\r\n";
 				 helpMenuDT += "<Date>, <Time>\r\n";
 				 helpMenuDT += "<Time>, <Date>\r\n";
 				 helpMenuDT += "<Date>\r\n";
@@ -510,34 +531,43 @@ namespace iPlannerUI {
 	}
 
 	private: System::Void deletingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuDel = "         Deleting a Task - Command List\r\n";
+				 String^ helpMenuDel = "                 Delete a Task Commands\r\n";
 
-				 helpMenuDel += "\r\ndelete <Display index of task to be deleted\r\n";
-				 helpMenuDel += "del <Display index of task to be deleted\r\n";
-				 helpMenuDel += "\r\nclear - Deletes all tasks in the Schedule\r\n";
+				 helpMenuDel += "\r\ndelete <Display index of task to be deleted>\r\n";
+				 helpMenuDel += "del <Display index of task to be deleted>\r\n";
+				 helpMenuDel += "\r\nDelete all tasks in the Schedule : clear\r\n";
 				 
 				 MessageBox::Show(helpMenuDel);
 	}
 
-	private: System::Void editingATaskToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuEdit = "\t\t    Editing a Task Command List\r\n";
+	private: System::Void addModifyATaskEntityToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+				 String^ helpMenuEditAdd = "\t\tEditing a Task - Add or Modify a Task Entity\r\n";
 
-				 helpMenuEdit += "\r\nedit <Display index of task to be edited> <Task entity to be edited>";
-				 helpMenuEdit += "Task entities can be edited with the same commands as Add\r\n";
-				 helpMenuEdit += "Task Name : -name <newTaskName>";
-				 helpMenuEdit += "Starting Time of Task : -start <newDateTime> or -date <newDateTime>\r\n";
-				 helpMenuEdit += "Ending Time of Task :  -end <newDateTime> or -due <newDateTime>\r\n";
-				 helpMenuEdit += "Task Description : -desc <newDescription>\r\n";
-				 helpMenuEdit += "Task Priority : -priority <newPriority>\r\n";
-				 helpMenuEdit += "\r\nPreviously entered Date & Time and Description can be removed\r\n";
-				 helpMenuEdit += "edit <Display index of task to be edited> rmv <date> - Start and End Times of the task are removed\r\n";
-				 helpMenuEdit += "edit <Display index of task to be edited> rmv <desc> - Description of the task is removed\r\n";
-				 
-				 MessageBox::Show(helpMenuEdit);
+				 helpMenuEditAdd += "\r\nedit <Display index of task to be edited> sub-command <New value of entity>";
+				 helpMenuEditAdd += "Task entities can be edited with the same sub-commands that function with Add\r\n";
+				 helpMenuEditAdd += "Task Name : -name <newTaskName>";
+				 helpMenuEditAdd += "Starting Time of Task : -start <newDateTime> or -date <newDateTime>\r\n";
+				 helpMenuEditAdd += "Ending Time of Task :  -end <newDateTime> or -due <newDateTime>\r\n";
+				 helpMenuEditAdd += "Task Description : -desc <newDescription>\r\n";
+				 helpMenuEditAdd += "Task Priority : -priority <newPriority>\r\n";
+
+				 MessageBox::Show(helpMenuEditAdd);
+	}
+
+	private: System::Void removeATaskEntityToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+				 String^ helpMenuEditRmv = "\t\t    Editing a Task - Remove a Task Entity\r\n";
+
+				 helpMenuEditRmv += "\r\nPreviously entered Date & Time, Description and Priority can be removed with \nedit, preceeded by the sub-command -remove or -rmv\r\n";
+				 helpMenuEditRmv += "\r\nRemove Start and End times of task : edit <Display index of task to be edited> -rmv date\r\n";
+				 helpMenuEditRmv += "Remove Start Time of task : edit <Display index of task to be edited> -rmv start\r\n";
+				 helpMenuEditRmv += "Remove End Time of task : edit <Display index of task to be edited> -rmv end\r\n";
+				 helpMenuEditRmv += "Remove Description of Task : edit <Display index of task to be edited> -rmv description or desc\r\n";
+				 helpMenuEditRmv += "Remove Priority of Task : edit <Display index of task to be edited> -rmv priority or <p>\r\n";
+				 MessageBox::Show(helpMenuEditRmv);
 	}
 
 	private: System::Void sortingScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuSort = "\t\t    Sort Schedule - Command List\r\n";
+				 String^ helpMenuSort = "\t\t       Sort Schedule Commands\r\n";
 
 				 helpMenuSort += "\r\nThe Schedule can be sorted by the following attributes : \r\n";
 				 helpMenuSort += "By Task Name : sort name - Sorts Tasks by Name in alphabetical order\r\n";
@@ -549,15 +579,29 @@ namespace iPlannerUI {
 				 MessageBox::Show(helpMenuSort);
 	}
 
+	private: System::Void viewScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+				 String^ helpMenuView = "\t\t       View Schedule Commands\r\n";
+
+				 helpMenuView += "\r\nUser can view All tasks, Tasks within a given range of dates, Completed tasks or tasks with a specific Priority\r\n";
+				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
+				 helpMenuView += "view <date1> <date2> - All tasks in the specified date range are displayed\r\n";
+				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
+				 helpMenuView += "view undone - Tasks which are not completed are displayed\r\n";
+				 helpMenuView += "view <H/M/L> - Tasks which have the priority specified are displayed\r\n";
+
+				 MessageBox::Show(helpMenuView);
+
+	}
+
 	private: System::Void miscellneousToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 String^ helpMenuMisc = "\t\t\tOther Commands\r\n";
 
 				 helpMenuMisc += "\r\nSearch\r\n";
-				 helpMenuMisc += "search <keyword to be searched> - Keyword can be either a Task Name or Task Description\r\n";
-				 helpMenuMisc += "search <keyword1> + <keyword2> + ... - To search multiple keywords\r\n";
-				 helpMenuMisc += "\r\nIndicate Task Completed\r\n";
+				 helpMenuMisc += "Search a single keyword : search <keyword to be searched> - Keyword can be either a Task Name or Task Description\r\n";
+				 helpMenuMisc += "Search multiple keywords : search <keyword1> + <keyword2> + ...\r\n";
+				 helpMenuMisc += "\r\nMark Task as Completed\r\n";
 				 helpMenuMisc += "done <Display index of completed task>\r\n";
-				 helpMenuMisc += "\r\nIndicate Task Not Completed\r\n";
+				 helpMenuMisc += "\r\nMark Task as Not Completed\r\n";
 				 helpMenuMisc += "undone <Display index of completed task>\r\n";
 				 helpMenuMisc += "\r\nUndo Last Action\r\n";
 				 helpMenuMisc += "undo\r\n";
@@ -568,25 +612,12 @@ namespace iPlannerUI {
 
 				 MessageBox::Show(helpMenuMisc);
 	}
-	
-	private: System::Void viewScheduleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 String^ helpMenuView = "\t\t   View Schedule - Command List\r\n";
-
-				 helpMenuView += "\r\nUser can view All tasks, Tasks within a given range of dates, Completed tasks or tasks with a specific Priority\r\n";
-				 helpMenuView += "\r\nview all - All tasks in the Schedule are displayed\r\n";
-				 helpMenuView += "view <date1> <date2> - All tasks in the specified date range are displayed\r\n";
-				 helpMenuView += "view done - Tasks which are completed are displayed\r\n";
-				 helpMenuView += "view undone - Tasks which are not completed are displayed\r\n";
-				 helpMenuView += "view <H/M/L> - Tasks which have the priority specified are displayed\r\n";
-				 
-				 MessageBox::Show(helpMenuView);
-
-	}
-
+		
 	// Function to write to log file that that the user has exited if the user closes using the close button
 	private: System::Void iPlannerUI_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
 				 Log closeLog;
 				 closeLog.writeToLogFile("exit");
 	}
+
 };
 }
