@@ -263,6 +263,7 @@ namespace iPlannerUI {
 			this->MaximizeBox = false;
 			this->Name = L"iPlannerUI";
 			this->Text = L"iPlanner";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &iPlannerUI::iPlannerUI_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &iPlannerUI::iPlannerUI_Load);
 			this->HelpmenuStrip1->ResumeLayout(false);
 			this->HelpmenuStrip1->PerformLayout();
@@ -352,7 +353,6 @@ namespace iPlannerUI {
 
 	private: System::Void commandInputBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 				 MESSAGE_AND_SCHEDULE displayMessage;
-				 iParser testParser;
 				 Log newLog;
 				 String^ userInput;
 				 userInput = commandInputBox->Text;
@@ -406,7 +406,7 @@ namespace iPlannerUI {
 					 String^ outcomeString = gcnew String(displayMessage.message.c_str());
 					 commandOutcomeLabel->Text = outcomeString;
 					 outputBox2->SelectionStart = 0;
-					 outputBox2->ScrollToCaret();
+					 newLog.writeToLogFile("");
 					 commandInputBox->Clear();
 				 }
 
@@ -513,6 +513,7 @@ namespace iPlannerUI {
 				 helpMenuDel += "\r\ndelete <Display index of task to be deleted\r\n";
 				 helpMenuDel += "del <Display index of task to be deleted\r\n";
 				 helpMenuDel += "\r\nclear - Deletes all tasks in the Schedule\r\n";
+				 
 				 MessageBox::Show(helpMenuDel);
 	}
 
@@ -529,6 +530,7 @@ namespace iPlannerUI {
 				 helpMenuEdit += "\r\nPreviously entered Date & Time and Description can be removed\r\n";
 				 helpMenuEdit += "edit <Display index of task to be edited> rmv <date> - Start and End Times of the task are removed\r\n";
 				 helpMenuEdit += "edit <Display index of task to be edited> rmv <desc> - Description of the task is removed\r\n";
+				 
 				 MessageBox::Show(helpMenuEdit);
 	}
 
@@ -579,5 +581,9 @@ namespace iPlannerUI {
 
 	}
 	
+	private: System::Void iPlannerUI_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
+				 Log closeLog;
+				 closeLog.writeToLogFile("exit");
+	}
 };
 }
