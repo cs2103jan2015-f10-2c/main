@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "Item.h"
-#include "assert.h"
 
 const string Item::EMPTYFIELD_ITEMNAME = "";
 const string Item::EMPTYFIELD_DESCRIPTION = "";

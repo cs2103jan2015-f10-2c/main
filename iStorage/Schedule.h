@@ -10,16 +10,28 @@
 #include <algorithm>
 #include "Item.h"
 #include "History.h"
+#include "..\iPlanner Log\Log.h"
 using namespace std;
 
 class Schedule {
 private:
+	Log _storageLogger;
+
 	static const string COMMAND_ADD;
 	static const string COMMAND_DELETE;
 	static const string COMMAND_REPLACE;
 	static const string COMMAND_CLEAR;
 	static const string ERROR_ADD;
 	static const string ERROR_EMPTYSTACKS;
+
+	static const string LOG_ADDITEM;
+	static const string LOG_RETRIEVEITEM;
+	static const string LOG_REPLACEITEM;
+	static const string LOG_DELETEITEM;
+	static const string LOG_CONSTRUCTSCHEDULE;
+	static const string LOG_DESTRUCTSCHEDULE;
+	static const string LOG_CLEAR;
+	static const string LOG_UNDO;	
 
 	vector <Item> _schedule;
 	vector <Item> _displaySchedule;
@@ -36,10 +48,6 @@ private:
 	bool isMatchingPriority(char, char);
 	bool isMatchingLabel(char, char);
 	bool isMatchingCompletionStatus(bool, bool);
-////////////////////////////////////////////////////////////////////////////////////////////    //////////
-////////////////// JF REMOVE THIS LATER!! //////////////////////////////////////////////////  ////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////    ////////
-public:
 	bool isRelevantDateTime(DateTime, DateTime, DateTime, DateTime);
 private:
 	//	Checks if an item's name or description has a keyword or a string

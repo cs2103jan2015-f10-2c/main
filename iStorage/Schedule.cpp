@@ -9,12 +9,24 @@ const string Schedule::COMMAND_REPLACE = "REPLACE";
 const string Schedule::COMMAND_CLEAR = "CLEAR";
 const string Schedule::ERROR_ADD = "ERROR: Command and Item were not recorded.";
 const string Schedule::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
+const string Schedule::LOG_ADDITEM = "STORAGE::AddItem";
+const string Schedule::LOG_RETRIEVEITEM = "STORAGE::RetrieveItem";
+const string Schedule::LOG_REPLACEITEM = "STORAGE::ReplaceItem";
+const string Schedule::LOG_DELETEITEM = "STORAGE::DeleteItem";
+const string Schedule::LOG_CONSTRUCTSCHEDULE = "STORAGE::ConstructSchedule";
+const string Schedule::LOG_DESTRUCTSCHEDULE = "STORAGE::DestructSchedule";
+const string Schedule::LOG_CLEAR = "STORAGE::ClearItems";
+const string Schedule::LOG_UNDO = "STORAGE::UndoCommand";
 
 //	Constructor
-Schedule::Schedule() {}
+Schedule::Schedule() {
+	_storageLogger.writeToLogFile(LOG_CONSTRUCTSCHEDULE);
+}
 
 //	Destructor
-Schedule::~Schedule() {}
+Schedule::~Schedule() {
+	_storageLogger.writeToLogFile(LOG_DESTRUCTSCHEDULE);
+}
 
 //	Checks if an itemID matches the itemID of an item in a given vector cell
 bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
@@ -116,6 +128,7 @@ unsigned int Schedule::resetDisplaySchedule() {
 string Schedule::addItem(Item* item) {
 	_scheduleHistory.addCommand(COMMAND_ADD, *item);
 	_schedule.push_back(*item);
+	_storageLogger.writeToLogFile(LOG_ADDITEM);
 
 	return _schedule.back().displayItemFullDetails();
 }
@@ -129,6 +142,7 @@ Item Schedule::retrieveItemGivenItemID(unsigned int itemID) {
 //	Retrieves a copy of an existing item in the schedule given the item's display vector index
 Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
+	_storageLogger.writeToLogFile(LOG_RETRIEVEITEM);
 	return retrieveItemGivenItemID(itemID);
 }
 
@@ -145,6 +159,7 @@ string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int item
 //	Replaces an existing item in the schedule given the item's display vector index
 string Schedule::replaceItemGivenDisplayVectorIndex(Item* replacementItem, unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
+	_storageLogger.writeToLogFile(LOG_REPLACEITEM);
 	return replaceItemGivenItemID(replacementItem, itemID);
 }
 
@@ -162,6 +177,7 @@ string Schedule::deleteItemGivenItemID(unsigned int itemID) {
 //	Deletes an item from the schedule given item's display vector index
 string Schedule::deleteItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
 	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
+	_storageLogger.writeToLogFile(LOG_DELETEITEM);
 	return deleteItemGivenItemID(itemID);
 }
 
@@ -178,6 +194,7 @@ string Schedule::clearDisplaySchedule() {
 		_displaySchedule.erase(_displaySchedule.begin());
 	}
 
+	_storageLogger.writeToLogFile(LOG_CLEAR);
 	return COMMAND_CLEAR;
 }
 
@@ -209,6 +226,7 @@ string Schedule::undoAdd(Item latestItem) {
 	string confirmation = deleteItemGivenItemID(latestItem.getItemID());
 	_scheduleHistory.removeUndoneCommand();
 
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_ADD);
 	return (COMMAND_ADD + confirmation);
 }
 
@@ -217,6 +235,7 @@ string Schedule::undoReplace(Item latestItem) {
 	string confirmation = replaceItemGivenItemID(&latestItem, latestItem.getItemID());
 	_scheduleHistory.removeUndoneCommand();
 
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_REPLACE);
 	return (COMMAND_REPLACE + confirmation);
 }
 
@@ -225,6 +244,7 @@ string Schedule::undoDelete(Item latestItem) {
 	string confirmation = addItem(&latestItem);
 	_scheduleHistory.removeUndoneCommand();
 
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_DELETE);
 	return (COMMAND_DELETE + confirmation);
 }
 
@@ -236,7 +256,8 @@ string Schedule::undoClear(vector<Item> latestClearedSchedule) {
 		_scheduleHistory.removeUndoneCommand();
 	}
 
-	return to_string (index);
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_CLEAR);
+	return to_string(index);
 }
 
 string Schedule::resetHistory() {
