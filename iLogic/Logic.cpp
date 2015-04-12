@@ -406,9 +406,11 @@ string Logic::undoPreviousAction(){
 
 
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
+	assert(parseInfoToBeProcessed.size() > 0);
 	if (parseInfoToBeProcessed.size() == 1){
 		return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INPUT;
 	} else if (isValidLineIndex(lineIndexToBeEdited)){
+		
 		Item *editedItemToBeReplaced;
 		editedItemToBeReplaced = new Item;
 		*editedItemToBeReplaced = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndexToBeEdited);
@@ -433,6 +435,7 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 
 
 string Logic::replaceItemInSchedule(Item* editedItemToBeReplaced, unsigned int lineIndexToBeEdited){
+	assert(lineIndexToBeEdited > 0);
 	_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
 	removeItemPointer(editedItemToBeReplaced);
 	return MESSAGE_SUCCESSFUL_EDIT;
@@ -452,26 +455,34 @@ string Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* it
 
 string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified, string& modifiedItemPartsForDisplay){
 	string modifier = iter->command;
+	assert(modifier != "");
 	modifiedItemPartsForDisplay = modifiedItemPartsForDisplay + modifier + " ";
-	if (modifier == MODIFIER_NAME){
-		itemToBeModified->setItemName(iter->text);
-	} else if (modifier == MODIFIER_DESCRIPTION){
-		string descriptionToBeAdded = iter->text;
-		itemToBeModified->setDescription(descriptionToBeAdded);
-	} else if (modifier == MODIFIER_START){
-		DateTime startTimeToBeModified = itemToBeModified->getStartTime();
-		itemToBeModified->setStartTime(interpreteDateTime(iter->text, itemToBeModified->getStartTime()));
-	} else if (modifier == MODIFIER_END){
-		itemToBeModified->setEndTime(interpreteDateTime(iter->text, itemToBeModified->getEndTime()));
-	} else if (modifier == MODIFIER_LABEL){
-		char labelToBeModified = iter->text[0];
-		itemToBeModified->setLabel(labelToBeModified);
-	} else if (modifier == MODIFIER_PRIORITY){
-		char priorityToBeModified = checkPriority(iter->text);
-		itemToBeModified->setPriority(priorityToBeModified);
-	} else if (modifier == MODIFIER_COMPLETION){
-		bool done = true;
-		itemToBeModified->setCompletion(done);
+	try{
+		if (modifier == MODIFIER_NAME){
+			itemToBeModified->setItemName(iter->text);
+		} else if (modifier == MODIFIER_DESCRIPTION){
+			string descriptionToBeAdded = iter->text;
+			itemToBeModified->setDescription(descriptionToBeAdded);
+		} else if (modifier == MODIFIER_START){
+			DateTime startTimeToBeModified = itemToBeModified->getStartTime();
+			itemToBeModified->setStartTime(interpreteDateTime(iter->text, itemToBeModified->getStartTime()));
+		} else if (modifier == MODIFIER_END){
+			itemToBeModified->setEndTime(interpreteDateTime(iter->text, itemToBeModified->getEndTime()));
+		} else if (modifier == MODIFIER_LABEL){
+			char labelToBeModified = iter->text[0];
+			itemToBeModified->setLabel(labelToBeModified);
+		} else if (modifier == MODIFIER_PRIORITY){
+			char priorityToBeModified = checkPriority(iter->text);
+			itemToBeModified->setPriority(priorityToBeModified);
+		} else if (modifier == MODIFIER_COMPLETION){
+			bool done = true;
+			itemToBeModified->setCompletion(done);
+		} else{
+			throw "invalid modifier type";
+		}
+	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
 	}
 	return modifiedItemPartsForDisplay;
 }
@@ -578,6 +589,7 @@ string Logic::markUndone(unsigned int lineIndex){
 }
 
 string Logic::changeCompletion(unsigned int lineIndex, string completion){
+	assert(lineIndex > 0);
 	Item* retrievedItem;
 	retrievedItem = new Item;
 	*retrievedItem = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndex);
@@ -610,18 +622,23 @@ vector<Item> Logic::sortTask(){
 	} else{
 		sortedDisplaySchedule = getDisplaySchedule();
 	}
-	if (_currentSorting == SORT_NAME){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
-	} else if (_currentSorting == SORT_PRIORITY){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
-	} else if (_currentSorting == SORT_COMPLETION){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
-	} else if (_currentSorting == SORT_DATE){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
-	} else if (_currentSorting == SORT_LAST_UPDATE){
-		sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
-	} else{
-		return sortedDisplaySchedule;
+	try{
+		if (_currentSorting == SORT_NAME){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByItemName();
+		} else if (_currentSorting == SORT_PRIORITY){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByPriority();
+		} else if (_currentSorting == SORT_COMPLETION){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByCompletionStatus();
+		} else if (_currentSorting == SORT_DATE){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByDate();
+		} else if (_currentSorting == SORT_LAST_UPDATE){
+			sortedDisplaySchedule = _logicSchedule.retrieveDisplayScheduleByLastUpdate();
+		} else{
+			throw "invalid sorting method";
+		}
+	}
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
 	}
 	printSchedule(sortedDisplaySchedule);
 	return sortedDisplaySchedule;
