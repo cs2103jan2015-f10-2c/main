@@ -1,3 +1,5 @@
+//author A0108462J
+
 #ifndef DATETIME_VERIFICATION_H
 #define DATETIME_VERIFICATION_H
 
@@ -46,11 +48,6 @@ private:
 	int _hour;
 	int _minute;
 
-	////////////////////////////////////////
-	//CHANGE BACK TO PRIVATE AFTER TESTING//
-	////////////////////////////////////////
-public:
-
 	////////////////////////////
 	////// LEVEL 1 of SLAP /////
 	////////////////////////////
@@ -85,7 +82,6 @@ public:
 	// individual year/month/day values come
 	// together as a valid time format.
 	// i.e. HH MM or -1 -1
-	bool hasHourMinute();
 	bool hasHour();
 	bool hasMinute();
 	bool isValidTime();
@@ -112,6 +108,8 @@ public:
 	//		-1	 DD MM HH MM
 	//		-1	 DD MM -1 -1
 	bool isValidDateTime();
+
+	bool hasHourMinute();
 
 };
 

@@ -1,3 +1,4 @@
+//author A0112042E
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
@@ -680,6 +681,7 @@ public:
 		Assert::AreEqual(isCompleted, outputCompletion);
 	}
 
+	//author A0108462J
 	TEST_METHOD(ItemTestSetLastUpdate) {
 		Item *item1 = new Item(string("Item #1"));
 		CTime lastUpdate;
@@ -704,7 +706,7 @@ public:
 		isSameTime = (lastUpdate == item1->getLastUpdate());
 		Assert::AreEqual(true, isSameTime);
 	}
-
+	//author A0112042E
 	};
 
 	TEST_CLASS(TEST_GET_ITEM) {
@@ -837,6 +839,7 @@ public:
 		Assert::AreEqual(isCompleted, outputCompletion);
 	}
 
+	//author A0108462J
 	TEST_METHOD(ItemTestGetLastUpdate) {
 		Item *item1 = new Item(string("Item #1"));
 		CTime lastUpdate;
@@ -861,7 +864,7 @@ public:
 		isSameTime = (lastUpdate == item1->getLastUpdate());
 		Assert::AreEqual(true, isSameTime);
 	}
-
+	//author A0112042E
 	};
 
 	TEST_CLASS(TEST_DISPLAY) {
@@ -1015,6 +1018,7 @@ public:
 		Assert::AreEqual(outputString.str(), item.displayItemFullDetails());
 	}
 
+	//author A0108462J
 	TEST_METHOD(ItemTestDisplayLastUpdatedTime) {
 		Item *item1 = new Item(string("Item #1"));
 		CTime lastUpdate;
@@ -1034,7 +1038,7 @@ public:
 		Assert::AreEqual(lastUpdateAsString, item1->displayLastUpdatedTime());
 
 	}
-
+	//author A0112042E
 	};
 }
 
@@ -1101,6 +1105,7 @@ public:
 		Assert::AreEqual((unsigned int)2, YoungbinLifeEvents.getSizeOfSchedule());
 	}
 
+	//author A0108462J
 	TEST_METHOD(TestResetDisplaySchedule) {
 		Schedule lohPengKimSchedule;
 		int scheduleSize;
@@ -1242,7 +1247,7 @@ public:
 		item3 = NULL;
 		item4 = NULL;
 	}
-
+	//author A0112042E
 	};
 
 	TEST_CLASS(TEST_CONVERSION) {
@@ -1706,6 +1711,7 @@ public:
 		delete item3;
 	}
 
+	//author A0108462J
 //	Testing of private function muted.
 /*	TEST_METHOD(ScheduleTestIsRelevantDateTime) {
 		Schedule relevantDateTimeSchedule;
@@ -3317,7 +3323,8 @@ public:
 		returnMessage = testHistory.undoLastCommand(commandFromHistory, latestItemFromHistory, latestClearedScheduleFromHistory);
 		Assert::AreEqual(clearedSchedule[0].getItemName(), latestClearedScheduleFromHistory[0].getItemName());
 	}
-
+	
+	//author A0112042E
 	TEST_METHOD(TestResetHistory) {
 		History testHistory;
 		string returnMessage;
