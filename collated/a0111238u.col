@@ -1,0 +1,3021 @@
+//@author: a0111238u
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iParser\iParser.cpp
+	 */
+
+//	Parser
+//	Tutorial F10-2C
+//	Coder:	Ng Chon Beng
+
+#include "iParser.h"
+
+const string iParser::COMMAND_ADD = "add";
+const string iParser::COMMAND_DELETE = "delete";
+const string iParser::COMMAND_DEL = "del";
+const string iParser::COMMAND_CLEAR = "clear";
+const string iParser::COMMAND_EDIT = "edit";
+const string iParser::COMMAND_UNDO = "undo";
+const string iParser::COMMAND_SORT = "sort";
+const string iParser::COMMAND_SEARCH = "search";
+const string iParser::COMMAND_VIEW = "view";
+const string iParser::COMMAND_SAVE = "save";
+const string iParser::COMMAND_DONE = "done";
+const string iParser::COMMAND_UNDONE = "undone";
+const string iParser::COMMAND_EXIT = "exit";
+
+const string iParser::COMMAND_NAME = "name";
+const string iParser::COMMAND_START = "start";
+const string iParser::COMMAND_END = "end";
+const string iParser::COMMAND_DESCRIPTION = "description";
+const string iParser::COMMAND_PRIORITY = "priority";
+const string iParser::COMMAND_REMOVE = "remove";
+const string iParser::COMMAND_RMV = "rmv";
+
+const string iParser::STRING_DATE = "date";
+const string iParser::STRING_DUE = "due";
+const string iParser::STRING_START = "start";
+const string iParser::STRING_END = "end";
+const string iParser::STRING_DESCRIPTION = "description";
+const string iParser::STRING_DESC = "desc";
+const string iParser::STRING_PRIORITY = "priority";
+const string iParser::STRING_PRIORITY_P = "p";
+const string iParser::STRING_ALL = "all";
+const string iParser::STRING_NAME = "name";
+const string iParser::STRING_UPDATE = "update";
+const string iParser::STRING_DONE = "done";
+const string iParser::STRING_UNDONE = "undone";
+const string iParser::STRING_HIGH = "high";
+const string iParser::STRING_MEDIUM = "medium";
+const string iParser::STRING_MED = "med";
+const string iParser::STRING_LOW = "low";
+const string iParser::STRING_H = "h";
+const string iParser::STRING_M = "m";
+const string iParser::STRING_L = "l";
+
+const string iParser::MODIFIER_NAME = "-name";
+const string iParser::MODIFIER_DATE = "-date";
+const string iParser::MODIFIER_DUE = "-due";
+const string iParser::MODIFIER_START = "-start";
+const string iParser::MODIFIER_END = "-end";
+const string iParser::MODIFIER_DESCRIPTION = "-description";
+const string iParser::MODIFIER_DESC = "-desc";
+const string iParser::MODIFIER_LABEL = "-label";
+const string iParser::MODIFIER_PRIORITY = "-priority";
+const string iParser::MODIFIER_PRIORITY_P = "-p";
+const string iParser::MODIFIER_REMOVE = "-remove";
+const string iParser::MODIFIER_RMV = "-rmv";
+
+const string iParser::STRING_MONTHS[] = { "january", "february", "march", "april", "may", "june",
+"july", "august", "september", "october", "november", "december" };
+const string iParser::STRING_MONTHS_SHORT_FORM[] = { "jan", "feb", "mar", "apr", "may", "jun",
+"jul", "aug", "sep", "oct", "nov", "dec" };
+const string iParser::STRING_MONTHS_IN_NUMBER[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
+const string iParser::STRING_TO = "to";
+const string iParser::STRING_AM = "am";
+const string iParser::STRING_PM = "pm";
+const string iParser::STRING_HR = "hr";
+const string iParser::STRING_DATE_INITIALISE = "-1 -1 -1";
+const string iParser::STRING_TIME_INITIALISE = "-1 -1";
+const string iParser::STRING_MINUTE_INITIALISE = "00";
+const string iParser::STRING_DATE_TIME_REMOVE = "-2 -2 -2 -2 -2";
+const string iParser::STRING_BLANK = "";
+const string iParser::STRING_ZERO = "0";
+const string iParser::STRING_NEGATIVE_ONE = "-1";
+
+const char iParser::CHAR_SPACE = ' ';
+const char iParser::CHAR_TAB = '\t';
+const char iParser::CHAR_COMMA = ',';
+const char iParser::CHAR_OBLIQUE = '/';
+const char iParser::CHAR_HYPHEN = '-';
+const char iParser::CHAR_COLON = ':';
+const char iParser::CHAR_PLUS = '+';
+
+const string iParser::MESSAGE_SUCCESS = "success";
+const string iParser::MESSAGE_FAILURE = "failure";
+const string iParser::MESSAGE_INVALID = "invalid";
+const string iParser::MESSAGE_INVALID_INPUT = "Invalid input";
+const string iParser::MESSAGE_INVALID_COMMAND = "Invalid command";
+const string iParser::MESSAGE_INVALID_MODIFIER = "Invalid modifier";
+const string iParser::MESSAGE_INVALID_SORT = "Invalid sort";
+const string iParser::MESSAGE_INVALID_REMOVE = "Invalid remove";
+const string iParser::MESSAGE_INVALID_VIEW = "Invalid view";
+const string iParser::MESSAGE_INVALID_PRIORITY = "Invalid priority";
+const string iParser::MESSAGE_INVALID_DATE_TIME = "Invalid date and time";
+const string iParser::MESSAGE_INVALID_ADD_NAME = "Unable to use \'name\' modifier when using \'add\' command";
+const string iParser::MESSAGE_INVALID_ADD_REMOVE = "Unable to use \'remove\' modifier when using \'add\' command";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER = "Unable to use \'name\' modifier more than once";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER = "Unable to use multiple date time modifiers";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER = "Unable to use \'description\' modifier more than once";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_PRIORITY_MODIFIER = "Unable to use \'priority\' modifier more than once";
+const string iParser::MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER = "Unable to use \'remove\' modifier more than once";
+
+const unsigned int iParser::SIZE_OF_STRING_TO = 2;
+const unsigned int iParser::SIZE_OF_STRING_HYPHEN = 1;
+const unsigned int iParser::MAX_SIZE_OF_STRING_HOURS = 2;
+const unsigned int iParser::MIN_SIZE_OF_STRING_HOURS = 1;
+const unsigned int iParser::SIZE_OF_STRING_MINUTES = 2;
+const unsigned int iParser::MIN_SIZE_OF_STRING_WITH_SUFFIX = 3;
+const unsigned int iParser::NUMBER_OF_DAYS = 7;
+const unsigned int iParser::NUMBER_OF_MONTHS = 12;
+const unsigned int iParser::NUMBER_OF_HOURS = 12;
+const unsigned int iParser::HOURS_ZERO = 0;
+const unsigned int iParser::HOURS_ONE_PM = 1;
+const unsigned int iParser::HOURS_ELEVEN_PM = 11;
+const string iParser::HOURS_TWELVE_AM = "12";
+
+const unsigned int iParser::INDEX_START = 0;
+const unsigned int iParser::INDEX_INVALID = -1;
+
+iParser::iParser() {}
+
+iParser::~iParser() {}
+
+list<COMMAND_AND_TEXT> iParser::parse(string userInput) {
+	executeParsing(userInput);
+	return _parseInfo;
+}
+
+string iParser::executeParsing(string userInput) {
+	trimText(userInput);
+	removeConsecutiveWhiteSpace(userInput);
+	string command = retrieveCommandOrModifier(userInput);
+	string textWithoutCommand = removeFirstStringToken(userInput);
+
+	if (command == COMMAND_ADD) {
+		executeAddParsing(textWithoutCommand);
+	} else if (command == COMMAND_DELETE || command == COMMAND_DEL) {
+		executeCommandAndTextParsing(COMMAND_DELETE, textWithoutCommand);
+	} else if (command == COMMAND_CLEAR) {
+		executeSingularCommandParsing(COMMAND_CLEAR, userInput);
+	} else if (command == COMMAND_EDIT) {
+		executeEditParsing(textWithoutCommand);
+	} else if (command == COMMAND_UNDO) {
+		executeSingularCommandParsing(COMMAND_UNDO, userInput);
+	} else if (command == COMMAND_SORT) {
+		executeSortParsing(textWithoutCommand);
+	} else if (command == COMMAND_SEARCH) {
+		executeCommandAndTextParsing(COMMAND_SEARCH, textWithoutCommand);
+	} else if (command == COMMAND_VIEW) {
+		executeViewParsing(textWithoutCommand);
+	} else if (command == COMMAND_SAVE) {
+		executeCommandAndTextParsing(COMMAND_SAVE, textWithoutCommand);
+	} else if (command == COMMAND_DONE) {
+		executeCommandAndTextParsing(COMMAND_DONE, textWithoutCommand);
+	} else if (command == COMMAND_UNDONE) {
+		executeCommandAndTextParsing(COMMAND_UNDONE, textWithoutCommand);
+	} else if (command == COMMAND_EXIT) {
+		executeSingularCommandParsing(COMMAND_EXIT, userInput);
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeAddParsing(string text) {
+	if (text == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+
+	vector<string> tokenisedInformation = tokeniseText(text);
+	try {
+		string itemName = tokenisedInformation[INDEX_START];
+		setParseInfo(COMMAND_ADD, itemName);
+		if (tokenisedInformation.size() > 1) {
+			checkAndSetTokenisedInformation(tokenisedInformation, COMMAND_ADD);
+		}
+	} catch (string& exceptionMessage) {
+		clearParseInfo();
+		setParseInfo(MESSAGE_INVALID, exceptionMessage);
+		return MESSAGE_FAILURE;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeEditParsing(string text) {
+	if (text == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+
+	vector<string> tokenisedInformation = tokeniseText(text);
+	try {
+		string indexToEdit = tokenisedInformation[INDEX_START];
+		setParseInfo(COMMAND_EDIT, indexToEdit);
+		if (tokenisedInformation.size() > 1) {
+			checkAndSetTokenisedInformation(tokenisedInformation, COMMAND_EDIT);
+		}
+	} catch (string& exceptionMessage) {
+		clearParseInfo();
+		setParseInfo(MESSAGE_INVALID, exceptionMessage);
+		return MESSAGE_FAILURE;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeSortParsing(string sortType) {
+	convertToLowerCase(sortType);
+
+	if (sortType == STRING_DATE) {
+		setParseInfo(COMMAND_SORT, STRING_DATE);
+	} else if (sortType == STRING_NAME) {
+		setParseInfo(COMMAND_SORT, STRING_NAME);
+	} else if (sortType == STRING_PRIORITY || sortType == STRING_PRIORITY_P) {
+		setParseInfo(COMMAND_SORT, STRING_PRIORITY);
+	} else if (sortType == STRING_DONE) {
+		setParseInfo(COMMAND_SORT, STRING_DONE);
+	} else if (sortType == STRING_UPDATE) {
+		setParseInfo(COMMAND_SORT, STRING_UPDATE);
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_SORT);
+		return MESSAGE_FAILURE;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeViewParsing(string viewType) {
+	if (viewType == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
+		return MESSAGE_FAILURE;
+	}
+
+	convertToLowerCase(viewType);
+	string tempDate = STRING_BLANK;
+
+	try {
+		if (viewType == STRING_ALL) {
+			setParseInfo(COMMAND_VIEW, STRING_ALL);
+		} else if (viewType == STRING_DONE) {
+			setParseInfo(COMMAND_VIEW, STRING_DONE);
+		} else if (viewType == STRING_UNDONE) {
+			setParseInfo(COMMAND_VIEW, STRING_UNDONE);
+		} else if (viewType == STRING_HIGH || viewType == STRING_H) {
+			setParseInfo(COMMAND_VIEW, STRING_HIGH);
+		} else if (viewType == STRING_MEDIUM || viewType == STRING_MED || viewType == STRING_M) {
+			setParseInfo(COMMAND_VIEW, STRING_MEDIUM);
+		} else if (viewType == STRING_LOW || viewType == STRING_L) {
+			setParseInfo(COMMAND_VIEW, STRING_LOW);
+		} else if (hasStartEndDateTime(viewType)) {
+			// if there is a range in view date
+			splitAndSetViewDateRange(viewType);
+		} else if (isValidDate(viewType, tempDate)) {
+			// if there is only a single date
+			string viewInfo = tempDate + CHAR_SPACE + STRING_TIME_INITIALISE;
+			viewInfo = STRING_DATE + CHAR_SPACE + viewInfo + CHAR_SPACE + viewInfo;
+			setParseInfo(COMMAND_VIEW, viewInfo);
+		} else {
+			setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
+			return MESSAGE_FAILURE;
+		}
+	} catch (string& exceptionMessage) {
+		setParseInfo(MESSAGE_INVALID, exceptionMessage);
+		return MESSAGE_FAILURE;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+// function used for commands with command and text
+// e.g. "delete", "del", "search", "save", "done" or "undone"
+string iParser::executeCommandAndTextParsing(const string commandType, string text) {
+	if (text != STRING_BLANK) {
+		convertToLowerCase(text);
+		setParseInfo(commandType, text);
+		return MESSAGE_SUCCESS;
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_INPUT);
+		return MESSAGE_FAILURE;
+	}
+}
+
+// function used for commands with just command
+// e.g. "clear", "undo" or "exit"
+string iParser::executeSingularCommandParsing(const string commandType, string userInput) {
+	convertToLowerCase(userInput);
+	if (userInput == commandType) {
+		setParseInfo(commandType);
+		return MESSAGE_SUCCESS;
+	} else {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_COMMAND);
+		return MESSAGE_FAILURE;
+	}
+}
+
+// only executed if 'add' or 'exit' is the command and there is modifier(s)
+// function will push modifiers and their respective text to _parseInfo
+string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInformation, const string command) {
+	assert(tokenisedInformation.size() > 1);
+
+	bool hasItem = false;
+	bool hasDateOrDue = false;
+	bool hasStart = false;
+	bool hasEnd = false;
+	bool hasDescription = false;
+	bool hasPriority = false;
+	bool hasRemove = false;
+
+	for (unsigned int index = 1; index < tokenisedInformation.size(); index++) {
+		string singleInformation = tokenisedInformation[index];
+		string modifier = retrieveCommandOrModifier(singleInformation);
+		string textWithoutCommand = removeFirstStringToken(singleInformation);
+
+		if (textWithoutCommand == STRING_BLANK) {
+			throw MESSAGE_INVALID_INPUT;
+		}
+
+		if (modifier == MODIFIER_NAME) {
+			if (command == COMMAND_EDIT && !hasItem) {
+				executeModifierAndTextParsing(COMMAND_NAME, textWithoutCommand);
+				hasItem = true;
+			} else {
+				if (command == COMMAND_ADD) {
+					throw MESSAGE_INVALID_ADD_NAME;
+				} else if (hasItem) {
+					throw MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER;
+				}
+			}
+		} else if (modifier == MODIFIER_DATE) {
+			if (!hasDateOrDue && !hasStart && !hasEnd) {
+				executeDateTimeParsing(textWithoutCommand);
+				hasDateOrDue = true;
+			} else {
+				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+			}
+		} else if (modifier == MODIFIER_DUE) {
+			if (!hasDateOrDue && !hasStart && !hasEnd) {
+				setDateTime(textWithoutCommand, STRING_DUE);
+				hasDateOrDue = true;
+			} else {
+				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+			}
+		} else if (modifier == MODIFIER_START) {
+			if (!hasDateOrDue && !hasStart) {
+				setDateTime(textWithoutCommand, STRING_START);
+				hasStart = true;
+			} else {
+				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+			}
+		} else if (modifier == MODIFIER_END) {
+			if (!hasDateOrDue && !hasEnd) {
+				setDateTime(textWithoutCommand, STRING_END);
+				hasEnd = true;
+			} else {
+				throw MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+			}
+		} else if (modifier == MODIFIER_DESCRIPTION || modifier == MODIFIER_DESC) {
+			if (!hasDescription) {
+				executeModifierAndTextParsing(COMMAND_DESCRIPTION, textWithoutCommand);
+				hasDescription = true;
+			} else {
+				throw MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER;
+			}
+		} else if (modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P) {
+			if (!hasPriority) {
+				executePriorityParsing(textWithoutCommand);
+				hasPriority = true;
+			} else {
+				throw MESSAGE_INVALID_NUMBER_OF_PRIORITY_MODIFIER;
+			}
+		} else if (modifier == MODIFIER_REMOVE || modifier == MODIFIER_RMV) {
+			if (command == COMMAND_EDIT && !hasItem && !hasDateOrDue && !hasStart && !hasEnd && !hasDescription) {
+				if (!hasRemove) {
+					executeRemoveParsing(textWithoutCommand);
+					hasRemove = true;
+				} else {
+					throw MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER;
+				}
+			} else if (command == COMMAND_ADD) {
+				throw MESSAGE_INVALID_ADD_REMOVE;
+			}
+		} else {
+			throw MESSAGE_INVALID_MODIFIER;
+		}
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+// function used for commands with just command
+// e.g. "name", "date", "due", "start", "end", "description", "desc", "priority", "p", "remove" or "rmv"
+string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
+	assert(ModifierType != STRING_BLANK);
+
+	if (text != STRING_BLANK) {
+		setParseInfo(ModifierType, text);
+		return MESSAGE_SUCCESS;
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+}
+
+string iParser::executeDateTimeParsing(const string dateTimeString) {
+	if (dateTimeString == STRING_BLANK) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	if (hasStartEndDateTime(dateTimeString)) {
+		splitAndSetStartEndDateTime(dateTimeString);
+	} else {
+		setDateTime(dateTimeString, STRING_DATE);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executePriorityParsing(string priorityType) {
+	convertToLowerCase(priorityType);
+
+	if (priorityType == STRING_HIGH || priorityType == STRING_H) {
+		setParseInfo(STRING_PRIORITY, STRING_HIGH);
+	} else if (priorityType == STRING_MEDIUM || priorityType == STRING_MED || priorityType == STRING_M) {
+		setParseInfo(STRING_PRIORITY, STRING_MEDIUM);
+	} else if (priorityType == STRING_LOW || priorityType == STRING_L) {
+		setParseInfo(STRING_PRIORITY, STRING_LOW);
+	} else {
+		throw MESSAGE_INVALID_PRIORITY;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::executeRemoveParsing(string textToRemove) {
+	assert(textToRemove != STRING_BLANK);
+
+	convertToLowerCase(textToRemove);
+
+	if (textToRemove == STRING_DATE) {
+		setParseInfo(COMMAND_START, STRING_DATE_TIME_REMOVE);
+		setParseInfo(COMMAND_END, STRING_DATE_TIME_REMOVE);
+	} else if (textToRemove == STRING_START) {
+		setParseInfo(COMMAND_START, STRING_DATE_TIME_REMOVE);
+	} else if (textToRemove == STRING_END) {
+		setParseInfo(COMMAND_END, STRING_DATE_TIME_REMOVE);
+	} else if (textToRemove == STRING_DESCRIPTION || textToRemove == STRING_DESC) {
+		setParseInfo(COMMAND_DESCRIPTION, STRING_BLANK);
+	} else if (textToRemove == STRING_PRIORITY || textToRemove == STRING_PRIORITY_P) {
+		setParseInfo(COMMAND_PRIORITY, STRING_BLANK);
+	} else {
+		throw MESSAGE_INVALID_REMOVE;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::retrieveCommandOrModifier(string userInput) {
+	unsigned int endIndex = userInput.find_first_of(" \t");
+	string command = userInput.substr(INDEX_START, endIndex);
+	convertToLowerCase(command);
+	return command;
+}
+
+vector<string> iParser::tokeniseText(const string text) {
+	assert(text != STRING_BLANK);
+	vector<string> tokenisedInformation;
+	unsigned int startIndexForText = 0;
+	unsigned int endIndexForText = 0;
+	unsigned int startIndexForModifier = 0;
+	unsigned int endIndexForModifier = 0;
+
+	while (startIndexForModifier != INDEX_INVALID) {
+		string tokenisedText;
+		startIndexForModifier = text.find_first_of("-", endIndexForModifier);
+		endIndexForModifier = text.find_first_of(" \t", startIndexForModifier);
+
+		if (startIndexForModifier == INDEX_INVALID) {
+			tokenisedText = text.substr(startIndexForText);
+			trimText(tokenisedText);
+			tokenisedInformation.push_back(tokenisedText);
+		} else {
+			string modifier = text.substr(startIndexForModifier, endIndexForModifier - startIndexForModifier);
+
+			if (isModifier(modifier)) {
+				endIndexForText = startIndexForModifier;
+				tokenisedText = text.substr(startIndexForText, endIndexForText - startIndexForText);
+				trimText(tokenisedText);
+				tokenisedInformation.push_back(tokenisedText);
+				startIndexForText = endIndexForText;
+			}
+		}
+	}
+
+	return tokenisedInformation;
+}
+
+string iParser::removeFirstStringToken(string userInput) {
+	unsigned int startIndex = userInput.find_first_of(" \t");
+	string text;
+
+	if (startIndex != INDEX_INVALID) {
+		text = userInput.substr(++startIndex);
+		return text;
+	} else {
+		return STRING_BLANK;
+	}
+}
+
+string iParser::removeConsecutiveWhiteSpace(string& text) {
+	unsigned int index;
+
+	if (text == STRING_BLANK) {
+		return MESSAGE_SUCCESS;
+	}
+
+	for (index = 0; index < text.length() - 1; index++) {
+		if (isWhiteSpace(text[index]) && isWhiteSpace(text[index + 1])) {
+			text.erase(index + 1, 1);
+			index--;
+		}
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::removeWhiteSpace(string& text) {
+	assert(text != STRING_BLANK);
+	unsigned int index;
+
+	for (index = 0; index < text.length(); index++) {
+		if (isWhiteSpace(text[index])) {
+			text.erase(index, 1);
+			index--;
+		}
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::convertToLowerCase(string& text) {
+	unsigned int index;
+	unsigned int endIndex = text.length();
+
+	for (index = 0; index < endIndex; index++) {
+		text[index] = tolower(text[index]);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::trimText(string& text) {
+	text = trimFront(text);
+	text = trimBack(text);
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::trimFront(string text) {
+	unsigned int startIndex = 0;
+
+	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
+		startIndex++;
+	}
+
+	return text.substr(startIndex);
+}
+
+string iParser::trimBack(string text) {
+	unsigned int endIndex = text.length();
+
+	while (endIndex > 0 && (text[endIndex - 1] == ' ' || text[endIndex - 1] == '\t')) {
+		endIndex--;
+	}
+
+	return text.substr(INDEX_START, endIndex);
+}
+
+bool iParser::hasStartEndDateTime(const string& dateTimeString) {
+	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
+	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
+
+	if ((seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) ||
+		(seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID)) {
+		return true;
+	}
+
+	return false;
+}
+
+string iParser::setDateTime(const string& dateTimeString, const string modifierType) {
+	assert(dateTimeString != STRING_BLANK);
+	assert(modifierType != STRING_BLANK);
+	unsigned int numberOfCommas = retrieveCount(dateTimeString, CHAR_COMMA);
+
+	if (numberOfCommas > 1) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	string commandType;
+	if (modifierType == STRING_DATE || modifierType == STRING_START) {
+		commandType = COMMAND_START;
+	} else if (modifierType == STRING_DUE || modifierType == STRING_END) {
+		commandType = COMMAND_END;
+	} else {
+		throw MESSAGE_INVALID_INPUT;
+	}
+
+	if (numberOfCommas == 0) {
+		string dateTimeToSet = STRING_BLANK;
+		if (isValidDate(dateTimeString, dateTimeToSet)) {
+			dateTimeToSet = dateTimeToSet + CHAR_SPACE + STRING_TIME_INITIALISE;
+			setParseInfo(commandType, dateTimeToSet);
+		} else if (isValidTime(dateTimeString, dateTimeToSet)) {
+			dateTimeToSet = STRING_DATE_INITIALISE + CHAR_SPACE + dateTimeToSet;
+			setParseInfo(commandType, dateTimeToSet);
+		} else {
+			throw MESSAGE_INVALID_DATE_TIME;
+		}
+	} else {
+		splitAndSetDateTime(dateTimeString, commandType);
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::splitAndSetDateTime(const string& dateTimeString, const string commandType) {
+	assert(dateTimeString != STRING_BLANK);
+	assert(commandType != STRING_BLANK);
+	unsigned int startIndex = 0;
+	unsigned int endIndex = dateTimeString.find_first_of(",");
+
+	if (endIndex == dateTimeString.size() - 1) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	string firstHalfOfDateTime = dateTimeString.substr(startIndex, endIndex + startIndex);
+	startIndex = endIndex + 1;
+	string secondHalfOfDateTime = dateTimeString.substr(startIndex);
+
+	string dateTime = STRING_BLANK;
+	string dateToSet = STRING_BLANK;
+	string timeToSet = STRING_BLANK;
+
+	if (isValidDate(firstHalfOfDateTime, dateToSet) && isValidTime(secondHalfOfDateTime, timeToSet)) {
+		dateTime = dateToSet + CHAR_SPACE + timeToSet;
+	} else if (isValidDate(secondHalfOfDateTime, dateToSet) && isValidTime(firstHalfOfDateTime, timeToSet)) {
+		dateTime = dateToSet + CHAR_SPACE + timeToSet;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	if (hasNoDayButHasTime(dateTime)) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	setParseInfo(commandType, dateTime);
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::splitAndSetStartEndDateTime(const string& dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
+
+	unsigned int numberOfCommas = retrieveCount(dateTimeString, CHAR_COMMA);
+
+	if (numberOfCommas == 0) {
+		splitAndSetNoCommaStartEndDateTime(dateTimeString);
+	} else if (numberOfCommas == 1) {
+		splitAndSetOneCommaStartEndDateTime(dateTimeString);
+	} else if (numberOfCommas == 2) {
+		splitAndSetTwoCommaStartEndDateTime(dateTimeString);
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::splitAndSetViewDateRange(const string& dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
+
+	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
+	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
+	string startDateString = STRING_BLANK;
+	string endDateString = STRING_BLANK;
+
+	if (seperatorToIndex != INDEX_INVALID) {
+		startDateString = dateTimeString.substr(INDEX_START, seperatorToIndex);
+		endDateString = dateTimeString.substr(seperatorToIndex + SIZE_OF_STRING_TO);
+	} else if (seperatorHyphenIndex != INDEX_INVALID) {
+		startDateString = dateTimeString.substr(INDEX_START, seperatorHyphenIndex);
+		endDateString = dateTimeString.substr(seperatorHyphenIndex + SIZE_OF_STRING_HYPHEN);
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	string startInfo = STRING_BLANK;
+	string endInfo = STRING_BLANK;
+	if (isValidDate(startDateString, startInfo) && isValidDate(endDateString, endInfo)) {
+		startInfo = startInfo + CHAR_SPACE + STRING_TIME_INITIALISE;
+		endInfo = endInfo + CHAR_SPACE + STRING_TIME_INITIALISE;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	string viewInfo = STRING_DATE + CHAR_SPACE + startInfo + CHAR_SPACE + endInfo;
+	setParseInfo(COMMAND_VIEW, viewInfo);
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::splitAndSetNoCommaStartEndDateTime(const string& dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
+
+	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
+	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
+	string startDateTimeString = STRING_BLANK;
+	string endDateTimeString = STRING_BLANK;
+
+	if (seperatorToIndex != INDEX_INVALID) {
+		startDateTimeString = dateTimeString.substr(INDEX_START, seperatorToIndex);
+		endDateTimeString = dateTimeString.substr(seperatorToIndex + SIZE_OF_STRING_TO);
+	} else if (seperatorHyphenIndex != INDEX_INVALID) {
+		startDateTimeString = dateTimeString.substr(INDEX_START, seperatorHyphenIndex);
+		endDateTimeString = dateTimeString.substr(seperatorHyphenIndex + SIZE_OF_STRING_HYPHEN);
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	string startInfo = STRING_BLANK;
+	string endInfo = STRING_BLANK;
+	if (isValidDate(startDateTimeString, startInfo) && isValidDate(endDateTimeString, endInfo)) {
+		startInfo = startInfo + CHAR_SPACE + STRING_TIME_INITIALISE;
+		endInfo = endInfo + CHAR_SPACE + STRING_TIME_INITIALISE;
+	} else if (isValidTime(startDateTimeString, startInfo) && isValidTime(endDateTimeString, endInfo)) {
+		startInfo = STRING_DATE_INITIALISE + CHAR_SPACE + startInfo;
+		endInfo = STRING_DATE_INITIALISE + CHAR_SPACE + endInfo;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	setParseInfo(COMMAND_START, startInfo);
+	setParseInfo(COMMAND_END, endInfo);
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::splitAndSetOneCommaStartEndDateTime(const string& dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
+
+	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
+	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
+	unsigned int commaIndex = dateTimeString.find_first_of(",");
+	unsigned int seperatorIndex = INDEX_INVALID;
+	unsigned int seperatorSize = 0;
+
+	if (seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) {
+		seperatorIndex = seperatorToIndex;
+		seperatorSize = SIZE_OF_STRING_TO;
+	} else if (seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID) {
+		seperatorIndex = seperatorHyphenIndex;
+		seperatorSize = SIZE_OF_STRING_HYPHEN;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	string startDateTimeString = STRING_BLANK;
+	string endDateTimeString = STRING_BLANK;
+	string fixedDateTimeString = STRING_BLANK;
+	if (commaIndex < seperatorIndex) {
+		fixedDateTimeString = dateTimeString.substr(INDEX_START, commaIndex);
+		startDateTimeString = dateTimeString.substr(commaIndex + 1, seperatorIndex - commaIndex - 1);
+		endDateTimeString = dateTimeString.substr(seperatorIndex + seperatorSize);
+	} else {
+		startDateTimeString = dateTimeString.substr(INDEX_START, seperatorIndex);
+		unsigned int startIndexForEndDateTime = seperatorIndex + seperatorSize;
+		endDateTimeString = dateTimeString.substr(startIndexForEndDateTime + 1, commaIndex - startIndexForEndDateTime - 1);
+		fixedDateTimeString = dateTimeString.substr(commaIndex + 1);
+	}
+
+	string dateToSet = STRING_BLANK;
+	if (isValidTime(fixedDateTimeString, dateToSet)) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	} else if (isValidDate(fixedDateTimeString, dateToSet)) {
+		string startTimeToSet = STRING_BLANK;
+		string endTimeToSet = STRING_BLANK;
+
+		if (isValidTime(startDateTimeString, startTimeToSet) && isValidTime(endDateTimeString, endTimeToSet)) {
+			string startDateTime = dateToSet + CHAR_SPACE + startTimeToSet;
+			string endDateTime = dateToSet + CHAR_SPACE + endTimeToSet;
+
+			if (hasNoDayButHasTime(startDateTime)) {
+				throw MESSAGE_INVALID_DATE_TIME;
+			}
+
+			setParseInfo(COMMAND_START, startDateTime);
+			setParseInfo(COMMAND_END, endDateTime);
+		} else {
+			throw MESSAGE_INVALID_DATE_TIME;
+		}
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::splitAndSetTwoCommaStartEndDateTime(const string& dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
+
+	unsigned int seperatorToIndex = dateTimeString.find(STRING_TO);
+	unsigned int seperatorHyphenIndex = dateTimeString.find(CHAR_HYPHEN);
+	unsigned int commaFirst = dateTimeString.find_first_of(",");
+	unsigned int commaSecond = dateTimeString.find_first_of(",", commaFirst + 1);
+	unsigned int seperatorIndex = INDEX_INVALID;
+	unsigned int seperatorSize = 0;
+
+	if (seperatorToIndex != INDEX_INVALID && seperatorHyphenIndex == INDEX_INVALID) {
+		seperatorIndex = seperatorToIndex;
+		seperatorSize = SIZE_OF_STRING_TO;
+	} else if (seperatorToIndex == INDEX_INVALID && seperatorHyphenIndex != INDEX_INVALID) {
+		seperatorIndex = seperatorHyphenIndex;
+		seperatorSize = SIZE_OF_STRING_HYPHEN;
+	} else {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	if (!(commaFirst < seperatorIndex && seperatorIndex < commaSecond)) {
+		throw MESSAGE_INVALID_DATE_TIME;
+	}
+
+	string startDateTimeString = dateTimeString.substr(INDEX_START, seperatorIndex);
+	string endDateTimeString = dateTimeString.substr(seperatorIndex + seperatorSize);
+
+	splitAndSetDateTime(startDateTimeString, COMMAND_START);
+	splitAndSetDateTime(endDateTimeString, COMMAND_END);
+
+	return MESSAGE_SUCCESS;
+}
+
+
+bool iParser::isValidDate(string dateString, string& dateToBeSet) {
+	assert(dateString != STRING_BLANK);
+	trimText(dateString);
+
+	if (dateString == STRING_BLANK) {
+		return false;
+	}
+
+	try {
+		const unsigned int numberOfObliques = retrieveCount(dateString, CHAR_OBLIQUE);
+		if (numberOfObliques > 2 || numberOfObliques < 0) {
+			return false;
+		} else if (numberOfObliques > 0) {
+			dateToBeSet = splitAndSetObliqueDateInformation(dateString, numberOfObliques);
+		} else {
+			unsigned int numberOfSpaces = retrieveCount(dateString, CHAR_SPACE);
+			if (numberOfSpaces > 2 || numberOfSpaces < 1) {
+				return false;
+			} else {
+				dateToBeSet = splitAndSetSpaceDateInformation(dateString, numberOfSpaces);
+			}
+		}
+	} catch (bool& booleanException) {
+		return booleanException;
+	}
+
+	return true;
+}
+
+bool iParser::isValidTime(string timeString, string& timeToBeSet) {
+	assert(timeString != STRING_BLANK);
+	removeWhiteSpace(timeString);
+
+	string suffix = STRING_BLANK;
+	if (hasTimePeriodSuffix(timeString)) {
+		unsigned int startIndex = 0;
+		unsigned int endIndex = timeString.size() - 2;
+
+		suffix = timeString.substr(endIndex);
+		convertToLowerCase(suffix);
+		timeString = timeString.substr(startIndex, endIndex);
+	}
+
+	try{
+		timeToBeSet = splitAndSetTimeString(timeString, suffix);
+	} catch (bool& booleanException) {
+		return booleanException;
+	}
+
+	return true;
+}
+
+string iParser::splitAndSetObliqueDateInformation(string dateString, const unsigned int numberOfObliques) {
+	assert(dateString != STRING_BLANK);
+	assert(numberOfObliques > 0 && numberOfObliques <= 2);
+	string day = STRING_NEGATIVE_ONE;
+	string month = STRING_NEGATIVE_ONE;
+	string year = STRING_NEGATIVE_ONE;
+	unsigned int startIndex = 0;
+	unsigned int endIndex = 0;
+
+	removeWhiteSpace(dateString);
+
+	endIndex = dateString.find_first_of("/");
+	if (endIndex == dateString.size() - 1) {
+		throw false;
+	}
+
+	day = dateString.substr(startIndex, endIndex - startIndex);
+	if (day == STRING_BLANK || !areDigits(day)) {
+		throw false;
+	}
+
+	startIndex = endIndex + 1;
+
+	if (numberOfObliques == 1) {
+		month = dateString.substr(startIndex);
+	} else if (numberOfObliques == 2) {
+		endIndex = dateString.find_first_of("/", startIndex);
+		if (endIndex == dateString.size() - 1) {
+			throw false;
+		}
+
+		month = dateString.substr(startIndex, endIndex - startIndex);
+		startIndex = endIndex + 1;
+		year = dateString.substr(startIndex);
+		if (year == STRING_BLANK || !areDigits(year)) {
+			throw false;
+		}
+	}
+
+	if (month == STRING_BLANK || !areDigits(month)) {
+		throw false;
+	}
+
+	ostringstream output;
+	output << year << CHAR_SPACE << month << CHAR_SPACE << day;
+
+	return output.str();
+}
+
+string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigned int numberOfSpaces) {
+	assert(dateString != STRING_BLANK);
+	assert(numberOfSpaces >= 1 && numberOfSpaces <= 2);
+	string day = STRING_NEGATIVE_ONE;
+	string month = STRING_NEGATIVE_ONE;
+	string year = STRING_NEGATIVE_ONE;
+	unsigned int keywordIndex = INDEX_INVALID;
+
+	unsigned int startIndex = 0;
+	unsigned int endIndex = 0;
+
+	endIndex = dateString.find_first_of(" ");
+	day = dateString.substr(startIndex, endIndex - startIndex);
+
+	if (day == STRING_BLANK || !areDigits(day)) {
+		throw false;
+	}
+	startIndex = endIndex + 1;
+
+	string tempMonth;
+	if (numberOfSpaces == 1) {
+		tempMonth = dateString.substr(startIndex);
+		if (tempMonth == STRING_BLANK || isMonth(tempMonth)) {
+			month = setMonth(tempMonth);
+		} else {
+			throw false;
+		}
+	} else if (numberOfSpaces == 2) {
+		endIndex = dateString.find_first_of(" ", startIndex);
+		tempMonth = dateString.substr(startIndex, endIndex - startIndex);
+		if (tempMonth == STRING_BLANK || isMonth(tempMonth)) {
+			month = setMonth(tempMonth);
+		} else {
+			throw false;
+		}
+		startIndex = endIndex + 1;
+		year = dateString.substr(startIndex);
+		if (year == STRING_BLANK || !areDigits(year)) {
+			throw false;
+		}
+	}
+
+	ostringstream output;
+	output << year << CHAR_SPACE << month << CHAR_SPACE << day;
+
+	return output.str();
+}
+
+string iParser::splitAndSetTimeString(string timeString, const string suffix) {
+	assert(timeString != STRING_BLANK);
+	const unsigned int numberOfColons = retrieveCount(timeString, CHAR_COLON);
+	string output;
+
+	if (numberOfColons == 0) {
+		output = splitAndSetNoColonTimeString(timeString, suffix);
+	} else if (numberOfColons == 1) {
+		output = splitAndSetColonTimeString(timeString, suffix);
+	} else {
+		throw false;
+	}
+
+	return output;
+}
+
+string iParser::splitAndSetColonTimeString(string timeString, const string suffix) {
+	assert(timeString != STRING_BLANK);
+	string hour = STRING_NEGATIVE_ONE;
+	string minute = STRING_NEGATIVE_ONE;
+	unsigned int startIndex = 0;
+	unsigned int endIndex = 0;
+
+	endIndex = timeString.find_first_of(":");
+	if (endIndex == timeString.size() - 1) {
+		throw false;
+	}
+	hour = timeString.substr(startIndex, endIndex - startIndex);
+	startIndex = endIndex + 1;
+	minute = timeString.substr(startIndex);
+
+	if (suffix == STRING_PM) {
+		hour = addTwelveToHours(hour);
+	}
+
+	if (!isAppropriateTime(hour, minute, suffix)) {
+		throw false;
+	}
+
+	if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
+		hour = STRING_ZERO;
+	}
+
+	ostringstream output;
+	output << hour << CHAR_SPACE << minute;
+
+	return output.str();
+}
+
+string iParser::splitAndSetNoColonTimeString(string timeString, const string suffix) {
+	assert(timeString != STRING_BLANK);
+
+	if (suffix != STRING_AM && suffix != STRING_PM && suffix != STRING_HR) {
+		throw false;
+	}
+
+	string hour = STRING_NEGATIVE_ONE;
+	string minute = STRING_NEGATIVE_ONE;
+	unsigned int numberOfDigits = timeString.length();
+
+	if ((numberOfDigits == 1 || numberOfDigits == 2) &&
+		(suffix == STRING_AM || suffix == STRING_PM)) {
+		hour = timeString;
+		minute = STRING_MINUTE_INITIALISE;
+	} else if (numberOfDigits == 3 &&
+		(suffix == STRING_AM || suffix == STRING_PM)) {
+		hour = timeString.substr(INDEX_START, 1);
+		minute = timeString.substr(1);
+	} else if (numberOfDigits == 4) {
+		hour = timeString.substr(INDEX_START, 2);
+		minute = timeString.substr(2);
+	} else {
+		throw false;
+	}
+
+	if (suffix == STRING_PM) {
+		hour = addTwelveToHours(hour);
+	}
+
+	if (!isAppropriateTime(hour, minute, suffix)) {
+		throw false;
+	}
+
+	if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
+		hour = STRING_ZERO;
+	}
+
+	ostringstream output;
+	output << hour << CHAR_SPACE << minute;
+
+	return output.str();
+}
+
+bool iParser::isMonth(string monthString) {
+	assert(monthString != STRING_BLANK);
+	unsigned int index;
+
+	convertToLowerCase(monthString);
+	for (index = 0; index < NUMBER_OF_MONTHS; index++) {
+		if (monthString == STRING_MONTHS[index] || monthString == STRING_MONTHS_SHORT_FORM[index]) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+string iParser::setMonth(string monthString) {
+	assert(monthString != STRING_BLANK);
+	unsigned int index;
+
+	convertToLowerCase(monthString);
+	for (index = 0; index < NUMBER_OF_MONTHS; index++) {
+		if (monthString == STRING_MONTHS[index] || monthString == STRING_MONTHS_SHORT_FORM[index]) {
+			ostringstream output;
+			index++;
+			output << index;
+			return output.str();
+		}
+	}
+
+	return STRING_BLANK;
+}
+
+bool iParser::hasTimePeriodSuffix(const string timeString) {
+	assert(timeString != STRING_BLANK);
+	if (timeString.size() < MIN_SIZE_OF_STRING_WITH_SUFFIX) {
+		return false;
+	}
+
+	unsigned int secondLastCharacterIndex = timeString.size() - 2;
+	string suffix = timeString.substr(secondLastCharacterIndex);
+
+	convertToLowerCase(suffix);
+
+	if (suffix == STRING_AM || suffix == STRING_PM || suffix == STRING_HR) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+string iParser::addTwelveToHours(const string hourString) {
+	assert(hourString != STRING_BLANK);
+	ostringstream output;
+
+	if (areDigits(hourString)) {
+		int hourInInt = stoi(hourString);
+		if (hourInInt == HOURS_ZERO) {
+			throw false;
+		} else if (hourInInt >= HOURS_ONE_PM && hourInInt <= HOURS_ELEVEN_PM) {
+			hourInInt += 12;
+		}
+		output << hourInInt;
+	} else {
+		throw false;
+	}
+
+	return output.str();
+}
+
+bool iParser::isAppropriateAMHour(const string hourString) {
+	assert(hourString != STRING_BLANK);
+
+	if (areDigits(hourString)) {
+		int hourInInt = stoi(hourString);
+		if (hourInInt <= HOURS_ZERO || hourInInt > NUMBER_OF_HOURS) {
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		return false;
+	}
+}
+
+bool iParser::isAppropriateTime(const string hour, const string minute, const string suffix) {
+	assert(hour != STRING_BLANK);
+	assert(minute != STRING_BLANK);
+	bool isValid = true;
+
+	if (!areDigits(hour) || !areDigits(minute)) {
+		isValid = false;
+	}
+
+	if (isValid && (minute.size() != SIZE_OF_STRING_MINUTES ||
+		hour.size() < MIN_SIZE_OF_STRING_HOURS || hour.size() > MAX_SIZE_OF_STRING_HOURS)) {
+		isValid = false;
+	}
+
+	if (isValid && suffix == STRING_AM && !isAppropriateAMHour(hour)) {
+		isValid = false;
+	}
+
+	return isValid;
+}
+
+bool iParser::hasNoDayButHasTime(const string dateTimeString) {
+	assert(dateTimeString != STRING_BLANK);
+
+	unsigned int startOfDayIndex = dateTimeString.find_first_of(" ");
+	startOfDayIndex = dateTimeString.find_first_of(" ", startOfDayIndex + 1);
+	unsigned int startOfTimeIndex = dateTimeString.find_first_of(" ", startOfDayIndex + 1);
+
+	startOfDayIndex++;
+	startOfTimeIndex++;
+
+	string day = dateTimeString.substr(startOfDayIndex, startOfTimeIndex - startOfDayIndex - 1);
+	string time = dateTimeString.substr(startOfTimeIndex);
+
+	if (day == STRING_NEGATIVE_ONE && time != STRING_TIME_INITIALISE) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool iParser::isModifier(string modifier) {
+	assert(modifier != STRING_BLANK);
+	convertToLowerCase(modifier);
+
+	return (modifier == MODIFIER_NAME || modifier == MODIFIER_DATE ||
+		modifier == MODIFIER_DUE || modifier == MODIFIER_START ||
+		modifier == MODIFIER_END || modifier == MODIFIER_DESCRIPTION ||
+		modifier == MODIFIER_DESC || modifier == MODIFIER_LABEL ||
+		modifier == MODIFIER_PRIORITY || modifier == MODIFIER_PRIORITY_P ||
+		modifier == MODIFIER_REMOVE || modifier == MODIFIER_RMV);
+}
+
+bool iParser::areDigits(const string text) {
+	unsigned int index;
+
+	for (index = 0; index < text.size(); index++) {
+		if (!isdigit(text[index])) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool iParser::isWhiteSpace(const char character) {
+	return (character == CHAR_SPACE || character == CHAR_TAB);
+}
+
+unsigned int iParser::retrieveCount(string text, const char character) {
+	assert(text != STRING_BLANK);
+	unsigned int count = 0;
+	unsigned int index;
+
+	for (index = 0; index < text.size(); index++) {
+		if (text[index] == character) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+list<COMMAND_AND_TEXT> iParser::getParseInfo() {
+	return _parseInfo;
+}
+
+string iParser::setParseInfo(string command, string text) {
+	assert(command != STRING_BLANK);
+	COMMAND_AND_TEXT information;
+	information.command = command;
+	information.text = text;
+	_parseInfo.push_back(information);
+	return MESSAGE_SUCCESS;
+}
+
+string iParser::clearParseInfo() {
+	_parseInfo.clear();
+	return MESSAGE_SUCCESS;
+}
+	// End of segment: C:\Users\SKR\Documents\main\iParser\iParser.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iParser\iParser.h
+	 */
+
+//	Parser
+//	Tutorial F10-2C
+//	Coder:	Ng Chon Beng
+
+/*
+===================================================================================================
+NOTES TO DEVELOPERS
+- Logic passes userInput to Parser
+- Parser returns a list of 2 strings, command and text
+- If there is at least one invalid input, list is cleared and invalid string is pushed to list and
+  sent to logic
+- Note that ParserTest contains 44 muted test methods 
+===================================================================================================
+*/
+
+#include <iostream>
+#include <string>
+#include <list>
+#include <vector>
+#include <sstream>
+#include <cctype>
+#include <assert.h>
+using namespace std;
+
+#ifndef IPARSER_H
+#define IPARSER_H
+
+struct COMMAND_AND_TEXT {
+	string command;
+	string text;
+};
+
+class iParser {
+
+#define TESTMODE
+#ifndef TESTMODE
+private:
+#else
+public:
+#endif
+
+	// =================
+	// private attribute
+	// =================
+
+	list<COMMAND_AND_TEXT> _parseInfo;
+
+	// =====================
+	// Pre defined variables
+	// =====================
+
+	// used to identify commands in userInput and set as command for logic to intepret
+	static const string COMMAND_ADD;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_DEL;
+	static const string COMMAND_CLEAR;
+	static const string COMMAND_EDIT;
+	static const string COMMAND_UNDO;
+	static const string COMMAND_SORT;
+	static const string COMMAND_SEARCH;
+	static const string COMMAND_VIEW;
+	static const string COMMAND_SAVE;
+	static const string COMMAND_DONE;
+	static const string COMMAND_UNDONE;
+	static const string COMMAND_EXIT;
+
+	// used to set as command for logic to intepret
+	static const string COMMAND_NAME;
+	static const string COMMAND_START;
+	static const string COMMAND_END;
+	static const string COMMAND_DESCRIPTION;
+	static const string COMMAND_PRIORITY;
+	static const string COMMAND_REMOVE;
+	static const string COMMAND_RMV;
+
+	// used to identify string in UserInput
+	static const string STRING_DATE;
+	static const string STRING_DUE;
+	static const string STRING_START;
+	static const string STRING_END;
+	static const string STRING_DESCRIPTION;
+	static const string STRING_DESC;
+	static const string STRING_PRIORITY;
+	static const string STRING_PRIORITY_P;
+	static const string STRING_ALL;
+	static const string STRING_UPDATE;
+	static const string STRING_NAME;
+	static const string STRING_DONE;
+	static const string STRING_UNDONE;
+	static const string STRING_HIGH;
+	static const string STRING_MEDIUM;
+	static const string STRING_MED;
+	static const string STRING_LOW;
+	static const string STRING_H;
+	static const string STRING_M;
+	static const string STRING_L;
+
+	// used to identify modifier in UserInput
+	static const string MODIFIER_NAME;
+	static const string MODIFIER_DATE;
+	static const string MODIFIER_DUE;
+	static const string MODIFIER_START;
+	static const string MODIFIER_END;
+	static const string MODIFIER_DESCRIPTION;
+	static const string MODIFIER_DESC;
+	static const string MODIFIER_LABEL;
+	static const string MODIFIER_PRIORITY;
+	static const string MODIFIER_PRIORITY_P;
+	static const string MODIFIER_REMOVE;
+	static const string MODIFIER_RMV;
+
+	// used for date time functions and checks
+	static const string STRING_MONTHS[];
+	static const string STRING_MONTHS_SHORT_FORM[];
+	static const string STRING_MONTHS_IN_NUMBER[];
+	static const string STRING_TO;
+	static const string STRING_AM;
+	static const string STRING_PM;
+	static const string STRING_HR;
+	static const string STRING_DATE_INITIALISE;
+	static const string STRING_TIME_INITIALISE;
+	static const string STRING_MINUTE_INITIALISE;
+	static const string STRING_DATE_TIME_REMOVE;
+	static const string STRING_BLANK;
+	static const string STRING_ZERO;
+	static const string STRING_NEGATIVE_ONE;
+
+	static const char CHAR_SPACE;
+	static const char CHAR_TAB;
+	static const char CHAR_COMMA;
+	static const char CHAR_OBLIQUE;
+	static const char CHAR_HYPHEN;
+	static const char CHAR_COLON;
+	static const char CHAR_PLUS;
+
+	// used for string return type as well as for setting _parseInfo list's text
+	static const string MESSAGE_SUCCESS;
+	static const string MESSAGE_FAILURE;
+	static const string MESSAGE_INVALID;
+	static const string MESSAGE_INVALID_INPUT;
+	static const string MESSAGE_INVALID_COMMAND;
+	static const string MESSAGE_INVALID_MODIFIER;
+	static const string MESSAGE_INVALID_SORT;
+	static const string MESSAGE_INVALID_VIEW;
+	static const string MESSAGE_INVALID_REMOVE;
+	static const string MESSAGE_INVALID_PRIORITY;
+	static const string MESSAGE_INVALID_DATE_TIME;
+	static const string MESSAGE_INVALID_ADD_NAME;
+	static const string MESSAGE_INVALID_ADD_REMOVE;
+	static const string MESSAGE_INVALID_NUMBER_OF_ITEM_MODIFIER;
+	static const string MESSAGE_INVALID_NUMBER_OF_DATE_TIME_MODIFIER;
+	static const string MESSAGE_INVALID_NUMBER_OF_DESCRIPTION_MODIFIER;
+	static const string MESSAGE_INVALID_NUMBER_OF_PRIORITY_MODIFIER;
+	static const string MESSAGE_INVALID_NUMBER_OF_REMOVE_MODIFIER;
+
+	// used to avoid magic numbers
+	static const unsigned int SIZE_OF_STRING_TO;
+	static const unsigned int SIZE_OF_STRING_HYPHEN;
+	static const unsigned int MAX_SIZE_OF_STRING_HOURS;
+	static const unsigned int MIN_SIZE_OF_STRING_HOURS;
+	static const unsigned int SIZE_OF_STRING_MINUTES;
+	static const unsigned int MIN_SIZE_OF_STRING_WITH_SUFFIX;
+	static const unsigned int NUMBER_OF_DAYS;
+	static const unsigned int NUMBER_OF_MONTHS;
+	static const unsigned int NUMBER_OF_HOURS;
+	static const unsigned int HOURS_ZERO;
+	static const unsigned int HOURS_ONE_PM;
+	static const unsigned int HOURS_ELEVEN_PM;
+	static const string HOURS_TWELVE_AM;
+
+	static const unsigned int INDEX_START;
+	static const unsigned int INDEX_INVALID;
+
+	// =====================
+	// main parsing function
+	// =====================
+	// Pre:		userInput passed to function as string
+	// Post:	sets command and text to _parseInfo list based on user's command
+	//			clears _parseInfo list and sets list as invalid if any invalid input is detected
+	string executeParsing(string); // unit test
+
+	// ===============================
+	// functions within executeParsing
+	// ===============================
+
+	// Pre:		commandType is "add"
+	// Post:	sets itemName and any modifiers along with their respective information to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
+	string executeAddParsing(string); 
+	// Pre:		commandType is "edit"
+	// Post:	sets indexToEdit and any modifiers along with their respective information to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text or invalid date time input is detected
+	string executeEditParsing(string);
+	// Pre:		commandType is 'sort'
+	// Post:	sets sortType to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if invalid sortType is input
+	string executeSortParsing(string);
+	// Pre:		commandType is 'view'
+	// Post:	sets viewType to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if invalid sortType is input
+	string executeViewParsing(string);
+	// Pre:		commandType is "delete", "del", "search", "save", "done" or "undone"
+	// Post:	sets text or index to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeCommandAndTextParsing(const string, string);
+	// Pre:		commandType is "clear", "undo" or "exit"
+	// Post:	sets command and text/index to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeSingularCommandParsing(const string, string);
+	
+	// ================
+	// helper functions
+	// ================
+
+	//Pre:		vector with tokenised information has more than one string passed to function
+	//Post:		determines the modifiers available in vector and executes the respective modifiers
+	//			if any modifiers cannot be determined or if sub functions throw an exception, this function will stop it's execution
+	string checkAndSetTokenisedInformation(vector<string>&, const string);
+	// Pre:		ModifierType is "name", "date", "due", "start", "end", "description", "desc", "priority", "p", "remove" or "rmv"
+	// Post:	sets modifier and text to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if blank text is detected
+	string executeModifierAndTextParsing(const string, string);
+	// Pre:		nil
+	// Post:	determines whether dateTime string is a single dateTime or a ranged dateTime and executes
+	//			respective dateTime parsing
+	//			if dateTime is not valid, invalid date time message will be thrown as exception
+	string executeDateTimeParsing(const string);
+	// Pre:		ModifierType is 'priority'
+	// Post:	sets priority to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if invalid priorityType is input
+	string executePriorityParsing(string);
+	// Pre:		ModifierType "remove" is called
+	// Post:	sets the parts to be removed to _parseInfo list
+	string executeRemoveParsing(string);
+
+	// =============================
+	// string manipulation functions
+	// =============================
+	// Pre:		nil
+	// Post:	retrieves the first word from userInput string
+	string retrieveCommandOrModifier(string);
+	// Pre:		nil
+	// Post:	tokenises userInput into commands and modifiers along with their respective texts that follow after
+	vector<string> tokeniseText(const string);
+	// Pre:		nil
+	// Post:	returns a string with the first word from the text removed
+	string removeFirstStringToken(string); 
+	// Pre:		nil
+	// Post:	if a whitespace character is detected within referenced string,
+	//			any whitespace characters in the next index will be removed
+	string removeConsecutiveWhiteSpace(string&);
+	// Pre:		nil
+	// Post:	removes all whitespace characters detected within the referenced string
+	string removeWhiteSpace(string&);
+	// Pre:		nil
+	// Post:	converts all alphabet characters in the referenced string to lower case alphabets
+	string convertToLowerCase(string&); 
+	// Pre:		nil
+	// Post:	trims text by removing whitespace characters at the front and back of the referenced string until
+	//			the first non-whitespace character
+	string trimText(string&);
+	// Pre:		nil
+	// Post:	trims text by removing whitespace characters at the front of the string until
+	//			the first non-whitespace character
+	string trimFront(string); 
+	// Pre:		nil
+	// Post:	trims text by removing whitespace characters at the back of the string until
+	//			the first non-whitespace character
+	string trimBack(string); 
+
+	// ===================
+	// date time functions
+	// ===================
+	// Pre:		nil
+	// Post:	returns true if "to" or "-" are found
+	//			else, returns false
+	bool hasStartEndDateTime(const string&);
+	// Pre:		nil
+	// Post:	determines the dateTime which user inputs and sets dateTime information to _parseInfo
+	//			if invalid dateTime is input, invalid input message will be thrown as exception
+	string setDateTime(const string&, const string);
+	// Pre:		one comma detected in dateTime string
+	// Post:	determines the dateTime which user inputs and sets start OR end dateTime to _parseInfo
+	//			if invalid dateTime is input, invalid input message will be thrown as exception
+	string splitAndSetDateTime(const string&, const string);
+	// Pre:		hasStartEndDateTime is true
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
+	string splitAndSetStartEndDateTime(const string&);
+	// Pre:		hasStartEndDateTime is true
+	// Post:	determines the dateTime range which user inputs and sets view dateTime to _parseInfo
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
+	string splitAndSetViewDateRange(const string&);
+	// Pre:		startEndDateTime has no commas detected
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			the range may be [date to date] or [time to time] range
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
+	string splitAndSetNoCommaStartEndDateTime(const string&);
+	// Pre:		startEndDateTime has 1 comma detected
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			the range may be [date, time to time] or [time to time, date] range
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
+	string splitAndSetOneCommaStartEndDateTime(const string&);
+	// Pre:		startEndDateTime has 2 commas detected
+	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
+	//			the range may be [date, time to date, time], [time, date to time, date],
+	//			[date, time to time, date] or [time, date to date, time] range
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
+	string splitAndSetTwoCommaStartEndDateTime(const string&);
+	// Pre:		nil
+	// Post:	if date is valid, set date to _parseInfo and return true
+	bool isValidDate(string, string&);
+	// Pre:		nil
+	// Post:	if time is valid, set time to _parseInfo and return true
+	bool isValidTime(string, string&);
+	// Pre:		date userInput contains '/'	
+	// Post:	if date is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidDate to catch
+	string splitAndSetObliqueDateInformation(string, const unsigned int);
+	// Pre:		date userInput does not contain '/'	
+	// Post:	if date is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidDate to catch
+	string splitAndSetSpaceDateInformation(string, const unsigned int);
+	// Pre:		nil
+	// Post:	determines if time string has colon or not and executes the respective time string functiions
+	//			if time string is invalid, false will be thrown as exception for isValidTime to catch
+	string splitAndSetTimeString(string, const string);
+	// Pre:		time userInput does contains ':'	
+	// Post:	if time is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidTime to catch
+	string splitAndSetColonTimeString(string, const string);
+	// Pre:		time userInput does does not contain ':'	
+	// Post:	if time is valid, set time to _parseInfo and return true
+	//			else, false will be thrown as exception for isValidTime to catch
+	string splitAndSetNoColonTimeString(string, const string);
+	// Pre:		nil	
+	// Post:	if month string is a valid month, return true
+	bool isMonth(string); 
+	// Pre:		isMonth is true	
+	// Post:	sets the month with digit string
+	string setMonth(string);
+	// Pre:		nil
+	// Post:	returns true if time string contains 'am', 'pm' or 'hr'
+	bool hasTimePeriodSuffix(const string);
+	// Pre:		hasTimePeriodSuffix is true, suffix is 'pm'	
+	// Post:	if time is between 1~11, it will be added by 12 and be returned as a string
+	string addTwelveToHours(const string); 
+	// Pre:		nil
+	// Post:	returns true if suffix is AM and hour falls between 1~12
+	bool isAppropriateAMHour(const string);
+	// Pre:		nil
+	// Post:	returns true if hour and minute strings are valid
+	bool isAppropriateTime(const string, const string, const string);
+	// Pre:		nil
+	// Post:	returns true if day is not detected while time is available
+	bool hasNoDayButHasTime(const string);
+
+	// =================
+	// boolean functions
+	// =================
+
+	// Pre:		nil
+	// Post:	returns boolean of whether string is a modifier keyword
+	bool isModifier(string);
+	// Pre:		nil
+	// Post:	returns true if string contains only digits between 0 to 9
+	//			returns false otherwise
+	bool areDigits(const string);
+	// Pre:		nil
+	// Post:	returns true if character is either a space or tab
+	//			returns false otherwise
+	bool isWhiteSpace(const char);
+
+	// =================
+	// character counter
+	// =================
+
+	// Pre:		string to be checked and character to count passed to function
+	// Post:	returns the unsigned int value of character to be counted within string
+	unsigned int retrieveCount(string, const char); 
+
+	// ===================
+	// setters and getters
+	// ===================
+
+	// Pre:		nil
+	// Post:	returns list of _parseInfo
+	list<COMMAND_AND_TEXT> getParseInfo();
+	// Pre:		non-blank command string passed to function
+	// Post:	sets command and text (if applicable) to _parseInfo list
+	string setParseInfo(string, string = "");
+	// Pre:		nil
+	// Post:	clears _parseInfo list
+	string clearParseInfo();
+
+public:
+	iParser();
+	~iParser();
+
+	// ================================================
+	// main function called by logic to parse userInput
+	// ================================================
+
+	// Pre:		nil
+	// Post:	returns a list of a pair of string to logic for logic to interpret
+	//			pair of string consist of command and text
+	list<COMMAND_AND_TEXT> parse(string Input);
+};
+
+#endif
+	// End of segment: C:\Users\SKR\Documents\main\iParser\iParser.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iParserTest\ParserTest.cpp
+	 */
+
+//	ParserTest
+//	Tutorial F10-2C
+//	Coder:	Ng Chon Beng
+
+/*
+===================================================================================================
+NOTES
+- Parser test methods muted as parser functions are all private except for parse which is called
+  by Logic
+- To execute unit testing for parser test methods, change private functions in parser.h to public
+- TEST COVERAGE: 94:58%
+===================================================================================================
+*/
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace iPlannerParserTest {
+
+	TEST_CLASS(iPlannerParserTest) {
+private:
+	iParser testParser;
+public:
+
+	TEST_METHOD(parserExecuteParsingTest) {
+		string testInput[] = { "add item1 -date 1 feb 2015, 2pm to 11 dec 2015, 3pm -DESC testDesc -p H",
+			"Delete 123",
+			"Clear",
+			"edit 2 -remove priority",
+			"edit 3 -remove date",
+			"edit 4 -remove desc",
+			"edit 5 -name testName",
+			"UnDo",
+			"sort date",
+			"sort name",
+			"sort p",
+			"sort done",
+			"sort update",
+			"search testSearch",
+			"view All",
+			"view DONE",
+			"view Undone",
+			"view H",
+			"view Med",
+			"view LOW",
+			"view 12 nov to 13 dec",
+			"view 12 nov",
+			"save C:\Folder1",
+			"done 1",
+			"undone 2",
+			"exit" };
+		string expectedCommand[][5] = { { "add", "start", "end", "description", "priority" },
+		{ "delete" },
+		{ "clear" },
+		{ "edit", "priority" },
+		{ "edit", "start", "end" },
+		{ "edit", "description" },
+		{ "edit", "name" },
+		{ "undo" },
+		{ "sort" },
+		{ "sort" },
+		{ "sort" },
+		{ "sort" },
+		{ "sort" },
+		{ "search" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "save" },
+		{ "done" },
+		{ "undone" },
+		{ "exit" } };
+		string expectedText[][5] = { { "item1", "2015 2 1 14 00", "2015 12 11 15 00", "testDesc", "high" },
+		{ "123" },
+		{ "" },
+		{ "2", "" },
+		{ "3", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2" },
+		{ "4", "" },
+		{ "5", "testName" },
+		{ "" },
+		{ "date" },
+		{ "name" },
+		{ "priority" },
+		{ "done" },
+		{ "update" },
+		{ "testSearch" },
+		{ "all" },
+		{ "done" },
+		{ "undone" },
+		{ "high" },
+		{ "medium" },
+		{ "low" },
+		{ "date -1 11 12 -1 -1 -1 12 13 -1 -1" },
+		{ "date -1 11 12 -1 -1 -1 11 12 -1 -1" },
+		{"C:\Folder1"},
+		{ "1" },
+		{"2"},
+		{""} };
+
+		for (int i = 0; i < 7; i++) {
+			testParser.executeParsing(testInput[i]);
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+			for (int j = 0; iter != testList.end(); j++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i][j], actualCommand);
+				Assert::AreEqual(expectedText[i][j], actualText);
+			}
+
+			testParser.clearParseInfo();
+		}
+	}
+
+	TEST_METHOD(parserExecuteAddParsingTest) {
+		string testInput[] = { "item1 -date 10 Nov 2015, 2359hr -DESC testDesc -p H",
+			"item2 -date 1/2/2015 to 2/3/2015",
+			"item3 -Due 1234hr, 12 nov",
+			"item4 -start 12 nov, 1234pm",
+			"item5 -END 12pm",
+			"item6 -remove date",
+			"item7 -NaMe testName",
+			"item8 -date 10 nov -due 11 dec",
+			"item9 -date 10 nov -start 11 DEC",
+			"item10 -date 10 nov -end 11 Dec",
+			"item11 -due 10 nov -start 11 dec",
+			"item12 -due 10 nov -end 11 Dec",
+			"item13 -p H -priority Low",
+			"item14 -desc testDescOne -description testDescTwo" };
+		string expectedCommand[][4] = { { "add", "start", "description", "priority" },
+		{ "add", "start", "end" },
+		{ "add", "end" },
+		{ "add", "start" },
+		{ "add", "end" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" } };
+		string expectedText[][4] = { { "item1", "2015 11 10 23 59", "testDesc", "high" },
+		{ "item2", "2015 2 1 -1 -1", "2015 3 2 -1 -1" },
+		{ "item3", "-1 11 12 12 34" },
+		{ "item4", "-1 11 12 12 34" },
+		{ "item5", "-1 -1 -1 12 00" },
+		{ "Unable to use \'remove\' modifier when using \'add\' command" },
+		{ "Unable to use \'name\' modifier when using \'add\' command" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use \'priority\' modifier more than once" },
+		{ "Unable to use \'description\' modifier more than once" } };
+
+		for (int i = 0; i < 14; i++) {
+			testParser.executeAddParsing(testInput[i]);
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+			for (int j = 0; iter != testList.end(); j++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i][j], actualCommand);
+				Assert::AreEqual(expectedText[i][j], actualText);
+			}
+
+			testParser.clearParseInfo();
+		}
+	}
+
+	TEST_METHOD(parserExecuteEditParsing) {
+		string testInput[] = { "1 -name testName -date 10 Nov 2015, 2359hr -Desc testDesc -p H",
+			"2 -REMOVE date",
+			"3 -date 1/2/2015 to 2/3/2015",
+			"4 -Start 12 nov, 1234pm",
+			"5 -end 12pm",
+			"6 -remove date -rmv desc",
+			"7 -name testNameOne -name TestNameTwo",
+			"8 -date 10 nov -due 11 dec",
+			"9 -date 10 nov -start 11 DEC",
+			"10 -date 10 nov -end 11 Dec",
+			"11 -due 10 nov -start 11 dec",
+			"12 -due 10 nov -end 11 Dec",
+			"13 -p H -priority Low",
+			"14 -desc testDescOne -description testDescTwo" };
+		string expectedCommand[][5] = { { "edit", "name", "start", "description", "priority" },
+		{ "edit", "start", "end" },
+		{ "edit", "start", "end" },
+		{ "edit", "start" },
+		{ "edit", "end" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" } };
+		string expectedText[][5] = { { "1", "testName", "2015 11 10 23 59", "testDesc", "high" },
+		{ "2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2" },
+		{ "3", "2015 2 1 -1 -1", "2015 3 2 -1 -1" },
+		{ "4", "-1 11 12 12 34" },
+		{ "5", "-1 -1 -1 12 00" },
+		{ "Unable to use \'remove\' modifier more than once" },
+		{ "Unable to use \'name\' modifier more than once" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use \'priority\' modifier more than once" },
+		{ "Unable to use \'description\' modifier more than once" } };
+
+		for (int i = 0; i < 12; i++) {
+			testParser.executeEditParsing(testInput[i]);
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+			for (int j = 0; iter != testList.end(); j++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i][j], actualCommand);
+				Assert::AreEqual(expectedText[i][j], actualText);
+			}
+
+			testParser.clearParseInfo();
+		}
+	}
+
+	TEST_METHOD(parserExecuteSortParsingTest) {
+		// testInput tests for all recognised cases
+		string testInput[] = { "date", "NAME", "Priority", "p", "done", "UPDATE" };
+		string expectedCommand = "sort";
+		string expectedText[] = { "date", "name", "priority", "priority", "done", "update" };
+
+		for (int i = 0; i < 6; i++) {
+			testParser.executeSortParsing(testInput[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+
+		testParser.clearParseInfo();
+
+		// testInput tests for other cases which will fail
+		string testInputFalse[] = { "test", " ", "" };
+		string expectedCommandFalse = "invalid";
+		string expectedTextFalse = "Invalid sort";
+
+		for (int i = 0; i < 3; i++) {
+			testParser.executeSortParsing(testInputFalse[i]);
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommandFalse, actualCommand);
+			Assert::AreEqual(expectedTextFalse, actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteViewParsingTest) {
+		// testInput tests for all recognised cases
+		string testInput[] = { "all", "DONE", "Undone", "12 nov to 13 dec", "12 nov" };
+		string expectedCommand = "view";
+		string expectedText[] = { "all", "done", "undone", "date -1 11 12 -1 -1 -1 12 13 -1 -1", "date -1 11 12 -1 -1 -1 11 12 -1 -1" };
+
+		for (int i = 0; i < 5; i++) {
+			testParser.executeViewParsing(testInput[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+
+		testParser.clearParseInfo();
+
+		// testInput tests for other cases which will fail
+		string testInputFalse[] = { "test", " ", "" };
+		string expectedCommandFalse = "invalid";
+		string expectedTextFalse = "Invalid view";
+
+		for (int i = 0; i < 3; i++) {
+			testParser.executeViewParsing(testInputFalse[i]);
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommandFalse, actualCommand);
+			Assert::AreEqual(expectedTextFalse, actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteCommandAndTextParsingTest) {
+		// testText[4] tests for invalid case where blank string is not allowed
+		string testCommand[] = { "delete", "del", "search", "save", "done" };
+		string testText[] = { "123", "123ABC", "abc", " ", "" };
+		string expectedCommand[] = { "delete", "del", "search", "save", "invalid" };
+		string expectedText[] = { "123", "123abc", "abc", " ", "Invalid input" };
+
+		for (int i = 0; i < 5; i++) {
+			testParser.executeCommandAndTextParsing(testCommand[i], testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteSingularCommandParsingTest) {
+		// testText[1], testText[3] and testText[5] tests for invalid commands where there
+		// are invalid texts after the commands
+		string testCommand[] = { "undo", "undo", "clear", "clear", "exit", "exit" };
+		string testText[] = { "undo", "undo 123", "clear", "clear 123ABC", "exit", "exit abc" };
+		string expectedCommand[] = { "undo", "invalid", "clear", "invalid", "exit", "invalid" };
+		string expectedText[] = { "", "Invalid command", "", "Invalid command", "", "Invalid command" };
+
+		for (int i = 0; i < 6; i++) {
+			testParser.executeSingularCommandParsing(testCommand[i], testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserCheckAndSetTokenisedInformationTest) {
+		// testInput[0] is added but not tested as the function starts from index = 1 where the modifiers starts
+		string testInput[] = { "edit 1", "-name testName", "-desc WEAR FORMAL", "-date 12/11/10, 10PM", "-p H" };
+		string expectedCommand[] = { "name", "description", "start", "priority" };
+		string expectedText[] = { "testName", "WEAR FORMAL", "10 11 12 22 00", "high" };
+		vector<string> testVector;
+
+		for (int i = 0; i < 5; i++) {
+			testVector.push_back(testInput[i]);
+		}
+
+		testParser.checkAndSetTokenisedInformation(testVector, "edit");
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+
+		testParser.clearParseInfo();
+
+		// test for remove modifier
+		string testInputRemove[] = { "edit 2", "-remove date" };
+		string expectedCommandRemove[] = { "start", "end" };
+		string expectedTextRemove = "-2 -2 -2 -2 -2";
+
+		testVector.clear();
+		for (int i = 0; i < 2; i++) {
+			testVector.push_back(testInputRemove[i]);
+		}
+
+		testParser.checkAndSetTokenisedInformation(testVector, "edit");
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommandRemove[i], actualCommand);
+			Assert::AreEqual(expectedTextRemove, actualText);
+		}
+
+		testParser.clearParseInfo();
+
+		// test for false inputs for edit and add
+		string testInputFalse[][3] = { { "edit 1", "-name test", "-name case" },
+		{ "edit 2", "-start 10 Nov", "-end 11 Nov" },
+		{ "edit 3", "-due 10 Nov", "-date 11 Nov" },
+		{ "edit 4", "-description test", "-desc case" },
+		{ "edit 5", "-priority H", "-p L" },
+		{ "edit 6", "-remove 1", "-remove 2" } };
+		string expectedTextFalse[] = { "Unable to use \'name\' modifier more than once",
+			"Unable to use multiple date time modifiers",
+			"Unable to use multiple date time modifiers",
+			"Unable to use \'description\' modifier more than once",
+			"Unable to use \'priority\' modifier more than once",
+			"Unable to use \'remove\' modifier more than once" };
+
+		for (int i = 0; i < 5; i++) {
+			testParser.clearParseInfo();
+			testVector.clear();
+			for (int j = 0; j < 3; j++) {
+				testVector.push_back(testInputFalse[i][j]);
+			}
+
+			try {
+				testParser.checkAndSetTokenisedInformation(testVector, "edit");
+			} catch (string& actualText) {
+				Assert::AreEqual(expectedTextFalse[i], actualText);
+			}
+		}
+
+		testParser.clearParseInfo();
+
+		// test for false inputs for edit and add
+		string testInputFalseAdd[][2] = { { "add 1", "-name test" },
+		{ "add 2", "-start 10 Nov" } };
+		string expectedTextFalseAdd[] = { "Unable to use \'name\' modifier when using \'add\' command",
+			"Unable to use \'remove\' modifier when using \'add\' command" };
+
+		for (int i = 0; i < 2; i++) {
+			testParser.clearParseInfo();
+			testVector.clear();
+			for (int j = 0; j < 2; j++) {
+				testVector.push_back(testInputFalseAdd[i][j]);
+			}
+
+			try {
+				testParser.checkAndSetTokenisedInformation(testVector, "add");
+			} catch (string& actualText) {
+				Assert::AreEqual(expectedTextFalseAdd[i], actualText);
+			}
+		}
+	}
+
+	TEST_METHOD(parserExecuteModifierAndTextParsingTest) {
+		// testText[4] tests for invalid case where blank string is not allowed
+		string testCommand[] = { "name", "desc", "priority", "desc", "priority" };
+		string testText[] = { "123", "123abc", "abc", "@@@", "high" };
+		string expectedCommand[] = { "name", "desc", "priority", "desc", "priority" };
+		string expectedText[] = { "123", "123abc", "abc", "@@@", "high" };
+
+		for (int i = 0; i < 5; i++) {
+			testParser.executeModifierAndTextParsing(testCommand[i], testText[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteDateTimeParsingTest) {
+		string testInput[] = { "10/11/2015", "2 Mar 2015", "10/11, 1PM", "2 Mar, 12:30", "10/11 to 11/12", "2 Mar 2015, 11am - 3 Apr 2015, 11pm" };
+		string expectedCommand[] = { "start", "start", "start", "start", "start", "end", "start", "end" };
+		string expectedText[] = { "2015 11 10 -1 -1", "2015 3 2 -1 -1", "-1 11 10 13 00", "-1 3 2 12 30", "-1 11 10 -1 -1", "-1 12 11 -1 -1", "2015 3 2 11 00", "2015 4 3 23 00" };
+
+		for (int i = 0; i < 6; i++) {
+			testParser.executeDateTimeParsing(testInput[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecutePriorityParsingTest) {
+		// test cases after testText[6] are false cases and will throw exceptions
+		string testText[] = { "high", "h", "MEDIUM", "MED", "M", "Low", "L", "test", " ", "" };
+		string expectedCommand = "priority";
+		string expectedText[] = { "high", "high", "medium", "medium", "medium", "low", "low" };
+		string expectedTextFalse = "Invalid priority";
+
+		for (int i = 0; i < 10; i++) {
+			try {
+				testParser.executePriorityParsing(testText[i]);
+			} catch (string& exceptionMessage) {
+				Assert::AreEqual(expectedTextFalse, exceptionMessage);
+			}
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserExecuteRemoveParsingTest) {
+		string testInput[] = { "date", "START", "End", "description", "DESC", "Priority", "p", "test", " " };
+		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
+		string expectedText[] = { "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "", "", "", "" };
+
+		for (int i = 0; i < 9; i++) {
+			try {
+				testParser.executeRemoveParsing(testInput[i]);
+			} catch (string& exceptionMessage) {
+				string expected = "Invalid remove";
+				Assert::AreEqual(expected, exceptionMessage);
+			}
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserRetrieveCommandOrModifierTest) {
+		string testInput[] = { "ADD   ", "DeLeTe\t\t\t", "-dAtE   ", "-desc\t\t\t", " ", "" };
+		string expected[] = { "add", "delete", "-date", "-desc", "", "" };
+
+		for (int i = 0; i < 6; i++) {
+			string actual = testParser.retrieveCommandOrModifier(testInput[i]);
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
+
+	TEST_METHOD(parserTokeniseTextTest) {
+		// as hyphen is used as the modifier identifier, cases created tests to see
+		//if it recognises the allowed modifiers
+		vector<string> testVector;
+		string testInput = "test -name testName -date te-st -due t-e-s-t -start 10AM -end 10PM -desc test ---label -priority te-descst -remove date -rmv desc";
+		string expected[] = { "test", "-name testName", "-date te-st", "-due t-e-s-t", "-start 10AM", "-end 10PM", "-desc test ---label", "-priority te-descst", "-remove date", "-rmv desc" };
+
+		testVector = testParser.tokeniseText(testInput);
+
+		for (unsigned int i = 0; i < testVector.size(); i++) {
+			string actual = testVector[i];
+			Assert::AreEqual(expected[i], actual);
+		}
+
+		vector<string> testVectorWhiteSpace;
+		string testWhiteSpace = " ";
+		string expectedWS = "";
+
+		testVectorWhiteSpace = testParser.tokeniseText(testWhiteSpace);
+
+		for (unsigned int i = 0; i < testVectorWhiteSpace.size(); i++) {
+			string actual = testVectorWhiteSpace[i];
+			Assert::AreEqual(expectedWS, actual);
+		}
+	}
+
+	TEST_METHOD(parserRemoveFirstStringTokenTest) {
+		// testCases after testInput[1] will return blank as there is no text beyong first string, if any
+		string testInput[] = { "add text", "del text", "exit", " ", "" };
+		string expected[] = { "text", "text", "", "", "" };
+
+		for (int i = 0; i < 5; i++) {
+			string actual = testParser.removeFirstStringToken(testInput[i]);
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
+
+	TEST_METHOD(parserRemoveConsecutiveWhiteSpace) {
+		string actual = "   1 2 \t 3 \t 4 5\t\t\t";
+		string expected = " 1 2 3 4 5\t";
+		string actualWhiteSpace = "  \t\t  ";
+		string expectedWhiteSpace = " ";
+		string actualBlank = "";
+		string expectedBlank = "";
+
+		testParser.removeConsecutiveWhiteSpace(actual);
+		Assert::AreEqual(expected, actual);
+		testParser.removeConsecutiveWhiteSpace(actualWhiteSpace);
+		Assert::AreEqual(expectedWhiteSpace, actualWhiteSpace);
+		testParser.removeConsecutiveWhiteSpace(actualBlank);
+		Assert::AreEqual(expectedBlank, actualBlank);
+	}
+
+	TEST_METHOD(parserRemoveWhiteSpace) {
+		string actual = "   1 2 \t 3 \t 4 5\t\t\t";
+		string expected = "12345";
+		string actualWhiteSpace = "  \t\t  ";
+		string expectedWhiteSpace = "";
+
+		testParser.removeWhiteSpace(actual);
+		Assert::AreEqual(expected, actual);
+		testParser.removeWhiteSpace(actualWhiteSpace);
+		Assert::AreEqual(expectedWhiteSpace, actualWhiteSpace);
+	}
+
+	TEST_METHOD(parserConvertToLowerCaseTest) {
+		string actual = "ABCDEFGHIJKLM123456789NOPQRSTUVWXYZ";
+		string expected = "abcdefghijklm123456789nopqrstuvwxyz";
+
+		testParser.convertToLowerCase(actual);
+		Assert::AreEqual(expected, actual);
+	}
+
+	TEST_METHOD(parserTrimTextTest) {
+		string testText[] = { "   add text   ", "\t\t del text \t\t\t", "  exit\t\t", " ", "" };
+		string expected[] = { "add text", "del text", "exit", "", "" };
+
+		for (int i = 0; i < 5; i++) {
+			testParser.trimText(testText[i]);
+			string actual = testText[i];
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
+
+	TEST_METHOD(parserHasStartEndTest) {
+		string testDateTime[] = { "10/11/12 to 12/11/12", "10 November 12-12 November 2012", "10 Nov 2012, 12Pm", "1030, 11 Sep 2015" };
+
+		for (int i = 0; i < 4; i++) {
+			bool actual = testParser.hasStartEndDateTime(testDateTime[i]);
+			if (i < 2) {
+				Assert::IsTrue(actual);
+			} else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
+
+	TEST_METHOD(parserSetDateTimeTest) {
+		string testDateTime[] = { "10/11/12, 10:30PM", "10 November 12, 900AM", "23 Mar, 23:59 PM", "11 Sep, 130PM", "1030hr, 10/11/12", "930PM, 10 Dec 2015", "1pm" };
+		string expectedDateTime[] = { "12 11 10 22 30", "12 11 10 9 00", "-1 3 23 23 59", "-1 9 11 13 30", "12 11 10 10 30", "2015 12 10 21 30", "-1 -1 -1 13 00" };
+		string expectedCommand[] = { "start", "end" };
+
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "date");
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[0], actualCommand);
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "due");
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[1], actualCommand);
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "start");
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[0], actualCommand);
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "end");
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[1], actualCommand);
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetDateTimeTest) {
+		string testDateTime[] = { "10/11/12, 6pm", "2200hr, 10 Nov 12", "8/9, 1pm", "2am, 10/11" };
+		string expected[] = { "12 11 10 18 00", "12 11 10 22 00", "-1 9 8 13 00", "-1 11 10 2 00", "-1 -1 monday 13 00" };
+		string expectedCommand = "end";
+
+		for (int i = 0; i < 4; i++) {
+			testParser.splitAndSetDateTime(testDateTime[i], "end");
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expected[i], actualDateTime);
+			Assert::AreEqual(expectedCommand, actualCommand);
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetStartEndDateTimeTest) {
+		string testDatesForNoComma[] = { "10AM to 1PM", "930AM to 1230PM", "1 Oct to 23 Oct", "1 Oct 2012 - 23 Oct 2015" };
+		string expectedStartForNoComma[] = { "-1 -1 -1 10 00", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1" };
+		string expectedEndForNoComma[] = { "-1 -1 -1 13 00", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1" };
+
+		string testDatesForOneComma[] = { "10 Nov 12, 10am to 10PM", "930AM - 1130PM, 9/11" };
+		string expectedStartForOneComma[] = { "12 11 10 10 00", "-1 11 9 9 30" };
+		string expectedEndForOneComma[] = { "12 11 10 22 00", "-1 11 9 23 30" };
+
+		string testDatesForTwoCommas[] = { "10 Nov 12, 10am to 20 Nov 12, 10PM", "930AM, 11/9 - 130PM, 9/11" };
+		string expectedStartForTwoCommas[] = { "12 11 10 10 00", "-1 9 11 9 30" };
+		string expectedEndForTwoCommas[] = { "12 11 20 22 00", "-1 11 9 13 30" };
+
+		string start = "start";
+		string end = "end";
+
+		for (int i = 0; i < 4; i++) {
+			testParser.splitAndSetStartEndDateTime(testDatesForNoComma[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStartForNoComma[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEndForNoComma[i / 2], actualText);
+			}
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 2; i++) {
+			testParser.splitAndSetStartEndDateTime(testDatesForOneComma[i]);
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStartForOneComma[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEndForOneComma[i / 2], actualText);
+			}
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 2; i++) {
+			testParser.splitAndSetStartEndDateTime(testDatesForTwoCommas[i]);
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStartForTwoCommas[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEndForTwoCommas[i / 2], actualText);
+			}
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetViewDateRangeTest) {
+		string testDateRange[] = { "10 Apr to 10 May", "abc to def" };
+		string expectedCommand = "view";
+		string expectedText[] = { "date -1 4 10 -1 -1 -1 5 10 -1 -1", "date -1 4 10 -1 -1 -1 4 10 -1 -1" };
+
+		for (int i = 0; i < 1; i++) {
+			try {
+				testParser.splitAndSetViewDateRange(testDateRange[i]);
+			} catch (string& exceptionMessage) {
+				string expected = "Invalid date time";
+				Assert::AreEqual(expected, exceptionMessage);
+			}
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetNoCommaStartEndDateTimeTest) {
+		string testDates[] = { "10AM to 1PM", "930AM to 1230PM", "1 Oct to 23 Oct", "1 Oct 2012 - 23 Oct 2015" };
+		string expectedStart[] = { "-1 -1 -1 10 00", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1" };
+		string expectedEnd[] = { "-1 -1 -1 13 00", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1" };
+		string start = "start";
+		string end = "end";
+
+		for (int i = 0; i < 4; i++) {
+			testParser.splitAndSetNoCommaStartEndDateTime(testDates[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStart[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEnd[i / 2], actualText);
+			}
+		}
+	}
+
+	TEST_METHOD(parsersplitAndSetOneCommaStartEndDateTimeTest) {
+		string testDates[] = { "10 Nov 12, 10am to 10PM", "930AM - 1130PM, 9/11" };
+		string expectedStart[] = { "12 11 10 10 00", "-1 11 9 9 30" };
+		string expectedEnd[] = { "12 11 10 22 00", "-1 11 9 23 30" };
+		string start = "start";
+		string end = "end";
+
+		for (int i = 0; i < 2; i++) {
+			testParser.splitAndSetOneCommaStartEndDateTime(testDates[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStart[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEnd[i / 2], actualText);
+			}
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetTwoCommaStartEndDateTimeTest) {
+		string testDates[] = { "10 Nov 12, 10am to 20 Nov 12, 10PM", "930AM, 11/9 - 130PM, 9/11" };
+		string expectedStart[] = { "12 11 10 10 00", "-1 9 11 9 30" };
+		string expectedEnd[] = { "12 11 20 22 00", "-1 11 9 13 30" };
+		string start = "start";
+		string end = "end";
+
+		for (int i = 0; i < 2; i++) {
+			testParser.splitAndSetTwoCommaStartEndDateTime(testDates[i]);
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+
+			if (i % 2 == 0) {
+				Assert::AreEqual(start, actualCommand);
+				Assert::AreEqual(expectedStart[i / 2], actualText);
+			} else {
+				Assert::AreEqual(end, actualCommand);
+				Assert::AreEqual(expectedEnd[i / 2], actualText);
+			}
+		}
+	}
+
+	TEST_METHOD(parserIsValidDateTest) {
+		string testDates[] = { "10/ 11/ 12", " 11/12\t", "9 Jan 10", "10 November 12", "15 FEB", "11 Sep" };
+		string testDatesFalse[] = { "10a/11b/12c", "10 Novmbr 12", "10/test/12", "monday march", "10", "11/12/13/14", "11/12/", "11/" };
+		string expected[] = { "12 11 10", "-1 12 11", "10 1 9", "12 11 10", "-1 2 15", "-1 9 11", "-1 -1 monday", "-1 -1 tuesday" };
+		string expectedFalse = "";
+
+		for (int i = 0; i < 6; i++) {
+			string actualDateTrue = "";
+			string actualDateFalse = "";
+			bool actualTrue = testParser.isValidDate(testDates[i], actualDateTrue);
+			bool actualFalse = testParser.isValidDate(testDatesFalse[i], actualDateFalse);
+			Assert::IsTrue(actualTrue);
+			Assert::AreEqual(expected[i], actualDateTrue);
+			Assert::IsFalse(actualFalse);
+			Assert::AreEqual(expectedFalse, actualDateFalse);
+		}
+	}
+
+	TEST_METHOD(parserIsValidTimeTest) {
+		string testTimes[] = { "00 : 59", "10:59PM", "10:59 pm", "1059AM", "930 am", "10 pm", "930pm", "1 pm" };
+		string testTimesFalse[] = { "10::59", "10a:59b", "10a:59bpm", "1059bpm", "1", "10", "12345", "030" };
+		string expected[] = { "00 59", "22 59", "22 59", "10 59", "9 30", "22 00", "21 30", "13 00" };
+		string expectedFalse = "";
+
+		for (int i = 0; i < 8; i++) {
+			string actualTimeTrue = "";
+			string actualTimeFalse = "";
+			bool actualTrue = testParser.isValidTime(testTimes[i], actualTimeTrue);
+			bool actualFalse = testParser.isValidTime(testTimesFalse[i], actualTimeFalse);
+			Assert::IsTrue(actualTrue);
+			Assert::AreEqual(expected[i], actualTimeTrue);
+			Assert::IsFalse(actualFalse);
+			Assert::AreEqual(expectedFalse, actualTimeFalse);
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
+		// test cases after testDate[1] are false as either there are alphabets or invalid date input
+		string testDate[] = { "10/11/12", "10/11", "10/", "10/11/", "ab/11/2015", "10/ab/2015", "10/11/ab", "10//", "//10" };
+		unsigned int numberOfOblique[] = { 2, 1, 1, 2, 2, 2, 2, 2, 2, 2 };
+		string expected[] = { "12 11 10", "-1 11 10" };
+
+		for (int i = 0; i < 9; i++) {
+			try {
+				string actual = testParser.splitAndSetObliqueDateInformation(testDate[i], numberOfOblique[i]);
+				Assert::AreEqual(expected[i], actual);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
+		// test cases after testDate[1] are false as either there are invalid strings or invalid date input
+		string testDate[] = { "10 nOv 2015", "9 OcT", "12 abc", "abc apr", "abc mar 2015", "12 12 12", "12 mar abc" };
+		unsigned int numberOfSpace[] = { 2, 2, 1, 1, 2, 2, 2, };
+		string expected[] = { "2015 11 10", "-1 10 9", "-1 -1 monday" };
+
+		for (int i = 0; i < 7; i++) {
+			try {
+				string actualOne = testParser.splitAndSetSpaceDateInformation(testDate[i], numberOfSpace[i]);
+				Assert::AreEqual(expected[i], actualOne);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetTimeStringTest) {
+		string testTimeColonAM[] = { "10:11", "09:10", "2:30", "11:59", "11", "1" };
+		string testTimeColonPM[] = { "10:11", "09:10", "13:30", "2:30", "11", "1" };
+		string testTimeColonHR[] = { "10:11", "09:10", "13:30", "02:30", "23:59", "00:00" };
+		string testTimeSpaceAM[] = { "1011", "0910", "230", "1159", "11", "1" };
+		string testTimeSpacePM[] = { "1011", "0910", "1330", "230", "11", "1" };
+		string testTimeSpaceHR[] = { "1011", "0910", "1330", "0230", "2359", "0000" };
+		string expectedAM[] = { "10 11", "09 10", "2 30", "11 59", "11 00", "1 00" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "14 30", "23 00", "13 00" };
+		string expectedHR[] = { "10 11", "09 10", "13 30", "02 30", "23 59", "00 00" };
+
+		for (int i = 0; i < 1; i++) {
+			string actualColonAM = testParser.splitAndSetTimeString(testTimeColonAM[i], "am");
+			string actualColonPM = testParser.splitAndSetTimeString(testTimeColonPM[i], "pm");
+			string actualColonHR = testParser.splitAndSetTimeString(testTimeColonHR[i], "hr");
+			string actualSpaceAM = testParser.splitAndSetTimeString(testTimeSpaceAM[i], "am");
+			string actualSpacePM = testParser.splitAndSetTimeString(testTimeSpacePM[i], "pm");
+			string actualSpaceHR = testParser.splitAndSetTimeString(testTimeSpaceHR[i], "hr");
+			Assert::AreEqual(expectedAM[i], actualColonAM);
+			Assert::AreEqual(expectedPM[i], actualColonPM);
+			Assert::AreEqual(expectedAM[i], actualColonHR);
+			Assert::AreEqual(expectedAM[i], actualSpaceAM);
+			Assert::AreEqual(expectedPM[i], actualSpacePM);
+			Assert::AreEqual(expectedAM[i], actualSpaceHR);
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetColonTimeStringTest) {
+		string testTime[] = { "10:11", "9:10", "13:30", "23:59" };
+		string expectedAM[] = { "10 11", "9 10" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "23 59" };
+		string expectedHR[] = { "10 11", "9 10", "13 30", "23 59" };
+
+		for (int i = 0; i < 1; i++) {
+			string testString = testTime[i];
+
+			string actual = testParser.splitAndSetColonTimeString(testString, "");
+			string actualPM = testParser.splitAndSetColonTimeString(testString, "pm");
+			string actualHR = testParser.splitAndSetColonTimeString(testString, "hr");
+			Assert::AreEqual(expectedAM[i], actual);
+			Assert::AreEqual(expectedPM[i], actualPM);
+			Assert::AreEqual(expectedAM[i], actualHR);
+
+			if (i < 2) {
+				string actualAM = testParser.splitAndSetColonTimeString(testString, "am");
+				Assert::AreEqual(expectedAM[i], actualAM);
+			}
+		}
+
+		string testTimeFalse[] = { "1:1", "12:1", "123:23", "ab:cd", "123:123" };
+
+		for (int i = 0; i < 5; i++) {
+			try {
+				string actual = testParser.splitAndSetColonTimeString(testTimeFalse[i], "");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actual);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetNoColonTimeStringTest) {
+		string testTimeAM[] = { "1011", "0910", "230", "1159", "11", "1" };
+		string testTimePM[] = { "1011", "0910", "1330", "230", "11", "1" };
+		string testTimeHR[] = { "1011", "0910", "1330", "0230", "2359", "0000" };
+		string expectedAM[] = { "10 11", "09 10", "2 30", "11 59", "11 00", "1 00" };
+		string expectedPM[] = { "22 11", "21 10", "13 30", "14 30", "23 00", "13 00" };
+		string expectedHR[] = { "10 11", "09 10", "13 30", "02 30", "23 59", "00 00" };
+
+		for (int i = 0; i < 6; i++) {
+			string actualAM = testParser.splitAndSetNoColonTimeString(testTimeAM[i], "am");
+			Assert::AreEqual(expectedAM[i], actualAM);
+			string actualPM = testParser.splitAndSetNoColonTimeString(testTimePM[i], "pm");
+			Assert::AreEqual(expectedPM[i], actualPM);
+			string actualHR = testParser.splitAndSetNoColonTimeString(testTimeHR[i], "hr");
+			Assert::AreEqual(expectedHR[i], actualHR);
+		}
+
+		string testTimeAMFail[] = { "2359", "abcd", "12345", "a" };
+		string testTimePMFail[] = { "0", "0030", "abcd", "12345" };
+		string testTimeHRFail[] = { "1", "12", "123", "12345" };
+
+		for (int i = 0; i < 4; i++) {
+			try {
+				string actualAM = testParser.splitAndSetNoColonTimeString(testTimeAMFail[i], "am");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualAM);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+
+			try {
+				string actualPM = testParser.splitAndSetNoColonTimeString(testTimePMFail[i], "pm");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualPM);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+
+			try {
+				string actualHR = testParser.splitAndSetNoColonTimeString(testTimeHRFail[i], "hr");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualHR);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+
+			try {
+				string actualHR = testParser.splitAndSetNoColonTimeString(testTimeHRFail[i], "");
+				// this is done to check that all exceptions are thrown
+				string expected = "";
+				Assert::AreEqual(expected, actualHR);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
+		}
+	}
+
+	TEST_METHOD(parserIsMonthAndSetMonthTest) {
+		string testMonth[] = { "January", "february", "March", "april", "May", "june",
+			"July", "august", "September", "october", "November", "december" };
+		string testMonthShortForm[] = { "JAN", "feb", "MAR", "apr", "MAY", "jun",
+			"JUL", "aug", "SEP", "oct", "NOV", "dec" };
+		string testMonthFalse[] = { "janr", "febr", "mach", "aprl", "my", "jn",
+			"jool", "augst", "sept", "octbr", "novmbr", "decmbr" };
+		string expectedMonth[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
+
+		for (int i = 0; i < 12; i++) {
+			bool actualBoolean = testParser.isMonth(testMonth[i]);
+			string actualMonth = testParser.setMonth(testMonth[i]);
+			Assert::IsTrue(actualBoolean);
+			Assert::AreEqual(expectedMonth[i], actualMonth);
+		}
+
+		for (int i = 0; i < 12; i++) {
+			bool actualBoolean = testParser.isMonth(testMonthShortForm[i]);
+			string actualMonth = testParser.setMonth(testMonthShortForm[i]);
+			Assert::IsTrue(actualBoolean);
+			Assert::AreEqual(expectedMonth[i], actualMonth);
+		}
+
+		for (int i = 0; i < 12; i++) {
+			string expected = "";
+			bool actualBoolean = testParser.isMonth(testMonthFalse[i]);
+			string actualMonth = testParser.setMonth(testMonthFalse[i]);
+			Assert::IsFalse(actualBoolean);
+			Assert::AreEqual(expected, actualMonth);
+		}
+	}
+
+	TEST_METHOD(parserHasTimePeriodSuffixTest) {
+		string testTime[] = { "1010AM", "1010PM", "1010aM", "1010Pm", "1010am", "1010pm" };
+		string testTimeFalse[] = { "1010", "1010mp", "1010ma", "1010cs", "PM", "AM" };
+
+		for (int i = 0; i < 6; i++) {
+			bool actual = testParser.hasTimePeriodSuffix(testTime[i]);
+			Assert::IsTrue(actual);
+		}
+
+		for (int i = 0; i < 6; i++) {
+			bool actual = testParser.hasTimePeriodSuffix(testTimeFalse[i]);
+			Assert::IsFalse(actual);
+		}
+	}
+
+	TEST_METHOD(parserAddTwelveToHoursTest) {
+		// test cases after testHour[6] are false as hour is either 0 or non-digit
+		string testHour[] = { "1", "6", "11", "12", "18", "23", "09", "0", "abc", "@@@" };
+		string expected[] = { "13", "18", "23", "12", "18", "23", "21" };
+
+		for (int i = 0; i < 10; i++) {
+			try {
+				string actual = testParser.addTwelveToHours(testHour[i]);
+				Assert::AreEqual(expected[i], actual);
+			} catch (bool& exception) {
+				bool expected = false;
+				Assert::IsFalse(exception);
+			}
+		}
+	}
+
+	TEST_METHOD(parserIsAppropriateAMHourTest) {
+		// test cases after testHour[4] are false as it is not within the acceptable range for hours in AM
+		string testHour[] = { "1", "6", "11", "06", "12", "18", "23" };
+
+		for (int i = 0; i < 7; i++) {
+			bool actual = testParser.isAppropriateAMHour(testHour[i]);
+			if (i < 5) {
+				Assert::IsTrue(actual);
+			} else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
+
+	TEST_METHOD(parserIsAppropriateTimeTest) {
+		// testCases after index 6 are false as one of the strings are violated
+		// [7] and [8] have alphabetical strings, [9] and [10] have non-2-digit string, and [11] has 2359 set as AM
+		string testHour[] = { "1", "6", "11", "12", "18", "23", "09", "abc", "10", "123", "10", "23" };
+		string testMinute[] = { "00", "10", "20", "30", "40", "50", "59", "00", "abc", "00", "123", "59" };
+		string testSuffix[] = { "pm", "am", "pm", "am", "pm", "pm", "pm", "pm", "pm", "pm", "pm", "am" };
+
+		for (int i = 0; i < 12; i++) {
+			bool actual = testParser.isAppropriateTime(testHour[i], testMinute[i], testSuffix[i]);
+			if (i < 7) {
+				Assert::IsTrue(actual);
+			} else {
+				Assert::IsFalse(actual);
+			}
+		}
+	}
+
+	TEST_METHOD(parserHasNoDayButHasTimeTest) {
+		// testDateTimeString[2] is true as it has no date (3rd set of string) and has time (last 2 set of string)
+		string testDateTimeString[] = { "-1 -1 monday 23 59", "2015 10 10 23 59", "2015 10 -1 23 59" };
+
+		for (int i = 0; i < 3; i++) {
+			bool actual = testParser.hasNoDayButHasTime(testDateTimeString[i]);
+			if (i < 2) {
+				Assert::IsFalse(actual);
+			} else {
+				Assert::IsTrue(actual);
+			}
+		}
+	}
+
+	TEST_METHOD(parserIsModifierTest) {
+		string testString[] = { "-NAME", "-DaTe", "-dUe", "-start", "-end", "-Desc", "-dESCRIPTION", "-pRiORiTy", "-P", "-remove", "-RmV" };
+		string testStringfalse[] = { "-names", "-descrb", "-123", "-abc", "-", " " };
+
+		for (int i = 0; i < 11; i++) {
+			bool actual = testParser.isModifier(testString[i]);
+			Assert::IsTrue(actual);
+		}
+
+		for (int i = 0; i < 6; i++) {
+			bool actualFalse = testParser.areDigits(testStringfalse[i]);
+			Assert::IsFalse(actualFalse);
+		}
+
+	}
+
+	TEST_METHOD(parserAreDigitsTest) {
+		string testString = "123456789";
+		string testStringfalse[] = { "123a456b789c", "123 456 789", " " };
+
+		bool actual = testParser.areDigits(testString);
+		Assert::IsTrue(actual);
+
+		for (int i = 0; i < 3; i++) {
+			bool actualFalse = testParser.areDigits(testStringfalse[i]);
+			Assert::IsFalse(actualFalse);
+		}
+
+	}
+
+	TEST_METHOD(parserIsWhiteSpaceTest) {
+		char testChar[] = { ' ', '\t' };
+		char testCharFalse[] = { 'a', '1', '/' };
+
+		for (int i = 0; i < 2; i++) {
+			bool actual = testParser.isWhiteSpace(testChar[i]);
+			Assert::IsTrue(actual);
+		}
+
+		for (int i = 0; i < 3; i++) {
+			bool actual = testParser.isWhiteSpace(testCharFalse[i]);
+			Assert::IsFalse(actual);
+		}
+	}
+
+	TEST_METHOD(parserRetrieveCountTest) {
+		string testString[] = { ",one,two,three,four,five,", "   " };
+		unsigned int expected[] = { 6, 0 };
+
+		for (int i = 0; i < 2; i++) {
+			unsigned int actual = testParser.retrieveCount(testString[i], ',');
+			Assert::AreEqual(expected[i], actual);
+		}
+	}
+
+	};
+}
+	// End of segment: C:\Users\SKR\Documents\main\iParserTest\ParserTest.cpp
+
+
+
+
+

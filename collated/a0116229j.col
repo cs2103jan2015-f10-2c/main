@@ -56,7 +56,7 @@ const string Logic::ACCEPTABLE_PRIORITY_LOW_1 = "low";
 const string Logic::ACCEPTABLE_PRIORITY_LOW_2 = "L";
 const string Logic::ACCEPTABLE_PRIORITY_LOW_3 = "l";
 
-const char Logic:: PRIORITY_HIGH = 'H';
+const char Logic::PRIORITY_HIGH = 'H';
 const char Logic::PRIORITY_MEDIUM = 'M';
 const char Logic::PRIORITY_LOW = 'L';
 const char Logic::PRIORITY_INVALID = 'E';
@@ -161,11 +161,11 @@ Logic::~Logic() {}
 /////////////////////////
 
 /*All the print functions are for Command line prompt debugging purposes*/
-
+/*does not appear on GUI*/
 void Logic::printSchedule(vector<Item> retrievedDisplaySchedule){
 	cout << endl;
 	cout << SCHEDULE_HEAD << endl;
-	
+
 	for (unsigned int lineNumber = FIRST_INDEX; lineNumber < retrievedDisplaySchedule.size(); lineNumber++){
 		cout << "[Item " << lineNumber + 1 << "]" << endl;
 		printItem(retrievedDisplaySchedule[lineNumber]);
@@ -273,15 +273,15 @@ void Logic::printChangeSavingDirectorySuccessful(){
 ////*MAIN FUNCTIONS*////
 ////////////////////////
 
-
+/*interprets the command given by the parser and calls for appropriate functions*/
 MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
+	
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(_logicParser, input);
 	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
 
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
-	MESSAGE_AND_SCHEDULE userDisplayInformation;
 	list<COMMAND_AND_TEXT>::iterator iter;
 
 	try{
@@ -300,6 +300,7 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
 		} else if (command == COMMAND_SEARCH){
 			returnMessage = modifyKeywordVec(itemInformation);
 		} else if (command == COMMAND_VIEW){
+			/*Clear keyword vector when the user changes the filtertype. keyword vec is only necessary for view-date*/
 			clearKeyWordVec();
 			returnMessage = filterTask(itemInformation);
 		} else if (command == COMMAND_SAVE){
@@ -322,25 +323,32 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
 			returnMessage = MESSAGE_INVALID_INPUT;
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_INPUT;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
 
-	userDisplayInformation = returnUserDisplayInformation(returnMessage);
+	MESSAGE_AND_SCHEDULE userDisplayInformation = returnUserDisplayInformation(returnMessage);
 	return userDisplayInformation;
 }
 
 
 MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage){
+	
 	resetAndGetDisplaySchedule();
-
 	vector<Item> displayVector = sortTask();
-	MESSAGE_AND_SCHEDULE userDisplayInformation;
-	userDisplayInformation.message = returnMessage;
-	userDisplayInformation.displaySchedule = displayVector;
+	MESSAGE_AND_SCHEDULE userDisplayInformation = setUserDisplayInformation(returnMessage, displayVector);
+
 	writeDataOntoFile();
+
+	return userDisplayInformation;
+}
+
+
+MESSAGE_AND_SCHEDULE Logic::setUserDisplayInformation(string message, vector<Item> displayVector){
+	MESSAGE_AND_SCHEDULE userDisplayInformation;
+	userDisplayInformation.message = message;
+	userDisplayInformation.displaySchedule = displayVector;
 	return userDisplayInformation;
 }
 
@@ -358,6 +366,7 @@ list<COMMAND_AND_TEXT> Logic::getParseInfo(iParser parser, string input){
 
 string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
+
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
 
@@ -365,6 +374,7 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	modifyItem(parseInfoToBeProcessed, newItemToBeAdded);
 
 	ItemVerification verifier(*newItemToBeAdded, _nextItemID);
+
 	try{
 		if (verifier.isValidItem()) {
 			string returnMessage = addItemToSchedule(newItemToBeAdded);
@@ -372,10 +382,9 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_FAILED_ADD;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
-		
+
 	}
 
 	string errorList = getErrorList(verifier);
@@ -400,6 +409,7 @@ string Logic::addItemToSchedule(Item* newItemToBeAdded){
 
 void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
+
 	newItem->setItemName(parseInfoToBeProcessed.begin()->text);
 	newItem->setItemID(_nextItemID);
 }
@@ -407,6 +417,7 @@ void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> par
 
 unsigned int Logic::increaseItemID(){
 	assert(_nextItemID >= SIZE_ZERO);
+
 	_nextItemID++;
 	return _nextItemID;
 }
@@ -414,8 +425,10 @@ unsigned int Logic::increaseItemID(){
 
 void Logic::removeItemPointer(Item* itemPointer){
 	assert(itemPointer != NULL);
+
 	itemPointer = NULL;
 	delete itemPointer;
+	return;
 }
 
 
@@ -430,14 +443,13 @@ void Logic::removeItemPointer(Item* itemPointer){
 string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 	try{
 		if (isValidLineIndex(lineIndexToBeDeleted)){
-			string displayMessage = deleteItemFromSchedule(lineIndexToBeDeleted);
-			return displayMessage;
+			string returnMessage = deleteItemFromSchedule(lineIndexToBeDeleted);
+			return returnMessage;
 		} else{
 			printDeleteTaskFailed();
 			throw MESSAGE_LOGIC + INVALID_LINE_INDEX;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -447,6 +459,7 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 
 string Logic::deleteItemFromSchedule(unsigned int lineIndexToBeDeleted){
 	assert(lineIndexToBeDeleted > SIZE_ZERO);
+
 	_logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 	printDeleteTaskSuccessful(lineIndexToBeDeleted);
 	return MESSAGE_SUCCESSFUL_DELETE;
@@ -460,16 +473,17 @@ int Logic::convertToDigit(string text) {
 	return digit;
 }
 
+
 string Logic::undoPreviousAction(){
 	string message = _logicSchedule.undoLastCommand();
+
 	try{
 		if (message != MESSAGE_UNABLE_TO_UNDO){
 			return MESSAGE_SUCCESSFUL_UNDO;
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_UNABLE_TO_UNDO;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -482,6 +496,9 @@ string Logic::undoPreviousAction(){
 /////////////////////////////////////
 
 
+//if valid line index && valid item, replace the item in the schedule
+//if valid line index but invalid item, display error list
+//if invalid line index, display invalid line index
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
 	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
 	try{
@@ -509,8 +526,7 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 			printEditTaskInvalidLineIndex();
 			throw MESSAGE_LOGIC + MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INDEX;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -564,8 +580,7 @@ string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemT
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_MODIFIER;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -584,8 +599,7 @@ char Logic::checkPriority(string priorityToBeModified){
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_PRIORITY;
 		}
-	}
-	catch (string errorMessage) {
+	} catch (string errorMessage) {
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -596,7 +610,7 @@ char Logic::checkPriority(string priorityToBeModified){
 DateTime Logic::interpreteDateTime(string infoToBeInterpreted, DateTime existingTimeSetting){
 	istringstream inputTime(infoToBeInterpreted);
 	int YYYY, MM, DD, hh, mm;
-	int YYYY2, MM2, DD2, hh2, mm2;
+	int YYYYNew, MMNew, DDNew, hhNew, mmNew;
 
 	YYYY = existingTimeSetting.getYear();
 	MM = existingTimeSetting.getMonth();
@@ -604,39 +618,39 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted, DateTime existing
 	hh = existingTimeSetting.getHour();
 	mm = existingTimeSetting.getMinute();
 
-	inputTime >> YYYY2 >> MM2 >> DD2 >> hh2 >> mm2;
+	inputTime >> YYYYNew >> MMNew >> DDNew >> hhNew >> mmNew;
 
 	//if new time input is user defined, make appropriate changes
-	if (YYYY2 != EMPTY_TIME_FIELD){
-		YYYY = YYYY2;
+	if (YYYYNew != EMPTY_TIME_FIELD){
+		YYYY = YYYYNew;
 	}
-	if (MM2 != EMPTY_TIME_FIELD){
-		MM = MM2;
+	if (MMNew != EMPTY_TIME_FIELD){
+		MM = MMNew;
 	}
-	if (DD2 != EMPTY_TIME_FIELD){
-		DD = DD2;
+	if (DDNew != EMPTY_TIME_FIELD){
+		DD = DDNew;
 	}
-	if (hh2 != EMPTY_TIME_FIELD){
-		hh = hh2;
+	if (hhNew != EMPTY_TIME_FIELD){
+		hh = hhNew;
 	}
-	if (mm2 != EMPTY_TIME_FIELD){
-		mm = mm2;
+	if (mmNew != EMPTY_TIME_FIELD){
+		mm = mmNew;
 	}
 
 	//when user did not specified any dates, set current date
-	if (YYYY == EMPTY_TIME_FIELD && YYYY2 == EMPTY_TIME_FIELD && MM == EMPTY_TIME_FIELD && MM2 == EMPTY_TIME_FIELD && DD == EMPTY_TIME_FIELD && DD2 == EMPTY_TIME_FIELD){
+	if (YYYY == EMPTY_TIME_FIELD && YYYYNew == EMPTY_TIME_FIELD && MM == EMPTY_TIME_FIELD && MMNew == EMPTY_TIME_FIELD && DD == EMPTY_TIME_FIELD && DDNew == EMPTY_TIME_FIELD){
 		YYYY = getCurrentTime().getYear();
 		MM = getCurrentTime().getMonth();
 		DD = getCurrentTime().getDay();
 	}
 
 	//if user did not specify year, set current year
-	if (YYYY == EMPTY_TIME_FIELD && YYYY2 == EMPTY_TIME_FIELD){
+	if (YYYY == EMPTY_TIME_FIELD && YYYYNew == EMPTY_TIME_FIELD){
 		YYYY = getCurrentTime().getYear();
 	}
-	
+
 	//if user wants to remove the datetime
-	if (YYYY2 == TIME_FIELD_REMOVED && MM2 == TIME_FIELD_REMOVED && DD2 == TIME_FIELD_REMOVED && hh2 == TIME_FIELD_REMOVED && mm2 == TIME_FIELD_REMOVED){
+	if (YYYYNew == TIME_FIELD_REMOVED && MMNew == TIME_FIELD_REMOVED && DDNew == TIME_FIELD_REMOVED && hhNew == TIME_FIELD_REMOVED && mmNew == TIME_FIELD_REMOVED){
 		YYYY = EMPTY_TIME_FIELD;
 		MM = EMPTY_TIME_FIELD;
 		DD = EMPTY_TIME_FIELD;
@@ -670,8 +684,7 @@ string Logic::markDone(unsigned int lineIndex){
 			printInvalidLineIndex();
 			throw MESSAGE_LOGIC + INVALID_LINE_INDEX;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -688,8 +701,7 @@ string Logic::markUndone(unsigned int lineIndex){
 			throw MESSAGE_LOGIC + INVALID_LINE_INDEX;
 
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -710,10 +722,8 @@ string Logic::changeCompletion(unsigned int lineIndex, string completion){
 			done = false;
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_COMPLETION;
-
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 		return MESSAGE_INVALID_COMPLETION;
@@ -752,8 +762,7 @@ vector<Item> Logic::sortTask(){
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_SORTTYPE;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -771,8 +780,7 @@ string Logic::changeCurrentSorting(string sortingMethod){
 			printSortTaskFailed();
 			throw MESSAGE_LOGIC + MESSAGE_FAILED_SORT + MESSAGE_INVALID_SORTTYPE;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -857,7 +865,7 @@ DateTime Logic::interpretStartEndTime(string identifier, int YYYY, int MM, int D
 	}
 	if (identifier == MODIFIER_END && hh == EMPTY_TIME_FIELD && mm == EMPTY_TIME_FIELD){
 		hh = FINAL_HOUR;
-			mm = FINAL_MINUTE;
+		mm = FINAL_MINUTE;
 	}
 	cout << YYYY << SPACE_BAR << MM << SPACE_BAR << DD << SPACE_BAR << hh << SPACE_BAR << mm << endl;
 	DateTime startEndTime(YYYY, MM, DD, hh, mm);
@@ -880,8 +888,7 @@ string Logic::filterByCompletion(bool completion){
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_COMPLETION;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -899,10 +906,9 @@ char Logic::stringConvertToPriorityChar(string priority){
 		} else if (priority == FILTER_PRIORITY_LOW){
 			return PRIORITY_LOW;
 		} else {
-			throw MESSAGE_LOGIC+ MESSAGE_INVALID_PRIORITY;
+			throw MESSAGE_LOGIC + MESSAGE_INVALID_PRIORITY;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -918,8 +924,7 @@ string Logic::filterByPriority(char priority){
 		} else {
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_PRIORITY;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -953,8 +958,7 @@ string Logic::searchTask(){
 		} else {
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_INPUT;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -1039,6 +1043,7 @@ void Logic::saveBasicInformationToTextFile(){
 	writeFile << _fileNameToBeSaved << endl;
 	writeFile << getScheduleSize() << endl;
 	writeFile << _nextItemID << endl;
+	return;
 }
 
 
@@ -1093,8 +1098,7 @@ string Logic::retrieveBasicInformation(){
 			createNewTextFile();
 			throw MESSAGE_LOGIC + MESSAGE_FILE_NOT_EXISTING;
 		}
-	}
-	catch (string errorMessage){
+	} catch (string errorMessage){
 		cerr << errorMessage << endl;
 		_logicLogger.writeToLogFile(errorMessage);
 	}
@@ -1198,7 +1202,7 @@ string Logic::readDataFromFile() {
 	cout << SCHEDULE_RETRIEVED << endl;
 	resetAndGetDisplaySchedule();
 	sortTask();
-	
+
 	return MESSAGE_READFILE_COMPLETE;
 }
 
@@ -1561,7 +1565,8 @@ public:
 	//and display vector
 	//pre : takes in a string of message 
 	//post : returns a MESSAGE_AND_SCHEDULE object created
-	MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage);
+	MESSAGE_AND_SCHEDULE returnUserDisplayInformation(string returnMessage);
+	MESSAGE_AND_SCHEDULE setUserDisplayInformation(string message, vector<Item> displayVector);
 
 
 	//calls for parser and get parsed info of the user input
