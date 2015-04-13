@@ -1,4 +1,4 @@
-//	@author A0111238U
+//@author A0111238U
 //	Parser
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng
@@ -10,6 +10,7 @@ NOTES TO DEVELOPERS
 - Parser returns a list of 2 strings, command and text
 - If there is at least one invalid input, list is cleared and invalid string is pushed to list and
   sent to logic
+- Note that ParserTest contains 44 muted test methods 
 ===================================================================================================
 */
 
@@ -216,7 +217,7 @@ public:
 	//Post:		determines the modifiers available in vector and executes the respective modifiers
 	//			if any modifiers cannot be determined or if sub functions throw an exception, this function will stop it's execution
 	string checkAndSetTokenisedInformation(vector<string>&, const string);
-	// Pre:		ModifierType is "item", "date", "due", "start", "end", "description", "desc" or "priority"
+	// Pre:		ModifierType is "name", "date", "due", "start", "end", "description", "desc", "priority", "p", "remove" or "rmv"
 	// Post:	sets modifier and text to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if blank text is detected
 	string executeModifierAndTextParsing(const string, string);

@@ -1,4 +1,4 @@
-//	@author A0111238U
+//@author A0111238U
 //	Parser
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng
@@ -289,7 +289,7 @@ string iParser::executeCommandAndTextParsing(const string commandType, string te
 }
 
 // function used for commands with just command
-// e.g. clear", "undo" or "exit"
+// e.g. "clear", "undo" or "exit"
 string iParser::executeSingularCommandParsing(const string commandType, string userInput) {
 	convertToLowerCase(userInput);
 	if (userInput == commandType) {
@@ -302,7 +302,7 @@ string iParser::executeSingularCommandParsing(const string commandType, string u
 }
 
 // only executed if 'add' or 'exit' is the command and there is modifier(s)
-// function 
+// function will push modifiers and their respective text to _parseInfo
 string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInformation, const string command) {
 	assert(tokenisedInformation.size() > 1);
 
@@ -395,6 +395,8 @@ string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInforma
 	return MESSAGE_SUCCESS;
 }
 
+// function used for commands with just command
+// e.g. "name", "date", "due", "start", "end", "description", "desc", "priority", "p", "remove" or "rmv"
 string iParser::executeModifierAndTextParsing(const string ModifierType, string text) {
 	assert(ModifierType != STRING_BLANK);
 

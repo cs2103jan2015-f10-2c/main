@@ -1,7 +1,17 @@
-//	@author A0111238U
+//@author A0111238U
 //	ParserTest
 //	Tutorial F10-2C
 //	Coder:	Ng Chon Beng
+
+/*
+===================================================================================================
+NOTES
+- Parser test methods muted as parser functions are all private except for parse which is called
+  by Logic
+- To execute unit testing for parser test methods, change private functions in parser.h to public
+- TEST COVERAGE: 94:58%
+===================================================================================================
+*/
 
 #include "stdafx.h"
 #include "CppUnitTest.h"
