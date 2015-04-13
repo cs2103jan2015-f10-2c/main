@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-//@author A0116229J
-//Coder : Yu Young Bin
-=======
->>>>>>> d64ecb1bd4aef2859d4c110947d1d2d8cbe87c70
 
 
 //@author A0116229J
