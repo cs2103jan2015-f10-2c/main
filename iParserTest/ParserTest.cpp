@@ -1,3 +1,8 @@
+//	@author A0111238U
+//	ParserTest
+//	Tutorial F10-2C
+//	Coder:	Ng Chon Beng
+
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
@@ -10,17 +15,224 @@ private:
 	iParser testParser;
 public:
 
-	/*TEST_METHOD(parserExecuteParsingTest) {
+	TEST_METHOD(parserExecuteParsingTest) {
+		string testInput[] = { "add item1 -date 1 feb 2015, 2pm to 11 dec 2015, 3pm -DESC testDesc -p H",
+			"Delete 123",
+			"Clear",
+			"edit 2 -remove priority",
+			"edit 3 -remove date",
+			"edit 4 -remove desc",
+			"edit 5 -name testName",
+			"UnDo",
+			"sort date",
+			"sort name",
+			"sort p",
+			"sort done",
+			"sort update",
+			"search testSearch",
+			"view All",
+			"view DONE",
+			"view Undone",
+			"view H",
+			"view Med",
+			"view LOW",
+			"view 12 nov to 13 dec",
+			"view 12 nov",
+			"save C:\Folder1",
+			"done 1",
+			"undone 2",
+			"exit" };
+		string expectedCommand[][5] = { { "add", "start", "end", "description", "priority" },
+		{ "delete" },
+		{ "clear" },
+		{ "edit", "priority" },
+		{ "edit", "start", "end" },
+		{ "edit", "description" },
+		{ "edit", "name" },
+		{ "undo" },
+		{ "sort" },
+		{ "sort" },
+		{ "sort" },
+		{ "sort" },
+		{ "sort" },
+		{ "search" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "view" },
+		{ "save" },
+		{ "done" },
+		{ "undone" },
+		{ "exit" } };
+		string expectedText[][5] = { { "item1", "2015 2 1 14 00", "2015 12 11 15 00", "testDesc", "high" },
+		{ "123" },
+		{ "" },
+		{ "2", "" },
+		{ "3", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2" },
+		{ "4", "" },
+		{ "5", "testName" },
+		{ "" },
+		{ "date" },
+		{ "name" },
+		{ "priority" },
+		{ "done" },
+		{ "update" },
+		{ "testSearch" },
+		{ "all" },
+		{ "done" },
+		{ "undone" },
+		{ "high" },
+		{ "medium" },
+		{ "low" },
+		{ "date -1 11 12 -1 -1 -1 12 13 -1 -1" },
+		{ "date -1 11 12 -1 -1 -1 11 12 -1 -1" },
+		{"C:\Folder1"},
+		{ "1" },
+		{"2"},
+		{""} };
 
-	}*/
+		for (int i = 0; i < 7; i++) {
+			testParser.executeParsing(testInput[i]);
 
-	/*TEST_METHOD(parserExecuteAddParsingTest) {
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
 
-	}*/
+			for (int j = 0; iter != testList.end(); j++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i][j], actualCommand);
+				Assert::AreEqual(expectedText[i][j], actualText);
+			}
 
-	/*TEST_METHOD(parserExecuteEditParsing) {
+			testParser.clearParseInfo();
+		}
+	}
 
-	}*/
+	TEST_METHOD(parserExecuteAddParsingTest) {
+		string testInput[] = { "item1 -date 10 Nov 2015, 2359hr -DESC testDesc -p H",
+			"item2 -date 1/2/2015 to 2/3/2015",
+			"item3 -Due 1234hr, 12 nov",
+			"item4 -start 12 nov, 1234pm",
+			"item5 -END 12pm",
+			"item6 -remove date",
+			"item7 -NaMe testName",
+			"item8 -date 10 nov -due 11 dec",
+			"item9 -date 10 nov -start 11 DEC",
+			"item10 -date 10 nov -end 11 Dec",
+			"item11 -due 10 nov -start 11 dec",
+			"item12 -due 10 nov -end 11 Dec",
+			"item13 -p H -priority Low",
+			"item14 -desc testDescOne -description testDescTwo" };
+		string expectedCommand[][4] = { { "add", "start", "description", "priority" },
+		{ "add", "start", "end" },
+		{ "add", "end" },
+		{ "add", "start" },
+		{ "add", "end" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" } };
+		string expectedText[][4] = { { "item1", "2015 11 10 23 59", "testDesc", "high" },
+		{ "item2", "2015 2 1 -1 -1", "2015 3 2 -1 -1" },
+		{ "item3", "-1 11 12 12 34" },
+		{ "item4", "-1 11 12 12 34" },
+		{ "item5", "-1 -1 -1 12 00" },
+		{ "Unable to use \'remove\' modifier when using \'add\' command" },
+		{ "Unable to use \'name\' modifier when using \'add\' command" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use \'priority\' modifier more than once" },
+		{ "Unable to use \'description\' modifier more than once" } };
+
+		for (int i = 0; i < 14; i++) {
+			testParser.executeAddParsing(testInput[i]);
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+			for (int j = 0; iter != testList.end(); j++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i][j], actualCommand);
+				Assert::AreEqual(expectedText[i][j], actualText);
+			}
+
+			testParser.clearParseInfo();
+		}
+	}
+
+	TEST_METHOD(parserExecuteEditParsing) {
+		string testInput[] = { "1 -name testName -date 10 Nov 2015, 2359hr -Desc testDesc -p H",
+			"2 -REMOVE date",
+			"3 -date 1/2/2015 to 2/3/2015",
+			"4 -Start 12 nov, 1234pm",
+			"5 -end 12pm",
+			"6 -remove date -rmv desc",
+			"7 -name testNameOne -name TestNameTwo",
+			"8 -date 10 nov -due 11 dec",
+			"9 -date 10 nov -start 11 DEC",
+			"10 -date 10 nov -end 11 Dec",
+			"11 -due 10 nov -start 11 dec",
+			"12 -due 10 nov -end 11 Dec",
+			"13 -p H -priority Low",
+			"14 -desc testDescOne -description testDescTwo" };
+		string expectedCommand[][5] = { { "edit", "name", "start", "description", "priority" },
+		{ "edit", "start", "end" },
+		{ "edit", "start", "end" },
+		{ "edit", "start" },
+		{ "edit", "end" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" },
+		{ "invalid" } };
+		string expectedText[][5] = { { "1", "testName", "2015 11 10 23 59", "testDesc", "high" },
+		{ "2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2" },
+		{ "3", "2015 2 1 -1 -1", "2015 3 2 -1 -1" },
+		{ "4", "-1 11 12 12 34" },
+		{ "5", "-1 -1 -1 12 00" },
+		{ "Unable to use \'remove\' modifier more than once" },
+		{ "Unable to use \'name\' modifier more than once" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use multiple date time modifiers" },
+		{ "Unable to use \'priority\' modifier more than once" },
+		{ "Unable to use \'description\' modifier more than once" } };
+
+		for (int i = 0; i < 12; i++) {
+			testParser.executeEditParsing(testInput[i]);
+
+			list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+			list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+			for (int j = 0; iter != testList.end(); j++, iter++) {
+				string actualCommand = iter->command;
+				string actualText = iter->text;
+				Assert::AreEqual(expectedCommand[i][j], actualCommand);
+				Assert::AreEqual(expectedText[i][j], actualText);
+			}
+
+			testParser.clearParseInfo();
+		}
+	}
 
 	TEST_METHOD(parserExecuteSortParsingTest) {
 		// testInput tests for all recognised cases
@@ -64,46 +276,46 @@ public:
 		}
 	}
 
-	//TEST_METHOD(parserExecuteViewParsingTest) {
-	//	// testInput tests for all recognised cases
-	//	string testInput[] = { "all", "DONE", "Undone", "priority", "p" };
-	//	string expectedCommand = "view";
-	//	string expectedText[] = { "all", "done", "undone", "priority", "priority" };
+	TEST_METHOD(parserExecuteViewParsingTest) {
+		// testInput tests for all recognised cases
+		string testInput[] = { "all", "DONE", "Undone", "12 nov to 13 dec", "12 nov" };
+		string expectedCommand = "view";
+		string expectedText[] = { "all", "done", "undone", "date -1 11 12 -1 -1 -1 12 13 -1 -1", "date -1 11 12 -1 -1 -1 11 12 -1 -1" };
 
-	//	for (int i = 0; i < 5; i++) {
-	//		testParser.executeViewParsing(testInput[i]);
-	//	}
+		for (int i = 0; i < 5; i++) {
+			testParser.executeViewParsing(testInput[i]);
+		}
 
-	//	list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-	//	list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
-	//	for (int i = 0; iter != testList.end(); i++, iter++) {
-	//		string actualCommand = iter->command;
-	//		string actualText = iter->text;
-	//		Assert::AreEqual(expectedCommand, actualCommand);
-	//		Assert::AreEqual(expectedText[i], actualText);
-	//	}
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
+		}
 
-	//	testParser.clearParseInfo();
+		testParser.clearParseInfo();
 
-	//	// testInput tests for other cases which will fail
-	//	string testInputFalse[] = { "test", " ", "" };
-	//	string expectedCommandFalse = "invalid";
-	//	string expectedTextFalse = "Invalid view";
+		// testInput tests for other cases which will fail
+		string testInputFalse[] = { "test", " ", "" };
+		string expectedCommandFalse = "invalid";
+		string expectedTextFalse = "Invalid view";
 
-	//	for (int i = 0; i < 3; i++) {
-	//		testParser.executeViewParsing(testInputFalse[i]);
-	//	}
+		for (int i = 0; i < 3; i++) {
+			testParser.executeViewParsing(testInputFalse[i]);
+		}
 
-	//	testList = testParser.getParseInfo();
-	//	iter = testList.begin();
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
 
-	//	for (int i = 0; iter != testList.end(); i++, iter++) {
-	//		string actualCommand = iter->command;
-	//		string actualText = iter->text;
-	//		Assert::AreEqual(expectedCommandFalse, actualCommand);
-	//		Assert::AreEqual(expectedTextFalse, actualText);
-	//	}
-	//}
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommandFalse, actualCommand);
+			Assert::AreEqual(expectedTextFalse, actualText);
+		}
+	}
 
 	TEST_METHOD(parserExecuteCommandAndTextParsingTest) {
 		// testText[4] tests for invalid case where blank string is not allowed
@@ -283,7 +495,7 @@ public:
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
-		
+
 		for (int i = 0; iter != testList.end(); i++, iter++) {
 			string actualCommand = iter->command;
 			string actualText = iter->text;
@@ -538,7 +750,7 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserSplitAndSetStartEndTest) {
+	TEST_METHOD(parserSplitAndSetStartEndDateTimeTest) {
 		string testDatesForNoComma[] = { "10AM to 1PM", "930AM to 1230PM", "1 Oct to 23 Oct", "1 Oct 2012 - 23 Oct 2015" };
 		string expectedStartForNoComma[] = { "-1 -1 -1 10 00", "-1 -1 -1 9 30", "-1 10 1 -1 -1", "2012 10 1 -1 -1" };
 		string expectedEndForNoComma[] = { "-1 -1 -1 13 00", "-1 -1 -1 12 30", "-1 10 23 -1 -1", "2015 10 23 -1 -1" };
@@ -555,7 +767,7 @@ public:
 		string end = "end";
 
 		for (int i = 0; i < 4; i++) {
-			testParser.splitAndSetNoCommaStartEndDateTime(testDatesForNoComma[i]);
+			testParser.splitAndSetStartEndDateTime(testDatesForNoComma[i]);
 		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
@@ -577,7 +789,7 @@ public:
 		testParser.clearParseInfo();
 
 		for (int i = 0; i < 2; i++) {
-			testParser.splitAndSetNoCommaStartEndDateTime(testDatesForNoComma[i]);
+			testParser.splitAndSetStartEndDateTime(testDatesForOneComma[i]);
 		}
 
 		testList = testParser.getParseInfo();
@@ -589,17 +801,17 @@ public:
 
 			if (i % 2 == 0) {
 				Assert::AreEqual(start, actualCommand);
-				Assert::AreEqual(expectedStartForNoComma[i / 2], actualText);
+				Assert::AreEqual(expectedStartForOneComma[i / 2], actualText);
 			} else {
 				Assert::AreEqual(end, actualCommand);
-				Assert::AreEqual(expectedEndForNoComma[i / 2], actualText);
+				Assert::AreEqual(expectedEndForOneComma[i / 2], actualText);
 			}
 		}
 
 		testParser.clearParseInfo();
 
 		for (int i = 0; i < 2; i++) {
-			testParser.splitAndSetNoCommaStartEndDateTime(testDatesForNoComma[i]);
+			testParser.splitAndSetStartEndDateTime(testDatesForTwoCommas[i]);
 		}
 
 		testList = testParser.getParseInfo();
@@ -611,11 +823,36 @@ public:
 
 			if (i % 2 == 0) {
 				Assert::AreEqual(start, actualCommand);
-				Assert::AreEqual(expectedStartForNoComma[i / 2], actualText);
+				Assert::AreEqual(expectedStartForTwoCommas[i / 2], actualText);
 			} else {
 				Assert::AreEqual(end, actualCommand);
-				Assert::AreEqual(expectedEndForNoComma[i / 2], actualText);
+				Assert::AreEqual(expectedEndForTwoCommas[i / 2], actualText);
 			}
+		}
+	}
+
+	TEST_METHOD(parserSplitAndSetViewDateRangeTest) {
+		string testDateRange[] = { "10 Apr to 10 May", "abc to def" };
+		string expectedCommand = "view";
+		string expectedText[] = { "date -1 4 10 -1 -1 -1 5 10 -1 -1", "date -1 4 10 -1 -1 -1 4 10 -1 -1" };
+
+		for (int i = 0; i < 1; i++) {
+			try {
+				testParser.splitAndSetViewDateRange(testDateRange[i]);
+			} catch (string& exceptionMessage) {
+				string expected = "Invalid date time";
+				Assert::AreEqual(expected, exceptionMessage);
+			}
+		}
+
+		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand, actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
 		}
 	}
 

@@ -75,7 +75,9 @@ const string iParser::STRING_TIME_INITIALISE = "-1 -1";
 const string iParser::STRING_MINUTE_INITIALISE = "00";
 const string iParser::STRING_DATE_TIME_REMOVE = "-2 -2 -2 -2 -2";
 const string iParser::STRING_BLANK = "";
+const string iParser::STRING_ZERO = "0";
 const string iParser::STRING_NEGATIVE_ONE = "-1";
+
 const char iParser::CHAR_SPACE = ' ';
 const char iParser::CHAR_TAB = '\t';
 const char iParser::CHAR_COMMA = ',';
@@ -115,6 +117,7 @@ const unsigned int iParser::NUMBER_OF_HOURS = 12;
 const unsigned int iParser::HOURS_ZERO = 0;
 const unsigned int iParser::HOURS_ONE_PM = 1;
 const unsigned int iParser::HOURS_ELEVEN_PM = 11;
+const string iParser::HOURS_TWELVE_AM = "12";
 
 const unsigned int iParser::INDEX_START = 0;
 const unsigned int iParser::INDEX_INVALID = -1;
@@ -231,6 +234,11 @@ string iParser::executeSortParsing(string sortType) {
 }
 
 string iParser::executeViewParsing(string viewType) {
+	if (viewType == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
+		return MESSAGE_FAILURE;
+	}
+
 	convertToLowerCase(viewType);
 	string tempDate = STRING_BLANK;
 
@@ -241,8 +249,6 @@ string iParser::executeViewParsing(string viewType) {
 			setParseInfo(COMMAND_VIEW, STRING_DONE);
 		} else if (viewType == STRING_UNDONE) {
 			setParseInfo(COMMAND_VIEW, STRING_UNDONE);
-		} else if (viewType == STRING_PRIORITY || viewType == STRING_PRIORITY_P) {
-			setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
 		} else if (viewType == STRING_HIGH || viewType == STRING_H) {
 			setParseInfo(COMMAND_VIEW, STRING_HIGH);
 		} else if (viewType == STRING_MEDIUM || viewType == STRING_MED || viewType == STRING_M) {
@@ -250,8 +256,10 @@ string iParser::executeViewParsing(string viewType) {
 		} else if (viewType == STRING_LOW || viewType == STRING_L) {
 			setParseInfo(COMMAND_VIEW, STRING_LOW);
 		} else if (hasStartEndDateTime(viewType)) {
+			// if there is a range in view date
 			splitAndSetViewDateRange(viewType);
 		} else if (isValidDate(viewType, tempDate)) {
+			// if there is only a single date
 			string viewInfo = tempDate + CHAR_SPACE + STRING_TIME_INITIALISE;
 			viewInfo = STRING_DATE + CHAR_SPACE + viewInfo + CHAR_SPACE + viewInfo;
 			setParseInfo(COMMAND_VIEW, viewInfo);
@@ -267,6 +275,8 @@ string iParser::executeViewParsing(string viewType) {
 	return MESSAGE_SUCCESS;
 }
 
+// function used for commands with command and text
+// e.g. "delete", "del", "search", "save", "done" or "undone"
 string iParser::executeCommandAndTextParsing(const string commandType, string text) {
 	if (text != STRING_BLANK) {
 		convertToLowerCase(text);
@@ -278,7 +288,10 @@ string iParser::executeCommandAndTextParsing(const string commandType, string te
 	}
 }
 
+// function used for commands with just command
+// e.g. clear", "undo" or "exit"
 string iParser::executeSingularCommandParsing(const string commandType, string userInput) {
+	convertToLowerCase(userInput);
 	if (userInput == commandType) {
 		setParseInfo(commandType);
 		return MESSAGE_SUCCESS;
@@ -288,6 +301,8 @@ string iParser::executeSingularCommandParsing(const string commandType, string u
 	}
 }
 
+// only executed if 'add' or 'exit' is the command and there is modifier(s)
+// function 
 string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInformation, const string command) {
 	assert(tokenisedInformation.size() > 1);
 
@@ -831,6 +846,10 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 	assert(dateString != STRING_BLANK);
 	trimText(dateString);
 
+	if (dateString == STRING_BLANK) {
+		return false;
+	}
+
 	try {
 		const unsigned int numberOfObliques = retrieveCount(dateString, CHAR_OBLIQUE);
 		if (numberOfObliques > 2 || numberOfObliques < 0) {
@@ -854,7 +873,6 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 
 bool iParser::isValidTime(string timeString, string& timeToBeSet) {
 	assert(timeString != STRING_BLANK);
-
 	removeWhiteSpace(timeString);
 
 	string suffix = STRING_BLANK;
@@ -1012,6 +1030,10 @@ string iParser::splitAndSetColonTimeString(string timeString, const string suffi
 		throw false;
 	}
 
+	if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
+		hour = STRING_ZERO;
+	}
+
 	ostringstream output;
 	output << hour << CHAR_SPACE << minute;
 
@@ -1050,6 +1072,10 @@ string iParser::splitAndSetNoColonTimeString(string timeString, const string suf
 
 	if (!isAppropriateTime(hour, minute, suffix)) {
 		throw false;
+	}
+
+	if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
+		hour = STRING_ZERO;
 	}
 
 	ostringstream output;
