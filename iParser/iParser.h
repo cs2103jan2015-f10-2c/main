@@ -280,8 +280,9 @@ public:
 	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo
 	//			if invalid dateTime range is input, invalid input message will be thrown as exception
 	string splitAndSetStartEndDateTime(const string&);
-	// Pre:		
-	// Post:
+	// Pre:		hasStartEndDateTime is true
+	// Post:	determines the dateTime range which user inputs and sets view dateTime to _parseInfo
+	//			if invalid dateTime range is input, invalid input message will be thrown as exception
 	string splitAndSetViewDateRange(const string&);
 	// Pre:		startEndDateTime has no commas detected
 	// Post:	determines the dateTime range which user inputs and sets start AND end dateTime to _parseInfo

@@ -231,6 +231,11 @@ string iParser::executeSortParsing(string sortType) {
 }
 
 string iParser::executeViewParsing(string viewType) {
+	if (viewType == STRING_BLANK) {
+		setParseInfo(MESSAGE_INVALID, MESSAGE_INVALID_VIEW);
+		return MESSAGE_FAILURE;
+	}
+
 	convertToLowerCase(viewType);
 	string tempDate = STRING_BLANK;
 
@@ -241,8 +246,6 @@ string iParser::executeViewParsing(string viewType) {
 			setParseInfo(COMMAND_VIEW, STRING_DONE);
 		} else if (viewType == STRING_UNDONE) {
 			setParseInfo(COMMAND_VIEW, STRING_UNDONE);
-		} else if (viewType == STRING_PRIORITY || viewType == STRING_PRIORITY_P) {
-			setParseInfo(COMMAND_VIEW, STRING_PRIORITY);
 		} else if (viewType == STRING_HIGH || viewType == STRING_H) {
 			setParseInfo(COMMAND_VIEW, STRING_HIGH);
 		} else if (viewType == STRING_MEDIUM || viewType == STRING_MED || viewType == STRING_M) {
@@ -279,6 +282,7 @@ string iParser::executeCommandAndTextParsing(const string commandType, string te
 }
 
 string iParser::executeSingularCommandParsing(const string commandType, string userInput) {
+	convertToLowerCase(userInput);
 	if (userInput == commandType) {
 		setParseInfo(commandType);
 		return MESSAGE_SUCCESS;
@@ -831,6 +835,10 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 	assert(dateString != STRING_BLANK);
 	trimText(dateString);
 
+	if (dateString == STRING_BLANK) {
+		return false;
+	}
+
 	try {
 		const unsigned int numberOfObliques = retrieveCount(dateString, CHAR_OBLIQUE);
 		if (numberOfObliques > 2 || numberOfObliques < 0) {
@@ -854,7 +862,6 @@ bool iParser::isValidDate(string dateString, string& dateToBeSet) {
 
 bool iParser::isValidTime(string timeString, string& timeToBeSet) {
 	assert(timeString != STRING_BLANK);
-
 	removeWhiteSpace(timeString);
 
 	string suffix = STRING_BLANK;
