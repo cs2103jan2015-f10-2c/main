@@ -3,6 +3,723 @@
 
 
 	/**
+	 * origin: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.cpp
+	 */
+
+
+#include <assert.h>
+#include <exception>
+#include "DateTimeVerification.h"
+
+const int DateTimeVerification::DATETIME_VERIFICATION_MIN_YEAR = 0;
+const int DateTimeVerification::DATETIME_VERIFICATION_MAX_YEAR = 9999;
+const int DateTimeVerification::DATETIME_VERIFICATION_MIN_MONTH = 1;
+const int DateTimeVerification::DATETIME_VERIFICATION_MAX_MONTH = 12;
+const int DateTimeVerification::DATETIME_VERIFICATION_MIN_DAY = 1;
+const int DateTimeVerification::DATETIME_VERIFICATION_MAX_DAY = 31;
+const int DateTimeVerification::DATETIME_VERIFICATION_MIN_HOUR = 0;
+const int DateTimeVerification::DATETIME_VERIFICATION_MAX_HOUR = 23;
+const int DateTimeVerification::DATETIME_VERIFICATION_MIN_MINUTE = 0;
+const int DateTimeVerification::DATETIME_VERIFICATION_MAX_MINUTE = 59;
+const int DateTimeVerification::DATETIME_VERIFICATION_EMPTYFIELD_DATETIME = -1;
+const int DateTimeVerification::DATETIME_VERIFICATION_INT_MINUS_TWO = -2;
+
+const int DateTimeVerification::DATETIME_VERIFICATION_DAY_29 = 29;
+const int DateTimeVerification::DATETIME_VERIFICATION_DAY_30 = 30;
+const int DateTimeVerification::DATETIME_VERIFICATION_DAY_31 = 31;
+const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_FEB = 2;
+const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_APR = 4;
+const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_JUN = 6;
+const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_SEP = 9;
+const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_NOV = 11;
+const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_4 = 4;
+const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_100 = 100;
+const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_400 = 400;
+
+const string DateTimeVerification::DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO = "Date/Time value less than -2";
+
+DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
+	_dateTimeObjectToVerify = dateTimeObject;
+	_year = _dateTimeObjectToVerify.getYear();
+	_month = _dateTimeObjectToVerify.getMonth();
+	_day = _dateTimeObjectToVerify.getDay();
+	_hour = _dateTimeObjectToVerify.getHour();
+	_minute = _dateTimeObjectToVerify.getMinute();
+}
+
+bool DateTimeVerification::isValidDateTimeValues() {
+	if (isValidYearRange() &&
+		isValidMonthRange() &&
+		isValidDayRange() &&
+		isValidHourRange() &&
+		isValidMinuteRange()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DateTimeVerification::isValidYearRange() {
+	if (_year >= DATETIME_VERIFICATION_MIN_YEAR && _year <= DATETIME_VERIFICATION_MAX_YEAR) {
+		return true;
+	} else if (_year == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+		return true;
+	} else {
+		assert(_year > DATETIME_VERIFICATION_MAX_YEAR || _year < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
+		return false;
+	}
+}
+
+bool DateTimeVerification::isValidMonthRange() {
+	if (_month >= DATETIME_VERIFICATION_MIN_MONTH && _month <= DATETIME_VERIFICATION_MAX_MONTH) {
+		return true;
+	} else if (_month == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+		return true;
+	} else {
+		assert(_month > DATETIME_VERIFICATION_MAX_MONTH || _month < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
+		return false;
+	}
+}
+
+bool DateTimeVerification::isValidDayRange() {
+	if (_day >= DATETIME_VERIFICATION_MIN_DAY && _day <= DATETIME_VERIFICATION_MAX_DAY) {
+		return true;
+	} else if (_day == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+		return true;
+	} else {
+		assert(_day > DATETIME_VERIFICATION_MAX_DAY || _day < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
+		return false;
+	}
+}
+
+bool DateTimeVerification::isValidHourRange() {
+	if (_hour >= DATETIME_VERIFICATION_MIN_HOUR && _hour <= DATETIME_VERIFICATION_MAX_HOUR) {
+		return true;
+	} else if (_hour == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+		return true;
+	} else {
+		assert(_hour > DATETIME_VERIFICATION_MAX_HOUR || _hour < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
+		return false;
+	}
+}
+
+bool DateTimeVerification::isValidMinuteRange() {
+	if (_minute >= DATETIME_VERIFICATION_MIN_MINUTE && _minute <= DATETIME_VERIFICATION_MAX_MINUTE) {
+		return true;
+	} else if (_minute == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+		return true;
+	} else {
+		assert(_minute > DATETIME_VERIFICATION_MAX_HOUR || _minute < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
+		return false;
+	}
+}
+
+bool DateTimeVerification::hasYearMonthDay() {
+	if (hasYear() && hasMonth() && hasDay()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DateTimeVerification::hasMonthDay() {
+	if (!hasYear() && hasMonth() && hasDay()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DateTimeVerification::hasYear() {
+	try {
+		if (!isValidYearRange()) {
+			return false;
+		} else if (_year == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+			return false;
+		} else if (_year <DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return true;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+}
+
+bool DateTimeVerification::hasMonth() {
+	try {
+		if (!isValidMonthRange()) {
+			return false;
+		} else if (_month == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+			return false;
+		} else if (_month <DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return true;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+}
+
+bool DateTimeVerification::hasDay() {
+	try {
+		if (!isValidDayRange()) {
+			return false;
+		} else if (_day == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+			return false;
+		} else if (_day <DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return true;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+}
+
+bool DateTimeVerification::hasHourMinute() {
+	try {
+		if (hasHour() && hasMinute()) {
+			return true;
+		} else if (_hour < DATETIME_VERIFICATION_INT_MINUS_TWO || _minute < DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return false;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+}
+
+bool DateTimeVerification::hasHour() {
+	try {
+		if (_hour >= DATETIME_VERIFICATION_MIN_HOUR && _hour <= DATETIME_VERIFICATION_MAX_HOUR) {
+			return true;
+		} else if (_hour < DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return false;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+}
+
+bool DateTimeVerification::hasMinute() {
+	try {
+		if (_minute >= DATETIME_VERIFICATION_MIN_MINUTE && _minute <= DATETIME_VERIFICATION_MAX_MINUTE) {
+			return true;
+		} else if (_minute < DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return false;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
+	}
+}
+
+
+bool DateTimeVerification::isValidTime() {
+	if (hasHour() && hasMinute()) {
+		return true;
+	} else if (!hasHour() && !hasMinute()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DateTimeVerification::isActualYearMonthDayDate() {
+	if ((_day == DATETIME_VERIFICATION_DAY_31) && (_month == DATETIME_VERIFICATION_MONTH_FEB || _month == DATETIME_VERIFICATION_MONTH_APR || _month == DATETIME_VERIFICATION_MONTH_JUN || _month == DATETIME_VERIFICATION_MONTH_SEP || _month == DATETIME_VERIFICATION_MONTH_NOV)) {
+		return false;
+	} else if ((_day == DATETIME_VERIFICATION_DAY_30) && (_month == DATETIME_VERIFICATION_MONTH_FEB)) {
+		return false;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_4 != 0)) {
+		return false;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_400 == 0)) {
+		return true;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_100 == 0)) {
+		return false;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_4 == 0)) {
+		return true;
+	} else {
+		return true;
+	}
+}
+
+
+////					   ////
+////PUBLIC FUNCTIONS BELOW ////
+////					   ////
+
+
+bool DateTimeVerification::isValidDateTime() {
+	if (isValidDateTimeValues()) {
+		if (hasYearMonthDay() && isActualYearMonthDayDate() && isValidTime()) {
+			return true;
+		} else if (!hasYear() && !hasMonth() && !hasDay() && !hasHour() && !hasMinute()) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+}
+	// End of segment: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.h
+	 */
+
+
+#ifndef DATETIME_VERIFICATION_H
+#define DATETIME_VERIFICATION_H
+
+#include <string>
+#include <iostream>
+#include "..\iStorage\DateTime.h"
+#include "..\iPlanner Log\Log.h"
+using namespace std;
+
+class DateTimeVerification {
+
+private:
+
+	static const int DATETIME_VERIFICATION_MIN_YEAR;
+	static const int DATETIME_VERIFICATION_MAX_YEAR;
+	static const int DATETIME_VERIFICATION_MIN_MONTH;
+	static const int DATETIME_VERIFICATION_MAX_MONTH;
+	static const int DATETIME_VERIFICATION_MIN_DAY;
+	static const int DATETIME_VERIFICATION_MAX_DAY;
+	static const int DATETIME_VERIFICATION_MIN_HOUR;
+	static const int DATETIME_VERIFICATION_MAX_HOUR;
+	static const int DATETIME_VERIFICATION_MIN_MINUTE;
+	static const int DATETIME_VERIFICATION_MAX_MINUTE;
+	static const int DATETIME_VERIFICATION_EMPTYFIELD_DATETIME;
+	static const int DATETIME_VERIFICATION_INT_MINUS_TWO;
+
+	static const int DATETIME_VERIFICATION_DAY_29;
+	static const int DATETIME_VERIFICATION_DAY_30;
+	static const int DATETIME_VERIFICATION_DAY_31;
+	static const int DATETIME_VERIFICATION_MONTH_FEB;
+	static const int DATETIME_VERIFICATION_MONTH_APR;
+	static const int DATETIME_VERIFICATION_MONTH_JUN;
+	static const int DATETIME_VERIFICATION_MONTH_SEP;
+	static const int DATETIME_VERIFICATION_MONTH_NOV;
+	static const int DATETIME_VERIFICATION_YEAR_4;
+	static const int DATETIME_VERIFICATION_YEAR_100;
+	static const int DATETIME_VERIFICATION_YEAR_400;
+
+	static const string DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+
+	Log _dateTimeVerificationLogger;
+	DateTime _dateTimeObjectToVerify;
+	int _year;
+	int _month;
+	int _day;
+	int _hour;
+	int _minute;
+
+	////////////////////////////
+	////// LEVEL 1 of SLAP /////
+	////////////////////////////
+
+	// This group of functions only check for VALIDITY of
+	// INDIVIDUAL year/month/day/hour/minute values.
+	// They do not check whether the values come together
+	// to give a "correct" DateTime object.
+	bool isValidDateTimeValues();
+	bool isValidYearRange();
+	bool isValidMonthRange();
+	bool isValidDayRange();
+	bool isValidHourRange();
+	bool isValidMinuteRange();
+
+
+	////////////////////////////
+	////// LEVEL 2 of SLAP /////
+	////////////////////////////
+
+	// This group of functions checks if the
+	// individual year/month/day values come
+	// together as a valid date format.
+	// i.e. DD MM YYYY or DD MM -1
+	bool hasYearMonthDay();
+	bool hasMonthDay();
+	bool hasYear();
+	bool hasMonth();
+	bool hasDay();
+
+	// This group of functions checks if the
+	// individual year/month/day values come
+	// together as a valid time format.
+	// i.e. HH MM or -1 -1
+	bool hasHour();
+	bool hasMinute();
+	bool isValidTime();
+
+	// Checks if the date (YYYY MM DD) is an actual
+	// Gregorian calendar date
+	//	Pre: Date is in YYYY MM DD format. Date that is in
+	//	-1 MM DD format will not be processed by thos method.
+	bool isActualYearMonthDayDate();
+
+
+
+public:
+
+	// Constructor
+	DateTimeVerification(DateTime dateTimeObject);
+
+
+	// Does comprehensive checks to the given DateTme object
+	// to determine if it satisfies a valid iPlanner calendar
+	// format and is an actual calendar date. Valid formats are: 
+	//		YYYY DD MM HH MM
+	//		YYYY DD MM -1 -1
+	//		-1	 DD MM HH MM
+	//		-1	 DD MM -1 -1
+	bool isValidDateTime();
+
+	bool hasHourMinute();
+
+};
+
+#endif
+	// End of segment: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iLogic\ItemVerification.cpp
+	 */
+
+
+#include <exception>
+#include <assert.h>
+#include "ItemVerification.h"
+
+const string ItemVerification::ITEM_VERIFICATION_EMPTY_STRING = "";
+const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
+const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_NAME = "Invalid Name";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_DESCRIPTION = "Invalid Description";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME = "Invalid Start Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME = "Invalid End Date/TIME";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME = "Start Date/Time same as End Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME = "Start Date/Time is later than End Date/Time";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_ID = "Invalid ID";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_PRIORITY = "Invalid Priority";
+const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_LABEL = "Invalid Label";
+
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS = "ITEM VERIFICATION:: Valid Name";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE = "ITEM VERIFICATION:: Invalid Name";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS = "ITEM VERIFICATION:: Valid Description";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_START_TIME = "ITEM VERIFICATION:: Valid Start Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_START_TIME = "ITEM VERIFICATION:: Invalid Start Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_END_TIME = "ITEM VERIFICATION:: Valid End Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_END_TIME = "ITEM VERIFICATION:: Invalid End Time";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_TIME_FRAME = "ITEM VERIFICATION:: Valid Time Frame";
+const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME = "ITEM VERIFICATION:: Invalid Time Frame";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS = "ITEM VERIFICATION:: Valid ID";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_FAILURE = "ITEM VERIFICATION:: Invalid ID";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS = "ITEM VERIFICATION:: Valid Priority";
+const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE = "ITEM VERIFICATION:: Invalid Priority";
+
+const int ItemVerification::ITEM_VERIFICATION_INT_ZERO = 0;
+
+ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
+	_itemObjectToVerify = itemObject;
+	_name = _itemObjectToVerify.getItemName();
+	_description = _itemObjectToVerify.getDescription();
+	_itemID = _itemObjectToVerify.getItemID();
+	_startTime = _itemObjectToVerify.getStartTime();
+	_endTime = _itemObjectToVerify.getEndTime();
+	_priority = _itemObjectToVerify.getPriority();
+	_label = _itemObjectToVerify.getLabel();
+	_isCompleted = _itemObjectToVerify.getCompletion();
+	_nextID = nextItemID;
+}
+
+bool ItemVerification::isValidName() {
+	string name = _itemObjectToVerify.getItemName();
+	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE);
+		assert(!_itemVerificationErrors.empty());
+		return false;
+	} else {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS);
+		return true;
+	}
+}
+
+bool ItemVerification::isValidDescription() {
+	_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS);
+	return true;
+}
+
+bool ItemVerification::isValidStartDateTime() {
+	DateTime startDateTime = _itemObjectToVerify.getStartTime();
+	DateTimeVerification startDateTimeVerification(startDateTime);
+	if (startDateTimeVerification.isValidDateTime()) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_START_TIME);
+		return true;
+	} else {
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME);
+		assert(!_itemVerificationErrors.empty());
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_START_TIME);
+		return false;
+	}
+}
+
+bool ItemVerification::isValidEndDateTime() {
+	DateTime endDateTime = _itemObjectToVerify.getEndTime();
+	DateTimeVerification endDateTimeVerification(endDateTime);
+	if (endDateTimeVerification.isValidDateTime()) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_END_TIME);
+		return true;
+	} else {
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME);
+		assert(!_itemVerificationErrors.empty());
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_END_TIME);
+		return false;
+	}
+}
+
+bool ItemVerification::isValidTimeFrame() {
+	DateTime startDateTime = _itemObjectToVerify.getStartTime();
+	DateTime endDateTime = _itemObjectToVerify.getEndTime();
+	DateTime emptyDateTime;
+	DateTimeVerification startDateTimeVerification(startDateTime);
+	DateTimeVerification endDateTimeVerification(endDateTime);
+	if (startDateTimeVerification.isValidDateTime() && endDateTimeVerification.isValidDateTime()) {
+		if (startDateTimeVerification.hasHourMinute() && endDateTimeVerification.hasHourMinute()) {
+			if (startDateTime == endDateTime) {
+				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
+				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME);
+				return false;
+			} else if (startDateTime.isAfter(endDateTime)) {
+				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
+				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME);
+				return false;
+			} else {
+				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_TIME_FRAME);
+				return true;
+			}
+		} else {
+			if (startDateTime == emptyDateTime || endDateTime == emptyDateTime) {
+				return true;
+			} else if (endDateTime.getYear() > startDateTime.getYear()) {
+				return true;
+			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() > startDateTime.getMonth()) {
+				return true;
+			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() == startDateTime.getMonth() && endDateTime.getDay() >= startDateTime.getDay()) {
+				return true;
+			} else {
+				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
+				assert(!_itemVerificationErrors.empty());
+				return false;
+			}
+		}
+	} else {
+		return false;
+	}
+}
+
+bool ItemVerification::isValidID() {
+	unsigned int itemID = _itemObjectToVerify.getItemID();
+	if (itemID <= _nextID) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS);
+		return true;
+	} else {
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_ID);
+		assert(!_itemVerificationErrors.empty());
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_FAILURE);
+		return false;
+	}
+}
+
+bool ItemVerification::isValidPriority() {
+	string priorityString;
+	char priorityChar = _itemObjectToVerify.getPriority();
+	unsigned int priorityFound;
+	priorityString.push_back(priorityChar);
+	priorityFound = priorityString.find_first_of(ITEM_VERIFICATION_AVAILABLE_PRIORITIES);
+	if (priorityFound != string::npos) {
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS);
+		return true;
+	} else {
+		assert(_priority != 'H' && _priority != 'M' && _priority != 'L' && _priority != 'E');
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
+		assert(!_itemVerificationErrors.empty());
+		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE);
+		return false;
+	}
+}
+
+bool ItemVerification::isValidLabel() {
+	string labelString;
+	char labelChar = _itemObjectToVerify.getLabel();
+	unsigned int labelFound;
+	labelString.push_back(labelChar);
+	labelFound = labelString.find_first_of(ITEM_VERIFICATION_AVAILABLE_LABELS);
+	if (labelFound != string::npos) {
+		return true;
+	} else {
+		assert(_label != 'P' && _label != 'M' && _label != 'O' && _label != 'E');
+		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_LABEL);
+		assert(!_itemVerificationErrors.empty());
+		return false;
+	}
+}
+
+bool ItemVerification::isValidItem() {
+
+	_itemVerificationErrors.clear();
+
+	bool hasValidName = isValidName();
+	bool hasValidDescription = isValidDescription();
+	bool hasValidStartDateTime = isValidStartDateTime();
+	bool hasValidEndDateTime = isValidEndDateTime();
+	bool hasValidTimeFrame = isValidTimeFrame();
+	bool hasValidID = isValidID();
+	bool hasValidPriority = isValidPriority();
+	bool hasValidLabel = isValidLabel();
+
+	if (hasValidName &&
+		hasValidDescription &&
+		hasValidStartDateTime &&
+		hasValidEndDateTime &&
+		hasValidTimeFrame &&
+		hasValidID &&
+		hasValidPriority &&
+		hasValidLabel) {
+		assert(_name != ITEM_VERIFICATION_EMPTY_STRING);
+		assert(_priority == 'H' || _priority == 'M' || _priority == 'L' || _priority == 'E');
+		assert(_label == 'P' || _label == 'M' || _label == 'O' || _label == 'E');
+		assert(_itemID > ITEM_VERIFICATION_INT_ZERO);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+list<string> ItemVerification::getItemVerificationErrors() {
+	return _itemVerificationErrors;
+}
+	// End of segment: C:\Users\SKR\Documents\main\iLogic\ItemVerification.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iLogic\ItemVerification.h
+	 */
+
+
+#ifndef ITEM_VERIFICATION_H
+#define ITEM_VERIFICATION_H
+
+#include <string>
+#include <list>
+#include <iostream>
+#include "DateTimeVerification.h"
+#include "..\iStorage\Item.h"
+#include "..\iPlanner Log\Log.h"
+
+using namespace std;
+
+class ItemVerification {
+
+private:
+	Log _itemVerificationLogger;
+	Item _itemObjectToVerify;
+	list<string> _itemVerificationErrors;
+	unsigned int _nextID;
+	string _name;
+	string _description;
+	unsigned int _itemID;
+	DateTime _startTime;
+	DateTime _endTime;
+	char _priority;
+	char _label;
+	bool _isCompleted;
+
+	static const string ITEM_VERIFICATION_EMPTY_STRING;
+	static const string ITEM_VERIFICATION_AVAILABLE_PRIORITIES;
+	static const string ITEM_VERIFICATION_AVAILABLE_LABELS;
+	static const string ITEM_VERIFICATION_ERROR_INVALID_NAME;
+	static const string ITEM_VERIFICATION_ERROR_INVALID_DESCRIPTION;
+	static const string ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME;
+	static const string ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME;
+	static const string ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME;
+	static const string ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME;
+	static const string ITEM_VERIFICATION_ERROR_INVALID_ID;
+	static const string ITEM_VERIFICATION_ERROR_INVALID_PRIORITY;
+	static const string ITEM_VERIFICATION_ERROR_INVALID_LABEL;
+
+	static const string ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE;
+	static const string ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_START_TIME;
+	static const string ITEM_VERIFICATION_LOG_INVALID_START_TIME;
+	static const string ITEM_VERIFICATION_LOG_VALID_END_TIME;
+	static const string ITEM_VERIFICATION_LOG_INVALID_END_TIME;
+	static const string ITEM_VERIFICATION_LOG_VALID_TIME_FRAME;
+	static const string ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME;
+	static const string ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_ID_FAILURE;
+	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS;
+	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE;
+
+	static const int ITEM_VERIFICATION_INT_ZERO;
+
+	// Conducts the validity checks on the individual
+	// fields within the item
+	bool isValidName();
+	bool isValidDescription();
+	bool isValidStartDateTime();
+	bool isValidEndDateTime();
+	bool isValidTimeFrame();
+	bool isValidID();
+	bool isValidPriority();
+	bool isValidLabel();
+
+public:
+	ItemVerification(Item itemObject, unsigned int nextItemID);
+
+	// Does comprehensive checks to the given Item object to 
+	// determine if it can be considered a valid Item according
+	// to iPlanner standards.
+	bool isValidItem();
+
+	// Allows retrieval of a list of errors with the given
+	// Item object.
+	list<string> getItemVerificationErrors();
+
+};
+
+#endif
+	// End of segment: C:\Users\SKR\Documents\main\iLogic\ItemVerification.h
+
+
+
+
+
+	/**
 	 * origin: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
 	 */
 
@@ -1867,723 +2584,6 @@ public:
 	}
 	
 	// End of segment: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
-
-
-
-
-
-	/**
-	 * origin: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.cpp
-	 */
-
-
-#include <assert.h>
-#include <exception>
-#include "DateTimeVerification.h"
-
-const int DateTimeVerification::DATETIME_VERIFICATION_MIN_YEAR = 0;
-const int DateTimeVerification::DATETIME_VERIFICATION_MAX_YEAR = 9999;
-const int DateTimeVerification::DATETIME_VERIFICATION_MIN_MONTH = 1;
-const int DateTimeVerification::DATETIME_VERIFICATION_MAX_MONTH = 12;
-const int DateTimeVerification::DATETIME_VERIFICATION_MIN_DAY = 1;
-const int DateTimeVerification::DATETIME_VERIFICATION_MAX_DAY = 31;
-const int DateTimeVerification::DATETIME_VERIFICATION_MIN_HOUR = 0;
-const int DateTimeVerification::DATETIME_VERIFICATION_MAX_HOUR = 23;
-const int DateTimeVerification::DATETIME_VERIFICATION_MIN_MINUTE = 0;
-const int DateTimeVerification::DATETIME_VERIFICATION_MAX_MINUTE = 59;
-const int DateTimeVerification::DATETIME_VERIFICATION_EMPTYFIELD_DATETIME = -1;
-const int DateTimeVerification::DATETIME_VERIFICATION_INT_MINUS_TWO = -2;
-
-const int DateTimeVerification::DATETIME_VERIFICATION_DAY_29 = 29;
-const int DateTimeVerification::DATETIME_VERIFICATION_DAY_30 = 30;
-const int DateTimeVerification::DATETIME_VERIFICATION_DAY_31 = 31;
-const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_FEB = 2;
-const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_APR = 4;
-const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_JUN = 6;
-const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_SEP = 9;
-const int DateTimeVerification::DATETIME_VERIFICATION_MONTH_NOV = 11;
-const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_4 = 4;
-const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_100 = 100;
-const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_400 = 400;
-
-const string DateTimeVerification::DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO = "Date/Time value less than -2";
-
-DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
-	_dateTimeObjectToVerify = dateTimeObject;
-	_year = _dateTimeObjectToVerify.getYear();
-	_month = _dateTimeObjectToVerify.getMonth();
-	_day = _dateTimeObjectToVerify.getDay();
-	_hour = _dateTimeObjectToVerify.getHour();
-	_minute = _dateTimeObjectToVerify.getMinute();
-}
-
-bool DateTimeVerification::isValidDateTimeValues() {
-	if (isValidYearRange() &&
-		isValidMonthRange() &&
-		isValidDayRange() &&
-		isValidHourRange() &&
-		isValidMinuteRange()) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool DateTimeVerification::isValidYearRange() {
-	if (_year >= DATETIME_VERIFICATION_MIN_YEAR && _year <= DATETIME_VERIFICATION_MAX_YEAR) {
-		return true;
-	} else if (_year == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return true;
-	} else {
-		assert(_year > DATETIME_VERIFICATION_MAX_YEAR || _year < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
-		return false;
-	}
-}
-
-bool DateTimeVerification::isValidMonthRange() {
-	if (_month >= DATETIME_VERIFICATION_MIN_MONTH && _month <= DATETIME_VERIFICATION_MAX_MONTH) {
-		return true;
-	} else if (_month == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return true;
-	} else {
-		assert(_month > DATETIME_VERIFICATION_MAX_MONTH || _month < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
-		return false;
-	}
-}
-
-bool DateTimeVerification::isValidDayRange() {
-	if (_day >= DATETIME_VERIFICATION_MIN_DAY && _day <= DATETIME_VERIFICATION_MAX_DAY) {
-		return true;
-	} else if (_day == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return true;
-	} else {
-		assert(_day > DATETIME_VERIFICATION_MAX_DAY || _day < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
-		return false;
-	}
-}
-
-bool DateTimeVerification::isValidHourRange() {
-	if (_hour >= DATETIME_VERIFICATION_MIN_HOUR && _hour <= DATETIME_VERIFICATION_MAX_HOUR) {
-		return true;
-	} else if (_hour == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return true;
-	} else {
-		assert(_hour > DATETIME_VERIFICATION_MAX_HOUR || _hour < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
-		return false;
-	}
-}
-
-bool DateTimeVerification::isValidMinuteRange() {
-	if (_minute >= DATETIME_VERIFICATION_MIN_MINUTE && _minute <= DATETIME_VERIFICATION_MAX_MINUTE) {
-		return true;
-	} else if (_minute == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return true;
-	} else {
-		assert(_minute > DATETIME_VERIFICATION_MAX_HOUR || _minute < DATETIME_VERIFICATION_EMPTYFIELD_DATETIME);
-		return false;
-	}
-}
-
-bool DateTimeVerification::hasYearMonthDay() {
-	if (hasYear() && hasMonth() && hasDay()) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool DateTimeVerification::hasMonthDay() {
-	if (!hasYear() && hasMonth() && hasDay()) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool DateTimeVerification::hasYear() {
-	try {
-		if (!isValidYearRange()) {
-			return false;
-		} else if (_year == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-			return false;
-		} else if (_year <DATETIME_VERIFICATION_INT_MINUS_TWO) {
-			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
-		} else {
-			return true;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-}
-
-bool DateTimeVerification::hasMonth() {
-	try {
-		if (!isValidMonthRange()) {
-			return false;
-		} else if (_month == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-			return false;
-		} else if (_month <DATETIME_VERIFICATION_INT_MINUS_TWO) {
-			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
-		} else {
-			return true;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-}
-
-bool DateTimeVerification::hasDay() {
-	try {
-		if (!isValidDayRange()) {
-			return false;
-		} else if (_day == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-			return false;
-		} else if (_day <DATETIME_VERIFICATION_INT_MINUS_TWO) {
-			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
-		} else {
-			return true;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-}
-
-bool DateTimeVerification::hasHourMinute() {
-	try {
-		if (hasHour() && hasMinute()) {
-			return true;
-		} else if (_hour < DATETIME_VERIFICATION_INT_MINUS_TWO || _minute < DATETIME_VERIFICATION_INT_MINUS_TWO) {
-			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
-		} else {
-			return false;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-}
-
-bool DateTimeVerification::hasHour() {
-	try {
-		if (_hour >= DATETIME_VERIFICATION_MIN_HOUR && _hour <= DATETIME_VERIFICATION_MAX_HOUR) {
-			return true;
-		} else if (_hour < DATETIME_VERIFICATION_INT_MINUS_TWO) {
-			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
-		} else {
-			return false;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-}
-
-bool DateTimeVerification::hasMinute() {
-	try {
-		if (_minute >= DATETIME_VERIFICATION_MIN_MINUTE && _minute <= DATETIME_VERIFICATION_MAX_MINUTE) {
-			return true;
-		} else if (_minute < DATETIME_VERIFICATION_INT_MINUS_TWO) {
-			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
-		} else {
-			return false;
-		}
-	} catch (string errorMessage) {
-		cerr << errorMessage << endl;
-	}
-}
-
-
-bool DateTimeVerification::isValidTime() {
-	if (hasHour() && hasMinute()) {
-		return true;
-	} else if (!hasHour() && !hasMinute()) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool DateTimeVerification::isActualYearMonthDayDate() {
-	if ((_day == DATETIME_VERIFICATION_DAY_31) && (_month == DATETIME_VERIFICATION_MONTH_FEB || _month == DATETIME_VERIFICATION_MONTH_APR || _month == DATETIME_VERIFICATION_MONTH_JUN || _month == DATETIME_VERIFICATION_MONTH_SEP || _month == DATETIME_VERIFICATION_MONTH_NOV)) {
-		return false;
-	} else if ((_day == DATETIME_VERIFICATION_DAY_30) && (_month == DATETIME_VERIFICATION_MONTH_FEB)) {
-		return false;
-	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_4 != 0)) {
-		return false;
-	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_400 == 0)) {
-		return true;
-	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_100 == 0)) {
-		return false;
-	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_4 == 0)) {
-		return true;
-	} else {
-		return true;
-	}
-}
-
-
-////					   ////
-////PUBLIC FUNCTIONS BELOW ////
-////					   ////
-
-
-bool DateTimeVerification::isValidDateTime() {
-	if (isValidDateTimeValues()) {
-		if (hasYearMonthDay() && isActualYearMonthDayDate() && isValidTime()) {
-			return true;
-		} else if (!hasYear() && !hasMonth() && !hasDay() && !hasHour() && !hasMinute()) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
-}
-	// End of segment: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.cpp
-
-
-
-
-
-	/**
-	 * origin: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.h
-	 */
-
-
-#ifndef DATETIME_VERIFICATION_H
-#define DATETIME_VERIFICATION_H
-
-#include <string>
-#include <iostream>
-#include "..\iStorage\DateTime.h"
-#include "..\iPlanner Log\Log.h"
-using namespace std;
-
-class DateTimeVerification {
-
-private:
-
-	static const int DATETIME_VERIFICATION_MIN_YEAR;
-	static const int DATETIME_VERIFICATION_MAX_YEAR;
-	static const int DATETIME_VERIFICATION_MIN_MONTH;
-	static const int DATETIME_VERIFICATION_MAX_MONTH;
-	static const int DATETIME_VERIFICATION_MIN_DAY;
-	static const int DATETIME_VERIFICATION_MAX_DAY;
-	static const int DATETIME_VERIFICATION_MIN_HOUR;
-	static const int DATETIME_VERIFICATION_MAX_HOUR;
-	static const int DATETIME_VERIFICATION_MIN_MINUTE;
-	static const int DATETIME_VERIFICATION_MAX_MINUTE;
-	static const int DATETIME_VERIFICATION_EMPTYFIELD_DATETIME;
-	static const int DATETIME_VERIFICATION_INT_MINUS_TWO;
-
-	static const int DATETIME_VERIFICATION_DAY_29;
-	static const int DATETIME_VERIFICATION_DAY_30;
-	static const int DATETIME_VERIFICATION_DAY_31;
-	static const int DATETIME_VERIFICATION_MONTH_FEB;
-	static const int DATETIME_VERIFICATION_MONTH_APR;
-	static const int DATETIME_VERIFICATION_MONTH_JUN;
-	static const int DATETIME_VERIFICATION_MONTH_SEP;
-	static const int DATETIME_VERIFICATION_MONTH_NOV;
-	static const int DATETIME_VERIFICATION_YEAR_4;
-	static const int DATETIME_VERIFICATION_YEAR_100;
-	static const int DATETIME_VERIFICATION_YEAR_400;
-
-	static const string DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
-
-	Log _dateTimeVerificationLogger;
-	DateTime _dateTimeObjectToVerify;
-	int _year;
-	int _month;
-	int _day;
-	int _hour;
-	int _minute;
-
-	////////////////////////////
-	////// LEVEL 1 of SLAP /////
-	////////////////////////////
-
-	// This group of functions only check for VALIDITY of
-	// INDIVIDUAL year/month/day/hour/minute values.
-	// They do not check whether the values come together
-	// to give a "correct" DateTime object.
-	bool isValidDateTimeValues();
-	bool isValidYearRange();
-	bool isValidMonthRange();
-	bool isValidDayRange();
-	bool isValidHourRange();
-	bool isValidMinuteRange();
-
-
-	////////////////////////////
-	////// LEVEL 2 of SLAP /////
-	////////////////////////////
-
-	// This group of functions checks if the
-	// individual year/month/day values come
-	// together as a valid date format.
-	// i.e. DD MM YYYY or DD MM -1
-	bool hasYearMonthDay();
-	bool hasMonthDay();
-	bool hasYear();
-	bool hasMonth();
-	bool hasDay();
-
-	// This group of functions checks if the
-	// individual year/month/day values come
-	// together as a valid time format.
-	// i.e. HH MM or -1 -1
-	bool hasHour();
-	bool hasMinute();
-	bool isValidTime();
-
-	// Checks if the date (YYYY MM DD) is an actual
-	// Gregorian calendar date
-	//	Pre: Date is in YYYY MM DD format. Date that is in
-	//	-1 MM DD format will not be processed by thos method.
-	bool isActualYearMonthDayDate();
-
-
-
-public:
-
-	// Constructor
-	DateTimeVerification(DateTime dateTimeObject);
-
-
-	// Does comprehensive checks to the given DateTme object
-	// to determine if it satisfies a valid iPlanner calendar
-	// format and is an actual calendar date. Valid formats are: 
-	//		YYYY DD MM HH MM
-	//		YYYY DD MM -1 -1
-	//		-1	 DD MM HH MM
-	//		-1	 DD MM -1 -1
-	bool isValidDateTime();
-
-	bool hasHourMinute();
-
-};
-
-#endif
-	// End of segment: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.h
-
-
-
-
-
-	/**
-	 * origin: C:\Users\SKR\Documents\main\iLogic\ItemVerification.cpp
-	 */
-
-
-#include <exception>
-#include <assert.h>
-#include "ItemVerification.h"
-
-const string ItemVerification::ITEM_VERIFICATION_EMPTY_STRING = "";
-const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_PRIORITIES = "HMLE";  // High, Medium, Low, *Empty*
-const string ItemVerification::ITEM_VERIFICATION_AVAILABLE_LABELS = "PMOE";  // Personal, Milestone, Official, *Empty*
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_NAME = "Invalid Name";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_DESCRIPTION = "Invalid Description";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME = "Invalid Start Date/Time";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME = "Invalid End Date/TIME";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME = "Start Date/Time same as End Date/Time";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME = "Start Date/Time is later than End Date/Time";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_ID = "Invalid ID";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_PRIORITY = "Invalid Priority";
-const string ItemVerification::ITEM_VERIFICATION_ERROR_INVALID_LABEL = "Invalid Label";
-
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS = "ITEM VERIFICATION:: Valid Name";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE = "ITEM VERIFICATION:: Invalid Name";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS = "ITEM VERIFICATION:: Valid Description";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_START_TIME = "ITEM VERIFICATION:: Valid Start Time";
-const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_START_TIME = "ITEM VERIFICATION:: Invalid Start Time";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_END_TIME = "ITEM VERIFICATION:: Valid End Time";
-const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_END_TIME = "ITEM VERIFICATION:: Invalid End Time";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_TIME_FRAME = "ITEM VERIFICATION:: Valid Time Frame";
-const string ItemVerification::ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME = "ITEM VERIFICATION:: Invalid Time Frame";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS = "ITEM VERIFICATION:: Valid ID";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_ID_FAILURE = "ITEM VERIFICATION:: Invalid ID";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS = "ITEM VERIFICATION:: Valid Priority";
-const string ItemVerification::ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE = "ITEM VERIFICATION:: Invalid Priority";
-
-const int ItemVerification::ITEM_VERIFICATION_INT_ZERO = 0;
-
-ItemVerification::ItemVerification(Item itemObject, unsigned int nextItemID) {
-	_itemObjectToVerify = itemObject;
-	_name = _itemObjectToVerify.getItemName();
-	_description = _itemObjectToVerify.getDescription();
-	_itemID = _itemObjectToVerify.getItemID();
-	_startTime = _itemObjectToVerify.getStartTime();
-	_endTime = _itemObjectToVerify.getEndTime();
-	_priority = _itemObjectToVerify.getPriority();
-	_label = _itemObjectToVerify.getLabel();
-	_isCompleted = _itemObjectToVerify.getCompletion();
-	_nextID = nextItemID;
-}
-
-bool ItemVerification::isValidName() {
-	string name = _itemObjectToVerify.getItemName();
-	if (name == ITEM_VERIFICATION_EMPTY_STRING) {
-		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_NAME);
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE);
-		assert(!_itemVerificationErrors.empty());
-		return false;
-	} else {
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS);
-		return true;
-	}
-}
-
-bool ItemVerification::isValidDescription() {
-	_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS);
-	return true;
-}
-
-bool ItemVerification::isValidStartDateTime() {
-	DateTime startDateTime = _itemObjectToVerify.getStartTime();
-	DateTimeVerification startDateTimeVerification(startDateTime);
-	if (startDateTimeVerification.isValidDateTime()) {
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_START_TIME);
-		return true;
-	} else {
-		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME);
-		assert(!_itemVerificationErrors.empty());
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_START_TIME);
-		return false;
-	}
-}
-
-bool ItemVerification::isValidEndDateTime() {
-	DateTime endDateTime = _itemObjectToVerify.getEndTime();
-	DateTimeVerification endDateTimeVerification(endDateTime);
-	if (endDateTimeVerification.isValidDateTime()) {
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_END_TIME);
-		return true;
-	} else {
-		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME);
-		assert(!_itemVerificationErrors.empty());
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_END_TIME);
-		return false;
-	}
-}
-
-bool ItemVerification::isValidTimeFrame() {
-	DateTime startDateTime = _itemObjectToVerify.getStartTime();
-	DateTime endDateTime = _itemObjectToVerify.getEndTime();
-	DateTime emptyDateTime;
-	DateTimeVerification startDateTimeVerification(startDateTime);
-	DateTimeVerification endDateTimeVerification(endDateTime);
-	if (startDateTimeVerification.isValidDateTime() && endDateTimeVerification.isValidDateTime()) {
-		if (startDateTimeVerification.hasHourMinute() && endDateTimeVerification.hasHourMinute()) {
-			if (startDateTime == endDateTime) {
-				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME);
-				assert(!_itemVerificationErrors.empty());
-				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME);
-				return false;
-			} else if (startDateTime.isAfter(endDateTime)) {
-				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
-				assert(!_itemVerificationErrors.empty());
-				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME);
-				return false;
-			} else {
-				_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_TIME_FRAME);
-				return true;
-			}
-		} else {
-			if (startDateTime == emptyDateTime || endDateTime == emptyDateTime) {
-				return true;
-			} else if (endDateTime.getYear() > startDateTime.getYear()) {
-				return true;
-			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() > startDateTime.getMonth()) {
-				return true;
-			} else if (endDateTime.getYear() == startDateTime.getYear() && endDateTime.getMonth() == startDateTime.getMonth() && endDateTime.getDay() >= startDateTime.getDay()) {
-				return true;
-			} else {
-				_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME);
-				assert(!_itemVerificationErrors.empty());
-				return false;
-			}
-		}
-	} else {
-		return false;
-	}
-}
-
-bool ItemVerification::isValidID() {
-	unsigned int itemID = _itemObjectToVerify.getItemID();
-	if (itemID <= _nextID) {
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS);
-		return true;
-	} else {
-		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_ID);
-		assert(!_itemVerificationErrors.empty());
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_ID_FAILURE);
-		return false;
-	}
-}
-
-bool ItemVerification::isValidPriority() {
-	string priorityString;
-	char priorityChar = _itemObjectToVerify.getPriority();
-	unsigned int priorityFound;
-	priorityString.push_back(priorityChar);
-	priorityFound = priorityString.find_first_of(ITEM_VERIFICATION_AVAILABLE_PRIORITIES);
-	if (priorityFound != string::npos) {
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS);
-		return true;
-	} else {
-		assert(_priority != 'H' && _priority != 'M' && _priority != 'L' && _priority != 'E');
-		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_PRIORITY);
-		assert(!_itemVerificationErrors.empty());
-		_itemVerificationLogger.writeToLogFile(ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE);
-		return false;
-	}
-}
-
-bool ItemVerification::isValidLabel() {
-	string labelString;
-	char labelChar = _itemObjectToVerify.getLabel();
-	unsigned int labelFound;
-	labelString.push_back(labelChar);
-	labelFound = labelString.find_first_of(ITEM_VERIFICATION_AVAILABLE_LABELS);
-	if (labelFound != string::npos) {
-		return true;
-	} else {
-		assert(_label != 'P' && _label != 'M' && _label != 'O' && _label != 'E');
-		_itemVerificationErrors.push_back(ITEM_VERIFICATION_ERROR_INVALID_LABEL);
-		assert(!_itemVerificationErrors.empty());
-		return false;
-	}
-}
-
-bool ItemVerification::isValidItem() {
-
-	_itemVerificationErrors.clear();
-
-	bool hasValidName = isValidName();
-	bool hasValidDescription = isValidDescription();
-	bool hasValidStartDateTime = isValidStartDateTime();
-	bool hasValidEndDateTime = isValidEndDateTime();
-	bool hasValidTimeFrame = isValidTimeFrame();
-	bool hasValidID = isValidID();
-	bool hasValidPriority = isValidPriority();
-	bool hasValidLabel = isValidLabel();
-
-	if (hasValidName &&
-		hasValidDescription &&
-		hasValidStartDateTime &&
-		hasValidEndDateTime &&
-		hasValidTimeFrame &&
-		hasValidID &&
-		hasValidPriority &&
-		hasValidLabel) {
-		assert(_name != ITEM_VERIFICATION_EMPTY_STRING);
-		assert(_priority == 'H' || _priority == 'M' || _priority == 'L' || _priority == 'E');
-		assert(_label == 'P' || _label == 'M' || _label == 'O' || _label == 'E');
-		assert(_itemID > ITEM_VERIFICATION_INT_ZERO);
-		return true;
-	} else {
-		return false;
-	}
-}
-
-list<string> ItemVerification::getItemVerificationErrors() {
-	return _itemVerificationErrors;
-}
-	// End of segment: C:\Users\SKR\Documents\main\iLogic\ItemVerification.cpp
-
-
-
-
-
-	/**
-	 * origin: C:\Users\SKR\Documents\main\iLogic\ItemVerification.h
-	 */
-
-
-#ifndef ITEM_VERIFICATION_H
-#define ITEM_VERIFICATION_H
-
-#include <string>
-#include <list>
-#include <iostream>
-#include "DateTimeVerification.h"
-#include "..\iStorage\Item.h"
-#include "..\iPlanner Log\Log.h"
-
-using namespace std;
-
-class ItemVerification {
-
-private:
-	Log _itemVerificationLogger;
-	Item _itemObjectToVerify;
-	list<string> _itemVerificationErrors;
-	unsigned int _nextID;
-	string _name;
-	string _description;
-	unsigned int _itemID;
-	DateTime _startTime;
-	DateTime _endTime;
-	char _priority;
-	char _label;
-	bool _isCompleted;
-
-	static const string ITEM_VERIFICATION_EMPTY_STRING;
-	static const string ITEM_VERIFICATION_AVAILABLE_PRIORITIES;
-	static const string ITEM_VERIFICATION_AVAILABLE_LABELS;
-	static const string ITEM_VERIFICATION_ERROR_INVALID_NAME;
-	static const string ITEM_VERIFICATION_ERROR_INVALID_DESCRIPTION;
-	static const string ITEM_VERIFICATION_ERROR_INVALID_START_DATE_TIME;
-	static const string ITEM_VERIFICATION_ERROR_INVALID_END_DATE_TIME;
-	static const string ITEM_VERIFICATION_ERROR_SAME_START_END_DATE_TIME;
-	static const string ITEM_VERIFICATION_ERROR_START_DATE_TIME_LATER_THAN_END_DATE_TIME;
-	static const string ITEM_VERIFICATION_ERROR_INVALID_ID;
-	static const string ITEM_VERIFICATION_ERROR_INVALID_PRIORITY;
-	static const string ITEM_VERIFICATION_ERROR_INVALID_LABEL;
-
-	static const string ITEM_VERIFICATION_LOG_VALID_NAME_SUCCESS;
-	static const string ITEM_VERIFICATION_LOG_VALID_NAME_FAILURE;
-	static const string ITEM_VERIFICATION_LOG_VALID_DESC_SUCCESS;
-	static const string ITEM_VERIFICATION_LOG_VALID_START_TIME;
-	static const string ITEM_VERIFICATION_LOG_INVALID_START_TIME;
-	static const string ITEM_VERIFICATION_LOG_VALID_END_TIME;
-	static const string ITEM_VERIFICATION_LOG_INVALID_END_TIME;
-	static const string ITEM_VERIFICATION_LOG_VALID_TIME_FRAME;
-	static const string ITEM_VERIFICATION_LOG_INVALID_TIME_FRAME;
-	static const string ITEM_VERIFICATION_LOG_VALID_ID_SUCCESS;
-	static const string ITEM_VERIFICATION_LOG_VALID_ID_FAILURE;
-	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_SUCCESS;
-	static const string ITEM_VERIFICATION_LOG_VALID_PRIORITY_FAILURE;
-
-	static const int ITEM_VERIFICATION_INT_ZERO;
-
-	// Conducts the validity checks on the individual
-	// fields within the item
-	bool isValidName();
-	bool isValidDescription();
-	bool isValidStartDateTime();
-	bool isValidEndDateTime();
-	bool isValidTimeFrame();
-	bool isValidID();
-	bool isValidPriority();
-	bool isValidLabel();
-
-public:
-	ItemVerification(Item itemObject, unsigned int nextItemID);
-
-	// Does comprehensive checks to the given Item object to 
-	// determine if it can be considered a valid Item according
-	// to iPlanner standards.
-	bool isValidItem();
-
-	// Allows retrieval of a list of errors with the given
-	// Item object.
-	list<string> getItemVerificationErrors();
-
-};
-
-#endif
-	// End of segment: C:\Users\SKR\Documents\main\iLogic\ItemVerification.h
 
 
 

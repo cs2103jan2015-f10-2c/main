@@ -3,6 +3,57 @@
 
 
 	/**
+	 * origin: C:\Users\SKR\Documents\main\iPlanner Log\Log.cpp
+	 */
+
+#include "Log.h"
+
+void Log::writeToLogFile(string stringToBeLogged) {
+
+	ofstream writeFile("log.txt", ios::app);
+	writeFile << stringToBeLogged << endl;
+
+	writeFile.close();
+}
+
+void Log::clearLogFile() {
+	ofstream writeFile("log.txt");
+}
+	// End of segment: C:\Users\SKR\Documents\main\iPlanner Log\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iPlanner Log\Log.h
+	 */
+
+// Log
+// Group : F10-2C
+// Coder : Shri Kishen Rajendran
+#ifndef LOG_H
+#define LOG_H
+
+#include<iostream>
+#include<string>
+#include<fstream>
+
+using namespace std;
+
+class Log {	
+public:
+	void writeToLogFile(string);
+	void clearLogFile();
+};
+#endif
+	// End of segment: C:\Users\SKR\Documents\main\iPlanner Log\Log.h
+
+
+
+
+
+	/**
 	 * origin: C:\Users\SKR\Documents\main\iPlannerUI\iPlannerUI.cpp
 	 */
 
@@ -148,7 +199,7 @@ using namespace System;
 		}
 
 		void displayDescription(String^ description) {
-			if (description != ""){
+			if (description != "") {
 				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
 				outputBox->SelectionColor = Color::BlueViolet;
 				outputBox->SelectedText = "\t     " + description + "\r\n\r\n";
@@ -248,21 +299,17 @@ using namespace System;
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 if (iterItem->getPriority() == 72) {
 						 displayPriorityAndName("H", nameString);
-					 }
-					 else if (iterItem->getPriority() == 77) {
+					 } else if (iterItem->getPriority() == 77) {
 						 displayPriorityAndName("M", nameString);
-					 }
-					 else if (iterItem->getPriority() == 76) {
+					 } else if (iterItem->getPriority() == 76) {
 						 displayPriorityAndName("L", nameString);
-					 }
-					 else {
+					 } else {
 						 displayPriorityAndName("-", nameString);
 					 }
 
 					 if (iterItem->getCompletion() == true) {
 						 displayCompletion("(D)");
-					 }
-					 else {
+					 } else {
 						 displayCompletion("(ND)");
 					 }
 
@@ -412,57 +459,6 @@ using namespace System;
 };
 }
 	// End of segment: C:\Users\SKR\Documents\main\iPlannerUI\iPlannerUI.h
-
-
-
-
-
-	/**
-	 * origin: C:\Users\SKR\Documents\main\iPlanner Log\Log.cpp
-	 */
-
-#include "Log.h"
-
-void Log::writeToLogFile(string stringToBeLogged) {
-
-	ofstream writeFile("log.txt", ios::app);
-	writeFile << stringToBeLogged << endl;
-
-	writeFile.close();
-}
-
-void Log::clearLogFile() {
-	ofstream writeFile("log.txt");
-}
-	// End of segment: C:\Users\SKR\Documents\main\iPlanner Log\Log.cpp
-
-
-
-
-
-	/**
-	 * origin: C:\Users\SKR\Documents\main\iPlanner Log\Log.h
-	 */
-
-// Log
-// Group : F10-2C
-// Coder : Shri Kishen Rajendran
-#ifndef LOG_H
-#define LOG_H
-
-#include<iostream>
-#include<string>
-#include<fstream>
-
-using namespace std;
-
-class Log {	
-public:
-	void writeToLogFile(string);
-	void clearLogFile();
-};
-#endif
-	// End of segment: C:\Users\SKR\Documents\main\iPlanner Log\Log.h
 
 
 
