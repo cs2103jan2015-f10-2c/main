@@ -1,4 +1,4 @@
-//author A0108462J
+//@author A0108462J
 
 #include <assert.h>
 #include <exception>

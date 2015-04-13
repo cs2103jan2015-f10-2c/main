@@ -1,4 +1,4 @@
-//author A0108462J
+//@author A0108462J
 
 #ifndef ITEM_VERIFICATION_H
 #define ITEM_VERIFICATION_H
