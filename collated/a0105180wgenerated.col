@@ -1,4 +1,28 @@
-//@author: generated
+//@author: a0105180wgenerated
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iPlannerUI\iPlannerUI.h
+	 */
+
+namespace iPlannerUI {
+
+	using namespace System;
+	using namespace System::ComponentModel;
+	using namespace System::Collections;
+	using namespace System::Windows::Forms;
+	using namespace System::Data;
+	using namespace System::Drawing;
+
+	/// <summary>
+	/// Summary for iPlannerUI
+	/// </summary>
+	public ref class iPlannerUI : public System::Windows::Forms::Form {
+	private:
+	// End of segment: C:\Users\SKR\Documents\main\iPlannerUI\iPlannerUI.h
+
+
 
 
 
@@ -7,11 +31,13 @@
 	 */
 
 	private: System::Windows::Forms::TextBox^  commandInputBox;
+	private: System::Windows::Forms::Label^  scheduleLabel;
 
 
-	private: System::Windows::Forms::Label^  label1;
+
 	private: System::Windows::Forms::Label^  commandOutcomeLabel;
-	private: System::Windows::Forms::RichTextBox^  outputBox2;
+	private: System::Windows::Forms::RichTextBox^  outputBox;
+
 
 	private: System::Windows::Forms::MenuStrip^  HelpmenuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
@@ -23,6 +49,10 @@
 	private: System::Windows::Forms::ToolStripMenuItem^  dateAndTimeVariationsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  basicCommandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  viewScheduleToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  addModifyATaskEntityToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  removeATaskEntityToolStripMenuItem;
+
+
 
 
 
@@ -49,13 +79,12 @@
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		void InitializeComponent(void)
-		{
+		void InitializeComponent(void) {
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(iPlannerUI::typeid));
 			this->commandInputBox = (gcnew System::Windows::Forms::TextBox());
-			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->scheduleLabel = (gcnew System::Windows::Forms::Label());
 			this->commandOutcomeLabel = (gcnew System::Windows::Forms::Label());
-			this->outputBox2 = (gcnew System::Windows::Forms::RichTextBox());
+			this->outputBox = (gcnew System::Windows::Forms::RichTextBox());
 			this->HelpmenuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->addingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -63,56 +92,63 @@
 			this->dateAndTimeVariationsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->deletingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editingATaskToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->addModifyATaskEntityToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->removeATaskEntityToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->sortingScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->miscellneousToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->viewScheduleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->miscellneousToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->HelpmenuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// commandInputBox
 			// 
 			this->commandInputBox->BackColor = System::Drawing::Color::Black;
+			this->commandInputBox->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->commandInputBox->ForeColor = System::Drawing::Color::Silver;
-			this->commandInputBox->Location = System::Drawing::Point(12, 388);
+			this->commandInputBox->Location = System::Drawing::Point(12, 532);
 			this->commandInputBox->Name = L"commandInputBox";
-			this->commandInputBox->Size = System::Drawing::Size(428, 20);
+			this->commandInputBox->Size = System::Drawing::Size(428, 25);
 			this->commandInputBox->TabIndex = 0;
 			this->commandInputBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &iPlannerUI::commandInputBox_KeyDown);
 			// 
-			// label1
+			// scheduleLabel
 			// 
-			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold));
-			this->label1->ForeColor = System::Drawing::Color::Salmon;
-			this->label1->Location = System::Drawing::Point(184, 38);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(74, 20);
-			this->label1->TabIndex = 4;
-			this->label1->Text = L"iPlanner";
+			this->scheduleLabel->AutoSize = true;
+			this->scheduleLabel->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->scheduleLabel->ForeColor = System::Drawing::Color::PeachPuff;
+			this->scheduleLabel->Location = System::Drawing::Point(184, 38);
+			this->scheduleLabel->Name = L"scheduleLabel";
+			this->scheduleLabel->Size = System::Drawing::Size(91, 21);
+			this->scheduleLabel->TabIndex = 4;
+			this->scheduleLabel->Text = L"SCHEDULE";
 			// 
 			// commandOutcomeLabel
 			// 
 			this->commandOutcomeLabel->AutoSize = true;
 			this->commandOutcomeLabel->BackColor = System::Drawing::Color::Black;
+			this->commandOutcomeLabel->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->commandOutcomeLabel->ForeColor = System::Drawing::Color::IndianRed;
-			this->commandOutcomeLabel->Location = System::Drawing::Point(12, 359);
+			this->commandOutcomeLabel->Location = System::Drawing::Point(12, 493);
 			this->commandOutcomeLabel->Name = L"commandOutcomeLabel";
-			this->commandOutcomeLabel->Size = System::Drawing::Size(122, 13);
+			this->commandOutcomeLabel->Size = System::Drawing::Size(150, 17);
 			this->commandOutcomeLabel->TabIndex = 5;
 			this->commandOutcomeLabel->Text = L"commandOutcomeLabel";
 			// 
-			// outputBox2
+			// outputBox
 			// 
-			this->outputBox2->BackColor = System::Drawing::SystemColors::MenuText;
-			this->outputBox2->ForeColor = System::Drawing::Color::White;
-			this->outputBox2->HideSelection = false;
-			this->outputBox2->Location = System::Drawing::Point(15, 70);
-			this->outputBox2->Name = L"outputBox2";
-			this->outputBox2->ReadOnly = true;
-			this->outputBox2->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
-			this->outputBox2->Size = System::Drawing::Size(425, 272);
-			this->outputBox2->TabIndex = 7;
-			this->outputBox2->Text = L"";
+			this->outputBox->BackColor = System::Drawing::Color::Black;
+			this->outputBox->ForeColor = System::Drawing::Color::Black;
+			this->outputBox->HideSelection = false;
+			this->outputBox->Location = System::Drawing::Point(15, 70);
+			this->outputBox->Name = L"outputBox";
+			this->outputBox->ReadOnly = true;
+			this->outputBox->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
+			this->outputBox->Size = System::Drawing::Size(425, 401);
+			this->outputBox->TabIndex = 7;
+			this->outputBox->Text = L"";
 			// 
 			// HelpmenuStrip1
 			// 
@@ -167,10 +203,27 @@
 			// 
 			// editingATaskToolStripMenuItem
 			// 
+			this->editingATaskToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->addModifyATaskEntityToolStripMenuItem,
+					this->removeATaskEntityToolStripMenuItem
+			});
 			this->editingATaskToolStripMenuItem->Name = L"editingATaskToolStripMenuItem";
 			this->editingATaskToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->editingATaskToolStripMenuItem->Text = L"Edit a Task";
-			this->editingATaskToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::editingATaskToolStripMenuItem_Click);
+			// 
+			// addModifyATaskEntityToolStripMenuItem
+			// 
+			this->addModifyATaskEntityToolStripMenuItem->Name = L"addModifyATaskEntityToolStripMenuItem";
+			this->addModifyATaskEntityToolStripMenuItem->Size = System::Drawing::Size(208, 22);
+			this->addModifyATaskEntityToolStripMenuItem->Text = L"Add/Modify a Task entity";
+			this->addModifyATaskEntityToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::addModifyATaskEntityToolStripMenuItem_Click);
+			// 
+			// removeATaskEntityToolStripMenuItem
+			// 
+			this->removeATaskEntityToolStripMenuItem->Name = L"removeATaskEntityToolStripMenuItem";
+			this->removeATaskEntityToolStripMenuItem->Size = System::Drawing::Size(208, 22);
+			this->removeATaskEntityToolStripMenuItem->Text = L"Remove a task entity";
+			this->removeATaskEntityToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::removeATaskEntityToolStripMenuItem_Click);
 			// 
 			// sortingScheduleToolStripMenuItem
 			// 
@@ -179,13 +232,6 @@
 			this->sortingScheduleToolStripMenuItem->Text = L"Sort Schedule";
 			this->sortingScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::sortingScheduleToolStripMenuItem_Click);
 			// 
-			// miscellneousToolStripMenuItem
-			// 
-			this->miscellneousToolStripMenuItem->Name = L"miscellneousToolStripMenuItem";
-			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(152, 22);
-			this->miscellneousToolStripMenuItem->Text = L"Miscellneous";
-			this->miscellneousToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::miscellneousToolStripMenuItem_Click);
-			// 
 			// viewScheduleToolStripMenuItem
 			// 
 			this->viewScheduleToolStripMenuItem->Name = L"viewScheduleToolStripMenuItem";
@@ -193,15 +239,22 @@
 			this->viewScheduleToolStripMenuItem->Text = L"View Schedule";
 			this->viewScheduleToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::viewScheduleToolStripMenuItem_Click);
 			// 
+			// miscellneousToolStripMenuItem
+			// 
+			this->miscellneousToolStripMenuItem->Name = L"miscellneousToolStripMenuItem";
+			this->miscellneousToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->miscellneousToolStripMenuItem->Text = L"Miscellneous";
+			this->miscellneousToolStripMenuItem->Click += gcnew System::EventHandler(this, &iPlannerUI::miscellneousToolStripMenuItem_Click);
+			// 
 			// iPlannerUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ActiveCaptionText;
-			this->ClientSize = System::Drawing::Size(452, 448);
-			this->Controls->Add(this->outputBox2);
+			this->ClientSize = System::Drawing::Size(452, 595);
+			this->Controls->Add(this->outputBox);
 			this->Controls->Add(this->commandOutcomeLabel);
-			this->Controls->Add(this->label1);
+			this->Controls->Add(this->scheduleLabel);
 			this->Controls->Add(this->commandInputBox);
 			this->Controls->Add(this->HelpmenuStrip1);
 			this->ForeColor = System::Drawing::SystemColors::ControlText;
@@ -210,7 +263,8 @@
 			this->MainMenuStrip = this->HelpmenuStrip1;
 			this->MaximizeBox = false;
 			this->Name = L"iPlannerUI";
-			this->Text = L"iPlannerUI";
+			this->Text = L"iPlanner";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &iPlannerUI::iPlannerUI_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &iPlannerUI::iPlannerUI_Load);
 			this->HelpmenuStrip1->ResumeLayout(false);
 			this->HelpmenuStrip1->PerformLayout();
