@@ -1,5 +1,6 @@
-//author A0116229J
+
 //Coder : Yu Young Bin
+//@author A0116229J
 
 #include "stdafx.h"
 #include "CppUnitTest.h"

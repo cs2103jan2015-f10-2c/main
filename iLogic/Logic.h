@@ -1,6 +1,6 @@
-//author A0116229J
-//Coder : Yu Young Bin
 
+//Coder : Yu Young Bin
+//@author A0116229J
 
 #pragma once
 
@@ -29,6 +29,7 @@ struct MESSAGE_AND_SCHEDULE {
 	vector<Item> displaySchedule;
 };
 
+//structure used for view date
 struct START_END_TIME{
 	DateTime startTime;
 	DateTime endTime;
@@ -49,6 +50,7 @@ private:
 	START_END_TIME _startEndTime;
 	Log _logicLogger;
 
+	//used strings for UI display
 	static const string MESSAGE_SUCCESS;
 	static const string MESSAGE_INVALID_INPUT;
 	static const string MESSAGE_INVALID_INPUT_FOR_DELETE;
@@ -86,8 +88,21 @@ private:
 	static const string FILTER_ALL;
 	static const string FILTER_DATE;
 
-	static const int ZERO_INDEX = 0;
-	static const unsigned int DEFAULT_ITEM_ID = 0;
+	static const string ACCEPTABLE_PRIORITY_HIGH_1;
+	static const string ACCEPTABLE_PRIORITY_HIGH_2;
+	static const string ACCEPTABLE_PRIORITY_HIGH_3;
+	static const string ACCEPTABLE_PRIORITY_MEDIUM_1;
+	static const string ACCEPTABLE_PRIORITY_MEDIUM_2;
+	static const string ACCEPTABLE_PRIORITY_MEDIUM_3;
+	static const string ACCEPTABLE_PRIORITY_LOW_1;
+	static const string ACCEPTABLE_PRIORITY_LOW_2;
+	static const string ACCEPTABLE_PRIORITY_LOW_3;
+
+	static const char PRIORITY_HIGH;
+	static const char PRIORITY_MEDIUM;
+	static const char PRIORITY_LOW;
+	static const char PRIORITY_INVALID;
+
 
 	static char buffer[300];
 	static const string ASSIGNED_PRIORITY;
@@ -96,11 +111,9 @@ private:
 	static const string ASSIGNED_END_TIME;
 	static const string ASSIGNED_NAME;
 	static const string ASSIGNED_DESCRIPTION;
-
 	static const string TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME;
 	static const string DEFAULT_FILENAME;
 	static const string DEFAULT_SORTING;
-
 	static const string MESSAGE_TASK;
 	static const string MESSAGE_SUCCESSFUL_ADD;
 	static const string MESSAGE_SUCCESSFUL_DELETE;
@@ -134,14 +147,39 @@ private:
 	static const string MESSAGE_READFILE_COMPLETE;
 	static const string MESSAGE_WRITEFILE_COMPLETE;
 	static const string MESSAGE_LOGIC;
+	static const string MESSAGE_DEFAULT;
+	static const string END_OF_FOLDER_NAME;
+	static const string PLUS;
+	static const string EMPTY_STRING;
+	static const string SPACE_BAR;
+	static const char CHAR_SPACE_BAR;
+	static const char CHAR_TAB;
 
+	//used to avoid using magic numbers
+	static const unsigned int FIRST_INDEX;
+	static const unsigned int SIZE_ZERO;
+	static const unsigned int SIZE_INVALID;
+	static const unsigned int NOT_FOUND;
+	static const unsigned int EMPTY_TIME_FIELD;
+	static const unsigned int TIME_FIELD_REMOVED;
+	static const unsigned int INITIAL_ITEM_ID;
+	static const unsigned int FIRST_HOUR;
+	static const unsigned int FIRST_MINUTE;
+	static const unsigned int FINAL_HOUR;
+	static const unsigned int FINAL_MINUTE;
+	static const int ZERO_INDEX;
+	static const unsigned int DEFAULT_ITEM_ID;
+
+
+	//Strings used for CLI prints
+	static const string SCHEDULE_HEAD;
+	static const string SCHEDULE_END;
 	static const string ADD_TASK_SUCCESSFUL;
 	static const string DELETE_TASK_SUCCESSFUL;
 	static const string EDIT_TASK_SUCCESSFUL;
 	static const string SORT_TASK_SUCCESSFUL;
 	static const string MARK_DONE_SUCCESSFUL;
-	
-
+	static const string SCHEDULE_RETRIEVED;
 	static const string ADD_TASK_FAILED;
 	static const string DELETE_TASK_FAILED;
 	static const string EDIT_TASK_FAILED;
@@ -183,7 +221,7 @@ public:
 	void printChangeSavingDirectorySuccessful();
 
 
-	
+
 	////////////////////////
 	////*MAIN FUNCTIONS*////
 	////////////////////////
@@ -220,13 +258,13 @@ public:
 	//Pre: takes in the parse info given by the parser and execute addTask
 	//post:returns Success or Failure message
 	string addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed);
-	
+
 
 	//adds Item to schedule once the item is valid
 	//Pre : takes in valid item to be added to storage
 	//post : returns a message of successful addition
 	string Logic::addItemToSchedule(Item* newItemToBeAdded);
-	
+
 
 	//set an item name and id for a new item created
 	//Pre : takes in the item pointer that ID and name should be assigned and the name that user specified
@@ -285,7 +323,7 @@ public:
 	//Pre: takes in the lineIndex and the parse info given by the parser and execute editTask
 	//post: returns Success or Failure message
 	string editTask(list<COMMAND_AND_TEXT>, unsigned int lineIndexToBeEdited);
-	
+
 
 	//if Item to be modified is valid and line index is valid, replace the item from the schedule
 	//pre : takes in valid item pointer, and valid line index
@@ -323,7 +361,7 @@ public:
 	//Post : returns a dateTime object created
 	DateTime interpreteDateTime(string infoToBeInterpreted, DateTime existingTimeSetting);
 	DateTime createDateTime(int DD, int MM, int YYYY, int hh, int mm);
-	
+
 
 	//gets current time and convert it to a DateTime object
 	//pre : none
@@ -349,8 +387,8 @@ public:
 	//Pre: none
 	//Post: returns the Display vector of Items
 	vector<Item> sortTask();
-	
-	
+
+
 	//changes current Sorting method if sorting method specified by the user is valid.
 	//display schedule will be sorted according to the current sorting method
 	//everytime a command is executed.
@@ -388,9 +426,16 @@ public:
 	string modifyKeywordVec(string keyWord);
 	string searchTask();
 	void clearKeyWordVec();
-	
 
+	//convert a string to a priority charactor (H,M,L)
+	//Pre: takes in a string that contains information on priority
+	//post: returns a priority charactor(H,M,L) Invalid priority (E)
 	char stringConvertToPriorityChar(string priority);
+
+
+	//takes in a string and trims the empty space front and back of it
+	//Pre : takes in a string
+	//Post : trimmed string
 	string trimText(string& text);
 	string trimBack(string text);
 	string trimFront(string text);
@@ -413,7 +458,7 @@ public:
 	//pre : none
 	//post : returns display schedule
 	vector<Item> getDisplaySchedule();
-	
+
 
 	//retrieves the schedule(only used for saving purpose)
 	//pre : none
@@ -433,8 +478,15 @@ public:
 	//post : returns a  string that contains error lists
 	string getErrorList(ItemVerification verifier);
 
+
+	//gets start and end time for the view date option
+	//takes in 10 integers and turn them into a start_END_TIME structure
+	//Pre : Takes in a string containing 10 integers
+	//Post : returns a START_END_TIME structure
 	START_END_TIME getStartEndTime(string infoToBeInterpreted);
 	DateTime interpretStartEndTime(string identifier, int YYYY, int MM, int DD, int hh, int mm);
+
+
 	/////////////////////////////////////
 	////*SAVE FILE RELATED FUNCTIONS*////
 	/////////////////////////////////////
@@ -454,7 +506,7 @@ public:
 	string assignOneFolderToMake(int truncatePosition, string userInputDirectory);
 	string assignLastFolderToMake(string userInputDirectory, string directoryToMake);
 	string truncateUserInputDirectory(int truncatePosition, string userInputDirectory);
-	
+
 
 	//retrieves the directory and filename of the save file
 	//pre : none
@@ -463,13 +515,14 @@ public:
 	string convertKeywordVecToString();
 	void convertStringToKeywordVec(string keywordString);
 
+
 	//save basic information in to basicinformation.txt file
 	//basic information include :
 	//directory, filename, schedulesize, sorting method, last item id used, filter
 	//pre : none
 	//post : none
 	void saveBasicInformationToTextFile();
-	
+
 
 	//retrieves basic information if basicinformation.txt file exists
 	//create new basicinformation.txt file for a new user or file is corrupted or accidentally deleted

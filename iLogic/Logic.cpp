@@ -1,5 +1,6 @@
-//author A0116229J
+
 //Coder : Yu Young Bin
+//@author A0116229J
 
 
 #include "Logic.h"
@@ -40,6 +41,20 @@ const string Logic::FILTER_ALL = "all";
 const string Logic::FILTER_KEYWORD = "keyword";
 const string Logic::FILTER_DATE = "date";
 
+const string Logic::ACCEPTABLE_PRIORITY_HIGH_1 = "high";
+const string Logic::ACCEPTABLE_PRIORITY_HIGH_2 = "h";
+const string Logic::ACCEPTABLE_PRIORITY_HIGH_3 = "H";
+const string Logic::ACCEPTABLE_PRIORITY_MEDIUM_1 = "medium";
+const string Logic::ACCEPTABLE_PRIORITY_MEDIUM_2 = "M";
+const string Logic::ACCEPTABLE_PRIORITY_MEDIUM_3 = "m";
+const string Logic::ACCEPTABLE_PRIORITY_LOW_1 = "low";
+const string Logic::ACCEPTABLE_PRIORITY_LOW_2 = "L";
+const string Logic::ACCEPTABLE_PRIORITY_LOW_3 = "l";
+
+const char Logic:: PRIORITY_HIGH = 'H';
+const char Logic::PRIORITY_MEDIUM = 'M';
+const char Logic::PRIORITY_LOW = 'L';
+const char Logic::PRIORITY_INVALID = 'E';
 
 const string Logic::TEXTFILE_TO_STORE_DIRECTORY_AND_FILENAME = "basicinformation.txt";
 const string Logic::DEFAULT_FILENAME = "save.txt";
@@ -76,17 +91,39 @@ const string Logic::MESSAGE_INVALID_COMPLETION = "invalid completion";
 const string Logic::MESSAGE_TASK_FOUND = "Tasks containing : ";
 const string Logic::MESSAGE_NO_TASK_FOUND = "No task can be found";
 const string Logic::MESSAGE_UNABLE_TO_UNDO = "ERROR: Undo has reached its limit.";
-const string Logic::MESSAGE_LOGIC = "Logic:: ";
+const string Logic::MESSAGE_LOGIC = "LOGIC::";
+const string Logic::MESSAGE_DEFAULT = "default";
 const string Logic::MESSAGE_READFILE_COMPLETE = "readfile completed";
 const string Logic::MESSAGE_WRITEFILE_COMPLETE = "writefile completed";
+const string Logic::EMPTY_STRING = "";
+const string Logic::END_OF_FOLDER_NAME = "/";
+const string Logic::PLUS = "+";
+const string Logic::SPACE_BAR = " ";
+const char Logic::CHAR_SPACE_BAR = ' ';
+const char Logic::CHAR_TAB = '\t';
+
+const unsigned int Logic::FIRST_INDEX = 0;
+const unsigned int Logic::SIZE_ZERO = 0;
+const unsigned int Logic::SIZE_INVALID = 1;
+const unsigned int Logic::NOT_FOUND = -1;
+const unsigned int Logic::EMPTY_TIME_FIELD = -1;
+const unsigned int Logic::TIME_FIELD_REMOVED = -2;
+const unsigned int Logic::INITIAL_ITEM_ID = 1;
+const unsigned int Logic::FIRST_HOUR = 0;
+const unsigned int Logic::FIRST_MINUTE = 0;
+const unsigned int Logic::FINAL_HOUR = 23;
+const unsigned int Logic::FINAL_MINUTE = 59;
+
 
 char Logic::buffer[300];
+const string Logic::SCHEDULE_HEAD = "-------------------------------------------------------------------------------\nSCHEDULE\n-------------------------------------------------------------------------------";
+const string Logic::SCHEDULE_END = "-------------------------------------------------------------------------------";
 const string Logic::ADD_TASK_SUCCESSFUL = "Task is added to schedule";
 const string Logic::DELETE_TASK_SUCCESSFUL = "Task %d is removed from schedule";
 const string Logic::EDIT_TASK_SUCCESSFUL = "Task %d is edited from schedule";
 const string Logic::SORT_TASK_SUCCESSFUL = "Sorting Changed to : ";
 const string Logic::MARK_DONE_SUCCESSFUL = "Task %d is done";
-
+const string Logic::SCHEDULE_RETRIEVED = "Schedule Retrieved";
 const string Logic::ADD_TASK_FAILED = "Task cannot be added to schedule";
 const string Logic::DELETE_TASK_FAILED = "Task cannot be removed from schedule";
 const string Logic::INVALID_LINE_INDEX = "invalid line index";
@@ -95,11 +132,11 @@ const string Logic::EDIT_TASK_FAILED = "Task cannot be edited from schedule";
 
 
 Logic::Logic() {
-	_nextItemID = 1;
-	//failure in add,delete,add function will return an item with ID = 0
-	_scheduleSize = 0;
+	_nextItemID = INITIAL_ITEM_ID;
+	//Initialised to 1, failure in add,delete,add function will return an item with ID = 0
+	_scheduleSize = SIZE_ZERO;
 	//schedule size initialised to 0
-	_directoryToBeSaved = "";
+	_directoryToBeSaved = EMPTY_STRING;
 	//if saving directory is an empty string, the directory is set to default
 	_fileNameToBeSaved = DEFAULT_FILENAME;
 	//default file name is save.txt
@@ -122,17 +159,16 @@ Logic::~Logic() {}
 
 void Logic::printSchedule(vector<Item> retrievedDisplaySchedule){
 	cout << endl;
-	cout << "-------------------------------------------------------------------------------" << endl;
-	cout << "SCHEDULE" << endl;
-	cout << "-------------------------------------------------------------------------------" << endl;
-	for (unsigned int lineNumber = 0; lineNumber < retrievedDisplaySchedule.size(); lineNumber++){
+	cout << SCHEDULE_HEAD << endl;
+	
+	for (unsigned int lineNumber = FIRST_INDEX; lineNumber < retrievedDisplaySchedule.size(); lineNumber++){
 		cout << "[Item " << lineNumber + 1 << "]" << endl;
 		printItem(retrievedDisplaySchedule[lineNumber]);
 		if (lineNumber != retrievedDisplaySchedule.size() - 1) {
 			cout << endl;
 		}
 	}
-	cout << "-------------------------------------------------------------------------------" << endl;
+	cout << SCHEDULE_END << endl;
 	cout << endl;
 }
 
@@ -191,7 +227,7 @@ void Logic::printEditTaskInvalidLineIndex(){
 
 
 void Logic::printUndo(){
-	cout << "Undo Previous command" << endl;
+	cout << MESSAGE_SUCCESSFUL_UNDO << endl;
 }
 
 
@@ -205,7 +241,7 @@ void Logic::printEditTaskInvalidItemParts(ItemVerification verifier){
 }
 
 void Logic::printInvalidInput(){
-	cout << "Error: " << MESSAGE_INVALID_INPUT << endl << endl;
+	cout << MESSAGE_INVALID_INPUT << endl << endl;
 }
 
 void Logic::printInvalidLineIndex(){
@@ -214,14 +250,17 @@ void Logic::printInvalidLineIndex(){
 
 
 void Logic::printInvalidViewOption(){
-	cout << "Invalid view option" << endl;
+	cout << MESSAGE_INVALID_FILTERTYPE << endl;
 }
 
 
 void Logic::printViewChanged(){
-	cout << "Filter : " << _currentFilter << endl;
+	cout << MESSAGE_SUCCESSFUL_VIEW << _currentFilter << endl;
 }
 
+void Logic::printChangeSavingDirectorySuccessful(){
+	cout << MESSAGE_SUCCESSFUL_SAVE << _directoryToBeSaved << endl;
+}
 
 
 
@@ -232,25 +271,19 @@ void Logic::printViewChanged(){
 
 MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
 	list<COMMAND_AND_TEXT> parseInfoToBeProcessed = getParseInfo(_logicParser, input);
-	assert(parseInfoToBeProcessed.size() > 0);
+	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
 
 	string command = parseInfoToBeProcessed.begin()->command;
 	string itemInformation = parseInfoToBeProcessed.begin()->text;
 	string returnMessage;
 	MESSAGE_AND_SCHEDULE userDisplayInformation;
 	list<COMMAND_AND_TEXT>::iterator iter;
-	/*For debugging purpose on CLI*/
-	for (iter = parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
-		cout << "COMMAND : " << iter->command << endl;
-		cout << "TEXT : " << iter->text << endl;
-	}
-	/*Debugging Ends*/
+
 	try{
 		if (command == COMMAND_ADD) {
 			returnMessage = addTask(parseInfoToBeProcessed);
 		} else if (command == COMMAND_DELETE) {
 			unsigned int lineIndexToBeDeleted = convertToDigit(itemInformation);
-			cout << "LINEINDEX : " << lineIndexToBeDeleted << endl;
 			returnMessage = deleteTask(lineIndexToBeDeleted);
 		} else if (command == COMMAND_EDIT){
 			unsigned int lineIndexToBeEdited = convertToDigit(itemInformation);
@@ -287,9 +320,9 @@ MESSAGE_AND_SCHEDULE Logic::initiateCommandAction(string input) {
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
-	string loggerString = command + " : " + returnMessage;
-	_logicLogger.writeToLogFile(loggerString);
+
 	userDisplayInformation = returnUserDisplayInformation(returnMessage);
 	return userDisplayInformation;
 }
@@ -319,7 +352,7 @@ list<COMMAND_AND_TEXT> Logic::getParseInfo(iParser parser, string input){
 
 
 string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
-	assert(parseInfoToBeProcessed.size() > 0);
+	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
 	Item *newItemToBeAdded;
 	newItemToBeAdded = new Item;
 
@@ -337,10 +370,15 @@ string Logic::addTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		
 	}
+
 	string errorList = getErrorList(verifier);
-	cout << "errorList : " << errorList << endl;
+
+	_logicLogger.writeToLogFile(MESSAGE_LOGIC + MESSAGE_FAILED_ADD + errorList);
+
 	removeItemPointer(newItemToBeAdded);
+
 	return MESSAGE_FAILED_ADD + errorList;
 }
 
@@ -356,14 +394,14 @@ string Logic::addItemToSchedule(Item* newItemToBeAdded){
 
 
 void Logic::setItemNameAndIDForNewItem(Item *newItem, list<COMMAND_AND_TEXT> parseInfoToBeProcessed){
-	assert(parseInfoToBeProcessed.size() > 0);
+	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
 	newItem->setItemName(parseInfoToBeProcessed.begin()->text);
 	newItem->setItemID(_nextItemID);
 }
 
 
 unsigned int Logic::increaseItemID(){
-	assert(_nextItemID >= 0);
+	assert(_nextItemID >= SIZE_ZERO);
 	_nextItemID++;
 	return _nextItemID;
 }
@@ -394,15 +432,16 @@ string Logic::deleteTask(unsigned int lineIndexToBeDeleted){
 			throw MESSAGE_LOGIC + INVALID_LINE_INDEX;
 		}
 	}
-	catch (string errorMessage2){
-		cerr << errorMessage2 << endl;
+	catch (string errorMessage){
+		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return  MESSAGE_FAILED_DELETE + MESSAGE_INVALID_INDEX;
 }
 
 
 string Logic::deleteItemFromSchedule(unsigned int lineIndexToBeDeleted){
-	assert(lineIndexToBeDeleted > 0);
+	assert(lineIndexToBeDeleted > SIZE_ZERO);
 	_logicSchedule.deleteItemGivenDisplayVectorIndex(lineIndexToBeDeleted);
 	printDeleteTaskSuccessful(lineIndexToBeDeleted);
 	return MESSAGE_SUCCESSFUL_DELETE;
@@ -427,6 +466,7 @@ string Logic::undoPreviousAction(){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return MESSAGE_FAILED_UNDO;
 }
@@ -438,9 +478,9 @@ string Logic::undoPreviousAction(){
 
 
 string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned int lineIndexToBeEdited){
-	assert(parseInfoToBeProcessed.size() > 0);
+	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
 	try{
-		if (parseInfoToBeProcessed.size() == 1){
+		if (parseInfoToBeProcessed.size() == SIZE_INVALID){
 			return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INPUT;
 		} else if (isValidLineIndex(lineIndexToBeEdited)){
 
@@ -467,13 +507,14 @@ string Logic::editTask(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, unsigned i
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return MESSAGE_FAILED_EDIT + MESSAGE_INVALID_INDEX;
 }
 
 
 string Logic::replaceItemInSchedule(Item* editedItemToBeReplaced, unsigned int lineIndexToBeEdited){
-	assert(lineIndexToBeEdited > 0);
+	assert(lineIndexToBeEdited > SIZE_ZERO);
 	_logicSchedule.replaceItemGivenDisplayVectorIndex(editedItemToBeReplaced, lineIndexToBeEdited);
 	removeItemPointer(editedItemToBeReplaced);
 	return MESSAGE_SUCCESSFUL_EDIT;
@@ -481,9 +522,9 @@ string Logic::replaceItemInSchedule(Item* editedItemToBeReplaced, unsigned int l
 
 
 string Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* itemToBeModified){
-	assert(parseInfoToBeProcessed.size() > 0);
+	assert(parseInfoToBeProcessed.size() > SIZE_ZERO);
 	list<COMMAND_AND_TEXT>::iterator iter;
-	string modifiedItemParts = "";
+	string modifiedItemParts = EMPTY_STRING;
 	for (iter = ++parseInfoToBeProcessed.begin(); iter != parseInfoToBeProcessed.end(); ++iter){
 		modifyItemParts(iter, itemToBeModified, modifiedItemParts);
 	}
@@ -493,8 +534,8 @@ string Logic::modifyItem(list<COMMAND_AND_TEXT> parseInfoToBeProcessed, Item* it
 
 string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemToBeModified, string& modifiedItemPartsForDisplay){
 	string modifier = iter->command;
-	assert(modifier != "");
-	modifiedItemPartsForDisplay = modifiedItemPartsForDisplay + modifier + " ";
+	assert(modifier != EMPTY_STRING);
+	modifiedItemPartsForDisplay = modifiedItemPartsForDisplay + modifier + SPACE_BAR;
 	try{
 		if (modifier == MODIFIER_NAME){
 			itemToBeModified->setItemName(iter->text);
@@ -507,7 +548,7 @@ string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemT
 		} else if (modifier == MODIFIER_END){
 			itemToBeModified->setEndTime(interpreteDateTime(iter->text, itemToBeModified->getEndTime()));
 		} else if (modifier == MODIFIER_LABEL){
-			char labelToBeModified = iter->text[0];
+			char labelToBeModified = iter->text[FIRST_INDEX];
 			itemToBeModified->setLabel(labelToBeModified);
 		} else if (modifier == MODIFIER_PRIORITY){
 			char priorityToBeModified = checkPriority(iter->text);
@@ -521,6 +562,7 @@ string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemT
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return modifiedItemPartsForDisplay;
 }
@@ -528,20 +570,21 @@ string Logic::modifyItemParts(list<COMMAND_AND_TEXT>::iterator iter, Item* itemT
 
 char Logic::checkPriority(string priorityToBeModified){
 	try{
-		if (priorityToBeModified == "high" || priorityToBeModified == "h" || priorityToBeModified == "H"){
-			return 'H';
-		} else if (priorityToBeModified == "medium" || priorityToBeModified == "m" || priorityToBeModified == "M"){
-			return 'M';
-		} else if (priorityToBeModified == "low" || priorityToBeModified == "l" || priorityToBeModified == "L"){
-			return 'L';
+		if (priorityToBeModified == ACCEPTABLE_PRIORITY_HIGH_1 || priorityToBeModified == ACCEPTABLE_PRIORITY_HIGH_2 || priorityToBeModified == ACCEPTABLE_PRIORITY_HIGH_3){
+			return PRIORITY_HIGH;
+		} else if (priorityToBeModified == ACCEPTABLE_PRIORITY_MEDIUM_1 || priorityToBeModified == ACCEPTABLE_PRIORITY_MEDIUM_2 || priorityToBeModified == ACCEPTABLE_PRIORITY_MEDIUM_3){
+			return PRIORITY_MEDIUM;
+		} else if (priorityToBeModified == ACCEPTABLE_PRIORITY_LOW_1 || priorityToBeModified == ACCEPTABLE_PRIORITY_LOW_2 || priorityToBeModified == ACCEPTABLE_PRIORITY_LOW_3){
+			return PRIORITY_LOW;
 		} else{
 			throw MESSAGE_LOGIC + MESSAGE_INVALID_PRIORITY;
 		}
 	}
 	catch (string errorMessage) {
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
-	return 'E';
+	return PRIORITY_INVALID;
 }
 
 
@@ -559,41 +602,41 @@ DateTime Logic::interpreteDateTime(string infoToBeInterpreted, DateTime existing
 	inputTime >> YYYY2 >> MM2 >> DD2 >> hh2 >> mm2;
 
 	//if new time input is user defined, make appropriate changes
-	if (YYYY2 != -1){
+	if (YYYY2 != EMPTY_TIME_FIELD){
 		YYYY = YYYY2;
 	}
-	if (MM2 != -1){
+	if (MM2 != EMPTY_TIME_FIELD){
 		MM = MM2;
 	}
-	if (DD2 != -1){
+	if (DD2 != EMPTY_TIME_FIELD){
 		DD = DD2;
 	}
-	if (hh2 != -1){
+	if (hh2 != EMPTY_TIME_FIELD){
 		hh = hh2;
 	}
-	if (mm2 != -1){
+	if (mm2 != EMPTY_TIME_FIELD){
 		mm = mm2;
 	}
 
 	//when user did not specified any dates, set current date
-	if (YYYY == -1 && YYYY2 == -1 && MM == -1 && MM2 == -1 && DD == -1 && DD2 == -1){
+	if (YYYY == EMPTY_TIME_FIELD && YYYY2 == EMPTY_TIME_FIELD && MM == EMPTY_TIME_FIELD && MM2 == EMPTY_TIME_FIELD && DD == EMPTY_TIME_FIELD && DD2 == EMPTY_TIME_FIELD){
 		YYYY = getCurrentTime().getYear();
 		MM = getCurrentTime().getMonth();
 		DD = getCurrentTime().getDay();
 	}
 
 	//if user did not specify year, set current year
-	if (YYYY == -1 && YYYY2 == -1){
+	if (YYYY == EMPTY_TIME_FIELD && YYYY2 == EMPTY_TIME_FIELD){
 		YYYY = getCurrentTime().getYear();
 	}
-
+	
 	//if user wants to remove the datetime
-	if (YYYY2 == -2 && MM2 == -2 && DD2 == -2 && hh2 == -2 && mm2 == -2){
-		YYYY = -1;
-		MM = -1;
-		DD = -1;
-		hh = -1;
-		mm = -1;
+	if (YYYY2 == TIME_FIELD_REMOVED && MM2 == TIME_FIELD_REMOVED && DD2 == TIME_FIELD_REMOVED && hh2 == TIME_FIELD_REMOVED && mm2 == TIME_FIELD_REMOVED){
+		YYYY = EMPTY_TIME_FIELD;
+		MM = EMPTY_TIME_FIELD;
+		DD = EMPTY_TIME_FIELD;
+		hh = EMPTY_TIME_FIELD;
+		mm = EMPTY_TIME_FIELD;
 	}
 
 	DateTime interpretedDateTime(YYYY, MM, DD, hh, mm);
@@ -625,6 +668,7 @@ string Logic::markDone(unsigned int lineIndex){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return INVALID_LINE_INDEX;
 }
@@ -642,12 +686,13 @@ string Logic::markUndone(unsigned int lineIndex){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return INVALID_LINE_INDEX;
 }
 
 string Logic::changeCompletion(unsigned int lineIndex, string completion){
-	assert(lineIndex > 0);
+	assert(lineIndex > SIZE_ZERO);
 	Item* retrievedItem;
 	retrievedItem = new Item;
 	*retrievedItem = _logicSchedule.retrieveItemGivenDisplayVectorIndex(lineIndex);
@@ -665,6 +710,7 @@ string Logic::changeCompletion(unsigned int lineIndex, string completion){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 		return MESSAGE_INVALID_COMPLETION;
 	}
 
@@ -704,6 +750,7 @@ vector<Item> Logic::sortTask(){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	printSchedule(sortedDisplaySchedule);
 	return sortedDisplaySchedule;
@@ -722,6 +769,7 @@ string Logic::changeCurrentSorting(string sortingMethod){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return MESSAGE_FAILED_SORT + MESSAGE_INVALID_SORTTYPE;
 }
@@ -793,20 +841,20 @@ START_END_TIME Logic::getStartEndTime(string infoToBeInterpreted){
 }
 
 DateTime Logic::interpretStartEndTime(string identifier, int YYYY, int MM, int DD, int hh, int mm){
-	if (YYYY == -1){
+	if (YYYY == EMPTY_TIME_FIELD){
 		YYYY = getCurrentTime().getYear();
 	}
-	if (MM == -1) {
+	if (MM == EMPTY_TIME_FIELD) {
 		MM = getCurrentTime().getMonth();
 	}
-	if (DD == -1){
+	if (DD == EMPTY_TIME_FIELD){
 		DD = getCurrentTime().getDay();
 	}
-	if (identifier == "end" && hh == -1 && mm == -1){
-		hh = 23;
-		mm = 59;
+	if (identifier == MODIFIER_END && hh == EMPTY_TIME_FIELD && mm == EMPTY_TIME_FIELD){
+		hh = FINAL_HOUR;
+			mm = FINAL_MINUTE;
 	}
-	cout << YYYY << " " << MM << " " << DD << " " << hh << " " << mm << endl;
+	cout << YYYY << SPACE_BAR << MM << SPACE_BAR << DD << SPACE_BAR << hh << SPACE_BAR << mm << endl;
 	DateTime startEndTime(YYYY, MM, DD, hh, mm);
 	return startEndTime;
 }
@@ -830,6 +878,7 @@ string Logic::filterByCompletion(bool completion){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 
 	return _currentFilter;
@@ -839,25 +888,26 @@ char Logic::stringConvertToPriorityChar(string priority){
 	_currentFilter = priority;
 	try{
 		if (priority == FILTER_PRIORITY_HIGH){
-			return 'H';
+			return PRIORITY_HIGH;
 		} else if (priority == FILTER_PRIORITY_MEDIUM){
-			return 'M';
+			return PRIORITY_MEDIUM;
 		} else if (priority == FILTER_PRIORITY_LOW){
-			return 'L';
+			return PRIORITY_LOW;
 		} else {
 			throw MESSAGE_LOGIC+ MESSAGE_INVALID_PRIORITY;
 		}
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
-	return 'I';
+	return PRIORITY_INVALID;
 
 }
 
 string Logic::filterByPriority(char priority){
 	try{
-		if (priority != 'E'){
+		if (priority != PRIORITY_INVALID){
 			_logicSchedule.retrieveDisplayScheduleFilteredByPriority(priority);
 			return _currentFilter;
 		} else {
@@ -866,6 +916,7 @@ string Logic::filterByPriority(char priority){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return MESSAGE_INVALID_PRIORITY;
 }
@@ -885,13 +936,13 @@ string Logic::modifyKeywordVec(string keyWord){
 
 
 string Logic::searchTask(){
-	for (int i = 0; i < _keywordVec.size(); i++){
-		_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(_keywordVec[i]);
+	for (int lineIndex = SIZE_ZERO; lineIndex < _keywordVec.size(); lineIndex++){
+		_logicSchedule.retrieveDisplayScheduleFilteredByKeyword(_keywordVec[lineIndex]);
 	}
 	try{
-		if (getDisplayScheduleSize() == 0){
+		if (getDisplayScheduleSize() == SIZE_ZERO){
 			return MESSAGE_NO_TASK_FOUND;
-		} else if (getDisplayScheduleSize() > 0){
+		} else if (getDisplayScheduleSize() > SIZE_ZERO){
 			_currentFilter = FILTER_KEYWORD;
 			return MESSAGE_TASK_FOUND;
 		} else {
@@ -900,6 +951,7 @@ string Logic::searchTask(){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return MESSAGE_INVALID_INPUT;
 }
@@ -911,9 +963,9 @@ string Logic::trimText(string& text) {
 }
 
 string Logic::trimFront(string text) {
-	unsigned int startIndex = 0;
+	unsigned int startIndex = FIRST_INDEX;
 
-	while (startIndex < text.length() && (text[startIndex] == ' ' || text[startIndex] == '\t')) {
+	while (startIndex < text.length() && (text[startIndex] == CHAR_SPACE_BAR || text[startIndex] == CHAR_TAB)) {
 		startIndex++;
 	}
 	return text.substr(startIndex);
@@ -922,11 +974,11 @@ string Logic::trimFront(string text) {
 string Logic::trimBack(string text) {
 	unsigned int endIndex = text.length();
 
-	while (endIndex > 0 && (text[endIndex - 1] == ' ' || text[endIndex - 1] == '\t')) {
+	while (endIndex > 0 && (text[endIndex - 1] == CHAR_SPACE_BAR || text[endIndex - 1] == CHAR_TAB)) {
 		endIndex--;
 	}
 
-	return text.substr(0, endIndex);
+	return text.substr(FIRST_INDEX, endIndex);
 }
 
 /////////////////////////////////////
@@ -935,20 +987,20 @@ string Logic::trimBack(string text) {
 
 
 string Logic::changeSavingDirectory(string userInputDirectory){
-	string directoryToMake = "";
+	string directoryToMake = EMPTY_STRING;
 	int truncatePosition;
-	if (userInputDirectory == "default"){
-		userInputDirectory = "";
+	if (userInputDirectory == MESSAGE_DEFAULT){
+		userInputDirectory = EMPTY_STRING;
 	}
 
-	while (userInputDirectory != ""){
-		truncatePosition = userInputDirectory.find_first_of("/");
-		if (truncatePosition != -1){
+	while (userInputDirectory != EMPTY_STRING){
+		truncatePosition = userInputDirectory.find_first_of(END_OF_FOLDER_NAME);
+		if (truncatePosition != NOT_FOUND){
 			directoryToMake = directoryToMake + assignOneFolderToMake(truncatePosition, userInputDirectory);
 			userInputDirectory = truncateUserInputDirectory(truncatePosition, userInputDirectory);
 		} else{
 			directoryToMake = assignLastFolderToMake(userInputDirectory, directoryToMake);
-			userInputDirectory = "";
+			userInputDirectory = EMPTY_STRING;
 		}
 		_mkdir(directoryToMake.c_str());
 	}
@@ -960,7 +1012,7 @@ string Logic::changeSavingDirectory(string userInputDirectory){
 
 
 string Logic::assignOneFolderToMake(int truncatePosition, string userInputDirectory){
-	return userInputDirectory.substr(0, truncatePosition + 1);
+	return userInputDirectory.substr(FIRST_INDEX, truncatePosition + 1);
 }
 
 
@@ -974,9 +1026,6 @@ string Logic::truncateUserInputDirectory(int truncatePosition, string userInputD
 }
 
 
-void Logic::printChangeSavingDirectorySuccessful(){
-	cout << "saving directory has been changed to   " << _directoryToBeSaved << endl;
-}
 
 
 void Logic::saveBasicInformationToTextFile(){
@@ -989,11 +1038,11 @@ void Logic::saveBasicInformationToTextFile(){
 
 
 string Logic::convertKeywordVecToString(){
-	string keywordString = "";
+	string keywordString = EMPTY_STRING;
 	if (_keywordVec.size() != 0){
 		for (int i = 0; i < _keywordVec.size(); i++){
 			if (i != _keywordVec.size() - 1){
-				keywordString = keywordString + _keywordVec[i] + "+";
+				keywordString = keywordString + _keywordVec[i] + PLUS;
 			} else{
 				keywordString = keywordString + _keywordVec[i];
 			}
@@ -1003,10 +1052,10 @@ string Logic::convertKeywordVecToString(){
 }
 
 void Logic::convertStringToKeywordVec(string keywordString){
-	while (keywordString != ""){
-		int breakPoint = keywordString.find_first_of("+");
-		if (breakPoint != -1){
-			string tokenisedKeyword = keywordString.substr(0, breakPoint);
+	while (keywordString != EMPTY_STRING){
+		int breakPoint = keywordString.find_first_of(PLUS);
+		if (breakPoint != NOT_FOUND){
+			string tokenisedKeyword = keywordString.substr(FIRST_INDEX, breakPoint);
 			trimText(tokenisedKeyword);
 			_keywordVec.push_back(tokenisedKeyword);
 			keywordString = keywordString.substr(breakPoint + 1);
@@ -1018,13 +1067,13 @@ void Logic::convertStringToKeywordVec(string keywordString){
 }
 
 string Logic::getDirectoryAndFileName(){
-	if (_directoryToBeSaved == ""){
-		if (_fileNameToBeSaved == ""){
+	if (_directoryToBeSaved == EMPTY_STRING){
+		if (_fileNameToBeSaved == EMPTY_STRING){
 			_fileNameToBeSaved == DEFAULT_FILENAME;
 		}
 		return _fileNameToBeSaved;
 	} else{
-		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+		return _directoryToBeSaved + END_OF_FOLDER_NAME + _fileNameToBeSaved;
 	}
 }
 
@@ -1042,6 +1091,7 @@ string Logic::retrieveBasicInformation(){
 	}
 	catch (string errorMessage){
 		cerr << errorMessage << endl;
+		_logicLogger.writeToLogFile(errorMessage);
 	}
 	return MESSAGE_FILE_NOT_EXISTING;
 }
@@ -1054,15 +1104,15 @@ string Logic::retrieveBasicInformationFromTextFile(){
 	readFile >> _scheduleSize;
 	readFile >> _nextItemID;
 
-	cout << _directoryToBeSaved + "/" + _fileNameToBeSaved << endl;
+	cout << _directoryToBeSaved + END_OF_FOLDER_NAME + _fileNameToBeSaved << endl;
 
-	if (_directoryToBeSaved == ""){
-		if (_fileNameToBeSaved == ""){
+	if (_directoryToBeSaved == EMPTY_STRING){
+		if (_fileNameToBeSaved == EMPTY_STRING){
 			_fileNameToBeSaved == DEFAULT_FILENAME;
 		}
 		return _fileNameToBeSaved;
 	} else{
-		return _directoryToBeSaved + "/" + _fileNameToBeSaved;
+		return _directoryToBeSaved + END_OF_FOLDER_NAME + _fileNameToBeSaved;
 	}
 }
 
@@ -1083,7 +1133,7 @@ string Logic::changeSavingFileName(string FileNameToBeSaved){
 string Logic::readDataFromFile() {
 	if (isExistingFileInDirectory(getDirectoryAndFileName())){
 		ifstream readFile(getDirectoryAndFileName());
-		for (unsigned int lineNumber = 0; lineNumber < _scheduleSize; lineNumber++){
+		for (unsigned int lineNumber = SIZE_ZERO; lineNumber < _scheduleSize; lineNumber++){
 
 			string itemName;
 			string description;
@@ -1119,7 +1169,7 @@ string Logic::readDataFromFile() {
 			readFile >> priority;
 			readFile >> label;
 			readFile >> completionIndicator;
-			if (completionIndicator != 0){
+			if (completionIndicator != SIZE_ZERO){
 				completion = true;
 			}
 			getline(readFile, junk);
@@ -1140,11 +1190,10 @@ string Logic::readDataFromFile() {
 		ofstream writeFile(getDirectoryAndFileName());
 	}
 	_logicSchedule.resetHistory();
-	cout << "Schedule retrieived" << endl;
+	cout << SCHEDULE_RETRIEVED << endl;
 	resetAndGetDisplaySchedule();
 	sortTask();
-	cout << "SORT : " << _currentSorting << endl;
-	cout << "Filter : " << _currentFilter << endl;
+	
 	return MESSAGE_READFILE_COMPLETE;
 }
 
@@ -1220,9 +1269,9 @@ string Logic::getErrorList(ItemVerification verifier){
 
 	list<string> errorList = verifier.getItemVerificationErrors();
 	list<string>::iterator iter;
-	string errorString = "";
+	string errorString = EMPTY_STRING;
 	for (iter = errorList.begin(); iter != errorList.end(); ++iter){
-		errorString = errorString + *iter + " ";
+		errorString = errorString + *iter + SPACE_BAR;
 	}
 	return errorString;
 }
@@ -1250,7 +1299,7 @@ bool Logic::isValidSortingMethod(string itemInformation){
 
 
 bool Logic::isValidLineIndex(unsigned int lineIndexToBeChecked){
-	if (getDisplayScheduleSize() >= lineIndexToBeChecked && lineIndexToBeChecked > 0){
+	if (getDisplayScheduleSize() >= lineIndexToBeChecked && lineIndexToBeChecked > SIZE_ZERO){
 		return true;
 	} else{
 		return false;
