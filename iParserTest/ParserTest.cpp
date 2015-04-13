@@ -894,35 +894,6 @@ public:
 		}
 	}
 
-	/*TEST_METHOD(parserIsDayAndSetDayTest) {
-		string testDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
-		string testDayShortForm[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
-		string testDayFalse[] = { "mondeh", "toosdeh", "weday", "thurs", "frehdeh", "satur", "sundae" };
-		string expectedDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
-
-		for (int i = 0; i < 7; i++) {
-		bool actualBoolean = testParser.isDay(testDay[i]);
-		string actualDay = testParser.setDay(testDay[i]);
-		Assert::IsTrue(actualBoolean);
-		Assert::AreEqual(expectedDay[i], actualDay);
-		}
-
-		for (int i = 0; i < 7; i++) {
-		bool actualBoolean = testParser.isDay(testDayShortForm[i]);
-		string actualDay = testParser.setDay(testDayShortForm[i]);
-		Assert::IsTrue(actualBoolean);
-		Assert::AreEqual(expectedDay[i], actualDay);
-		}
-
-		for (int i = 0; i < 7; i++) {
-		string expected = "";
-		bool actualBoolean = testParser.isDay(testDayFalse[i]);
-		string actualDay = testParser.setDay(testDayFalse[i]);
-		Assert::IsFalse(actualBoolean);
-		Assert::AreEqual(expected, actualDay);
-		}
-		}*/
-
 	TEST_METHOD(parserIsMonthAndSetMonthTest) {
 		string testMonth[] = { "January", "february", "March", "april", "May", "june",
 			"July", "august", "September", "october", "November", "december" };

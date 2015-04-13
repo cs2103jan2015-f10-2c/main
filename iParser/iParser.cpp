@@ -61,8 +61,6 @@ const string iParser::MODIFIER_PRIORITY_P = "-p";
 const string iParser::MODIFIER_REMOVE = "-remove";
 const string iParser::MODIFIER_RMV = "-rmv";
 
-const string iParser::STRING_DAYS[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
-const string iParser::STRING_DAYS_SHORT_FORM[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
 const string iParser::STRING_MONTHS[] = { "january", "february", "march", "april", "may", "june",
 "july", "august", "september", "october", "november", "december" };
 const string iParser::STRING_MONTHS_SHORT_FORM[] = { "jan", "feb", "mar", "apr", "may", "jun",
@@ -1059,35 +1057,6 @@ string iParser::splitAndSetNoColonTimeString(string timeString, const string suf
 
 	return output.str();
 }
-
-//bool iParser::isDay(string dayString) {
-//	assert(dayString != STRING_BLANK);
-//	unsigned int index;
-//
-//	convertToLowerCase(dayString);
-//	for (index = 0; index < NUMBER_OF_DAYS; index++) {
-//		if (dayString == STRING_DAYS[index] || dayString == STRING_DAYS_SHORT_FORM[index]) {
-//			return true;
-//		}
-//	}
-//
-//	return false;
-//}
-
-//string iParser::setDay(string dayString) {
-//	assert(dayString != STRING_BLANK);
-//	unsigned int index;
-//	string output = STRING_BLANK;
-//
-//	convertToLowerCase(dayString);
-//	for (index = 0; index < NUMBER_OF_DAYS; index++) {
-//		if (dayString == STRING_DAYS[index] || dayString == STRING_DAYS_SHORT_FORM[index]) {
-//			output = STRING_DAYS[index];
-//		}
-//	}
-//
-//	return output;
-//}
 
 bool iParser::isMonth(string monthString) {
 	assert(monthString != STRING_BLANK);
