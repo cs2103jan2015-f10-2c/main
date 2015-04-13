@@ -1,6 +1,7 @@
 //@author A0105180W
-//	GUI
-//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+// GUI
+// Group : F10-2C
+// Coder : Shri Kishen Rajendran
 
 #pragma once
 
@@ -12,7 +13,7 @@
 using namespace std;
 using namespace System;
 
-//@author generated
+//@author A0105180W generated
 namespace iPlannerUI {
 
 	using namespace System;
@@ -27,6 +28,7 @@ namespace iPlannerUI {
 	/// </summary>
 	public ref class iPlannerUI : public System::Windows::Forms::Form {
 	private:
+		//@author A0105180W
 		Logic* testLogic;
 	public:
 		iPlannerUI(void) {
@@ -50,7 +52,7 @@ namespace iPlannerUI {
 				delete testLogic;
 			}
 		}
-
+	//@author A0105180W generated
 	private: System::Windows::Forms::TextBox^  commandInputBox;
 	private: System::Windows::Forms::Label^  scheduleLabel;
 
@@ -380,7 +382,7 @@ namespace iPlannerUI {
 				 MarshalString(userInput, stdUserInput);
 				 vector<Item> tempItem;
 
-				 //Command entered by user is passed to Logic only when the Enter key is pressed
+				 // Command entered by user is passed to Logic only when the Enter key is pressed
 				 if (e->KeyCode == Keys::Enter) {
 					 newLog.writeToLogFile(stdUserInput);
 					 displayMessage = testLogic->initiateCommandAction(stdUserInput);
