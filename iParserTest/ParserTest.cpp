@@ -220,7 +220,7 @@ public:
 				testVector.push_back(testInputFalse[i][j]);
 			}
 
-			try{
+			try {
 				testParser.checkAndSetTokenisedInformation(testVector, "edit");
 			} catch (string& actualText) {
 				Assert::AreEqual(expectedTextFalse[i], actualText);
@@ -242,7 +242,7 @@ public:
 				testVector.push_back(testInputFalseAdd[i][j]);
 			}
 
-			try{
+			try {
 				testParser.checkAndSetTokenisedInformation(testVector, "add");
 			} catch (string& actualText) {
 				Assert::AreEqual(expectedTextFalseAdd[i], actualText);
@@ -278,19 +278,19 @@ public:
 		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
 
 		for (int i = 0; i < 7; i++) {
-			testParser.executeRemoveParsing(testText[i]);
+		testParser.executeRemoveParsing(testText[i]);
 		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter;
 		int i = 0;
 		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-			string actualCommand = iter->command;
-			string actualText = iter->text;
-			Assert::AreEqual(expectedCommand[i], actualCommand);
-			Assert::AreEqual(expectedText[i], actualText);
+		string actualCommand = iter->command;
+		string actualText = iter->text;
+		Assert::AreEqual(expectedCommand[i], actualCommand);
+		Assert::AreEqual(expectedText[i], actualText);
 		}
-	}*/
+		}*/
 
 	TEST_METHOD(parserExecutePriorityParsingTest) {
 		// test cases after testText[6] are false cases and will throw exceptions
@@ -300,7 +300,7 @@ public:
 		string expectedTextFalse = "Invalid priority";
 
 		for (int i = 0; i < 10; i++) {
-			try{
+			try {
 				testParser.executePriorityParsing(testText[i]);
 			} catch (string& exceptionMessage) {
 				Assert::AreEqual(expectedTextFalse, exceptionMessage);
@@ -324,19 +324,19 @@ public:
 		string expectedText[] = { "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "", "", "", "" };
 
 		for (int i = 0; i < 7; i++) {
-			testParser.executeRemoveParsing(testText[i]);
+		testParser.executeRemoveParsing(testText[i]);
 		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter;
 		int i = 0;
 		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-			string actualCommand = iter->command;
-			string actualText = iter->text;
-			Assert::AreEqual(expectedCommand[i], actualCommand);
-			Assert::AreEqual(expectedText[i], actualText);
+		string actualCommand = iter->command;
+		string actualText = iter->text;
+		Assert::AreEqual(expectedCommand[i], actualCommand);
+		Assert::AreEqual(expectedText[i], actualText);
 		}
-	}*/
+		}*/
 
 	TEST_METHOD(parserRetrieveCommandOrModifierTest) {
 		string testInput[] = { "ADD   ", "DeLeTe\t\t\t", "-dAtE   ", "-desc\t\t\t", " ", "" };
@@ -451,35 +451,35 @@ public:
 		string expectedCommand[] = { "start", "end" };
 
 		for (int i = 0; i < 7; i++) {
-			testParser.setDateTime(testDateTime[i], "date");
+		testParser.setDateTime(testDateTime[i], "date");
 		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
 		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
 
 		for (int i = 0; iter != testList.end(); i++, iter++) {
-			string actualCommand = iter->command;
-			string actualDateTime = iter->text;
-			Assert::AreEqual(expectedDateTime[i], actualDateTime);
-			Assert::AreEqual(expectedCommand[0], actualCommand);
+		string actualCommand = iter->command;
+		string actualDateTime = iter->text;
+		Assert::AreEqual(expectedDateTime[i], actualDateTime);
+		Assert::AreEqual(expectedCommand[0], actualCommand);
 		}
 
 		testParser.clearParseInfo();
 
 		for (int i = 0; i < 7; i++) {
-			testParser.setDateTime(testDateTime[i], "due");
+		testParser.setDateTime(testDateTime[i], "due");
 		}
 
 		testList = testParser.getParseInfo();
 		iter = testList.begin();
 
 		for (int i = 0; iter != testList.end(); i++, iter++) {
-			string actualCommand = iter->command;
-			string actualDateTime = iter->text;
-			Assert::AreEqual(expectedDateTime[i], actualDateTime);
-			Assert::AreEqual(expectedCommand[1], actualCommand);
+		string actualCommand = iter->command;
+		string actualDateTime = iter->text;
+		Assert::AreEqual(expectedDateTime[i], actualDateTime);
+		Assert::AreEqual(expectedCommand[1], actualCommand);
 		}
-	}*/
+		}*/
 
 	//TEST_METHOD(parserSplitAndSetDateTimeTest) {
 	//	string testDateTime[] = { "10/11/12, 6pm", "2200hr, 10 Nov 12", "8/9, 1pm", "2am, 10/11", "monday, 1pm" };
@@ -703,13 +703,17 @@ public:
 	//}
 
 	TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
-		string testDate[] = { "10/11/12", "10/11" };
-		unsigned int numberOfOblique[] = { 2, 1 };
+		string testDate[] = { "10/11/12", "10/11", "10/", "10/11/", "ab/11/2015", "10/ab/2015", "10/11/ab", "10//", "//10" };
+		unsigned int numberOfOblique[] = { 2, 1, 1, 2, 2, 2, 2, 2, 2, 2 };
 		string expected[] = { "12 11 10", "-1 11 10" };
 
-		for (int i = 0; i < 2; i++) {
-			string actual = testParser.splitAndSetObliqueDateInformation(testDate[i], numberOfOblique[i]);
-			Assert::AreEqual(expected[i], actual);
+		for (int i = 0; i < 9; i++) {
+			try {
+				string actual = testParser.splitAndSetObliqueDateInformation(testDate[i], numberOfOblique[i]);
+				Assert::AreEqual(expected[i], actual);
+			} catch (bool& exception) {
+				Assert::IsFalse(exception);
+			}
 		}
 	}
 
@@ -810,7 +814,7 @@ public:
 
 		string testTimeAMFail[] = { "2359", "abcd", "12345", "a" };
 		string testTimePMFail[] = { "0", "0030", "abcd", "12345" };
-		string testTimeHRFail[] = { "1", "12", "123", "12345"};
+		string testTimeHRFail[] = { "1", "12", "123", "12345" };
 
 		for (int i = 0; i < 4; i++) {
 			try {
@@ -851,7 +855,7 @@ public:
 		}
 	}
 
-	TEST_METHOD(parserIsDayAndSetDayTest) {
+	/*TEST_METHOD(parserIsDayAndSetDayTest) {
 		string testDay[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
 		string testDayShortForm[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
 		string testDayFalse[] = { "mondeh", "toosdeh", "weday", "thurs", "frehdeh", "satur", "sundae" };
@@ -878,7 +882,7 @@ public:
 			Assert::IsFalse(actualBoolean);
 			Assert::AreEqual(expected, actualDay);
 		}
-	}
+	}*/
 
 	TEST_METHOD(parserIsMonthAndSetMonthTest) {
 		string testMonth[] = { "January", "february", "March", "april", "May", "june",
