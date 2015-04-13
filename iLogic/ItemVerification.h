@@ -1,3 +1,5 @@
+//author A0108462J
+
 #ifndef ITEM_VERIFICATION_H
 #define ITEM_VERIFICATION_H
 
@@ -55,13 +57,6 @@ private:
 
 	static const int ITEM_VERIFICATION_INT_ZERO;
 
-/* #ifndef TESTMODE
-private:
-#else
-public:
-#endif */
-public:
-
 	// Conducts the validity checks on the individual
 	// fields within the item
 	bool isValidName();
@@ -86,6 +81,5 @@ public:
 	list<string> getItemVerificationErrors();
 
 };
-
 
 #endif
