@@ -272,25 +272,25 @@ public:
 		}
 	}
 
-	/*TEST_METHOD(parserExecuteDateTimeParsingTest) {
-		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
-		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
-		string expectedText[] = { "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "-1 -1 -1 -1 -1", "", "", "", "" };
+	TEST_METHOD(parserExecuteDateTimeParsingTest) {
+		string testInput[] = { "10/11/2015", "2 Mar 2015", "10/11, 1PM", "2 Mar, 12:30", "10/11 to 11/12", "2 Mar 2015, 11am - 3 Apr 2015, 11pm" };
+		string expectedCommand[] = { "start", "start", "start", "start", "start", "end", "start", "end" };
+		string expectedText[] = { "2015 11 10 -1 -1", "2015 3 2 -1 -1", "-1 11 10 13 00", "-1 3 2 12 30", "-1 11 10 -1 -1", "-1 12 11 -1 -1", "2015 3 2 11 00", "2015 4 3 23 00" };
 
-		for (int i = 0; i < 7; i++) {
-		testParser.executeRemoveParsing(testText[i]);
+		for (int i = 0; i < 6; i++) {
+			testParser.executeDateTimeParsing(testInput[i]);
 		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-		list<COMMAND_AND_TEXT>::iterator iter;
-		int i = 0;
-		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-		string actualCommand = iter->command;
-		string actualText = iter->text;
-		Assert::AreEqual(expectedCommand[i], actualCommand);
-		Assert::AreEqual(expectedText[i], actualText);
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+		
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
 		}
-		}*/
+	}
 
 	TEST_METHOD(parserExecutePriorityParsingTest) {
 		// test cases after testText[6] are false cases and will throw exceptions
@@ -318,25 +318,30 @@ public:
 		}
 	}
 
-	/*TEST_METHOD(parserExecuteRemoveParsingTest) {
-		string testText[] = { "date", "start", "end", "description", "desc", "priority", "p" };
+	TEST_METHOD(parserExecuteRemoveParsingTest) {
+		string testInput[] = { "date", "START", "End", "description", "DESC", "Priority", "p", "test", " " };
 		string expectedCommand[] = { "start", "end", "start", "end", "description", "description", "priority", "priority" };
 		string expectedText[] = { "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "-2 -2 -2 -2 -2", "", "", "", "" };
 
-		for (int i = 0; i < 7; i++) {
-		testParser.executeRemoveParsing(testText[i]);
+		for (int i = 0; i < 9; i++) {
+			try {
+				testParser.executeRemoveParsing(testInput[i]);
+			} catch (string& exceptionMessage) {
+				string expected = "Invalid remove";
+				Assert::AreEqual(expected, exceptionMessage);
+			}
 		}
 
 		list<COMMAND_AND_TEXT> testList = testParser.getParseInfo();
-		list<COMMAND_AND_TEXT>::iterator iter;
-		int i = 0;
-		for (iter = testList.begin(); iter != testList.end(); i++, iter++) {
-		string actualCommand = iter->command;
-		string actualText = iter->text;
-		Assert::AreEqual(expectedCommand[i], actualCommand);
-		Assert::AreEqual(expectedText[i], actualText);
+		list<COMMAND_AND_TEXT>::iterator iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualText = iter->text;
+			Assert::AreEqual(expectedCommand[i], actualCommand);
+			Assert::AreEqual(expectedText[i], actualText);
 		}
-		}*/
+	}
 
 	TEST_METHOD(parserRetrieveCommandOrModifierTest) {
 		string testInput[] = { "ADD   ", "DeLeTe\t\t\t", "-dAtE   ", "-desc\t\t\t", " ", "" };
@@ -468,6 +473,38 @@ public:
 
 		for (int i = 0; i < 7; i++) {
 			testParser.setDateTime(testDateTime[i], "due");
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[1], actualCommand);
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "start");
+		}
+
+		testList = testParser.getParseInfo();
+		iter = testList.begin();
+
+		for (int i = 0; iter != testList.end(); i++, iter++) {
+			string actualCommand = iter->command;
+			string actualDateTime = iter->text;
+			Assert::AreEqual(expectedDateTime[i], actualDateTime);
+			Assert::AreEqual(expectedCommand[0], actualCommand);
+		}
+
+		testParser.clearParseInfo();
+
+		for (int i = 0; i < 7; i++) {
+			testParser.setDateTime(testDateTime[i], "end");
 		}
 
 		testList = testParser.getParseInfo();
@@ -703,6 +740,7 @@ public:
 	}
 
 	TEST_METHOD(parserSplitAndSetObliqueDateInformationTest) {
+		// test cases after testDate[1] are false as either there are alphabets or invalid date input
 		string testDate[] = { "10/11/12", "10/11", "10/", "10/11/", "ab/11/2015", "10/ab/2015", "10/11/ab", "10//", "//10" };
 		unsigned int numberOfOblique[] = { 2, 1, 1, 2, 2, 2, 2, 2, 2, 2 };
 		string expected[] = { "12 11 10", "-1 11 10" };
@@ -718,6 +756,7 @@ public:
 	}
 
 	TEST_METHOD(parserSplitAndSetSpaceDateInformationTest) {
+		// test cases after testDate[1] are false as either there are invalid strings or invalid date input
 		string testDate[] = { "10 nOv 2015", "9 OcT", "12 abc", "abc apr", "abc mar 2015", "12 12 12", "12 mar abc" };
 		unsigned int numberOfSpace[] = { 2, 2, 1, 1, 2, 2, 2, };
 		string expected[] = { "2015 11 10", "-1 10 9", "-1 -1 monday" };
