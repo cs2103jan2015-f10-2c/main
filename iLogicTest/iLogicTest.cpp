@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 //@author A0116229J
+=======
+
+>>>>>>> d64ecb1bd4aef2859d4c110947d1d2d8cbe87c70
 //Coder : Yu Young Bin
+//@author A0116229J
 
 #include "stdafx.h"
 #include "CppUnitTest.h"
