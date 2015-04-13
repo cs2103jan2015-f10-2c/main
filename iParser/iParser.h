@@ -6,6 +6,10 @@
 /*
 ===================================================================================================
 NOTES TO DEVELOPERS
+- Logic passes userInput to Parser
+- Parser returns a list of 2 strings, command and text
+- If there is at least one invalid input, list is cleared and invalid string is pushed to list and
+  sent to logic
 ===================================================================================================
 */
 
@@ -118,6 +122,7 @@ public:
 	static const string STRING_MINUTE_INITIALISE;
 	static const string STRING_DATE_TIME_REMOVE;
 	static const string STRING_BLANK;
+	static const string STRING_ZERO;
 	static const string STRING_NEGATIVE_ONE;
 
 	static const char CHAR_SPACE;
@@ -161,6 +166,7 @@ public:
 	static const unsigned int HOURS_ZERO;
 	static const unsigned int HOURS_ONE_PM;
 	static const unsigned int HOURS_ELEVEN_PM;
+	static const string HOURS_TWELVE_AM;
 
 	static const unsigned int INDEX_START;
 	static const unsigned int INDEX_INVALID;
@@ -189,8 +195,9 @@ public:
 	// Post:	sets sortType to _parseInfo list
 	//			clears _parseInfo list and sets list as invalid if invalid sortType is input
 	string executeSortParsing(string);
-	// Pre:		
-	// Post:	
+	// Pre:		commandType is 'view'
+	// Post:	sets viewType to _parseInfo list
+	//			clears _parseInfo list and sets list as invalid if invalid sortType is input
 	string executeViewParsing(string);
 	// Pre:		commandType is "delete", "del", "search", "save", "done" or "undone"
 	// Post:	sets text or index to _parseInfo list

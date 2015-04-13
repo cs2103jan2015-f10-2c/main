@@ -75,7 +75,9 @@ const string iParser::STRING_TIME_INITIALISE = "-1 -1";
 const string iParser::STRING_MINUTE_INITIALISE = "00";
 const string iParser::STRING_DATE_TIME_REMOVE = "-2 -2 -2 -2 -2";
 const string iParser::STRING_BLANK = "";
+const string iParser::STRING_ZERO = "0";
 const string iParser::STRING_NEGATIVE_ONE = "-1";
+
 const char iParser::CHAR_SPACE = ' ';
 const char iParser::CHAR_TAB = '\t';
 const char iParser::CHAR_COMMA = ',';
@@ -115,6 +117,7 @@ const unsigned int iParser::NUMBER_OF_HOURS = 12;
 const unsigned int iParser::HOURS_ZERO = 0;
 const unsigned int iParser::HOURS_ONE_PM = 1;
 const unsigned int iParser::HOURS_ELEVEN_PM = 11;
+const string iParser::HOURS_TWELVE_AM = "12";
 
 const unsigned int iParser::INDEX_START = 0;
 const unsigned int iParser::INDEX_INVALID = -1;
@@ -253,8 +256,10 @@ string iParser::executeViewParsing(string viewType) {
 		} else if (viewType == STRING_LOW || viewType == STRING_L) {
 			setParseInfo(COMMAND_VIEW, STRING_LOW);
 		} else if (hasStartEndDateTime(viewType)) {
+			// if there is a range in view date
 			splitAndSetViewDateRange(viewType);
 		} else if (isValidDate(viewType, tempDate)) {
+			// if there is only a single date
 			string viewInfo = tempDate + CHAR_SPACE + STRING_TIME_INITIALISE;
 			viewInfo = STRING_DATE + CHAR_SPACE + viewInfo + CHAR_SPACE + viewInfo;
 			setParseInfo(COMMAND_VIEW, viewInfo);
@@ -270,6 +275,8 @@ string iParser::executeViewParsing(string viewType) {
 	return MESSAGE_SUCCESS;
 }
 
+// function used for commands with command and text
+// e.g. "delete", "del", "search", "save", "done" or "undone"
 string iParser::executeCommandAndTextParsing(const string commandType, string text) {
 	if (text != STRING_BLANK) {
 		convertToLowerCase(text);
@@ -281,6 +288,8 @@ string iParser::executeCommandAndTextParsing(const string commandType, string te
 	}
 }
 
+// function used for commands with just command
+// e.g. clear", "undo" or "exit"
 string iParser::executeSingularCommandParsing(const string commandType, string userInput) {
 	convertToLowerCase(userInput);
 	if (userInput == commandType) {
@@ -292,6 +301,8 @@ string iParser::executeSingularCommandParsing(const string commandType, string u
 	}
 }
 
+// only executed if 'add' or 'exit' is the command and there is modifier(s)
+// function 
 string iParser::checkAndSetTokenisedInformation(vector<string>& tokenisedInformation, const string command) {
 	assert(tokenisedInformation.size() > 1);
 
@@ -1013,6 +1024,8 @@ string iParser::splitAndSetColonTimeString(string timeString, const string suffi
 
 	if (suffix == STRING_PM) {
 		hour = addTwelveToHours(hour);
+	} else if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
+		hour = STRING_ZERO;
 	}
 
 	if (!isAppropriateTime(hour, minute, suffix)) {

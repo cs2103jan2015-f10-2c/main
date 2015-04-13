@@ -1,3 +1,8 @@
+//	@author A0111238U
+//	ParserTest
+//	Tutorial F10-2C
+//	Coder:	Ng Chon Beng
+
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
