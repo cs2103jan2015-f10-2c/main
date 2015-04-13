@@ -19,6 +19,10 @@ const string Schedule::LOG_DESTRUCTSCHEDULE = "STORAGE::DestructSchedule";
 const string Schedule::LOG_CLEAR = "STORAGE::ClearItems";
 const string Schedule::LOG_UNDO = "STORAGE::UndoCommand";
 
+const char Schedule::PRIORITY_HIGH = 'H';	
+const char Schedule::PRIORITY_MEDIUM = 'M';
+const char Schedule::PRIORITY_LOW = 'L';
+
 //	Constructor
 Schedule::Schedule() {
 	_storageLogger.writeToLogFile(LOG_CONSTRUCTSCHEDULE);
@@ -353,21 +357,21 @@ bool Schedule::isLowerPriorityThan(Item leftItem, Item rightItem) {
 	char leftItemPriority = leftItem.getPriority();
 	char rightItemPriority = rightItem.getPriority();
 
-	if (leftItemPriority == 'H') {
+	if (leftItemPriority == PRIORITY_HIGH) {
 		leftItemPriority = '1';
-	} else if (leftItemPriority == 'M') {
+	} else if (leftItemPriority == PRIORITY_MEDIUM) {
 		leftItemPriority = '2';
-	} else if (leftItemPriority == 'L') {
+	} else if (leftItemPriority == PRIORITY_LOW) {
 		leftItemPriority = '3';
 	} else {
 		leftItemPriority = '4';
 	}
 
-	if (rightItemPriority == 'H') {
+	if (rightItemPriority == PRIORITY_HIGH) {
 		rightItemPriority = '1';
-	} else if (rightItemPriority == 'M') {
+	} else if (rightItemPriority == PRIORITY_MEDIUM) {
 		rightItemPriority = '2';
-	} else if (rightItemPriority == 'L') {
+	} else if (rightItemPriority == PRIORITY_LOW) {
 		rightItemPriority = '3';
 	} else {
 		rightItemPriority = '4';
