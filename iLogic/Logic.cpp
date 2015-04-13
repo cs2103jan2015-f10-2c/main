@@ -1,7 +1,7 @@
 
-//Coder : Yu Young Bin
-//@author A0116229J
 
+//@author A0116229J
+//Coder : Yu Young Bin
 
 #include "Logic.h"
 #include <exception>
