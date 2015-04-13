@@ -1,3 +1,4 @@
+//author A0112042E
 //	DateTime (Date and Time for all Items)
 //	Tutorial Group 8 (Friday, 10:00AM); Group 2C
 
@@ -31,7 +32,6 @@ private:
 	static const char DISPLAY_SEPARATOR_DATETIME;
 	static const char DISPLAY_FILLER;
 
-	static const string ERROR_DISPLAYEMPTYDATETIME;
 	static const string ERROR_DATETIMERANGE;
 
 	int _year;

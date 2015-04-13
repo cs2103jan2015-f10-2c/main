@@ -1,3 +1,5 @@
+//author A0108462J
+
 #ifndef DATETIME_VERIFICATION_H
 #define DATETIME_VERIFICATION_H
 
@@ -22,6 +24,7 @@ private:
 	static const int DATETIME_VERIFICATION_MIN_MINUTE;
 	static const int DATETIME_VERIFICATION_MAX_MINUTE;
 	static const int DATETIME_VERIFICATION_EMPTYFIELD_DATETIME;
+	static const int DATETIME_VERIFICATION_INT_MINUS_TWO;
 
 	static const int DATETIME_VERIFICATION_DAY_29;
 	static const int DATETIME_VERIFICATION_DAY_30;
@@ -35,8 +38,7 @@ private:
 	static const int DATETIME_VERIFICATION_YEAR_100;
 	static const int DATETIME_VERIFICATION_YEAR_400;
 
-	static const string DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS;
-	static const string DATETIME_VERIFICATION_LOG_DATETIME_FAILURE;
+	static const string DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
 
 	Log _dateTimeVerificationLogger;
 	DateTime _dateTimeObjectToVerify;
@@ -45,11 +47,6 @@ private:
 	int _day;
 	int _hour;
 	int _minute;
-
-	////////////////////////////////////////
-	//CHANGE BACK TO PRIVATE AFTER TESTING//
-	////////////////////////////////////////
-public:
 
 	////////////////////////////
 	////// LEVEL 1 of SLAP /////
@@ -85,7 +82,6 @@ public:
 	// individual year/month/day values come
 	// together as a valid time format.
 	// i.e. HH MM or -1 -1
-	bool hasHourMinute();
 	bool hasHour();
 	bool hasMinute();
 	bool isValidTime();
@@ -112,6 +108,8 @@ public:
 	//		-1	 DD MM HH MM
 	//		-1	 DD MM -1 -1
 	bool isValidDateTime();
+
+	bool hasHourMinute();
 
 };
 

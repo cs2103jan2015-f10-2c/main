@@ -61,8 +61,6 @@ const string iParser::MODIFIER_PRIORITY_P = "-p";
 const string iParser::MODIFIER_REMOVE = "-remove";
 const string iParser::MODIFIER_RMV = "-rmv";
 
-const string iParser::STRING_DAYS[] = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
-const string iParser::STRING_DAYS_SHORT_FORM[] = { "mon", "tue", "wed", "thur", "fri", "sat", "sun" };
 const string iParser::STRING_MONTHS[] = { "january", "february", "march", "april", "may", "june",
 "july", "august", "september", "october", "november", "december" };
 const string iParser::STRING_MONTHS_SHORT_FORM[] = { "jan", "feb", "mar", "apr", "may", "jun",
@@ -895,7 +893,7 @@ string iParser::splitAndSetObliqueDateInformation(string dateString, const unsig
 	}
 
 	day = dateString.substr(startIndex, endIndex - startIndex);
-	if (!areDigits(day)) {
+	if (day == STRING_BLANK || !areDigits(day)) {
 		throw false;
 	}
 
@@ -912,12 +910,12 @@ string iParser::splitAndSetObliqueDateInformation(string dateString, const unsig
 		month = dateString.substr(startIndex, endIndex - startIndex);
 		startIndex = endIndex + 1;
 		year = dateString.substr(startIndex);
-		if (!areDigits(year)) {
+		if (year == STRING_BLANK || !areDigits(year)) {
 			throw false;
 		}
 	}
 
-	if (!areDigits(month)) {
+	if (month == STRING_BLANK || !areDigits(month)) {
 		throw false;
 	}
 
@@ -941,7 +939,7 @@ string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigne
 	endIndex = dateString.find_first_of(" ");
 	day = dateString.substr(startIndex, endIndex - startIndex);
 
-	if (!areDigits(day)) {
+	if (day == STRING_BLANK || !areDigits(day)) {
 		throw false;
 	}
 	startIndex = endIndex + 1;
@@ -949,7 +947,7 @@ string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigne
 	string tempMonth;
 	if (numberOfSpaces == 1) {
 		tempMonth = dateString.substr(startIndex);
-		if (isMonth(tempMonth)) {
+		if (tempMonth == STRING_BLANK || isMonth(tempMonth)) {
 			month = setMonth(tempMonth);
 		} else {
 			throw false;
@@ -957,14 +955,14 @@ string iParser::splitAndSetSpaceDateInformation(string dateString, const unsigne
 	} else if (numberOfSpaces == 2) {
 		endIndex = dateString.find_first_of(" ", startIndex);
 		tempMonth = dateString.substr(startIndex, endIndex - startIndex);
-		if (isMonth(tempMonth)) {
+		if (tempMonth == STRING_BLANK || isMonth(tempMonth)) {
 			month = setMonth(tempMonth);
 		} else {
 			throw false;
 		}
 		startIndex = endIndex + 1;
 		year = dateString.substr(startIndex);
-		if (!areDigits(year)) {
+		if (year == STRING_BLANK || !areDigits(year)) {
 			throw false;
 		}
 	}
@@ -1058,35 +1056,6 @@ string iParser::splitAndSetNoColonTimeString(string timeString, const string suf
 	output << hour << CHAR_SPACE << minute;
 
 	return output.str();
-}
-
-bool iParser::isDay(string dayString) {
-	assert(dayString != STRING_BLANK);
-	unsigned int index;
-
-	convertToLowerCase(dayString);
-	for (index = 0; index < NUMBER_OF_DAYS; index++) {
-		if (dayString == STRING_DAYS[index] || dayString == STRING_DAYS_SHORT_FORM[index]) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-string iParser::setDay(string dayString) {
-	assert(dayString != STRING_BLANK);
-	unsigned int index;
-	string output = STRING_BLANK;
-
-	convertToLowerCase(dayString);
-	for (index = 0; index < NUMBER_OF_DAYS; index++) {
-		if (dayString == STRING_DAYS[index] || dayString == STRING_DAYS_SHORT_FORM[index]) {
-			output = STRING_DAYS[index];
-		}
-	}
-
-	return output;
 }
 
 bool iParser::isMonth(string monthString) {
@@ -1226,7 +1195,6 @@ bool iParser::isModifier(string modifier) {
 }
 
 bool iParser::areDigits(const string text) {
-	assert(text != STRING_BLANK);
 	unsigned int index;
 
 	for (index = 0; index < text.size(); index++) {

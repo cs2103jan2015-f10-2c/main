@@ -1,3 +1,5 @@
+//author A0108462J
+
 #include <assert.h>
 #include <exception>
 #include "DateTimeVerification.h"
@@ -13,6 +15,7 @@ const int DateTimeVerification::DATETIME_VERIFICATION_MAX_HOUR = 23;
 const int DateTimeVerification::DATETIME_VERIFICATION_MIN_MINUTE = 0;
 const int DateTimeVerification::DATETIME_VERIFICATION_MAX_MINUTE = 59;
 const int DateTimeVerification::DATETIME_VERIFICATION_EMPTYFIELD_DATETIME = -1;
+const int DateTimeVerification::DATETIME_VERIFICATION_INT_MINUS_TWO = -2;
 
 const int DateTimeVerification::DATETIME_VERIFICATION_DAY_29 = 29;
 const int DateTimeVerification::DATETIME_VERIFICATION_DAY_30 = 30;
@@ -26,9 +29,7 @@ const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_4 = 4;
 const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_100 = 100;
 const int DateTimeVerification::DATETIME_VERIFICATION_YEAR_400 = 400;
 
-const string DateTimeVerification::DATETIME_VERIFICATION_LOG_DATETIME_FAILURE = "DT VERIFICATION:: Invalid Date Time Values";
-const string DateTimeVerification::DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS = "DT VERIFICATION:: Valid Date Time Values";
-
+const string DateTimeVerification::DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO = "Date/Time value less than -2";
 
 DateTimeVerification::DateTimeVerification(DateTime dateTimeObject) {
 	_dateTimeObjectToVerify = dateTimeObject;
@@ -45,10 +46,8 @@ bool DateTimeVerification::isValidDateTimeValues() {
 		isValidDayRange() &&
 		isValidHourRange() &&
 		isValidMinuteRange()) {
-		_dateTimeVerificationLogger.writeToLogFile(DATETIME_VERIFICATION_LOG_DATETIME_SUCCESS);
 		return true;
 	} else {
-		_dateTimeVerificationLogger.writeToLogFile(DATETIME_VERIFICATION_LOG_DATETIME_FAILURE);
 		return false;
 	}
 }
@@ -125,56 +124,92 @@ bool DateTimeVerification::hasMonthDay() {
 }
 
 bool DateTimeVerification::hasYear() {
-	if (!isValidYearRange()) {
-		return false;
-	} else if (_year == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return false;
-	} else {
-		return true;
+	try {
+		if (!isValidYearRange()) {
+			return false;
+		} else if (_year == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+			return false;
+		} else if (_year <DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return true;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
 	}
 }
 
 bool DateTimeVerification::hasMonth() {
-	if (!isValidMonthRange()) {
-		return false;
-	} else if (_month == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return false;
-	} else {
-		return true;
+	try {
+		if (!isValidMonthRange()) {
+			return false;
+		} else if (_month == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+			return false;
+		} else if (_month <DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return true;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
 	}
 }
 
 bool DateTimeVerification::hasDay() {
-	if (!isValidDayRange()) {
-		return false;
-	} else if (_day == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
-		return false;
-	} else {
-		return true;
+	try {
+		if (!isValidDayRange()) {
+			return false;
+		} else if (_day == DATETIME_VERIFICATION_EMPTYFIELD_DATETIME) {
+			return false;
+		} else if (_day <DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return true;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
 	}
 }
 
 bool DateTimeVerification::hasHourMinute() {
-	if (hasHour() && hasMinute()) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (hasHour() && hasMinute()) {
+			return true;
+		} else if (_hour < DATETIME_VERIFICATION_INT_MINUS_TWO || _minute < DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return false;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
 	}
 }
 
 bool DateTimeVerification::hasHour() {
-	if (_hour >= DATETIME_VERIFICATION_MIN_HOUR && _hour <= DATETIME_VERIFICATION_MAX_HOUR) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (_hour >= DATETIME_VERIFICATION_MIN_HOUR && _hour <= DATETIME_VERIFICATION_MAX_HOUR) {
+			return true;
+		} else if (_hour < DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return false;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
 	}
 }
 
 bool DateTimeVerification::hasMinute() {
-	if (_minute >= DATETIME_VERIFICATION_MIN_MINUTE && _minute <= DATETIME_VERIFICATION_MAX_MINUTE) {
-		return true;
-	} else {
-		return false;
+	try {
+		if (_minute >= DATETIME_VERIFICATION_MIN_MINUTE && _minute <= DATETIME_VERIFICATION_MAX_MINUTE) {
+			return true;
+		} else if (_minute < DATETIME_VERIFICATION_INT_MINUS_TWO) {
+			throw DATETIME_VERIFICATION_EXCEPTION_LESS_THAN_MINUS_TWO;
+		} else {
+			return false;
+		}
+	} catch (string errorMessage) {
+		cerr << errorMessage << endl;
 	}
 }
 
