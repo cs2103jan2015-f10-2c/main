@@ -1024,12 +1024,14 @@ string iParser::splitAndSetColonTimeString(string timeString, const string suffi
 
 	if (suffix == STRING_PM) {
 		hour = addTwelveToHours(hour);
-	} else if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
-		hour = STRING_ZERO;
 	}
 
 	if (!isAppropriateTime(hour, minute, suffix)) {
 		throw false;
+	}
+
+	if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
+		hour = STRING_ZERO;
 	}
 
 	ostringstream output;
@@ -1070,6 +1072,10 @@ string iParser::splitAndSetNoColonTimeString(string timeString, const string suf
 
 	if (!isAppropriateTime(hour, minute, suffix)) {
 		throw false;
+	}
+
+	if (suffix == STRING_AM && hour == HOURS_TWELVE_AM) {
+		hour = STRING_ZERO;
 	}
 
 	ostringstream output;
