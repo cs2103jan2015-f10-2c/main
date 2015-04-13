@@ -106,8 +106,6 @@ public:
 	static const string MODIFIER_RMV;
 
 	// used for date time functions and checks
-	static const string STRING_DAYS[];
-	static const string STRING_DAYS_SHORT_FORM[];
 	static const string STRING_MONTHS[];
 	static const string STRING_MONTHS_SHORT_FORM[];
 	static const string STRING_MONTHS_IN_NUMBER[];
@@ -327,12 +325,6 @@ public:
 	// Post:	if time is valid, set time to _parseInfo and return true
 	//			else, false will be thrown as exception for isValidTime to catch
 	string splitAndSetNoColonTimeString(string, const string);
-	// Pre:		nil	
-	// Post:	if day string is a valid day, return true
-	bool isDay(string);
-	// Pre:		isDay is true	
-	// Post:	sets the day with alphabetical string
-	string setDay(string);
 	// Pre:		nil	
 	// Post:	if month string is a valid month, return true
 	bool isMonth(string); 
