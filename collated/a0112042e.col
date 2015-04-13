@@ -1,0 +1,3471 @@
+//@author: a0112042e
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\DateTime.cpp
+	 */
+
+//	DateTime (Date and Time for all Items)
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+
+#include "DateTime.h"
+
+const int DateTime::MIN_YEAR = 0;
+const int DateTime::MAX_YEAR = 9999;
+const int DateTime::MIN_MONTH = 1;
+const int DateTime::MAX_MONTH = 12;
+const int DateTime::MIN_DAY = 1;
+const int DateTime::MAX_DAY = 31;
+const int DateTime::MIN_HOUR = 0;
+const int DateTime::MAX_HOUR = 23;
+const int DateTime::MIN_MINUTE = 0;
+const int DateTime::MAX_MINUTE = 59;
+const int DateTime::EMPTYFIELD_DATETIME = -1;
+const int DateTime::INDICATOR_FAILEDSETATTEMPT = -2;
+const char DateTime::DISPLAY_SEPARATOR_DATE = '/';
+const char DateTime::DISPLAY_SEPARATOR_TIME = ':';
+const char DateTime::DISPLAY_SEPARATOR_DATETIME = ' ';
+const char DateTime::DISPLAY_FILLER = '0';
+
+const string DateTime::ERROR_DATETIMERANGE = "DATETIME:: Date/Time out of range.";
+
+//	Constructor
+DateTime::DateTime() {
+	_year = EMPTYFIELD_DATETIME;
+	_month = EMPTYFIELD_DATETIME;
+	_day = EMPTYFIELD_DATETIME;
+	_hour = EMPTYFIELD_DATETIME;
+	_minute = EMPTYFIELD_DATETIME;
+}
+
+//	Overloaded Constructor with YYYY MM DD HH MM
+DateTime::DateTime(int year, int month, int day, int hour, int minute) {
+	_year = year;
+	_month = month;
+	_day = day;
+	_hour = hour;
+	_minute = minute;
+}
+
+//	Overloaded Constructor with YYYY MM DD
+DateTime::DateTime(int year, int month, int day) {
+	_year = year;
+	_month = month;
+	_day = day;
+	_hour = EMPTYFIELD_DATETIME;
+	_minute = EMPTYFIELD_DATETIME;
+}
+
+//	Destructor
+DateTime::~DateTime() {}
+
+//	Sets the year
+int DateTime::setYear(int year) {
+	if (isValidYearRange(year)) {
+		_year = year;
+	} else {
+		_year = INDICATOR_FAILEDSETATTEMPT;
+	}
+	return _year;
+}
+
+//	Sets the month
+int DateTime::setMonth(int month) {
+	if (isValidMonthRange(month)) {
+		_month = month;
+	} else {
+		_month = INDICATOR_FAILEDSETATTEMPT;
+	}
+	return _month;
+}
+
+//	Sets the day of the month
+int DateTime::setDay(int day) {
+	if (isValidDayRange(day)) {
+		_day = day;
+	} else {
+		_day = INDICATOR_FAILEDSETATTEMPT;
+	}
+	return _day;
+}
+
+//	Sets the hour of the day (in 24-hour format)
+int DateTime::setHour(int hour) {
+	if (isValidHourRange(hour)) {
+		_hour = hour;
+	} else {
+		_hour = INDICATOR_FAILEDSETATTEMPT;
+	}
+	return _hour;
+}
+
+//	Sets the minute of the hour
+int DateTime::setMinute(int minute) {
+	if (isValidMinuteRange(minute)) {
+		_minute = minute;
+	} else {
+		_minute = INDICATOR_FAILEDSETATTEMPT;
+	}
+	return _minute;
+}
+
+//	Retrieves the year
+int DateTime::getYear() {
+	assert(_year >= INDICATOR_FAILEDSETATTEMPT);
+	return _year;
+}
+
+//	Retrieves the month
+int DateTime::getMonth() {
+	assert(_month >= INDICATOR_FAILEDSETATTEMPT);
+	return _month;
+}
+
+//	Retrieves the day of the month
+int DateTime::getDay() {
+	assert(_day >= INDICATOR_FAILEDSETATTEMPT);
+	return _day;
+}
+
+//	Retrieves the hour of the day (24-hour format)
+int DateTime::getHour() {
+	assert(_hour >= INDICATOR_FAILEDSETATTEMPT);
+	return _hour;
+}
+
+//	Retrieves the minute
+int DateTime::getMinute() {
+	assert(_minute >= INDICATOR_FAILEDSETATTEMPT);
+	return _minute;
+}
+
+//	Checks if year ranges from 0 to 9999
+bool DateTime::isValidYearRange(int year) {
+	try {
+		if (year >= MIN_YEAR && year <= MAX_YEAR) {
+			return true;
+		} else if (year >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+}
+
+//	Checks if month ranges from 1 to 12
+bool DateTime::isValidMonthRange(int month) {
+	try {
+		if (month >= MIN_MONTH && month <= MAX_MONTH) {
+			return true;
+		} else if (month >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+}
+
+//	Checks if day ranges from 1 to 31
+bool DateTime::isValidDayRange(int day) {
+	try {
+		if (day >= MIN_DAY && day <= MAX_DAY) {
+			return true;
+		} else if (day >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+}
+
+//	Checks if the entire date is valid (inclusive of year, month, and day)
+bool DateTime::isValidDate(int year, int month, int day) {
+	if (!isValidYearRange(year) || !isValidMonthRange(month) || !isValidDayRange(day)) {
+		return false;
+	} else if ((day == 31) && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
+		return false;
+	} else if ((day == 30) && (month == 2)) {
+		return false;
+	} else if ((month == 2) && (day == 29) && (year % 4 != 0)) {
+		return false;
+	} else if ((month == 2) && (day == 29) && (year % 400 == 0)) {
+		return true;
+	} else if ((month == 2) && (day == 29) && (year % 100 == 0)) {
+		return false;
+	} else if ((month == 2) && (day == 29) && (year % 4 == 0)) {
+		return true;
+	}
+
+	return true;
+}
+
+//	Checks if hour ranges from 0 to 23
+bool DateTime::isValidHourRange(int hour) {
+	try {
+		if (hour >= MIN_HOUR && hour <= MAX_HOUR) {
+			return true;
+		} else if (hour >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+}
+
+//	Checks if minute ranges from 0 to 59
+bool DateTime::isValidMinuteRange(int minute) {
+	try {
+		if (minute >= MIN_MINUTE && minute <= MAX_MINUTE) {
+			return true;
+		} else if (minute >= INDICATOR_FAILEDSETATTEMPT) {
+			return false;
+		} else {
+			throw ERROR_DATETIMERANGE;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+}
+
+//	Checks if entire time is valid
+bool DateTime::isValidTime(int hour, int minute) {
+	return (isValidHourRange(hour) && isValidMinuteRange(minute));
+}
+
+//	Checks if two DateTime objects are identical
+bool DateTime::operator== (DateTime secondaryDateTime) {
+	bool sameYear = (_year == secondaryDateTime.getYear());
+	bool sameMonth = (_month == secondaryDateTime.getMonth());
+	bool sameDay = (_day == secondaryDateTime.getDay());
+	bool sameHour = (_hour == secondaryDateTime.getHour());
+	bool sameMinute = (_minute == secondaryDateTime.getMinute());
+
+	return (sameYear && sameMonth && sameDay && sameHour && sameMinute);
+}
+
+//	Checks if two DateTime objects are not identical
+bool DateTime::operator!= (DateTime secondaryDateTime) {
+	bool differentYear = (_year != secondaryDateTime.getYear());
+	bool differentMonth = (_month != secondaryDateTime.getMonth());
+	bool differentDay = (_day != secondaryDateTime.getDay());
+	bool differentHour = (_hour != secondaryDateTime.getHour());
+	bool differentMinute = (_minute != secondaryDateTime.getMinute());
+
+	return (differentYear || differentMonth || differentDay || differentHour || differentMinute);
+}
+
+//	Checks if current DateTime object is after another
+bool DateTime::isAfter(DateTime secondaryDateTime) {
+	if (_year != secondaryDateTime.getYear()) {
+		return (_year > secondaryDateTime.getYear());
+	} else if (_month != secondaryDateTime.getMonth()) {
+		return (_month > secondaryDateTime.getMonth());
+	} else if (_day != secondaryDateTime.getDay()) {
+		return (_day > secondaryDateTime.getDay());
+	} else if (_hour != secondaryDateTime.getHour()) {
+		return (_hour > secondaryDateTime.getHour());
+	} else if (_minute != secondaryDateTime.getMinute()) {
+		return (_minute > secondaryDateTime.getMinute());
+	} else {
+		return false;
+	}
+}
+
+//	Checks if current DateTime object is before another
+bool DateTime::isBefore(DateTime secondaryDateTime) {
+	if (_year != secondaryDateTime.getYear()) {
+		return (_year < secondaryDateTime.getYear());
+	} else if (_month != secondaryDateTime.getMonth()) {
+		return (_month < secondaryDateTime.getMonth());
+	} else if (_day != secondaryDateTime.getDay()) {
+		return (_day < secondaryDateTime.getDay());
+	} else if (_hour != secondaryDateTime.getHour()) {
+		return (_hour < secondaryDateTime.getHour());
+	} else if (_minute != secondaryDateTime.getMinute()) {
+		return (_minute < secondaryDateTime.getMinute());
+	} else {
+		return false;
+	}
+}
+
+//	Returns string with YYYY MM DD
+string DateTime::displayDate() {
+	ostringstream displayOutput;
+
+	assert(_year >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_month >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_day >= INDICATOR_FAILEDSETATTEMPT);
+
+	displayOutput
+		<< setw(4) << _year
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _month
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _day;
+
+	return displayOutput.str();
+}
+
+//	Returns string with HH:MM
+string DateTime::displayTime() {
+	ostringstream displayOutput;
+
+	assert(_hour >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_minute >= INDICATOR_FAILEDSETATTEMPT);
+
+	displayOutput
+		<< setfill(DISPLAY_FILLER) << setw(2) << _hour
+		<< DISPLAY_SEPARATOR_TIME << setfill(DISPLAY_FILLER) << setw(2) << _minute;
+
+	return displayOutput.str();
+}
+
+//	Returns date in YYYY MM DD, time in HH:MM, and both in YYYY MM DD HH:MM
+string DateTime::displayDateTime() {
+	ostringstream displayOutput;
+	if (isValidDate(_year, _month, _day)) {
+		displayOutput << displayDate();
+
+		if (isValidTime(_hour, _minute)) {
+			displayOutput << DISPLAY_SEPARATOR_DATETIME;
+			displayOutput << displayTime();
+		}
+	} else if (isValidTime(_hour, _minute)) {
+		displayOutput << displayTime();
+	}
+
+	return displayOutput.str();
+}
+
+//	Returns string with DD/MM/YYYY
+string DateTime::displayDateForUser() {
+	ostringstream displayOutput;
+
+	assert(_year >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_month >= INDICATOR_FAILEDSETATTEMPT);
+	assert(_day >= INDICATOR_FAILEDSETATTEMPT);
+
+	displayOutput
+		<< setw(2) << _day
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(2) << _month
+		<< DISPLAY_SEPARATOR_DATE << setfill(DISPLAY_FILLER) << setw(4) << _year;
+
+	return displayOutput.str();
+}
+
+//	Returns date in DD/MM/YYYY, time in HH:MM, and both in DD/MM/YYYY HH:MM
+string DateTime::displayDateTimeForUser() {
+	ostringstream displayOutput;
+	if (isValidDate(_year, _month, _day)) {
+		displayOutput << displayDateForUser();
+
+		if (isValidTime(_hour, _minute)) {
+			displayOutput << DISPLAY_SEPARATOR_DATETIME;
+			displayOutput << displayTime();
+		}
+	} else if (isValidTime(_hour, _minute)) {
+		displayOutput << displayTime();
+	}
+
+	return displayOutput.str();
+}
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\DateTime.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\DateTime.h
+	 */
+
+//	DateTime (Date and Time for all Items)
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+
+#ifndef DATETIME_H
+#define DATETIME_H
+
+#include <string>
+#include <iostream>
+#include <vector>
+#include <sstream>
+#include <iomanip>
+#include <assert.h>
+using namespace std;
+
+class DateTime {
+private:
+	static const int MIN_YEAR;
+	static const int MAX_YEAR;
+	static const int MIN_MONTH;
+	static const int MAX_MONTH;
+	static const int MIN_DAY;
+	static const int MAX_DAY;
+	static const int MIN_HOUR;
+	static const int MAX_HOUR;
+	static const int MIN_MINUTE;
+	static const int MAX_MINUTE;
+	static const int EMPTYFIELD_DATETIME;
+	static const int INDICATOR_FAILEDSETATTEMPT;
+	static const char DISPLAY_SEPARATOR_DATE;
+	static const char DISPLAY_SEPARATOR_TIME;
+	static const char DISPLAY_SEPARATOR_DATETIME;
+	static const char DISPLAY_FILLER;
+
+	static const string ERROR_DATETIMERANGE;
+
+	int _year;
+	int _month;
+	int _day;
+	int _hour;
+	int _minute;
+
+	//	Checks if the attribute is in its valid range
+	//	Pre:	Nil
+	//	Post:	Returns true if (false otherwise):
+	//			Year ranges from 0 to 9999
+	//			Month ranges from 1 to 12
+	//			Day ranges from 1 to 31
+	//			Hour ranges from 0 to 23
+	//			Minute ranges from 0 to 59
+	bool isValidYearRange(int);
+	bool isValidMonthRange(int);
+	bool isValidDayRange(int);
+	bool isValidDate(int, int, int);
+	bool isValidHourRange(int);
+	bool isValidMinuteRange(int);
+	bool isValidTime(int, int);
+
+public:
+	//	Constructor
+	//	Pre:	Nil
+	//	Post:	DateTime object is created; attributes have no default assigned values
+	DateTime();
+
+	//	Overloaded Constructor with YYYY MM DD HH MM
+	//	Pre:	Year, Month, Day, Hour, and Minute are valid integers within range
+	//	Post:	DateTime object is created; all attributes are assigned accordingly
+	DateTime(int, int, int, int, int);
+
+	//	Overloaded Constructor with YYYY MM DD
+	//	Pre:	Year, Month, Day are valid integers within range
+	//	Post:	DateTime object is created; only YYYY MM DD attributes are assigned
+	DateTime(int, int, int);
+
+	//	Destructor
+	//	Pre:	Nil
+	//	Post:	DateTime object is destroyed
+	~DateTime();
+
+	//	Sets the attribute
+	//	Pre:	Year ranges from 0 to 9999
+	//			Month ranges from 1 to 12
+	//			Day ranges from 1 to 31
+	//			Hour ranges from 0 to 23
+	//			Minute ranges from 0 to 59
+	//	Post:	_(attribute) is set, and value is returned
+	int setYear(int);
+	int setMonth(int);
+	int setDay(int);
+	int setHour(int);
+	int setMinute(int);
+
+	//	Retrieves the attribute
+	//	Pre:	Attribute has been previously set
+	//	Post:	_(attribute) is returned
+	int getYear();
+	int getMonth();
+	int getDay();
+	int getHour();
+	int getMinute();
+
+	//	Comparators between DateTime objects
+	//	Pre:	Nil
+	//	Post:	Boolean == returns true if all attributes are equal
+	//			Boolean != returns true if at least one of the attributes are different
+	//			Boolean A.isAfter(B) returns true if A is later than B
+	//			Boolean B.isBefore(B) returns true if A is earlier than B
+	bool operator== (DateTime);
+	bool operator!= (DateTime);
+	bool isAfter(DateTime);
+	bool isBefore(DateTime);
+
+	// Returns string with YYYY MM DD and HH:MM
+	// Pre:		Nil
+	// Post:	String with attributes in YYYY MM DD and HH:MM format is returned
+	string displayDate();
+	string displayTime();
+	string displayDateTime();
+	string displayDateForUser();
+	string displayDateTimeForUser();
+};
+
+#endif
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\DateTime.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\History.h
+	 */
+
+//	Permanent Storage
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+
+#ifndef HISTORY_H
+#define HISTORY_H
+
+#include <stack>
+#include "..\iPlanner Log\Log.h"
+#include "Item.h"
+
+class History {
+private:
+	Log _historyLogger;
+
+	static const string COMMAND_ADD;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_REPLACE;
+	static const string COMMAND_CLEAR;
+	static const string RESET_COMPLETION;
+	static const string ERROR_ADD;
+	static const string ERROR_EMPTYSTACKS;
+	
+	static const string ERROR_INVALIDCOMMAND;
+
+	static const string LOG_CONSTRUCTHISTORY;
+	static const string LOG_DESTRUCTHISTORY;
+	static const string LOG_ITEMCOMMAND;
+	static const string LOG_CLEARCOMMAND;
+	static const string LOG_UNDOITEM;
+	static const string LOG_UNDOCLEAR;
+	static const string LOG_RESETHISTORY;
+
+	stack <string> _commandStack;
+	stack <vector <Item>> _scheduleStack;
+	stack <Item> _itemStack;
+
+	bool isNormalHistoryCommand(string);
+	bool isClearCommand(string);
+	bool isValidUndoCall();
+
+public:
+	//	Default Constructor
+	History();
+
+	//	Default Destructor
+	~History();
+
+	//	Adds commands that modifies storage information (add, delete, edit)
+	//	Pre:	Valid item
+	//	Post:	Command is added into the command stack; item is added into the item stack
+	string addCommand(string, Item);
+
+	//	Adds clear command that cleared an entire schedule
+	//	Pre:	Valid schedule
+	//	Post:	Clear command is added into the command stack; cleared schedule is added into the schedule stack
+	string addClearCommand(vector<Item>);
+
+	//	Removes commands from the item and command stack; returns item and command (both via reference)
+	//	Pre:	Item and command stacks are not empty
+	//	Post:	Command and Item are returned via reference; success/failure message is returned
+	string undoLastCommand(string&, Item&, vector<Item>&);
+
+	//	From the item and command stack, removes the undone command (that is re-added during execution of undo)
+	//	Pre:	Nil
+	//	Post:	Pops the top item in the command stack and the item stack
+	bool removeUndoneCommand();
+
+	//	Resets the schedule; empties all stack
+	//	Pre:	Nil
+	//	Post:	All stacks are emptied; confirmation string returned
+	string reset();
+};
+
+#endif;
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\History.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\Item.cpp
+	 */
+
+//	Item (Tasks, Deadlines, Events)
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+
+#include "Item.h"
+
+const string Item::EMPTYFIELD_ITEMNAME = "";
+const string Item::EMPTYFIELD_DESCRIPTION = "";
+const string Item::EMPTYFIELD_TIME = "";
+const string Item::ALLOWABLEOPTIONS_PRIORITY = "LMH";
+const string Item::ALLOWABLEOPTIONS_LABEL = "POM";
+const unsigned int Item::EMPTYFIELD_ITEMID = 0;
+const char Item::EMPTYFIELD_PRIORITY = 'E';
+const char Item::EMPTYFIELD_LABEL = 'E';
+
+const string Item::ERROR_INVALIDITEMNAME = "ITEM::Invalid Item Name";
+const string Item::ERROR_INVALIDDATETIME = "ITEM::Invalid Date/Time";
+const string Item::ERROR_INVALIDITEMID = "ITEM::Invalid Item ID";
+//	Checks if item has a valid item name
+bool Item::hasValidItemName() {
+	try {
+		if (_itemName != EMPTYFIELD_ITEMNAME) {
+			return true;
+		} else {
+			throw ERROR_INVALIDITEMNAME;
+		}
+	}
+	catch (string err_msg) {
+		cerr << ERROR_INVALIDITEMNAME << endl;
+	}
+
+	return false;
+}
+
+//	Checks if item has a valid start time
+bool Item::hasValidItemStartTime() {
+	if (_startTime.displayDateTime() != EMPTYFIELD_TIME) {
+			return true;
+		}
+
+	return false;
+}
+
+//	Checks if item has a valid end time
+bool Item::hasValidItemEndTime() {
+		if (_endTime.displayDateTime() != EMPTYFIELD_TIME) {
+			return true;
+		}
+
+	return false;
+}
+
+//	Checks if item has a valid description
+bool Item::hasValidItemDescription() {
+	if (_description != EMPTYFIELD_DESCRIPTION) {
+		return true;
+	}
+
+	assert(_description == EMPTYFIELD_DESCRIPTION);
+	return false;
+}
+
+//	Checks if item has a valid item ID
+bool Item::hasValidItemID() {
+	try {
+		if (_itemID > EMPTYFIELD_ITEMID) {
+			return true;
+		} else {
+			throw ERROR_INVALIDITEMID;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+	assert(_itemID <= EMPTYFIELD_ITEMID);
+	return false;
+}
+
+//	Checks if item has a valid priority
+bool Item::hasValidItemPriority() {
+	if (ALLOWABLEOPTIONS_PRIORITY.find_first_of(_priority) != string::npos) {
+		return true;
+	}
+
+	assert(_priority != 'L' && _priority != 'M' && _priority != 'H');
+	return false;
+}
+
+//	Checks if item has a valid label
+bool Item::hasValidItemLabel() {
+	if (ALLOWABLEOPTIONS_LABEL.find_first_of(_label) != string::npos) {
+		return true;
+	}
+
+	assert(_label != 'P' && _label != 'O' && _label != 'M');
+	return false;
+}
+
+CTime Item::setLastUpdate() {
+	CTime time = CTime::GetCurrentTime();
+	_lastUpdate = time;
+
+	return _lastUpdate;
+}
+
+//	Default Constructor
+Item::Item() {
+	_itemName = EMPTYFIELD_ITEMNAME;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_itemID = EMPTYFIELD_ITEMID;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+	setLastUpdate();
+}
+
+//	Overloaded Constructor with itemName
+Item::Item(string itemName) {
+	_itemName = itemName;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_itemID = EMPTYFIELD_ITEMID;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+	setLastUpdate();
+}
+
+//	Overloaded Constructor with itemID
+Item::Item(unsigned int itemID) {
+	assert(itemID >= 0);
+
+	_itemID = itemID;
+	_itemName = EMPTYFIELD_ITEMNAME;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+	setLastUpdate();
+}
+
+//	Overloaded Constructor with itemName and itemID
+Item::Item(string itemName, unsigned int itemID) {
+	assert(itemName != "");
+	assert(itemID >= 0);
+
+	_itemID = itemID;
+	_itemName = itemName;
+	_description = EMPTYFIELD_DESCRIPTION;
+	_priority = EMPTYFIELD_PRIORITY;
+	_label = EMPTYFIELD_LABEL;
+	_isCompleted = false;
+	setLastUpdate();
+}
+
+//	Destructor
+Item::~Item() {}
+
+//	Sets the item name
+string Item::setItemName(string itemName) {
+	_itemName = itemName;
+	setLastUpdate();
+	return _itemName;
+}
+
+//	Sets the item description
+string Item::setDescription(string description) {
+	_description = description;
+	setLastUpdate();
+	return _description;
+}
+
+//	Sets the item start time, given DateTime object
+DateTime Item::setStartTime(DateTime startTime) {
+	_startTime = startTime;
+	setLastUpdate();
+	return _startTime;
+}
+
+//	Sets the item start time, given year, month, day
+DateTime Item::setStartTime(int year, int month, int day) {
+	DateTime dateTime(year, month, day);
+	_startTime = dateTime;
+	setLastUpdate();
+	return _startTime;
+}
+
+//	Sets the item start time, given year, month, day, hour, minute
+DateTime Item::setStartTime(int year, int month, int day, int hour, int minute) {
+	DateTime dateTime(year, month, day, hour, minute);
+	_startTime = dateTime;
+	setLastUpdate();
+	return _startTime;
+}
+
+//	Sets the item end time, given DateTime object
+DateTime Item::setEndTime(DateTime endTime) {
+	_endTime = endTime;
+	setLastUpdate();
+	return _endTime;
+}
+
+//	Sets the item end time, given year, month, day
+DateTime Item::setEndTime(int year, int month, int day) {
+	DateTime dateTime(year, month, day);
+	_endTime = dateTime;
+	setLastUpdate();
+	return _endTime;
+}
+
+//	Sets the item end time, given year, month, day, hour, minute
+DateTime Item::setEndTime(int year, int month, int day, int hour, int minute) {
+	DateTime dateTime(year, month, day, hour, minute);
+	_endTime = dateTime;
+	setLastUpdate();
+	return _endTime;
+}
+
+//	Sets the item ID
+unsigned int Item::setItemID(unsigned int itemID) {
+	assert(itemID >= 0);
+
+	_itemID = itemID;
+	setLastUpdate();
+	return _itemID;
+}
+
+//	Sets the item priority (H, M, L)
+char Item::setPriority(char priority) {
+	_priority = priority;
+	setLastUpdate();
+	return _priority;
+}
+
+//	Sets the item label (P, O, M)
+char Item::setLabel(char label) {
+	_label = label;
+	setLastUpdate();
+	return _label;
+}
+
+//	Sets the item completion status
+bool Item::setCompletion(bool isCompleted) {
+	_isCompleted = isCompleted;
+	setLastUpdate();
+	return _isCompleted;
+}
+
+//	Retrieves the item name
+string Item::getItemName() {
+	return _itemName;
+}
+
+//	Retrieves the item description
+string Item::getDescription() {
+	return _description;
+}
+
+//	Retrieves the item start time (DateTime object)
+DateTime Item::getStartTime() {
+	return _startTime;
+}
+
+//	Retrieves the item end time (DateTime object)
+DateTime Item::getEndTime() {
+	return _endTime;
+}
+
+CTime Item::getLastUpdate() {
+	return _lastUpdate;
+}
+
+//	Retrieves the item ID
+unsigned int Item::getItemID() {
+	assert(_itemID >= 0);
+	return _itemID;
+}
+
+//	Retrieves the item priority
+char Item::getPriority() {
+	return _priority;
+}
+
+//	Retrieves the item label
+char Item::getLabel() {
+	return _label;
+}
+
+//	Retrieves the item completion status
+bool Item::getCompletion() {
+	return _isCompleted;
+}
+
+//	Retrieves the key item details for user display (string)
+string Item::displayItemForUser() {
+	ostringstream displayOutput;
+
+	if (hasValidItemName()) {
+		assert(_itemName != "");
+		displayOutput << "Name:\t\t" << _itemName << endl;
+	}
+
+	try {
+		if (hasValidItemStartTime()) {
+			displayOutput << "Start Time:\t" << _startTime.displayDateTimeForUser() << endl;
+		}
+
+		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
+			throw ERROR_INVALIDDATETIME;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+
+	try {
+		if (hasValidItemEndTime()) {
+			displayOutput << "End Time:\t" << _endTime.displayDateTimeForUser() << endl;
+		}
+
+		if (displayOutput.str()[displayOutput.str().length() - 3] == '-') {
+			throw ERROR_INVALIDDATETIME;
+		}
+	}
+	catch (string err_msg) {
+		cerr << err_msg << endl;
+	}
+
+
+	if (hasValidItemDescription()) {
+		assert(_description != "");
+		displayOutput << "Description:\t" << _description << endl;
+	}
+
+	if (hasValidItemPriority()) {
+		assert(_priority != 'E');
+		displayOutput << "Priority:\t" << _priority << endl;
+	}
+
+	if (hasValidItemLabel()) {
+		assert(_label != 'E');
+		displayOutput << "Label:\t" << _label << endl;
+	}
+
+	return displayOutput.str();
+}
+
+//	Retrieves the full item details (string)
+string Item::displayItemFullDetails() {
+	ostringstream displayOutput;
+
+	if (hasValidItemID()) {
+		assert(_itemID >= 0);
+		displayOutput << "Item ID:\t" << _itemID << endl;
+	}
+
+	displayOutput << displayItemForUser();
+
+	displayOutput << "Completed?\t" << boolalpha << _isCompleted << endl;
+
+	return displayOutput.str();
+}
+
+//	Retrieves the item start time (string)
+string Item::displayStartTime() {
+	return _startTime.displayDateTime();
+}
+
+//	Retrieves the item end time (string)
+string Item::displayEndTime() {
+	return _endTime.displayDateTime();
+}
+
+//	Retrieves the item last updated time (string)
+string Item::displayLastUpdatedTime() {
+	DateTime lastUpdateTime(_lastUpdate.GetYear(), _lastUpdate.GetMonth(), _lastUpdate.GetDay(), _lastUpdate.GetHour(), _lastUpdate.GetMinute());
+
+	assert(lastUpdateTime.getYear() >= 0);
+	assert(lastUpdateTime.getMonth() >= 0);
+	assert(lastUpdateTime.getDay() >= 0);
+	assert(lastUpdateTime.getHour() >= 0);
+	assert(lastUpdateTime.getMinute() >= 0);
+
+	return lastUpdateTime.displayDateTime();
+}
+
+//	Retrieves the item's start time for display to user
+string Item::displayStartTimeForUser() {
+	return _startTime.displayDateTimeForUser();
+}
+
+//	Retrieves the item's end time for display to user
+string Item::displayEndTimeForUser() {
+	return _endTime.displayDateTimeForUser();
+}
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\Item.h
+	 */
+
+//	Item (Tasks, Deadlines, Events)
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+
+#ifndef ITEM_H
+#define ITEM_H
+
+#include <string>
+#include <iostream>
+#include <vector>
+#include <atltime.h>
+#include <ctime>
+#include "DateTime.h"
+using namespace std;
+
+class Item {
+private:
+	static const string EMPTYFIELD_ITEMNAME;
+	static const string EMPTYFIELD_DESCRIPTION;
+	static const string EMPTYFIELD_TIME;
+	static const string ALLOWABLEOPTIONS_PRIORITY;
+	static const string ALLOWABLEOPTIONS_LABEL;
+	static const unsigned int EMPTYFIELD_ITEMID;
+	static const char EMPTYFIELD_PRIORITY;
+	static const char EMPTYFIELD_LABEL;
+
+	static const string ERROR_INVALIDITEMNAME;
+	static const string ERROR_INVALIDDATETIME;
+	static const string ERROR_INVALIDITEMID;
+
+	string _itemName;
+	DateTime _startTime;
+	DateTime _endTime;
+	CTime _lastUpdate;
+	string _description;
+	unsigned int _itemID;
+	char _priority;
+	char _label;
+	bool _isCompleted;
+
+	bool hasValidItemName();
+	bool hasValidItemStartTime();
+	bool hasValidItemEndTime();
+	bool hasValidItemDescription();
+	bool hasValidItemID();
+	bool hasValidItemPriority();
+	bool hasValidItemLabel();
+
+	CTime setLastUpdate();
+
+public:
+	//	Constructor
+	//	Pre:	Nil
+	//	Post:	Item object is created; attributes have assigned to defaults
+	Item();
+
+	//	Overloaded Constructors
+	//	Pre:	itemName and itemID are valid
+	//	Post:	Item is created with _itemName and _itemID assigned
+	Item(string);
+	Item(unsigned int);
+	Item(string, unsigned int);
+
+	//	Destructor
+	//	Pre:	Nil
+	//	Post:	Item object is destroyed
+	~Item();
+
+	//	Sets the attribute
+	//	Pre:	ItemName is a string
+	//			Description is a string
+	//			Start Time and End Time are DateTime objects
+	//			Item ID is an unsigned integer
+	//			Priority is a character - L, M, or H
+	//			Label is a character - P, O, or M
+	//			Completion is a boolean value - true if item is completed
+	//	Post:	_(attribute) is set, and value is returned
+	string setItemName(string);
+	string setDescription(string);
+	DateTime setStartTime(DateTime);
+	DateTime setStartTime(int, int, int);
+	DateTime setStartTime(int, int, int, int, int);
+	DateTime setEndTime(DateTime);
+	DateTime setEndTime(int, int, int);
+	DateTime setEndTime(int, int, int, int, int);
+	unsigned int setItemID(unsigned int);
+	char setPriority(char);
+	char setLabel(char);
+	bool setCompletion(bool);
+
+	//	Sets the attribute
+	//	Pre:	Attribute has been previously set.
+	//	Post:	_(attribute) is returned
+	string getItemName();
+	string getDescription();
+	DateTime getStartTime();
+	DateTime getEndTime();
+	CTime getLastUpdate();
+	unsigned int getItemID();
+	char getPriority();
+	char getLabel();
+	bool getCompletion();
+
+	// Returns string with item details
+	// Pre:		Nil
+	// Post:	String with existing details are returned
+	string displayItemForUser();
+	string displayItemFullDetails();
+	string displayStartTime();
+	string displayEndTime();
+	string displayLastUpdatedTime();
+
+	//	Returns string with item details for display to user
+	//	Pre:	Nil
+	//	Post:	String with existing details are returned (intuitive to user)
+	string displayStartTimeForUser();
+	string displayEndTimeForUser();
+};
+
+#endif
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\Item.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\Schedule.cpp
+	 */
+
+//	Schedule
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+
+#include "Schedule.h"
+
+const string Schedule::COMMAND_ADD = "ADD";
+const string Schedule::COMMAND_DELETE = "DELETE";
+const string Schedule::COMMAND_REPLACE = "REPLACE";
+const string Schedule::COMMAND_CLEAR = "CLEAR";
+const string Schedule::ERROR_ADD = "ERROR: Command and Item were not recorded.";
+const string Schedule::ERROR_EMPTYSTACKS = "ERROR: Undo has reached its limit.";
+const string Schedule::LOG_ADDITEM = "STORAGE::AddItem";
+const string Schedule::LOG_RETRIEVEITEM = "STORAGE::RetrieveItem";
+const string Schedule::LOG_REPLACEITEM = "STORAGE::ReplaceItem";
+const string Schedule::LOG_DELETEITEM = "STORAGE::DeleteItem";
+const string Schedule::LOG_CONSTRUCTSCHEDULE = "STORAGE::ConstructSchedule";
+const string Schedule::LOG_DESTRUCTSCHEDULE = "STORAGE::DestructSchedule";
+const string Schedule::LOG_CLEAR = "STORAGE::ClearItems";
+const string Schedule::LOG_UNDO = "STORAGE::UndoCommand";
+
+//	Constructor
+Schedule::Schedule() {
+	_storageLogger.writeToLogFile(LOG_CONSTRUCTSCHEDULE);
+}
+
+//	Destructor
+Schedule::~Schedule() {
+	_storageLogger.writeToLogFile(LOG_DESTRUCTSCHEDULE);
+}
+
+//	Checks if an itemID matches the itemID of an item in a given vector cell
+bool Schedule::isMatchingItemID(unsigned int vectorIndex, unsigned int itemID) {
+	assert(itemID >= 0);
+	assert(vectorIndex >= 0);
+	
+	if (_schedule[vectorIndex].getItemID() == itemID) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's priority matches that specified by the user
+bool Schedule::isMatchingPriority(char itemPriority, char userPriority) {
+	if (itemPriority == userPriority) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's label matches that specified by the user
+bool Schedule::isMatchingLabel(char itemLabel, char userLabel) {
+	if (itemLabel == userLabel) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's completion status matches that specified by the user
+bool Schedule::isMatchingCompletionStatus(bool itemCompletion, bool userCompletion) {
+	if (itemCompletion == userCompletion) {
+		return true;
+	}
+	return false;
+}
+
+//	Checks if an item's time period matches that specified by the user
+bool Schedule::isRelevantDateTime(DateTime itemStart, DateTime itemEnd, DateTime startTime, DateTime endTime) {
+	if (itemStart.displayDateTime() == "" && itemEnd.displayDateTime() == "") {
+		return false;
+	} else if (itemStart.isAfter(endTime) && itemEnd.displayDateTime() == "") {
+		return false;
+	} else if (itemStart.isBefore(startTime) && itemEnd.displayDateTime() == "") {
+		return false;
+	} else if (itemStart.displayDateTime() == "" && itemEnd.isAfter(endTime)) {
+		return false;
+	} else if (itemStart.displayDateTime() == "" && itemEnd.isBefore(startTime)) {
+		return false;
+	} else if (itemStart.isBefore(startTime) && itemEnd.isBefore(startTime)) {
+		return false;
+	} else if (itemStart.isAfter(endTime) && itemEnd.isAfter(endTime)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+//	Checks if an item's description and name has a user-specified keyword
+bool Schedule::hasKeyword(string name, string description, string keyword) {
+	if (lowerAllCase(name).find(lowerAllCase(keyword)) != string::npos) {
+		return true;
+	} else if (lowerAllCase(description).find(lowerAllCase(keyword)) != string::npos) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+//	Retrieves schedule vector index given itemID
+unsigned int Schedule::findVectorIndexGivenItemID(unsigned int itemID) {
+	unsigned int vectorIndex = 0;
+
+	while (vectorIndex < _schedule.size() && !isMatchingItemID(vectorIndex, itemID)) {
+		vectorIndex++;
+	}
+
+	return vectorIndex;
+}
+
+//	Retrieves item ID given display vector index
+unsigned int Schedule::findItemIDGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	
+	return _displaySchedule[displayVectorIndex - 1].getItemID();
+}
+
+//	Retrieves the size of the schedule
+unsigned int Schedule::getSizeOfSchedule() {
+	return _schedule.size();
+}
+
+//	Retrieves the size of the display schedule
+unsigned int Schedule::getSizeOfDisplaySchedule() {
+	return _displaySchedule.size();
+}
+
+//	Resets the display schedule to the schedule
+unsigned int Schedule::resetDisplaySchedule() {
+	_displaySchedule = _schedule;
+	return getSizeOfDisplaySchedule();
+}
+
+//	Adds the item to the schedule, returns full details of the item (string)
+string Schedule::addItem(Item* item) {
+	_scheduleHistory.addCommand(COMMAND_ADD, *item);
+	_schedule.push_back(*item);
+
+	assert(_schedule.size() > 0);
+	_storageLogger.writeToLogFile(LOG_ADDITEM);
+
+	return _schedule.back().displayItemFullDetails();
+}
+
+//	Retrieves a copy of an existing item in the schedule give Item ID
+Item Schedule::retrieveItemGivenItemID(unsigned int itemID) {
+	assert(itemID >= 0);
+	
+	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+	return _schedule[vectorIndex];
+}
+
+//	Retrieves a copy of an existing item in the schedule given the item's display vector index
+Item Schedule::retrieveItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	assert(_schedule.size() > 0);
+	assert(_displaySchedule.size() > 0);
+	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
+	_storageLogger.writeToLogFile(LOG_RETRIEVEITEM);
+	return retrieveItemGivenItemID(itemID);
+}
+
+//	Replaces an existing item in the schedule, returns full details of the item (string)
+string Schedule::replaceItemGivenItemID(Item* replacementItem, unsigned int itemID) {
+	assert(itemID >= 0);
+	assert(_schedule.size() > 0);
+	unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+
+	_scheduleHistory.addCommand(COMMAND_REPLACE, _schedule[vectorIndex]);
+	_schedule[vectorIndex] = *replacementItem;
+
+	return _schedule[vectorIndex].displayItemFullDetails();
+}
+
+//	Replaces an existing item in the schedule given the item's display vector index
+string Schedule::replaceItemGivenDisplayVectorIndex(Item* replacementItem, unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	assert(_schedule.size() > 0);
+	assert(_displaySchedule.size() > 0);
+	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
+	_storageLogger.writeToLogFile(LOG_REPLACEITEM);
+	return replaceItemGivenItemID(replacementItem, itemID);
+}
+
+//	Deletes an item from the schedule, returns full details of the item (string)
+string Schedule::deleteItemGivenItemID(unsigned int itemID) {
+	assert(itemID >= 0);
+	assert(_schedule.size() > 0);
+	unsigned int index = findVectorIndexGivenItemID(itemID);
+	Item itemToBeDeleted = _schedule[index];
+
+	_scheduleHistory.addCommand(COMMAND_DELETE, itemToBeDeleted);
+	_schedule.erase(_schedule.begin() + index);
+
+	return itemToBeDeleted.displayItemFullDetails();
+}
+
+//	Deletes an item from the schedule given item's display vector index
+string Schedule::deleteItemGivenDisplayVectorIndex(unsigned int displayVectorIndex) {
+	assert(displayVectorIndex >= 1);
+	assert(_schedule.size() > 0);
+	assert(_displaySchedule.size() > 0);
+	unsigned int itemID = findItemIDGivenDisplayVectorIndex(displayVectorIndex);
+	_storageLogger.writeToLogFile(LOG_DELETEITEM);
+	return deleteItemGivenItemID(itemID);
+}
+
+//	Removes all items in the display schedule, from the schedule
+string Schedule::clearDisplaySchedule() {
+	unsigned int index = 1;
+
+	_scheduleHistory.addClearCommand(_displaySchedule);
+
+	while (getSizeOfDisplaySchedule() != 0) {
+		unsigned int itemID = findItemIDGivenDisplayVectorIndex(index);
+		unsigned int vectorIndex = findVectorIndexGivenItemID(itemID);
+		_schedule.erase(_schedule.begin() + vectorIndex);
+		_displaySchedule.erase(_displaySchedule.begin());
+	}
+	
+	assert(_displaySchedule.empty());
+
+	_storageLogger.writeToLogFile(LOG_CLEAR);
+	return COMMAND_CLEAR;
+}
+
+//	Undoes the last command that modified the schedule (add, replace, delete)
+string Schedule::undoLastCommand() {
+	Item latestItem;
+	string command;
+	vector <Item> latestClearedSchedule;
+
+	string confirmation = _scheduleHistory.undoLastCommand(command, latestItem, latestClearedSchedule);
+
+	if (confirmation == ERROR_EMPTYSTACKS) {
+		return confirmation;
+	} else if (command == COMMAND_ADD) {
+		confirmation = undoAdd(latestItem);
+	} else if (command == COMMAND_DELETE) {
+		confirmation = undoDelete(latestItem);
+	} else if (command == COMMAND_REPLACE) {
+		confirmation = undoReplace(latestItem);
+	} else if (command == COMMAND_CLEAR) {
+		confirmation = undoClear(latestClearedSchedule);
+	}
+
+	return confirmation;
+}
+
+//	Undoes the last command that modified the schedule (add)
+string Schedule::undoAdd(Item latestItem) {
+	string confirmation = deleteItemGivenItemID(latestItem.getItemID());
+	_scheduleHistory.removeUndoneCommand();
+
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_ADD);
+	return (COMMAND_ADD + confirmation);
+}
+
+//	Undoes the last command that modified the schedule (replace)
+string Schedule::undoReplace(Item latestItem) {
+	string confirmation = replaceItemGivenItemID(&latestItem, latestItem.getItemID());
+	_scheduleHistory.removeUndoneCommand();
+
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_REPLACE);
+	return (COMMAND_REPLACE + confirmation);
+}
+
+//	Undoes the last command that modified the schedule (delete)
+string Schedule::undoDelete(Item latestItem) {
+	string confirmation = addItem(&latestItem);
+	_scheduleHistory.removeUndoneCommand();
+
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_DELETE);
+	return (COMMAND_DELETE + confirmation);
+}
+
+//	Undoes the last command that cleared a schedule
+string Schedule::undoClear(vector<Item> latestClearedSchedule) {
+	unsigned int index;
+	for (index = 0; index < latestClearedSchedule.size(); index++) {
+		addItem(&(latestClearedSchedule[index]));
+		_scheduleHistory.removeUndoneCommand();
+	}
+
+	_storageLogger.writeToLogFile(LOG_UNDO + COMMAND_CLEAR);
+	return to_string(index);
+}
+
+string Schedule::resetHistory() {
+	return _scheduleHistory.reset();
+}
+
+//	Retrieves the entire schedule
+const vector<Item>& Schedule::retrieveSchedule() {
+	return _schedule;
+}
+
+//	Retrieves the entire display schedule
+const vector<Item>& Schedule::retrieveDisplaySchedule() {
+	return _displaySchedule;
+}
+
+//	Checks if an item is earlier than another
+bool Schedule::isEarlierThan(Item leftItem, Item rightItem) {
+	string leftDateTime = "";
+	string rightDateTime = "";
+
+	if (leftItem.displayStartTime() != "") {
+		leftDateTime = leftItem.displayStartTime();
+	} else if (leftItem.displayEndTime() != "") {
+		leftDateTime = leftItem.displayEndTime();
+	}
+
+	if (rightItem.displayStartTime() != "") {
+		rightDateTime = rightItem.displayStartTime();
+	} else if (rightItem.displayEndTime() != "") {
+		rightDateTime = rightItem.displayEndTime();
+	}
+
+	return (leftDateTime < rightDateTime);
+}
+
+//	Sorts the display schedule by date, returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByDate() {
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isEarlierThan);
+	return retrieveDisplaySchedule();
+}
+
+// Convert entire string to lowercase
+string Schedule::lowerAllCase(const string& uncovertedString) {
+	string workingStringCopy = uncovertedString;
+
+	transform(workingStringCopy.begin(), workingStringCopy.end(), workingStringCopy.begin(), tolower);
+
+	return workingStringCopy;
+}
+
+//	Checks if an item's name is alphabetically smaller than another's
+bool Schedule::isAlphabeticallySmallerThan(Item leftItem, Item rightItem) {
+	string leftItemName = lowerAllCase(leftItem.getItemName());
+	string rightItemName = lowerAllCase(rightItem.getItemName());
+
+	return (leftItemName < rightItemName);
+}
+
+//	Sorts the display schedule by item name, returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByItemName() {
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isAlphabeticallySmallerThan);
+	return retrieveDisplaySchedule();
+}
+
+//	Checks if an item is of lower priority than another
+bool Schedule::isLowerPriorityThan(Item leftItem, Item rightItem) {
+	char leftItemPriority = leftItem.getPriority();
+	char rightItemPriority = rightItem.getPriority();
+
+	if (leftItemPriority == 'H') {
+		leftItemPriority = '1';
+	} else if (leftItemPriority == 'M') {
+		leftItemPriority = '2';
+	} else if (leftItemPriority == 'L') {
+		leftItemPriority = '3';
+	} else {
+		leftItemPriority = '4';
+	}
+
+	if (rightItemPriority == 'H') {
+		rightItemPriority = '1';
+	} else if (rightItemPriority == 'M') {
+		rightItemPriority = '2';
+	} else if (rightItemPriority == 'L') {
+		rightItemPriority = '3';
+	} else {
+		rightItemPriority = '4';
+	}
+
+	return (leftItemPriority < rightItemPriority);
+}
+
+//	Sorts the display schedule by priority, returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByPriority() {
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isLowerPriorityThan);
+	return retrieveDisplaySchedule();
+}
+
+//	Checks if an item is less completed than another (completed vs incomplete)
+bool Schedule::isLessCompleteThan(Item leftItem, Item rightItem) {
+	return (leftItem.getCompletion() < rightItem.getCompletion());
+}
+
+//	Sorts the display schedule by completion status (completed first), returns constant reference to sorted display schedule
+const vector<Item>& Schedule::retrieveDisplayScheduleByCompletionStatus() {
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isLessCompleteThan);
+	return retrieveDisplaySchedule();
+}
+
+//	Checks if an items is updated later than another
+bool Schedule::isUpdatedLaterThan(Item leftItem, Item rightItem) {
+	return (leftItem.getLastUpdate() > rightItem.getLastUpdate());
+}
+
+//	Sorts the display schedule by last updated time
+const vector<Item>& Schedule::retrieveDisplayScheduleByLastUpdate() {
+	stable_sort(_displaySchedule.begin(), _displaySchedule.end(), isUpdatedLaterThan);
+	return retrieveDisplaySchedule();
+}
+
+//	Filters the schedule by priority
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByPriority(char priority) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByPriority(index, priority)) {
+			index--;
+		}
+	}
+
+	return retrieveDisplaySchedule();
+}
+
+//	Filters the schedule by label
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByLabel(char label) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByLabel(index, label)) {
+			index--;
+		}
+	}
+
+	return retrieveDisplaySchedule();
+}
+
+//	Filters the schedule by completion status
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByCompletion(bool completionStatus) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByCompletion(index, completionStatus)) {
+			index--;
+		}
+	}
+
+	return retrieveDisplaySchedule();
+}
+
+//	Filters the schedule by keyword
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByKeyword(string keyword) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByKeyword(index, keyword)) {
+			index--;
+		}
+	}
+
+	return retrieveDisplaySchedule();
+}
+
+//	Filters the schedule by a user-specified time period
+const vector<Item>& Schedule::retrieveDisplayScheduleFilteredByDateTime(DateTime startTime, DateTime endTime) {
+	for (int index = 0; index < (int)_displaySchedule.size(); index++) {
+		if (filterDisplayScheduleByDateTime(index, startTime, endTime)) {
+			index--;
+		}
+	}
+
+	return retrieveDisplaySchedule();
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified priority
+bool Schedule::filterDisplayScheduleByPriority(int index, char priority) {
+	Item removedItem;
+
+	if (!isMatchingPriority(_displaySchedule[index].getPriority(), priority)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified label
+bool Schedule::filterDisplayScheduleByLabel(int index, char label) {
+	Item removedItem;
+
+	if (!isMatchingLabel(_displaySchedule[index].getLabel(), label)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified completion status
+bool Schedule::filterDisplayScheduleByCompletion(int index, bool completionStatus) {
+	Item removedItem;
+
+	if (!isMatchingCompletionStatus(_displaySchedule[index].getCompletion(), completionStatus)) {
+		removedItem = _displaySchedule[index];
+
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	}
+
+	return false;
+}
+
+//	Checks given item in the schedule, and removes it if it does not have the user-specified keyword
+bool Schedule::filterDisplayScheduleByKeyword(int index, string keyword) {
+	if (!hasKeyword(_displaySchedule[index].getItemName(), _displaySchedule[index].getDescription(), keyword)) {
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+//	Checks given item in the schedule, and removes it if it does not coincide with the user-specified date and time period
+bool Schedule::filterDisplayScheduleByDateTime(int index, DateTime startTime, DateTime endTime) {
+	if (!isRelevantDateTime(_displaySchedule[index].getStartTime(), _displaySchedule[index].getEndTime(), startTime, endTime)) {
+		_displaySchedule.erase(_displaySchedule.begin() + index);
+		return true;
+	} else {
+		return false;
+	}
+}
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\Schedule.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\Schedule.h
+	 */
+
+//	Permanent Storage
+//	Tutorial Group 8 (Friday, 10:00AM); Group 2C
+
+#ifndef SCHEDULE_H
+#define SCHEDULE_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include "Item.h"
+#include "History.h"
+#include "..\iPlanner Log\Log.h"
+using namespace std;
+
+class Schedule {
+private:
+	Log _storageLogger;
+
+	static const string COMMAND_ADD;
+	static const string COMMAND_DELETE;
+	static const string COMMAND_REPLACE;
+	static const string COMMAND_CLEAR;
+	static const string ERROR_ADD;
+	static const string ERROR_EMPTYSTACKS;
+
+	static const string LOG_ADDITEM;
+	static const string LOG_RETRIEVEITEM;
+	static const string LOG_REPLACEITEM;
+	static const string LOG_DELETEITEM;
+	static const string LOG_CONSTRUCTSCHEDULE;
+	static const string LOG_DESTRUCTSCHEDULE;
+	static const string LOG_CLEAR;
+	static const string LOG_UNDO;	
+
+	vector <Item> _schedule;
+	vector <Item> _displaySchedule;
+	History _scheduleHistory;
+
+	//	Checks if an itemID matches the itemID of an item in a given vector cell
+	//	Pre:	Valid itemID, valid vectorIndex
+	//	Post:	Returns true if the itemID matches; false otherwise
+	bool isMatchingItemID(unsigned int, unsigned int);
+
+	//	Checks if an item's attribute matches that specified by the user
+	//	Pre:	Valid user-specified attribute
+	//	Post:	Returns true if the attributes match; false otherwise
+	bool isMatchingPriority(char, char);
+	bool isMatchingLabel(char, char);
+	bool isMatchingCompletionStatus(bool, bool);
+	bool isRelevantDateTime(DateTime, DateTime, DateTime, DateTime);
+private:
+	//	Checks if an item's name or description has a keyword or a string
+	bool hasKeyword(string, string, string);
+
+	//	Checks how an item compares with another according to the item's attribute
+	//			isEarlierThan uses start time, if any, else uses end time, if any
+	//			isAlphabeticallySmallerThan uses the items' item name, regardless of case
+	//			isLowerPriorityThan uses the item's priority - L, M, H
+	//			isLessCompleteThan uses the item's completion status (completed vs incomplete)
+	//	Pre:	Valid Item objects
+	//	Post:	Returns if the left Item is earlier than the right one; false otherwise
+	static bool isEarlierThan(Item, Item);
+	static bool isAlphabeticallySmallerThan(Item, Item);
+	static bool isLowerPriorityThan(Item, Item);
+	static bool isLessCompleteThan(Item, Item);
+	static bool isUpdatedLaterThan(Item, Item);
+
+	//	Convert entire string to lowercase
+	//	Pre:	Valid string
+	//	Post:	All uppercased characters are converted to lowercase
+	static string lowerAllCase(const string& unconvertedString);
+
+	//	Undoes the last command that modified the schedule (add, edit, delete)
+	//	Pre:	Previous commands valid
+	//	Post:	Reverses the effect of the last command
+	string undoAdd(Item);
+	string undoReplace(Item);
+	string undoDelete(Item);
+	string undoClear(vector<Item>);
+
+public:
+	//	Constructor
+	//	Pre:    Nil
+	//	Post:	Empty schedule is created without any Item objects
+	Schedule();
+
+	//	Destructor
+	//	Pre:    Nil
+	//	Post:	Schedule is destroyed, along with the items stored in it
+	~Schedule();
+
+	//	Retrieves the size of the schedule/display schedule
+	//	Pre:	Nil
+	//	Post:	Returns the number of items within _schedule or _displaySchedule respectively
+	unsigned int getSizeOfSchedule();
+	unsigned int getSizeOfDisplaySchedule();
+
+	//	Retrieves schedule vector index given item ID
+	//	Pre:	Valid itemID
+	//	Post:	Schedule vector index is returned
+	unsigned int findVectorIndexGivenItemID(unsigned int);
+
+	//	Retrieves item ID given display vector index
+	//	Pre:	Display vector is not sorted by the other components
+	//	Post:	Returns item ID of the item selected
+	unsigned int findItemIDGivenDisplayVectorIndex(unsigned int);
+
+	//	Resets the display schedule to the schedule
+	//	Pre:	Nil.
+	//	Post:	Display schedule is a duplicate of schedule; size of display schedule is returned
+	unsigned int resetDisplaySchedule();
+
+	//	Adds an item to the schedule
+	//	Pre:	Valid Item object
+	//	Post:	Item is added to the schedule
+	//			Full details of the item is returned (string)
+	string addItem(Item*);
+
+	//	Given Item ID, retrieves a copy of/replaces/deletes an existing item in the schedule
+	//	Pre:	Valid Item ID, valid Item object (for replacement)
+	//	Post:	Given Item ID, a copy of the existing item is returned (for retrieval)
+	//			Given Item ID, a string of the item's full details is returned
+	Item retrieveItemGivenItemID(unsigned int);
+	string replaceItemGivenItemID(Item*, unsigned int);
+	string deleteItemGivenItemID(unsigned int);
+
+	//	Given display vector index, retrieves a copy of/replaces/deletes an existing item in the schedule
+	//	Pre:	Valid display vector index, valid Item object (for replacement)
+	//	Post:	Given display vector index, a copy of the existing item is returned (for retrieval)
+	//			Given display vector index, a string of the item's full details is returned
+	Item retrieveItemGivenDisplayVectorIndex(unsigned int);
+	string replaceItemGivenDisplayVectorIndex(Item*, unsigned int);
+	string deleteItemGivenDisplayVectorIndex(unsigned int);
+
+	//	Removes all items in the display schedule, from the schedule
+	//	Pre:	Nil
+	//	Post:	Items in the display schedule are deleted from the schedule
+	string clearDisplaySchedule();
+
+	//	Undoes the last command that modified the schedule (add, edit, delete)
+	//	Pre:	Previous commands valid
+	//	Post:	Reverses the effect of the last command
+	string undoLastCommand();
+
+	//	Resets the History schedule; to be only executed after readFile
+	//	Pre:	Nil.
+	//	Post:	History schedule is reset.
+	string resetHistory();
+
+	//	Retrieves the entire schedule/display schedule
+	//	Pre:	Nil
+	//	Post:	Constant reference to vector of Item is returned.
+	const vector <Item>& retrieveSchedule();
+	const vector <Item>& retrieveDisplaySchedule();
+
+	//	Sorts the schedule by attribute (date - if any, item name, priority, completion status)
+	//	Pre:	Valid date, if any - YYYY MM DD HH:MM or YYYY MM DD
+	//			Valid item name (string)
+	//			Valid priority, if any - P, O, M
+	//			Valid completion status - true, false
+	//	Post:	Constant reference to the sorted schedule is returned
+	const vector<Item>& retrieveDisplayScheduleByDate();
+	const vector<Item>& retrieveDisplayScheduleByItemName();
+	const vector<Item>& retrieveDisplayScheduleByPriority();
+	const vector<Item>& retrieveDisplayScheduleByCompletionStatus();
+	const vector<Item>& retrieveDisplayScheduleByLastUpdate();
+
+	//	Filters the schedule by attribute (priority, label, or completion status)
+	//	Pre:	Valid priority - L, M, or H
+	//			Valid label - P, O, or M
+	//			Valid completion status - true, false
+	//	Post:	Constant reference to the filtered schedule is returned
+	const vector<Item>& retrieveDisplayScheduleFilteredByPriority(char);
+	const vector<Item>& retrieveDisplayScheduleFilteredByLabel(char);
+	const vector<Item>& retrieveDisplayScheduleFilteredByCompletion(bool);
+	const vector<Item>& retrieveDisplayScheduleFilteredByKeyword(string);
+	const vector<Item>& retrieveDisplayScheduleFilteredByDateTime(DateTime, DateTime);
+
+	//	Checks given item in the schedule, and removes it if it does not have the specified attribute
+	//	Pre:	Valid priority - L, M, or H
+	//			Valid label - P, O, or M
+	//			Valid completion status - true, false
+	//	Post:	Returns true if item is removed, false otherwise
+	bool filterDisplayScheduleByPriority(int, char);
+	bool filterDisplayScheduleByLabel(int, char);
+	bool filterDisplayScheduleByCompletion(int, bool);
+	bool filterDisplayScheduleByKeyword(int, string);
+	bool filterDisplayScheduleByDateTime(int, DateTime, DateTime);
+};
+
+#endif
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\Schedule.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace DateTimeTest {
+	TEST_CLASS(TEST_SET_DATETIME) {
+public:
+
+	TEST_METHOD(TestSetYear) {
+		DateTime dateTime;
+		int year = 1994;
+
+		int outputYear = dateTime.setYear(year);
+
+		Assert::AreEqual(year, outputYear);
+
+		year = -1;
+		outputYear = dateTime.setYear(year);
+		Assert::AreEqual(-2, outputYear);
+	}
+
+	TEST_METHOD(TestSetMonth) {
+		DateTime dateTime;
+		int month = 12;
+
+		int outputMonth = dateTime.setMonth(month);
+
+		Assert::AreEqual(month, outputMonth);
+
+		month = -1;
+		outputMonth = dateTime.setMonth(month);
+		Assert::AreEqual(-2, outputMonth);
+	}
+
+	TEST_METHOD(TestSetDay) {
+		DateTime dateTime;
+		int day = 12;
+
+		int outputDay = dateTime.setDay(day);
+
+		Assert::AreEqual(day, outputDay);
+
+		day = -1;
+		outputDay = dateTime.setDay(day);
+		Assert::AreEqual(-2, outputDay);
+	}
+
+	TEST_METHOD(TestSetHour) {
+		DateTime dateTime;
+		int hour = 15;
+
+		int outputHour = dateTime.setHour(hour);
+
+		Assert::AreEqual(hour, outputHour);
+
+		hour = -1;
+		outputHour = dateTime.setHour(hour);
+		Assert::AreEqual(-2, outputHour);
+	}
+
+	TEST_METHOD(TestSetMinute) {
+		DateTime dateTime;
+		int minute = 15;
+
+		int outputMinute = dateTime.setMinute(minute);
+
+		Assert::AreEqual(minute, outputMinute);
+
+		minute = -1;
+		outputMinute = dateTime.setMinute(minute);
+		Assert::AreEqual(-2, outputMinute);
+	}
+
+	TEST_METHOD(TestConstructor) {
+		DateTime dateTime;
+		Assert::AreEqual(-1, dateTime.getYear());
+		Assert::AreEqual(-1, dateTime.getMonth());
+		Assert::AreEqual(-1, dateTime.getDay());
+		Assert::AreEqual(-1, dateTime.getHour());
+		Assert::AreEqual(-1, dateTime.getMinute());
+
+		DateTime dateTime2(2015, 2, 14, 3, 14);
+		Assert::AreEqual(2015, dateTime2.getYear());
+		Assert::AreEqual(2, dateTime2.getMonth());
+		Assert::AreEqual(14, dateTime2.getDay());
+		Assert::AreEqual(3, dateTime2.getHour());
+		Assert::AreEqual(14, dateTime2.getMinute());
+
+		DateTime dateTime3(2015, 2, 14);
+		Assert::AreEqual(2015, dateTime3.getYear());
+		Assert::AreEqual(2, dateTime3.getMonth());
+		Assert::AreEqual(14, dateTime3.getDay());
+		Assert::AreEqual(-1, dateTime3.getHour());
+		Assert::AreEqual(-1, dateTime3.getMinute());
+	}
+	};
+
+	TEST_CLASS(TEST_GET_DATETIME) {
+public:
+
+	TEST_METHOD(TestGetYear) {
+		DateTime dateTime;
+		int year = 1994;
+
+		dateTime.setYear(year);
+		int outputYear = dateTime.getYear();
+
+		Assert::AreEqual(year, outputYear);
+	}
+
+	TEST_METHOD(TestGetMonth) {
+		DateTime dateTime;
+		int month = 12;
+
+		dateTime.setMonth(month);
+		int outputMonth = dateTime.getMonth();
+
+		Assert::AreEqual(month, outputMonth);
+	}
+
+	TEST_METHOD(TestGetDay) {
+		DateTime dateTime;
+		int day = 12;
+
+		dateTime.setDay(day);
+		int outputDay = dateTime.getDay();
+
+		Assert::AreEqual(day, outputDay);
+	}
+
+	TEST_METHOD(TestGetHour) {
+		DateTime dateTime;
+		int hour = 15;
+
+		dateTime.setHour(hour);
+		int outputHour = dateTime.getHour();
+
+		Assert::AreEqual(hour, outputHour);
+	}
+
+	TEST_METHOD(TestGetMinute) {
+		DateTime dateTime;
+		int minute = 15;
+
+		dateTime.setMinute(minute);
+		int outputMinute = dateTime.getMinute();
+
+		Assert::AreEqual(minute, outputMinute);
+	}
+	};
+
+	//	Muted tests for isValidRange (Year/Month/Day/Hour/Minute)
+	/*	TEST_CLASS(TEST_IS_WITHIN_RANGE) {
+	public:
+	TEST_METHOD(TestIsValidYearRange) {
+	DateTime dateTime;
+
+	int year = 1994;
+	bool outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(true, outputYear);
+
+	year = 0;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(true, outputYear);
+
+	year = 9999;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(true, outputYear);
+
+	//	Boundary Tests
+	year = -1;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(false, outputYear);
+
+	year = 10000;
+	outputYear = dateTime.isValidYearRange(year);
+	Assert::AreEqual(false, outputYear);
+	}
+
+	TEST_METHOD(TestIsValidMonthRange) {
+	DateTime dateTime;
+
+	int month = 9;
+	bool outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(true, outputMonth);
+
+	month = 1;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(true, outputMonth);
+
+	month = 12;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(true, outputMonth);
+
+	//	Boundary Tests
+	month = 0;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(false, outputMonth);
+
+	month = 13;
+	outputMonth = dateTime.isValidMonthRange(month);
+	Assert::AreEqual(false, outputMonth);
+	}
+
+	TEST_METHOD(TestIsValidDayRange) {
+	DateTime dateTime;
+
+	int day = 12;
+	bool outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(true, outputDay);
+
+	day = 1;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(true, outputDay);
+
+	day = 31;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(true, outputDay);
+
+	//	Boundary Tests
+	day = 0;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(false, outputDay);
+
+	day = 32;
+	outputDay = dateTime.isValidDayRange(day);
+	Assert::AreEqual(false, outputDay);
+	}
+
+	TEST_METHOD(TestIsValidHourRange) {
+	DateTime dateTime;
+
+	int hour = 12;
+	bool outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(true, outputHour);
+
+	hour = 0;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(true, outputHour);
+
+	hour = 23;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(true, outputHour);
+
+	//	Boundary Tests
+	hour = 24;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(false, outputHour);
+
+	hour = -1;
+	outputHour = dateTime.isValidHourRange(hour);
+	Assert::AreEqual(false, outputHour);
+	}
+
+	TEST_METHOD(TestIsValidMinuteRange) {
+	DateTime dateTime;
+
+	int minute = 12;
+	bool outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(true, outputMinute);
+
+	minute = 0;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(true, outputMinute);
+
+	minute = 59;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(true, outputMinute);
+
+	//	Boundary Tests
+	minute = -1;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(false, outputMinute);
+
+	minute = 60;
+	outputMinute = dateTime.isValidMinuteRange(minute);
+	Assert::AreEqual(false, outputMinute);
+	}
+	}; */
+
+	TEST_CLASS(TEST_COMPARATORS) {
+
+public:
+
+	TEST_METHOD(TestIsEqual) {
+		DateTime primary(1994, 12, 12);
+		DateTime secondary(1994, 12, 12);
+		bool outputEqual = false;
+		if (primary == secondary) {
+			outputEqual = true;
+		} else {
+			outputEqual = false;
+		}
+		Assert::AreEqual(true, outputEqual);
+
+		primary.setYear(1992);
+		primary.setMonth(9);
+		primary.setDay(20);
+		if (primary == secondary) {
+			outputEqual = true;
+		} else {
+			outputEqual = false;
+		}
+		Assert::AreEqual(false, outputEqual);
+
+		primary.setYear(1994);
+		primary.setMonth(12);
+		primary.setDay(12);
+		primary.setHour(20);
+		primary.setMinute(9);
+		secondary.setHour(20);
+		secondary.setMinute(9);
+		if (primary == secondary) {
+			outputEqual = true;
+		} else {
+			outputEqual = false;
+		}
+		Assert::AreEqual(true, outputEqual);
+
+		primary.setYear(1992);
+		primary.setMonth(9);
+		primary.setDay(20);
+		if (primary == secondary) {
+			outputEqual = true;
+		} else {
+			outputEqual = false;
+		}
+		Assert::AreEqual(false, outputEqual);
+	}
+
+	TEST_METHOD(TestIsNotEqual) {
+		DateTime primary(1994, 12, 12);
+		DateTime secondary(1994, 12, 12);
+		bool outputNotEqual;
+		if (primary != secondary) {
+			outputNotEqual = true;
+		} else {
+			outputNotEqual = false;
+		}
+		Assert::AreEqual(false, outputNotEqual);
+
+		primary.setYear(1992);
+		primary.setMonth(9);
+		primary.setDay(20);
+		primary.setHour(20);
+		primary.setMinute(20);
+		if (primary != secondary) {
+			outputNotEqual = true;
+		} else {
+			outputNotEqual = false;
+		}
+		Assert::AreEqual(true, outputNotEqual);
+
+		primary.setYear(1994);
+		primary.setMonth(12);
+		primary.setDay(12);
+		primary.setHour(20);
+		primary.setMinute(9);
+		secondary.setHour(20);
+		secondary.setMinute(9);
+		if (primary != secondary) {
+			outputNotEqual = true;
+		} else {
+			outputNotEqual = false;
+		}
+		Assert::AreEqual(false, outputNotEqual);
+
+		primary.setYear(1992);
+		primary.setMonth(9);
+		primary.setDay(20);
+		if (primary != secondary) {
+			outputNotEqual = true;
+		} else {
+			outputNotEqual = false;
+		}
+		Assert::AreEqual(true, outputNotEqual);
+	}
+
+	TEST_METHOD(TestIsAfter) {
+		DateTime primary(1994, 11, 11, 13, 13);
+		DateTime secondary(1994, 11, 11, 13, 13);
+		bool outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setMinute(12);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setMinute(14);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setHour(12);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setHour(14);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setDay(10);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setDay(12);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setMonth(10);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setMonth(12);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setYear(1993);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setYear(1997);
+		outputEqual = primary.isAfter(secondary);
+		Assert::AreEqual(false, outputEqual);
+	}
+
+	TEST_METHOD(TestIsBefore) {
+		DateTime primary(1994, 11, 11, 13, 13);
+		DateTime secondary(1994, 11, 11, 13, 13);
+		bool outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setMinute(12);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setMinute(14);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setHour(12);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setHour(14);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setDay(10);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setDay(12);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setMonth(10);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setMonth(12);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+
+		secondary.setYear(1993);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(false, outputEqual);
+
+		secondary.setYear(1997);
+		outputEqual = primary.isBefore(secondary);
+		Assert::AreEqual(true, outputEqual);
+	}
+	};
+
+	TEST_CLASS(TEST_DISPLAY) {
+public:
+
+	TEST_METHOD(TestDisplayDate) {
+		DateTime dateOnly(1992, 9, 20);
+		string outputString = dateOnly.displayDate();
+		Assert::AreEqual((string) "1992/09/20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayDateForUser) {
+		DateTime dateOnly(1992, 9, 20);
+		string outputString = dateOnly.displayDateForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+	}
+
+	TEST_METHOD(TestDisplayTime) {
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		string outputString = timeOnly.displayTime();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayDateTimeForUser) {
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		string outputString = dateTime.displayDateTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		outputString = dateOnly.displayDateTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		outputString = timeOnly.displayDateTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+
+		DateTime emptyDateTime;
+		outputString = emptyDateTime.displayDateTimeForUser();
+		Assert::AreEqual((string)"", outputString);
+	}
+
+	TEST_METHOD(TestDisplayDateTime) {
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		string outputString = dateTime.displayDateTime();
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		outputString = dateOnly.displayDateTime();
+		Assert::AreEqual((string) "1992/09/20", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		outputString = timeOnly.displayDateTime();
+		Assert::AreEqual((string) "09:20", outputString);
+
+		DateTime emptyDateTime;
+		outputString = emptyDateTime.displayDateTime();
+		Assert::AreEqual((string)"", outputString);
+	}
+	};
+}
+
+namespace ItemTest {
+	TEST_CLASS(TEST_SET_ITEM) {
+public:
+
+	TEST_METHOD(TestSetItemName) {
+		string itemName("Project Marriage");
+		Item trueStory(itemName);
+		Assert::AreEqual(itemName, trueStory.getItemName());
+
+		itemName = "Love Forever";
+		string outputName = trueStory.setItemName(itemName);
+		Assert::AreEqual(itemName, outputName);
+
+		itemName = "";
+		outputName = trueStory.setItemName(itemName);
+		Assert::AreEqual(itemName, outputName);
+
+		itemName = "123456!@#$%^";
+		outputName = trueStory.setItemName(itemName);
+		Assert::AreEqual(itemName, outputName);
+	}
+
+	TEST_METHOD(TestSetDescription) {
+		string itemName = "Love Story";
+		unsigned int itemID = 100;
+		Item trueStory(itemName, itemID);
+
+		string description("Joon Fai and Gantian are going to get married soon.");
+		string outputDesc = trueStory.setDescription(description);
+		Assert::AreEqual(description, outputDesc);
+
+		description = "";
+		outputDesc = trueStory.setDescription(description);
+		Assert::AreEqual(description, outputDesc);
+
+		description = "<3 <3 <3";
+		outputDesc = trueStory.setDescription(description);
+		Assert::AreEqual(description, outputDesc);
+	}
+
+	TEST_METHOD(TestSetStartTime) {
+		unsigned int itemID = 21;
+		Item trueStory(itemID);
+
+		DateTime dateTime(1994, 12, 12);
+		DateTime outputDateTime = trueStory.setStartTime(dateTime);
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+
+		dateTime.setHour(20);
+		dateTime.setMinute(9);
+		outputDateTime = trueStory.setStartTime(dateTime);
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+		Assert::AreEqual(dateTime.getHour(), outputDateTime.getHour());
+		Assert::AreEqual(dateTime.getMinute(), outputDateTime.getMinute());
+
+		outputDateTime = trueStory.setStartTime(1992, 9, 20, 12, 12);
+		Assert::AreEqual(1992, outputDateTime.getYear());
+		Assert::AreEqual(9, outputDateTime.getMonth());
+		Assert::AreEqual(20, outputDateTime.getDay());
+		Assert::AreEqual(12, outputDateTime.getHour());
+		Assert::AreEqual(12, outputDateTime.getMinute());
+
+		outputDateTime = trueStory.setStartTime(1995, 11, 19);
+		Assert::AreEqual(1995, outputDateTime.getYear());
+		Assert::AreEqual(11, outputDateTime.getMonth());
+		Assert::AreEqual(19, outputDateTime.getDay());
+		Assert::AreEqual(-1, outputDateTime.getHour());
+		Assert::AreEqual(-1, outputDateTime.getMinute());
+	}
+
+	TEST_METHOD(TestSetEndTime) {
+		Item trueStory;
+
+		DateTime dateTime(1994, 12, 12);
+		DateTime outputDateTime = trueStory.setEndTime(dateTime);
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+
+		dateTime.setHour(20);
+		dateTime.setMinute(9);
+		outputDateTime = trueStory.setEndTime(dateTime);
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+		Assert::AreEqual(dateTime.getHour(), outputDateTime.getHour());
+		Assert::AreEqual(dateTime.getMinute(), outputDateTime.getMinute());
+
+		outputDateTime = trueStory.setEndTime(1992, 9, 20, 12, 12);
+		Assert::AreEqual(1992, outputDateTime.getYear());
+		Assert::AreEqual(9, outputDateTime.getMonth());
+		Assert::AreEqual(20, outputDateTime.getDay());
+		Assert::AreEqual(12, outputDateTime.getHour());
+		Assert::AreEqual(12, outputDateTime.getMinute());
+
+		outputDateTime = trueStory.setEndTime(1995, 11, 19);
+		Assert::AreEqual(1995, outputDateTime.getYear());
+		Assert::AreEqual(11, outputDateTime.getMonth());
+		Assert::AreEqual(19, outputDateTime.getDay());
+		Assert::AreEqual(-1, outputDateTime.getHour());
+		Assert::AreEqual(-1, outputDateTime.getMinute());
+	}
+
+	TEST_METHOD(TestSetItemID) {
+		Item trueStory;
+
+		unsigned int itemID = 20091992;
+		unsigned int outputID = trueStory.setItemID(itemID);
+		Assert::AreEqual(itemID, outputID);
+	}
+
+	TEST_METHOD(TestSetPriority) {
+		Item trueStory;
+
+		char priority = 'H';
+		char outputPriority = trueStory.setPriority(priority);
+		Assert::AreEqual(priority, outputPriority);
+	}
+
+	TEST_METHOD(TestSetLabel) {
+		Item trueStory;
+
+		char label = 'P';
+		char outputLabel = trueStory.setLabel(label);
+		Assert::AreEqual(label, outputLabel);
+	}
+
+	TEST_METHOD(TestSetCompletion) {
+		Item trueStory;
+
+		bool isCompleted = true;
+		bool outputCompletion = trueStory.setCompletion(isCompleted);
+		Assert::AreEqual(isCompleted, outputCompletion);
+
+		isCompleted = false;
+		outputCompletion = trueStory.setCompletion(isCompleted);
+		Assert::AreEqual(isCompleted, outputCompletion);
+	}
+
+	// End of segment: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+	 */
+
+	};
+
+	TEST_CLASS(TEST_GET_ITEM) {
+public:
+
+	TEST_METHOD(TestGetItemName) {
+		Item trueStory;
+
+		string itemName("Project Marriage");
+		trueStory.setItemName(itemName);
+		string outputName = trueStory.getItemName();
+		Assert::AreEqual(itemName, outputName);
+
+		itemName = "";
+		trueStory.setItemName(itemName);
+		outputName = trueStory.getItemName();
+		Assert::AreEqual(itemName, outputName);
+
+		itemName = "123456!@#$%^";
+		trueStory.setItemName(itemName);
+		outputName = trueStory.getItemName();
+		Assert::AreEqual(itemName, outputName);
+	}
+
+	TEST_METHOD(TestGetDescription) {
+		Item trueStory;
+
+		string description("Joon Fai and Gantian are going to get married soon.");
+		trueStory.setDescription(description);
+		string outputDesc = trueStory.getDescription();
+		Assert::AreEqual(description, outputDesc);
+
+		description = "";
+		trueStory.setDescription(description);
+		outputDesc = trueStory.getDescription();
+		Assert::AreEqual(description, outputDesc);
+
+		description = "<3 <3 <3";
+		trueStory.setDescription(description);
+		outputDesc = trueStory.getDescription();
+		Assert::AreEqual(description, outputDesc);
+	}
+
+	TEST_METHOD(TestGetStartTime) {
+		Item trueStory;
+
+		DateTime dateTime(1994, 12, 12);
+		trueStory.setStartTime(dateTime);
+		DateTime outputDateTime = trueStory.getStartTime();
+
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+
+		dateTime.setHour(20);
+		dateTime.setMinute(9);
+		trueStory.setStartTime(dateTime);
+		outputDateTime = trueStory.getStartTime();
+
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+		Assert::AreEqual(dateTime.getHour(), outputDateTime.getHour());
+		Assert::AreEqual(dateTime.getMinute(), outputDateTime.getMinute());
+	}
+
+	TEST_METHOD(TestGetEndTime) {
+		Item trueStory;
+
+		DateTime dateTime(1994, 12, 12);
+		trueStory.setEndTime(dateTime);
+		DateTime outputDateTime = trueStory.getEndTime();
+
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+
+		dateTime.setHour(20);
+		dateTime.setMinute(9);
+		trueStory.setEndTime(dateTime);
+		outputDateTime = trueStory.getEndTime();
+
+		Assert::AreEqual(dateTime.getYear(), outputDateTime.getYear());
+		Assert::AreEqual(dateTime.getMonth(), outputDateTime.getMonth());
+		Assert::AreEqual(dateTime.getDay(), outputDateTime.getDay());
+		Assert::AreEqual(dateTime.getHour(), outputDateTime.getHour());
+		Assert::AreEqual(dateTime.getMinute(), outputDateTime.getMinute());
+	}
+
+	TEST_METHOD(TestGetItemID) {
+		Item trueStory;
+
+		unsigned int outputID = trueStory.getItemID();
+		Assert::AreEqual((unsigned int)0, outputID);
+
+		unsigned int itemID = 20091992;
+		outputID = trueStory.setItemID(itemID);
+		Assert::AreEqual(itemID, outputID);
+	}
+
+	TEST_METHOD(TestGetPriority) {
+		Item trueStory;
+
+		char priority = 'H';
+		trueStory.setPriority(priority);
+		char outputPriority = trueStory.getPriority();
+		Assert::AreEqual(priority, outputPriority);
+	}
+
+	TEST_METHOD(TestGetLabel) {
+		Item trueStory;
+
+		char label = 'P';
+		trueStory.setLabel(label);
+		char outputLabel = trueStory.getLabel();
+		Assert::AreEqual(label, outputLabel);
+	}
+
+	TEST_METHOD(TestGetCompletion) {
+		Item trueStory;
+
+		bool isCompleted = true;
+		trueStory.setCompletion(isCompleted);
+		bool outputCompletion = trueStory.getCompletion();
+		Assert::AreEqual(isCompleted, outputCompletion);
+
+		isCompleted = false;
+		trueStory.setCompletion(isCompleted);
+		outputCompletion = trueStory.getCompletion();
+		Assert::AreEqual(isCompleted, outputCompletion);
+	}
+
+	// End of segment: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+	 */
+
+	};
+
+	TEST_CLASS(TEST_DISPLAY) {
+public:
+	TEST_METHOD(TestDisplayStartTime) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setStartTime(dateTime);
+		string outputString = item.displayStartTime();
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setStartTime(dateOnly);
+		outputString = item.displayStartTime();
+		Assert::AreEqual((string) "1992/09/20", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setStartTime(timeOnly);
+		outputString = item.displayStartTime();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayEndTime) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setEndTime(dateTime);
+		string outputString = item.displayEndTime();
+		Assert::AreEqual((string) "1994/12/12 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setEndTime(dateOnly);
+		outputString = item.displayEndTime();
+		Assert::AreEqual((string) "1992/09/20", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setEndTime(timeOnly);
+		outputString = item.displayEndTime();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayStartTimeForUser) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setStartTime(dateTime);
+		string outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setStartTime(dateOnly);
+		outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setStartTime(timeOnly);
+		outputString = item.displayStartTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayEndTimeForUser) {
+		Item item;
+
+		DateTime dateTime(1994, 12, 12, 20, 9);
+		item.setEndTime(dateTime);
+		string outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "12/12/1994 20:09", outputString);
+
+		DateTime dateOnly(1992, 9, 20);
+		item.setEndTime(dateOnly);
+		outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "20/09/1992", outputString);
+
+		DateTime timeOnly;
+		timeOnly.setHour(9);
+		timeOnly.setMinute(20);
+		item.setEndTime(timeOnly);
+		outputString = item.displayEndTimeForUser();
+		Assert::AreEqual((string) "09:20", outputString);
+	}
+
+	TEST_METHOD(TestDisplayItemForUser) {
+		Item item;
+		ostringstream outputString;
+
+		item.setItemName("Short Jog");
+		outputString << "Name:\t\tShort Jog\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+		item.setStartTime(2015, 3, 17, 6, 30);
+		outputString << "Start Time:\t17/03/2015 06:30\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+		item.setEndTime(2015, 3, 17, 7, 0);
+		outputString << "End Time:\t17/03/2015 07:00\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+		item.setDescription("4km in 30 minutes");
+		outputString << "Description:\t4km in 30 minutes\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+		item.setItemID(1992);
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+		item.setPriority('H');
+		outputString << "Priority:\tH\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+		item.setLabel('P');
+		outputString << "Label:\tP\n";
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+
+		item.setCompletion(true);
+		Assert::AreEqual(outputString.str(), item.displayItemForUser());
+	}
+
+	TEST_METHOD(TestDisplayItemFullDetails) {
+		Item item;
+		ostringstream outputString;
+
+		item.setItemID(1992);
+		outputString << "Item ID:\t1992\n";
+
+		item.setItemName("Short Jog");
+		outputString << "Name:\t\tShort Jog\n";
+
+		item.setStartTime(2015, 3, 17, 6, 30);
+		outputString << "Start Time:\t17/03/2015 06:30\n";
+
+		item.setEndTime(2015, 3, 17, 7, 0);
+		outputString << "End Time:\t17/03/2015 07:00\n";
+
+		item.setDescription("4km in 30 minutes");
+		outputString << "Description:\t4km in 30 minutes\n";
+
+		item.setPriority('H');
+		outputString << "Priority:\tH\n";
+
+		item.setLabel('P');
+		outputString << "Label:\tP\n";
+
+		item.setCompletion(true);
+		outputString << "Completed?\ttrue\n";
+		Assert::AreEqual(outputString.str(), item.displayItemFullDetails());
+	}
+
+	// End of segment: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+	 */
+
+	};
+}
+
+namespace ScheduleTest {
+	TEST_CLASS(TEST_SCHEDULE) {
+public:
+
+	TEST_METHOD(TestRetrieveSchedule) {
+		Schedule YoungbinLifeEvents;
+		vector <Item> YoungbinParallelUniverse;
+		Item *marriage = new Item;
+
+		marriage->setItemName("Marriage with Sophie");
+		marriage->setDescription("Hope it'll last this time.");
+		marriage->setItemID(101);
+		marriage->setLabel('M');
+		marriage->setPriority('H');
+		marriage->setStartTime(2015, 9, 20, 12, 12);
+
+		YoungbinLifeEvents.addItem(marriage);
+		YoungbinParallelUniverse = YoungbinLifeEvents.retrieveSchedule();
+		Assert::AreEqual(marriage->displayItemFullDetails(), YoungbinParallelUniverse[0].displayItemFullDetails());
+		delete marriage;
+
+		marriage = new Item;
+		marriage->setItemName("Second Marriage");
+		marriage->setDescription("Wife: Victoria Secret model.");
+		marriage->setItemID(2103);
+		marriage->setLabel('P');
+		marriage->setPriority('H');
+		marriage->setStartTime(2015, 9, 21, 0, 0);
+
+		YoungbinLifeEvents.addItem(marriage);
+		YoungbinParallelUniverse = YoungbinLifeEvents.retrieveSchedule();
+		Assert::AreEqual(marriage->displayItemFullDetails(), YoungbinParallelUniverse[1].displayItemFullDetails());
+		delete marriage;
+	}
+
+	TEST_METHOD(TestGetScheduleSize) {
+		Schedule YoungbinLifeEvents;
+		Item *marriage = new Item;
+
+		marriage->setItemName("Marriage with Sophie");
+		marriage->setDescription("Hope it'll last this time.");
+		marriage->setItemID(101);
+		marriage->setLabel('M');
+		marriage->setPriority('H');
+		marriage->setStartTime(2015, 9, 20, 12, 12);
+
+		YoungbinLifeEvents.addItem(marriage);
+		delete marriage;
+		Assert::AreEqual((unsigned int)1, YoungbinLifeEvents.getSizeOfSchedule());
+
+		marriage = new Item;
+		marriage->setItemName("Second Marriage");
+		marriage->setDescription("Wife: Victoria Secret model.");
+		marriage->setItemID(2103);
+		marriage->setLabel('P');
+		marriage->setPriority('H');
+		marriage->setStartTime(2015, 9, 21, 0, 0);
+
+		YoungbinLifeEvents.addItem(marriage);
+		delete marriage;
+		Assert::AreEqual((unsigned int)2, YoungbinLifeEvents.getSizeOfSchedule());
+	}
+
+	// End of segment: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+	 */
+
+	};
+
+	TEST_CLASS(TEST_CONVERSION) {
+public:
+	TEST_METHOD(TestFindVectorIndexGivenItemID) {
+		Schedule premierLeague;
+		Item soccerMatch;
+
+		for (int i = 0; i < 10; i++) {
+			soccerMatch.setItemID(1000 + i);
+			premierLeague.addItem(&soccerMatch);
+		}
+
+		for (unsigned int i = 0; i < 10; i++) {
+			Assert::AreEqual(i, premierLeague.findVectorIndexGivenItemID(1000 + i));
+		}
+	}
+
+	TEST_METHOD(TestFindItemIDGivenDisplayVectorIndex) {
+
+	}
+	};
+
+	TEST_CLASS(TEST_ITEMS_IN_SCHEDULE) {
+public:
+
+	TEST_METHOD(TestAddItem) {
+		Schedule projectLife;
+		Item *item1 = new Item;
+		DateTime dateTime1(2020, 3, 20, 12, 30);
+
+		item1->setItemName("Joon Fai's Marriage");
+		item1->setDescription("Wife: Gantian");
+		item1->setEndTime(dateTime1);
+		item1->setCompletion(false);
+		item1->setItemID(12);
+		item1->setPriority('H');
+		item1->setLabel('P');
+
+		Item *item2 = new Item;
+		DateTime dateTime2(2015, 3, 8, 15, 39);
+
+		item2->setItemName("Chon Beng's Date");
+		item2->setDescription("Girlfriend: Multiple");
+		item2->setEndTime(dateTime2);
+		item2->setCompletion(true);
+		item2->setItemID(57);
+		item2->setPriority('M');
+		item2->setLabel('O');
+
+		Item *item3 = new Item;
+		DateTime dateTime3(2015, 4, 1, 14, 0);
+
+		item3->setItemName("Andy's lunch");
+		item3->setDescription("Lunch: Nasi Lemak");
+		item3->setEndTime(dateTime3);
+		item3->setCompletion(false);
+		item3->setItemID(201);
+		item3->setPriority('H');
+		item3->setLabel('M');
+
+		string tempItem1 = projectLife.addItem(item1);
+		string tempItem2 = projectLife.addItem(item2);
+		string tempItem3 = projectLife.addItem(item3);
+
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
+
+		delete item1;
+		delete item2;
+		delete item3;
+	}
+
+	TEST_METHOD(TestDeleteItemGivenItemID) {
+		Schedule projectLife;
+		Item *item1 = new Item;
+		DateTime dateTime1(2020, 3, 20, 12, 30);
+
+		item1->setItemName("Joon Fai's Marriage");
+		item1->setDescription("Wife: Gantian");
+		item1->setEndTime(dateTime1);
+		item1->setCompletion(false);
+		item1->setItemID(12);
+		item1->setPriority('H');
+		item1->setLabel('P');
+
+		Item *item2 = new Item;
+		DateTime dateTime2(2015, 3, 8, 15, 39);
+
+		item2->setItemName("Chon Beng's Date");
+		item2->setDescription("Girlfriend: Multiple");
+		item2->setEndTime(dateTime2);
+		item2->setCompletion(true);
+		item2->setItemID(57);
+		item2->setPriority('M');
+		item2->setLabel('O');
+
+		Item *item3 = new Item;
+		DateTime dateTime3(2015, 4, 1, 14, 0);
+
+		item3->setItemName("Andy's lunch");
+		item3->setDescription("Lunch: Nasi Lemak");
+		item3->setEndTime(dateTime3);
+		item3->setCompletion(false);
+		item3->setItemID(201);
+		item3->setPriority('H');
+		item3->setLabel('M');
+
+		projectLife.addItem(item1);
+		projectLife.addItem(item2);
+		projectLife.addItem(item3);
+
+		Item tempItem;
+
+		string tempItem1 = projectLife.deleteItemGivenItemID(12);
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+
+		tempItem = projectLife.retrieveSchedule()[0];
+		string tempItem2 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+
+		tempItem = projectLife.retrieveSchedule()[1];
+		string tempItem3 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
+
+		projectLife.addItem(item1);
+
+		tempItem3 = projectLife.deleteItemGivenItemID(201);
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
+
+		tempItem = projectLife.retrieveSchedule()[0];
+		tempItem2 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+
+		tempItem = projectLife.retrieveSchedule()[1];
+		tempItem1 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+
+		delete item1;
+		delete item2;
+		delete item3;
+	}
+
+	TEST_METHOD(TestRetrieveItemGivenItemID) {
+		Schedule projectLife;
+		Item *item1 = new Item;
+		DateTime dateTime1(2020, 3, 20, 12, 30);
+
+		item1->setItemName("Joon Fai's Marriage");
+		item1->setDescription("Wife: Gantian");
+		item1->setEndTime(dateTime1);
+		item1->setCompletion(false);
+		item1->setItemID(8888);
+		item1->setPriority('H');
+		item1->setLabel('P');
+
+		Item *item2 = new Item;
+		DateTime dateTime2(2015, 3, 8, 15, 39);
+
+		item2->setItemName("Chon Beng's Date");
+		item2->setDescription("Girlfriend: Multiple");
+		item2->setEndTime(dateTime2);
+		item2->setCompletion(true);
+		item2->setItemID(6969);
+		item2->setPriority('M');
+		item2->setLabel('O');
+
+		Item *item3 = new Item;
+		DateTime dateTime3(2015, 4, 1, 14, 0);
+
+		item3->setItemName("Andy's lunch");
+		item3->setDescription("Lunch: Nasi Lemak");
+		item3->setEndTime(dateTime3);
+		item3->setCompletion(false);
+		item3->setItemID(10101);
+		item3->setPriority('H');
+		item3->setLabel('M');
+
+		projectLife.addItem(item1);
+		projectLife.addItem(item2);
+		projectLife.addItem(item3);
+
+		Item tempItem = projectLife.retrieveItemGivenItemID(8888);
+		string tempItem1 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+
+		tempItem = projectLife.retrieveItemGivenItemID(6969);
+		string tempItem2 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+
+		tempItem = projectLife.retrieveItemGivenItemID(10101);
+		string tempItem3 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
+
+		delete item1;
+		delete item2;
+		delete item3;
+	}
+
+	TEST_METHOD(TestReplaceItemGivenItemID) {
+		Schedule projectLife;
+		Item *item1 = new Item;
+		DateTime dateTime1(2020, 3, 20, 12, 30);
+
+		item1->setItemName("Joon Fai's Marriage");
+		item1->setDescription("Wife: Gantian");
+		item1->setEndTime(dateTime1);
+		item1->setCompletion(false);
+		item1->setItemID(8888);
+		item1->setPriority('H');
+		item1->setLabel('P');
+
+		Item *item2 = new Item;
+		DateTime dateTime2(2015, 3, 8, 15, 39);
+
+		item2->setItemName("Chon Beng's Date");
+		item2->setDescription("Girlfriend: Multiple");
+		item2->setEndTime(dateTime2);
+		item2->setCompletion(true);
+		item2->setItemID(6969);
+		item2->setPriority('M');
+		item2->setLabel('O');
+
+		Item *item3 = new Item;
+		DateTime dateTime3(2015, 4, 1, 14, 0);
+
+		item3->setItemName("Andy's lunch");
+		item3->setDescription("Lunch: Nasi Lemak");
+		item3->setEndTime(dateTime3);
+		item3->setCompletion(false);
+		item3->setItemID(10101);
+		item3->setPriority('H');
+		item3->setLabel('M');
+
+		projectLife.addItem(item1);
+		projectLife.addItem(item2);
+
+		vector<Item> parallelUniverse = projectLife.retrieveSchedule();
+
+		Item tempItem = projectLife.retrieveItemGivenItemID(8888);
+		string tempItem1 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+		Assert::AreEqual(item1->displayItemFullDetails(), parallelUniverse[0].displayItemFullDetails());
+
+		tempItem = projectLife.retrieveItemGivenItemID(6969);
+		string tempItem2 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+		Assert::AreEqual(item2->displayItemFullDetails(), parallelUniverse[1].displayItemFullDetails());
+
+		string tempItem3 = projectLife.replaceItemGivenItemID(item3, 8888);
+		parallelUniverse = projectLife.retrieveSchedule();
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItem3);
+		Assert::AreEqual(item3->displayItemFullDetails(), parallelUniverse[0].displayItemFullDetails());
+
+		tempItem1 = projectLife.replaceItemGivenItemID(item1, 6969);
+		parallelUniverse = projectLife.retrieveSchedule();
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem1);
+		Assert::AreEqual(item1->displayItemFullDetails(), parallelUniverse[1].displayItemFullDetails());
+
+		delete item1;
+		delete item2;
+		delete item3;
+	}
+
+	TEST_METHOD(TestRetrieveItemGivenDisplayVectorIndex) {
+		Schedule projectLife;
+
+		Item *item1 = new Item;
+		DateTime dateTime1(2015, 3, 20, 12, 30);
+		DateTime dateTime2(2015, 4, 20, 12, 30);
+
+		item1->setItemName("CS Project");
+		item1->setDescription("V0.1");
+		item1->setStartTime(dateTime1);
+		item1->setEndTime(dateTime2);
+		item1->setCompletion(true);
+		item1->setItemID(12);
+		item1->setPriority('L');
+		item1->setLabel('O');
+
+		Item *item2 = new Item;
+		DateTime dateTime3(2015, 4, 27, 12, 30);
+
+		item2->setItemName("CS Project");
+		item2->setDescription("V0.2");
+		item2->setStartTime(dateTime1);
+		item2->setEndTime(dateTime3);
+		item2->setCompletion(false);
+		item2->setItemID(21);
+		item2->setPriority('H');
+		item2->setLabel('O');
+
+		Item *item3 = new Item;
+		DateTime dateTime4(2015, 4, 1, 14, 0);
+
+		item3->setItemName("CS Project");
+		item3->setDescription("V0.3");
+		item3->setEndTime(dateTime4);
+		item3->setCompletion(false);
+		item3->setItemID(201);
+		item3->setPriority('M');
+		item3->setLabel('P');
+
+		projectLife.addItem(item1);
+		projectLife.addItem(item2);
+		projectLife.addItem(item3);
+
+		projectLife.resetDisplaySchedule();
+		vector <Item> displaySchedule = projectLife.retrieveDisplaySchedule();
+
+		Item tempItem1 = projectLife.retrieveItemGivenDisplayVectorIndex(1);
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem1.displayItemFullDetails());
+
+		Item tempItem2 = projectLife.retrieveItemGivenDisplayVectorIndex(2);
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem2.displayItemFullDetails());
+
+		Item tempItem3 = projectLife.retrieveItemGivenDisplayVectorIndex(3);
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItem3.displayItemFullDetails());
+
+		delete item1;
+		delete item2;
+		delete item3;
+	}
+
+	TEST_METHOD(TestReplaceItemGivenDisplayVectorIndex) {
+		Schedule projectLife;
+		Item *item1 = new Item;
+		DateTime dateTime1(2015, 3, 20, 12, 30);
+		DateTime dateTime2(2015, 4, 20, 12, 30);
+
+		item1->setItemName("CS Project");
+		item1->setDescription("V0.1");
+		item1->setStartTime(dateTime1);
+		item1->setEndTime(dateTime2);
+		item1->setCompletion(true);
+		item1->setItemID(12);
+		item1->setPriority('L');
+		item1->setLabel('O');
+
+		Item *item2 = new Item;
+		DateTime dateTime3(2015, 4, 27, 12, 30);
+
+		item2->setItemName("CS Project");
+		item2->setDescription("V0.2");
+		item2->setStartTime(dateTime1);
+		item2->setEndTime(dateTime3);
+		item2->setCompletion(false);
+		item2->setItemID(21);
+		item2->setPriority('H');
+		item2->setLabel('O');
+
+		Item *item3 = new Item;
+		DateTime dateTime4(2015, 4, 1, 14, 0);
+
+		item3->setItemName("CS Project");
+		item3->setDescription("V0.3");
+		item3->setEndTime(dateTime4);
+		item3->setCompletion(false);
+		item3->setItemID(201);
+		item3->setPriority('M');
+		item3->setLabel('P');
+
+		projectLife.addItem(item1);
+		projectLife.addItem(item2);
+		projectLife.addItem(item3);
+
+		projectLife.resetDisplaySchedule();
+
+		vector<Item> tempItemVector = projectLife.retrieveDisplaySchedule();
+
+		unsigned int index = projectLife.findVectorIndexGivenItemID(item3->getItemID());
+
+		Item tempItem = projectLife.retrieveItemGivenItemID(item3->getItemID());
+		string tempItem1 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItem1);
+		Assert::AreEqual(item3->displayItemFullDetails(), tempItemVector[2].displayItemFullDetails());
+
+		unsigned int index2 = projectLife.findVectorIndexGivenItemID(item2->getItemID());
+		tempItem = projectLife.retrieveItemGivenItemID(item2->getItemID());
+		string tempItem2 = tempItem.displayItemFullDetails();
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem2);
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItemVector[1].displayItemFullDetails());
+
+		string tempItem3 = projectLife.replaceItemGivenDisplayVectorIndex(item1, index);
+		tempItemVector = projectLife.retrieveSchedule();
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItem3);
+		Assert::AreEqual(item1->displayItemFullDetails(), tempItemVector[0].displayItemFullDetails());
+
+		tempItem1 = projectLife.replaceItemGivenDisplayVectorIndex(item2, index2);
+		tempItemVector = projectLife.retrieveSchedule();
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItem1);
+		Assert::AreEqual(item2->displayItemFullDetails(), tempItemVector[0].displayItemFullDetails());
+
+		delete item1;
+		delete item2;
+		delete item3;
+	}
+
+	TEST_METHOD(TestDeleteItemGivenDisplayVectorIndex) {
+		Schedule projectLife;
+		Item *item1 = new Item;
+		DateTime dateTime1(2015, 3, 20, 12, 30);
+		DateTime dateTime2(2015, 4, 20, 12, 30);
+
+		item1->setItemName("CS Project");
+		item1->setDescription("V0.1");
+		item1->setStartTime(dateTime1);
+		item1->setEndTime(dateTime2);
+		item1->setCompletion(true);
+		item1->setItemID(12);
+		item1->setPriority('L');
+		item1->setLabel('O');
+
+		Item *item2 = new Item;
+		DateTime dateTime3(2015, 4, 27, 12, 30);
+
+		item2->setItemName("CS Project");
+		item2->setDescription("V0.2");
+		item2->setStartTime(dateTime1);
+		item2->setEndTime(dateTime3);
+		item2->setCompletion(false);
+		item2->setItemID(21);
+		item2->setPriority('H');
+		item2->setLabel('O');
+
+		Item *item3 = new Item;
+		DateTime dateTime4(2015, 4, 1, 14, 0);
+
+		item3->setItemName("CS Project");
+		item3->setDescription("V0.3");
+		item3->setEndTime(dateTime4);
+		item3->setCompletion(false);
+		item3->setItemID(201);
+		item3->setPriority('M');
+		item3->setLabel('P');
+
+		projectLife.addItem(item1);
+		projectLife.addItem(item2);
+		projectLife.addItem(item3);
+
+		projectLife.resetDisplaySchedule();
+
+		string tempString = projectLife.deleteItemGivenDisplayVectorIndex(1);
+		Assert::AreEqual(item1->displayItemFullDetails(), tempString);
+		projectLife.addItem(item1);
+		projectLife.resetDisplaySchedule();
+
+		tempString = projectLife.deleteItemGivenDisplayVectorIndex(2);
+		Assert::AreEqual(item3->displayItemFullDetails(), tempString);
+		projectLife.addItem(item3);
+		projectLife.resetDisplaySchedule();
+
+		tempString = projectLife.deleteItemGivenDisplayVectorIndex(1);
+		Assert::AreEqual(item2->displayItemFullDetails(), tempString);
+		projectLife.addItem(item2);
+		projectLife.resetDisplaySchedule();
+
+		delete item1;
+		delete item2;
+		delete item3;
+	}
+
+	// End of segment: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+	 */
+
+	TEST_METHOD(TestResetHistory) {
+		History testHistory;
+		string returnMessage;
+		vector<Item> clearedSchedule;
+		Item* item0 = new Item(string("helloworld"));
+
+		string command1 = "ADD";
+		Item item1(string("This is the first item"));
+
+		string command2 = "DELETE";
+		Item item2(string("This is the second item"));
+
+		string command3 = "REPLACE";
+		Item item3(string("This is the third item"));
+
+		string command4 = "ADDD";
+		Item item4(string("This is the fourth item"));
+
+		string command5 = "SIT";
+		Item item5(string("This is the fifth item"));
+
+		returnMessage = testHistory.addCommand(command1, item1);
+		Assert::AreEqual(command1 + item1.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command2, item2);
+		Assert::AreEqual(command2 + item2.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command3, item3);
+		Assert::AreEqual(command3 + item3.displayItemFullDetails(), returnMessage);
+
+		returnMessage = testHistory.addCommand(command4, item4);
+		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
+
+		returnMessage = testHistory.addCommand(command5, item5);
+		Assert::AreEqual(string("ERROR: Command and Item were not recorded."), returnMessage);
+
+		clearedSchedule.push_back(*item0);
+		returnMessage = testHistory.addClearCommand(clearedSchedule);
+		Assert::AreEqual(string("CLEAR"), returnMessage);
+
+		string confirmation = testHistory.reset();
+		Assert::AreEqual((string) "Reset completed.", confirmation);
+	}
+	};
+}
+	// End of segment: C:\Users\SKR\Documents\main\iStorageTest\StorageTest.cpp
+
+
+
+
+
