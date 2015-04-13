@@ -237,7 +237,8 @@ public:
 	//and display vector
 	//pre : takes in a string of message 
 	//post : returns a MESSAGE_AND_SCHEDULE object created
-	MESSAGE_AND_SCHEDULE Logic::returnUserDisplayInformation(string returnMessage);
+	MESSAGE_AND_SCHEDULE returnUserDisplayInformation(string returnMessage);
+	MESSAGE_AND_SCHEDULE setUserDisplayInformation(string message, vector<Item> displayVector);
 
 
 	//calls for parser and get parsed info of the user input

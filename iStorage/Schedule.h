@@ -34,6 +34,10 @@ private:
 	static const string LOG_CLEAR;
 	static const string LOG_UNDO;	
 
+	static const char PRIORITY_HIGH;
+	static const char PRIORITY_MEDIUM;
+	static const char PRIORITY_LOW;
+
 	vector <Item> _schedule;
 	vector <Item> _displaySchedule;
 	History _scheduleHistory;

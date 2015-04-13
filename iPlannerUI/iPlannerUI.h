@@ -360,7 +360,7 @@ namespace iPlannerUI {
 		}
 
 		void displayDescription(String^ description) {
-			if (description != ""){
+			if (description != "") {
 				outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Italic);
 				outputBox->SelectionColor = Color::BlueViolet;
 				outputBox->SelectedText = "\t     " + description + "\r\n\r\n";
@@ -460,21 +460,17 @@ namespace iPlannerUI {
 					 String^ nameString = gcnew String(iterItem->getItemName().c_str());
 					 if (iterItem->getPriority() == 72) {
 						 displayPriorityAndName("H", nameString);
-					 }
-					 else if (iterItem->getPriority() == 77) {
+					 } else if (iterItem->getPriority() == 77) {
 						 displayPriorityAndName("M", nameString);
-					 }
-					 else if (iterItem->getPriority() == 76) {
+					 } else if (iterItem->getPriority() == 76) {
 						 displayPriorityAndName("L", nameString);
-					 }
-					 else {
+					 } else {
 						 displayPriorityAndName("-", nameString);
 					 }
 
 					 if (iterItem->getCompletion() == true) {
 						 displayCompletion("(D)");
-					 }
-					 else {
+					 } else {
 						 displayCompletion("(ND)");
 					 }
 
