@@ -297,7 +297,7 @@ namespace iPlannerUI {
 		}
 #pragma endregion
 
-		//@author A0105180W 
+		//@author A0105180W-reused 
 		// Function to convert System string entered by user to std string for Logic to process
 		void MarshalString(String^ s, string& os) {
 			using namespace Runtime::InteropServices;
@@ -306,6 +306,7 @@ namespace iPlannerUI {
 			Marshal::FreeHGlobal(IntPtr((void*)chars));
 		}
 
+		//@author A0105180W
 		void displayPriorityAndName(String^ priority, String^ name) {
 			outputBox->SelectionFont = gcnew System::Drawing::Font("Segoe UI", 10, FontStyle::Bold);
 			if (priority == "H") {
