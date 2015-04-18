@@ -224,6 +224,7 @@ bool DateTimeVerification::isValidTime() {
 	}
 }
 
+//@author A0108462J-reused
 bool DateTimeVerification::isActualYearMonthDayDate() {
 	if ((_day == DATETIME_VERIFICATION_DAY_31) && (_month == DATETIME_VERIFICATION_MONTH_FEB || _month == DATETIME_VERIFICATION_MONTH_APR || _month == DATETIME_VERIFICATION_MONTH_JUN || _month == DATETIME_VERIFICATION_MONTH_SEP || _month == DATETIME_VERIFICATION_MONTH_NOV)) {
 		return false;
@@ -241,7 +242,7 @@ bool DateTimeVerification::isActualYearMonthDayDate() {
 		return true;
 	}
 }
-
+//@author A0108462J
 
 ////					   ////
 ////PUBLIC FUNCTIONS BELOW ////

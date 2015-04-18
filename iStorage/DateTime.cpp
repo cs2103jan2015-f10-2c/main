@@ -181,6 +181,7 @@ bool DateTime::isValidDayRange(int day) {
 	}
 }
 
+//@author A0112042E-reused
 //	Checks if the entire date is valid (inclusive of year, month, and day)
 bool DateTime::isValidDate(int year, int month, int day) {
 	if (!isValidYearRange(year) || !isValidMonthRange(month) || !isValidDayRange(day)) {
@@ -202,6 +203,7 @@ bool DateTime::isValidDate(int year, int month, int day) {
 	return true;
 }
 
+//@author A0112042E
 //	Checks if hour ranges from 0 to 23
 bool DateTime::isValidHourRange(int hour) {
 	try {
