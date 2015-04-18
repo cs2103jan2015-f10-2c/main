@@ -1,0 +1,22 @@
+//@author: a0105180w-reused
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iPlannerUI\iPlannerUI.h
+	 */
+
+		// Function to convert System string entered by user to std string for Logic to process
+		void MarshalString(String^ s, string& os) {
+			using namespace Runtime::InteropServices;
+			const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+			os = chars;
+			Marshal::FreeHGlobal(IntPtr((void*)chars));
+		}
+
+	// End of segment: C:\Users\SKR\Documents\main\iPlannerUI\iPlannerUI.h
+
+
+
+
+

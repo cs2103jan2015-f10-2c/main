@@ -1,0 +1,31 @@
+//@author: a0108462j-reused
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.cpp
+	 */
+
+bool DateTimeVerification::isActualYearMonthDayDate() {
+	if ((_day == DATETIME_VERIFICATION_DAY_31) && (_month == DATETIME_VERIFICATION_MONTH_FEB || _month == DATETIME_VERIFICATION_MONTH_APR || _month == DATETIME_VERIFICATION_MONTH_JUN || _month == DATETIME_VERIFICATION_MONTH_SEP || _month == DATETIME_VERIFICATION_MONTH_NOV)) {
+		return false;
+	} else if ((_day == DATETIME_VERIFICATION_DAY_30) && (_month == DATETIME_VERIFICATION_MONTH_FEB)) {
+		return false;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_4 != 0)) {
+		return false;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_400 == 0)) {
+		return true;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_100 == 0)) {
+		return false;
+	} else if ((_month == DATETIME_VERIFICATION_MONTH_FEB) && (_day == DATETIME_VERIFICATION_DAY_29) && (_year % DATETIME_VERIFICATION_YEAR_4 == 0)) {
+		return true;
+	} else {
+		return true;
+	}
+}
+	// End of segment: C:\Users\SKR\Documents\main\iLogic\DateTimeVerification.cpp
+
+
+
+
+

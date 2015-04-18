@@ -188,26 +188,15 @@ bool DateTime::isValidDayRange(int day) {
 	}
 }
 
-//	Checks if the entire date is valid (inclusive of year, month, and day)
-bool DateTime::isValidDate(int year, int month, int day) {
-	if (!isValidYearRange(year) || !isValidMonthRange(month) || !isValidDayRange(day)) {
-		return false;
-	} else if ((day == 31) && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
-		return false;
-	} else if ((day == 30) && (month == 2)) {
-		return false;
-	} else if ((month == 2) && (day == 29) && (year % 4 != 0)) {
-		return false;
-	} else if ((month == 2) && (day == 29) && (year % 400 == 0)) {
-		return true;
-	} else if ((month == 2) && (day == 29) && (year % 100 == 0)) {
-		return false;
-	} else if ((month == 2) && (day == 29) && (year % 4 == 0)) {
-		return true;
-	}
+	// End of segment: C:\Users\SKR\Documents\main\iStorage\DateTime.cpp
 
-	return true;
-}
+
+
+
+
+	/**
+	 * origin: C:\Users\SKR\Documents\main\iStorage\DateTime.cpp
+	 */
 
 //	Checks if hour ranges from 0 to 23
 bool DateTime::isValidHourRange(int hour) {
